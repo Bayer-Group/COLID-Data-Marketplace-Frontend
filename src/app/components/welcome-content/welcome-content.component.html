@@ -1,0 +1,41 @@
+<div class="d-flex justify-content-center h-85">
+    <div class="col">
+      <div class="d-flex mt-5 justify-content-center">
+        <img src="assets/BAG_COLID-Visual_coloured_with-Claim_lh.svg" alt="COLID" height="120em">
+      </div>
+
+      <div class="d-flex mt-6 justify-content-center">
+        <img src="assets/BAG_COLID-DM-Text_coloured_lh.svg" alt="Data Marketplace" height="50em">
+      </div>
+
+      <div class="d-flex col-12 col-lg-8 mt-6 mx-auto p-0">
+        <app-search-bar-autocomplete class="full-width" (searchChange)="handleSearchChange($event)" (inputChange)="handleInputChange($event)"></app-search-bar-autocomplete>
+      </div>
+
+      <div class="d-flex col-12 col-md-10 mt-6 mx-auto p-0 justify-content-center">
+        <button mat-raised-button class="text-large center-button" id="button-welcome-search" (click)="search()">
+          COLID Search
+        </button>
+        
+        <button mat-raised-button class="text-large ml-5 center-button" id="button-welcome-colid-link" (click)="goToEditor()">
+          Go to COLID Editor
+        </button>
+      </div>
+
+      <ng-container *ngIf="(welcomeMessage$ | async) as welcomeMessage">
+        <div class="d-flex ql-editor justify-content-center p-4" style="height: fit-content;">
+            <div [innerHTML]="transformYourHtml(welcomeMessage.content)"></div>
+        </div>
+      </ng-container>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center logo-footer">
+    <img src="assets/BAG-logo.svg" alt="Bayer AG" height="120em">
+</div>
+
+<div class="rotated fixed d-none d-md-block">
+  <div style="font-size: 0.8em;">
+    <app-support-feedback-bar></app-support-feedback-bar>
+  </div>
+</div>

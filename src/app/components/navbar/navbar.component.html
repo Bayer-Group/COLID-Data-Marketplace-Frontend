@@ -1,0 +1,61 @@
+<mat-toolbar class="align-items-center" color="primary">
+  <mat-toolbar-row>
+    <span class="menu-spacer"></span>
+    <button mat-icon-button (click)="toggleNavbar()" color="white">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <a href="">
+      <img src="assets/BAG_COLID-Visual_white_lh.svg" height="29" alt="COLID">
+    </a>
+    <div class="app-title">Data Marketplace
+      <span *ngIf="(buildInformation$ | async) as buildInformation">{{buildInformation.versionNumber}}
+        <span>{{environmentLabel}}</span>
+      </span>
+    </div>
+
+    <button mat-flat-button class="ml-4 d-none d-md-block" id="button-sidebar-pid-link" (click)="goToEditor()">
+      Want to register resources? Go to COLID Editor
+    </button>
+
+    <span class="filler"></span>
+    <button mat-icon-button (click)="toggleNotification.emit()" matTooltip="Notifications">
+      <mat-icon *ngIf="newNotifications === 0">notifications_none</mat-icon>
+      <mat-icon *ngIf="newNotifications !== 0" [matBadge]="newNotifications" matBadgeColor="warn">notifications_active</mat-icon>
+    </button>
+
+    <div *ngIf="isLoggedIn">
+
+      <button class="d-none d-md-block" mat-icon-button [matMenuTriggerFor]="appMenu">
+        <mat-icon>person</mat-icon>
+      </button>
+      <mat-menu #appMenu="matMenu">
+        <button mat-menu-item disabled>
+          <mat-icon fontSet="material-icons-outlined">face</mat-icon>
+          <span>Welcome {{ currentName }}</span>
+        </button>
+        <button mat-menu-item [matMenuTriggerFor]="usersettings">
+          <mat-icon fontSet="material-icons-outlined">settings</mat-icon>
+          <span>User Settings</span>
+        </button>
+      </mat-menu>
+
+      <mat-menu #usersettings="matMenu">
+        <button mat-menu-item [routerLink]="'user'" matTooltip="">
+          <mat-icon fontSet="material-icons-outlined">settings</mat-icon>
+          <span>Open User Settings</span>
+        </button>
+        <button mat-menu-item
+          matTooltip="Saves the currently selected search filters as default for all future searches"
+          (click)="saveActiveAggregationAsDefault()">
+          <mat-icon fontSet="material-icons-outlined">save</mat-icon>
+          <span>Save default filters</span>
+        </button>
+      </mat-menu>
+
+    </div>
+    <button mat-icon-button matTooltip="Help" [routerLink]="'/help'">
+      <mat-icon>help_outline</mat-icon>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>

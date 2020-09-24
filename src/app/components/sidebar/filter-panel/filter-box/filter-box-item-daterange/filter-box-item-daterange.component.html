@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="col-6">
+      <mat-form-field class="w-100" appearance="outline" class="form-field-date">
+        <mat-label>Choose a start date</mat-label>
+        <input #input class="mat-datetime" matInput [matDatepicker]="pickerFrom" [value]="internalValueFrom" placeholder="YYYY-MM-DD"
+          (dateChange)="onValueChangeFrom($event)" (click)="pickerFrom.open()">
+        <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+        <mat-datepicker #pickerFrom></mat-datepicker>
+      </mat-form-field>
+  </div>
+  <div class="col-6">
+      <mat-form-field class="w-100" appearance="outline" class="form-field-date">
+        <mat-label>Choose an end date</mat-label>
+        <input #input class="mat-datetime" matInput [matDatepicker]="pickerTo" [value]="internalValueTo" placeholder="YYYY-MM-DD"
+          (dateChange)="onValueChangeTo($event)" (click)="pickerTo.open()">
+        <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+        <mat-datepicker #pickerTo></mat-datepicker>
+      </mat-form-field>
+    </div>
+</div>

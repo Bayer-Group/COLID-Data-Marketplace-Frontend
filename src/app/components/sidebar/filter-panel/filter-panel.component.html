@@ -1,0 +1,35 @@
+<div class="filter-panel-container">
+  <div class="filter-panel-main" *ngIf="mainAggregationFilters && activeAggregations; else loading">
+    <app-filter-box *ngFor="let filter of mainAggregationFilters" [filterType]="'checkbox'"
+      [initialFilterBox]="initialFilterPanel" [activeAggregationBuckets]="activeAggregations.get(filter.key)"
+      [aggregation]="filter">
+    </app-filter-box>
+  </div>
+
+  <div class="centered-item" *ngIf="aggregationFilters && activeAggregations; else loading">
+      <app-filter-box *ngFor="let filter of aggregationFilters" [initialFilterBox]="initialFilterPanel"
+        [activeAggregationBuckets]="activeAggregations.get(filter.key)" [filterType]="filter.taxonomy ? 'taxonomy' : 'select'" [aggregation]="filter">
+      </app-filter-box>
+
+      <div class="px-3" *ngIf="rangeFilters$ | async as rangeFilters">
+        <app-range-box *ngFor="let rangeFilter of rangeFilters; let last = last" [last]="last" [initialRangeBox]="initialFilterPanel"
+          [rangeFilter]="rangeFilter" [activeRangeFilter]="(activeRangeFilters$ | async)[rangeFilter.key]">
+        </app-range-box>
+      </div>
+  </div>
+
+  <div class="d-flex justify-content-around filter-panel-buttons">
+    <button mat-stroked-button color="primary" (click)="resetActiveAggregation()">
+      <mat-icon fontSet="material-icons-outlined">undo</mat-icon>
+      Reset filters
+    </button>
+  </div>
+
+</div>
+<ng-template #loading>
+  <div class="row justify-content-center mt-4 loading">
+    <div class="col-auto">
+      <app-colid-spinner></app-colid-spinner>
+    </div>
+  </div>
+</ng-template>

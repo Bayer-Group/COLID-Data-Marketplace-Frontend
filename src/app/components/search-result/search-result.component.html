@@ -1,0 +1,143 @@
+<mat-accordion>
+  <mat-expansion-panel [expanded]="toggled" (opened)="onResultClicked()">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <div>
+          <div class="result-header h4 align-items-center mr-0">
+            <ds-icon class="icon-25" iconType="S3" [tooltipDisabled]="false" [delay]="300" [icon]="resourceType[0]">
+            </ds-icon>
+            {{label}}
+          </div>
+          <span *ngIf="developmentMode">Score: {{score}}</span>
+          <br>
+          <span class="result-description" [class.line-clamp]="!toggled" [innerHTML]="definitionHighlight"></span>
+        </div>
+      </mat-panel-title>
+      <mat-panel-description>
+        <!-- colidEntrySubscriptions && !isSubscribed -->
+        <button mat-icon-button class="border-button mr-2" matTooltip="Subscribe to resource"
+          *ngIf="colidEntrySubscriptions && !isSubscribed" (click)="subscribeToResource($event)">
+          <mat-icon>notifications_none</mat-icon>
+        </button>
+        <button mat-icon-button class="border-button mr-2" matTooltip="Unsubscribe from resource"
+          *ngIf="colidEntrySubscriptions && isSubscribed" (click)="unsubscribeFromResource($event)">
+          <mat-icon>notifications_active</mat-icon>
+        </button>
+        <button mat-icon-button class="border-button bayerblue-a100"
+          matTooltip="View in Knowledge Graph Explorer (BETA)" (click)="openInKnowledgeGraphExplorer($event)">
+          <ds-icon iconType="S3" [tooltipDisabled]="true" [delay]="300"
+            [icon]="'http://pid.bayer.com/kos/19014/Ontology'"></ds-icon>
+        </button>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div>
+      <mat-divider class="my-1"></mat-divider>
+
+      <div class="container m-0" *ngIf="details && details.length; else empty">
+        <div class="row pb-1" *ngFor="let detail of details">
+          <div class="col-12"
+            *ngIf="(detail.nested && detail.nested.length) || (detail.nestedInbound && detail.nestedInbound.length)">
+            <mat-accordion>
+              <mat-expansion-panel id={{label+detail.hasPID}} (opened)="toggleShowingNested(detail.key)"
+                (closed)="toggleShowingNested(detail.key)">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <span class="font-weight-bold text-muted">
+                      {{detail.label}}
+                      <span class="badge badge-pill badge-light" style="font-size: 95%; font-weight: normal;">
+                        {{detail.nested.length + detail.nestedInbound.length}}
+                      </span>
+                    </span>
+                  </mat-panel-title>
+                  <mat-panel-description class="text-muted">
+                    {{toggledNested[detail.key] ? 'Show less' : 'Show more'}}
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="row">
+                  <div class="col-12">
+                    <ng-container *ngIf="detail.key === 'https://pid.bayer.com/kos/19050/distribution'">
+                      <ng-container *ngFor="let distributionEndpoint of detail.nested; let i = index">
+                        <app-distribution-endpoint [resource]="details" [endpoint]="distributionEndpoint.value"
+                          [baseUriPointsAt]="subjectPidUriMap.get(baseUriPointsAt)"
+                          [lastElement]="detail.nested.length === i + 1"
+                          [metadata]="GetMetadataOfDistributionEndpoint(distributionEndpoint.value)">
+                        </app-distribution-endpoint>
+                      </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="detail.key === constants.Shacl.Groups.LinkTypes">
+                      <ng-container *ngFor="let linkType of detail.nested; let i = index">
+                        <app-search-result-link-type [resource]="details" [linkType]="linkType.value"
+                          [edge]="linkType.edge" [lastElement]="detail.nested.length === i + 1" [metadata]="metadata">
+                        </app-search-result-link-type>
+                      </ng-container>
+                      <ng-container *ngFor="let linkType of detail.nestedInbound; let i = index">
+                        <app-search-result-link-type [resource]="details" [linkType]="linkType.value"
+                          [edge]="linkType.edge" [inbound]="true" [lastElement]="detail.nested.length === i + 1"
+                          [metadata]="metadata">
+                        </app-search-result-link-type>
+                      </ng-container>
+                    </ng-container>
+                    <ng-container
+                      *ngIf="detail.key !== 'https://pid.bayer.com/kos/19050/distribution' && detail.key !== constants.Shacl.Groups.LinkTypes">
+                      <table class="result-table" *ngFor="let nestedEntity of detail.nested">
+                        <tr *ngFor="let nestedDetail of nestedEntity">
+                          <td><span class="small text-muted text-uppercase lead">{{nestedDetail.label}}</span></td>
+                          <td>
+                            <ng-container [ngSwitch]="nestedDetail.inputType">
+                              <span *ngSwitchCase="InputType.HTML" [innerHTML]="nestedDetail.value"></span>
+                              <span
+                                *ngSwitchCase="InputType.Date">{{nestedDetail.value | date: 'yyyy-MM-dd hh:mm'}}</span>
+                              <span *ngSwitchDefault>{{nestedDetail.value}}</span>
+
+                            </ng-container>
+                          </td>
+                        </tr>
+                      </table>
+                    </ng-container>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+          <div class="col-3"
+            *ngIf="(!detail.nested || detail.nested.length === 0) && (!detail.nestedInbound || detail.nestedInbound.length === 0)">
+            <span class="small text-muted text-uppercase lead">{{detail.label}}</span>
+          </div>
+          <div class="col-9" *ngIf="!detail.nested || detail.nested.length === 0">
+            <ng-container [ngSwitch]="detail.inputType">
+              <a *ngSwitchCase="InputType.Link" [href]="detail.valueForHref[0]" (click)="onLinkClicked(detail, $event)">
+                <span [innerHTML]="detail.value"></span>
+              </a>
+              <span *ngSwitchCase="InputType.HTML" [innerHTML]="detail.value"></span>
+              <span *ngSwitchCase="InputType.Date">{{detail.value | date: 'yyyy-MM-dd hh:mm'}}</span>
+              <ng-container *ngSwitchCase="InputType.Version">
+                <ng-container *ngFor="let previous of versions?.inbound">
+                  <a [href]="previous.value[constants.Metadata.HasPidUri].value" (click)="onVersionLinkClicked(detail, previous, $event)"
+                    class="badge badge-light">{{previous.value['https://pid.bayer.com/kos/19050/hasVersion'].value}}</a>
+                  <span class="mx-1">-</span>
+                </ng-container>
+                <span class="badge badge-primary">{{detail?.value}}</span>
+                <ng-container *ngFor="let next of versions?.outbound">
+                  <span class="mx-1">-</span>
+                  <a [href]="next.value[constants.Metadata.HasPidUri].value" (click)="onVersionLinkClicked(detail, next, $event)"
+                    class="badge badge-light">{{next.value['https://pid.bayer.com/kos/19050/hasVersion'].value}}</a>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <ng-template #empty>
+        No metadata for result!
+      </ng-template>
+    </div>
+
+  </mat-expansion-panel>
+</mat-accordion>
+
+<div class="result" [ngClass]="{'selected': toggled}">
+
+
+
+</div>

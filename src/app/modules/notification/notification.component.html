@@ -1,0 +1,48 @@
+<div class="notification-area px-4">
+    <div class="d-flex justify-content-between py-2">
+        <h2>Notifications</h2>
+        <mat-icon (click)="closeSidebar.emit()" class="close">arrow_right_alt</mat-icon>
+    </div>
+    <ng-container *ngIf="notifications$ | async as notifications; else loading">
+        <div class="mt-2" *ngIf="notifications.length !== 0; else emptyNotifications">
+            <div class="d-flex justify-content-between">
+                <span class="dismiss" (click)="reloadNofications()">Reload</span>
+                <span class="dismiss" (click)="readNotifications(notifications)">Dismiss all</span>
+            </div>
+            <hr class="mt-1">
+            <div class="d-flex flex-column">
+                <div class="notification-item mb-2" [class.new]="!notification.readOn"
+                    *ngFor="let notification of notifications">
+                    <div class="d-flex justify-content-between">
+                        <span class="mr-1" *ngIf="!notification.readOn">
+                            <mat-chip color="draft" matTooltip="New Notification"> NEW
+                            </mat-chip>
+                        </span>
+                        <span class="header flex-grow-1" [innerHTML]="notification.subject"
+                            (click)="openNotification(notification)"></span>
+                        <mat-icon class="close" (click)="deleteNotification(notification)">close</mat-icon>
+                    </div>
+                    <div class="body" (click)="openNotification(notification)">
+                        {{notification.body}}
+                    </div>
+                    <div class="text-muted text-right">
+                        {{notification.createdAt | timeAgo}}
+                    </div>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>
+<ng-template #emptyNotifications>
+    <div class="mt-5 text-center px-5 mx-3">
+        <mat-icon class="icon-100">notifications_off</mat-icon>
+        <br>
+        <span>No notifications</span>
+    </div>
+</ng-template>
+<ng-template #loading>
+    <div class="d-flex justify-content-center">
+        <mat-spinner [diameter]="100" [strokeWidth]="5"></mat-spinner>
+    </div>
+</ng-template>

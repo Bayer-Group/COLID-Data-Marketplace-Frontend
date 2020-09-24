@@ -1,0 +1,26 @@
+a:hover {
+  text-decoration: none;
+}
+
+mat-list-item:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.mat-standard-chip {
+border-radius: 10px;
+min-height: 20px;
+padding: 0px 8px;
+}
+
+.mat-standard-chip > .mat-icon {
+height: 16px;
+width: 16px;
+}
+
+.mat-standard-chip > .material-icons-outlined {
+font-size: 16px;
+}
+
+mat-chip-list {
+margin-left: 1em;
+}

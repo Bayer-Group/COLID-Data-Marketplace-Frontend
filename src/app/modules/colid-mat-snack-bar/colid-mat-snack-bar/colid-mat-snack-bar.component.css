@@ -1,0 +1,11 @@
+button {
+  transform: scale(0.9);
+}
+
+p {
+  margin-bottom: 0;
+}
+
+.mat-icon {
+  font-size: 45px;
+}

@@ -1,0 +1,14 @@
+.search-hints {
+    padding-left: 1rem;
+    padding-right: 0rem;
+}
+
+.search-results {
+    height: calc(100vh - 144px) !important;
+    overflow-y:scroll;
+    overflow-x:hidden;
+}
+
+.loading-batch-spinner {
+    margin-bottom: 30px !important;
+}

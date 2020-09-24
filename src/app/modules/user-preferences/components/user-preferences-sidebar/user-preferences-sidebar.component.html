@@ -1,0 +1,21 @@
+<h1 class="mat-headline pt-2 pl-3">User Preferences</h1>
+<mat-nav-list>
+    <mat-list-item routerLink="/user" (click)="linkClicked()" routerLinkActive="active">
+        <mat-icon class="mr-1" fontSet="material-icons-outlined">settings</mat-icon>
+        <a>General</a>
+    </mat-list-item>
+    <h1 matSubheader>Subscriptions</h1>
+    <mat-list-item routerLink="resourceSubscriptions" (click)="linkClicked()" routerLinkActive="active">
+        <mat-icon class="mr-1" fontSet="material-icons-outlined">notifications</mat-icon>
+        <a>Resource Subscriptions</a>
+    </mat-list-item>
+    <!--<mat-list-item routerLink="storedQueries" (click)="linkClicked()" routerLinkActive="active">
+        <mat-icon class="mr-1" fontSet="material-icons-outlined">youtube_searched_for</mat-icon>
+        <a>Search Subscriptions</a>
+    </mat-list-item>
+    <h1 matSubheader>Filters</h1>
+    <mat-list-item routerLink="searchFiltersDataMarketplace" (click)="linkClicked()" routerLinkActive="active">
+        <mat-icon class="mr-1" fontSet="material-icons-outlined">search</mat-icon>
+        <a>Search Filters for Data Marketplace</a>
+    </mat-list-item>-->
+</mat-nav-list>

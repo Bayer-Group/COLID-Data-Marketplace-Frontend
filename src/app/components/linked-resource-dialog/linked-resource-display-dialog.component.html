@@ -1,0 +1,42 @@
+<div class="dialog-panel">
+  <div *ngIf="document && metadata; else noData">
+    <div mat-dialog-content>
+      <app-search-result [source]="document" [metadata]="metadata"></app-search-result>
+    </div>
+
+    <div mat-dialog-actions>
+      <button mat-raised-button (click)="closeDialog()">
+        <mat-icon fontSet="material-icons-outlined">close</mat-icon>
+        Close
+      </button>
+      <button mat-raised-button color="primary" (click)="openInEditor()">
+        <mat-icon fontSet="material-icons-outlined">open_in_new</mat-icon>
+        Open in COLID Editor
+      </button>
+    </div>
+  </div>
+
+  <ng-template #noData>
+    <div mat-dialog-content>
+      <div *ngIf="error">
+        <div class="d-flex justify-content-center">
+          <mat-icon class="icon-error" fontSet="material-icons-outlined">error_outline</mat-icon>
+        </div>
+        <div class="d-flex text-error justify-content-center">
+          {{error}}
+        </div>
+      </div>
+      <div *ngIf="!error" class="row justify-content-center mt-4">
+        <div class="col-auto">
+          <app-colid-spinner></app-colid-spinner>
+        </div>
+      </div>
+    </div>
+    <div mat-dialog-actions class="d-flex justify-content-center">
+      <button mat-raised-button (click)="closeDialog()">
+        <mat-icon fontSet="material-icons-outlined">close</mat-icon>
+        Close
+      </button>
+    </div>
+  </ng-template>
+</div>

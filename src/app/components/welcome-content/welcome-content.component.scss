@@ -1,0 +1,35 @@
+.fixed {
+    top: 50% !important;
+    right: -178px !important;
+    bottom: auto !important;
+    left: auto !important;
+    position: fixed !important;
+  }
+
+.rotated {
+  transform: rotate(270deg);
+}
+
+.logo-footer {
+  width: 100%;
+  position: absolute;
+  bottom: 50px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.mt-6 {
+  margin-top: 50px !important;
+}
+
+.center-button {
+  width: 200px!important;
+  min-width: unset!important;
+  justify-content: center;
+}
+
+.welcome-message {
+  text-align: center;
+}

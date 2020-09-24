@@ -1,0 +1,39 @@
+.divider {
+  flex-grow: 1;
+  border-bottom: 1px solid gray;
+  margin: 5px
+}
+
+div[hidden] {
+  display: none;
+}
+
+.more-less-button {
+  margin: 0 6px 0 3px;
+}
+
+.badge {
+  cursor: pointer;
+  font-weight: normal !important;
+}
+
+.ng-select {
+  padding-bottom: 0.8em;
+}
+
+::ng-deep .ng-select {
+  .ng-select-container.ng-appearance-outline {
+    min-height: 51.5px !important;
+  }
+
+  .ng-placeholder {
+    font-weight: 550;
+    color: #6c757d !important;
+  }
+
+  .ng-select-container .ng-value-container .ng-value {
+    border-radius: 12px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+}

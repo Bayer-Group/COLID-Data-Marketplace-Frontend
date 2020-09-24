@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-2">
+    <ng-container [ngSwitch]="data.type">
+      <ng-container *ngSwitchCase="colidSnackBarType.SUCCESS">
+        <mat-icon >done</mat-icon>
+      </ng-container>
+      <ng-container *ngSwitchCase="colidSnackBarType.WARNING">
+        <mat-icon >warning</mat-icon>
+      </ng-container>
+      <ng-container *ngSwitchCase="colidSnackBarType.ERROR">
+        <mat-icon >error_outline</mat-icon>
+      </ng-container>
+      <ng-container *ngSwitchCase="colidSnackBarType.INFO">
+        <mat-icon >notifications_active</mat-icon>
+      </ng-container>
+    </ng-container>
+  </div>
+  <div class="col-10">
+    <h4 *ngIf="data.header">{{data.header}}</h4>
+    <p *ngIf="data.message">{{data.message}}</p>
+    <div style="text-align: right;">
+      <button *ngIf="data.data" mat-button (click)="copy()">Copy</button>
+      <button mat-button (click)="dismiss()">Dismiss</button>
+    </div>
+  </div>
+</div>

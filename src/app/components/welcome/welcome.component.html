@@ -1,0 +1,13 @@
+<div class="h-100" [class.is-mobile]="(sidebarMode$ | async) === 'over'">
+  <mat-sidenav-container autosize>
+    <mat-sidenav #sidenav [opened]="sidebarOpened$ | async" (closed)="closeSidebar()"
+      [mode]="sidebarMode$ | async" [fixedInViewport]="(sidebarMode$ | async) === 'over'" fixedTopGap="54">
+      <app-sidebar [initialFilterPanel]="true"></app-sidebar>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="h-content m-0 justify-content-center">
+        <app-welcome-content (searchChange)="handleSearchChange($event)"></app-welcome-content>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

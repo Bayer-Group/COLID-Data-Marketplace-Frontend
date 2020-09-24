@@ -1,0 +1,13 @@
+.active {
+    color: #0075A6;
+    font-weight: bold;
+}
+
+::ng-deep mat-checkbox label {
+    margin-bottom: unset !important;
+}
+
+.badge {
+    cursor: pointer;
+    font-weight: normal !important;
+}

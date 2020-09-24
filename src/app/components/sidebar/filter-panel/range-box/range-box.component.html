@@ -1,0 +1,15 @@
+<div class="d-flex justify-content-between align-items-center text-uppercase text-muted" style="cursor:pointer"
+  (click)="hidden = !hidden">
+  <span><small style="font-weight: 600">{{rangeFilter.label}}</small></span>
+  <small>
+    <mat-icon *ngIf="hidden">expand_more</mat-icon>
+    <mat-icon *ngIf="!hidden">expand_less</mat-icon>
+  </small>
+</div>
+<div class="range-box-content p-2" [style.display]="hidden ? 'none' : 'block'">
+  <div class="d-flex flex-column">
+    <app-filter-box-item-daterange (changeRange)="rangeChanged($event)" [rangeFilter]="rangeFilter"
+      [selection]="rangeFilterSelection"></app-filter-box-item-daterange>
+  </div>
+</div>
+<hr *ngIf="!last" class="my-1">

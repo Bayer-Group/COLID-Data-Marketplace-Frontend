@@ -1,0 +1,15 @@
+# CICD stages
+stages:
+  - deploy
+
+trigger-deployment:
+  stage: deploy
+  image: curlimages/curl
+  tags:
+    - dind-dev
+  script:
+    - curl -X POST -F token=$DEPLOYMENT_TOKEN -F ref=$CI_COMMIT_REF_NAME $DEPLOYMENT_REPO_URL
+  only:
+    - develop
+    - release
+    - master

@@ -1,0 +1,14 @@
+<ng-container *ngIf="supportedBrowser">
+  <ng-content></ng-content>
+</ng-container>
+
+<ng-container *ngIf="!supportedBrowser">
+
+  <h2 style="text-align: center; margin-top: 50vh; ">You are trying to reach a webpage with an unsupported browser.
+    Please use Mozilla Firefox or Google Chrome instead.
+    <br>
+    <a href="ms-settings:defaultapps" target="_blank">Click here</a> to switch the default browser of
+    Windows 10.
+  </h2>
+
+</ng-container>

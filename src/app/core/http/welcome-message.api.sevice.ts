@@ -1,0 +1,19 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { WelcomeMessage } from 'src/app/shared/models/welcome-message';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class WelcomeMessageApiService {
+
+    constructor(private httpClient: HttpClient) { }
+
+    getWelcomeMessage(): Observable<WelcomeMessage> {
+        const url = environment.appDataApiUrl + '/WelcomeMessages/dataMarketplace';
+        return this.httpClient.get<WelcomeMessage>(url);
+    }
+
+}

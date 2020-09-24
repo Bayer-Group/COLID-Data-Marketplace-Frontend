@@ -1,0 +1,66 @@
+.border-button {
+  border: 1px solid currentColor !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.beta-feature-tag {
+  font-size: 0.8rem;
+  vertical-align: top;
+}
+
+.result {
+  padding: 0.85rem 0rem 0.85rem 0rem;
+  border-radius: 0.3rem;
+}
+
+.result-header {
+  cursor: pointer !important;
+
+  &:hover {
+    background-color: whitesmoke;
+    border-radius: 0.3rem;
+  }
+}
+
+.result-description {
+  font-size: 0.94rem;
+  margin-bottom: unset !important;
+}
+
+::ng-deep .mat-expansion-panel:not([class*="mat-elevation-z"]) {
+  box-shadow: none;
+}
+
+::ng-deep .mat-expansion-panel-header {
+  padding-left: 0 !important;
+  height: auto !important;
+  font-size: 0.8rem !important;
+}
+
+::ng-deep .mat-expansion-panel-body {
+  padding-left: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.badge {
+  font-weight: 500 !important;
+}
+
+.bayerblue-a100 {
+  background-color: #dbedff;
+  border-color: #dbedff !important;
+}
+
+mat-panel-description {
+  display: flex !important;
+  justify-content: flex-end;
+  align-items: center;
+  color: black;
+}
