@@ -30,5 +30,5 @@ export const environment = {
     ciCommitSha:  '$BUILD_CICOMMITSHA',
   },
   pidUrl: 'http://localhost:4200/',
-  kgeUrl: 'https://kge.example.com/'
+  kgeUrl: 'http://localhost:4400/'
 };
