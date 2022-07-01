@@ -6,6 +6,8 @@ import { FetchFilter } from 'src/app/states/filter.state';
 import { LogService } from 'src/app/core/logging/log.service';
 import { SidebarState, SetSidebarOpened } from 'src/app/states/sidebar.state';
 import { FetchWelcomeMessage } from 'src/app/states/welcome-message.state';
+import { ActivatedRoute } from '@angular/router';
+import { SetFromRRM, SetSourceDialog } from 'src/app/states/rrm.state';
 
 @Component({
   selector: 'app-welcome',
@@ -17,11 +19,18 @@ export class WelcomeComponent implements OnInit {
   @Select(SidebarState.sidebarOpened) sidebarOpened$: Observable<any>;
   @Select(SidebarState.sidebarMode) sidebarMode$: Observable<any>;
 
-  constructor(private store: Store, private logger: LogService) { }
+  constructor(private store: Store, private route: ActivatedRoute, private logger: LogService) { 
+    var state = JSON.parse(this.route.snapshot.queryParamMap.get('fromRRM'));
+    this.store.dispatch(new SetFromRRM(state));
+
+    var sourceDialog = this.route.snapshot.queryParamMap.get('sourceDialog');
+    this.store.dispatch(new SetSourceDialog(sourceDialog));
+  }
 
   ngOnInit() {
     this.store.dispatch(new FetchFilter()).subscribe();
     this.store.dispatch(new FetchWelcomeMessage()).subscribe();
+   
     this.logger.info("DMP_WELCOME_PAGE_OPENED");
   }
 

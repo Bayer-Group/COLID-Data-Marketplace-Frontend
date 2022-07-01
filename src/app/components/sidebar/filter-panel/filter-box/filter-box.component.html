@@ -1,4 +1,4 @@
-<div class="px-3" *ngIf="aggregation.buckets && aggregation.buckets.length">
+<div class="px-3" *ngIf="aggregation.buckets ">
 
   <!-- Filter as dropdown -->
   <div *ngIf="filterType === 'select'">
@@ -61,4 +61,21 @@
     </div>
     <hr *ngIf="!last" class="my-1">
   </div>
+
+  <!-- Filter as checkBoxHierarchy -->
+
+  <div *ngIf="filterType === 'checkBoxHierarchy'">
+    <div class="text-muted" style="cursor:pointer">
+      <span style="font-weight: 550">
+        {{aggregation.label}}
+      </span>
+    </div>
+    <div [style.display]="hidden ? 'none' : 'block'">
+      <app-filter-box-item-checkboxHierarchy [key]="aggregation.key"
+        [activeAggregationBuckets]="activeAggregationBuckets" [buckets]="visibleBuckets"
+        (changeFilterBuckets)="filterHierarchyItemsChanged($event)" [resourceHierarchy]="resourceHierarchy">
+      </app-filter-box-item-checkboxHierarchy>
+    </div>
+  </div>
+
 </div>

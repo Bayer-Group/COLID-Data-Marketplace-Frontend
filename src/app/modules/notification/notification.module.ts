@@ -4,6 +4,7 @@ import { NotificationComponent } from './notification.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
+import { UTCToLocalTimePipe } from './pipes/utc-to-local-time';
 import { NotificationDialogComponent } from './components/notification-dialog/notification-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,24 +17,23 @@ import { NotificationService } from './services/notification.service';
 
 
 @NgModule({
-  declarations: [NotificationComponent, TimeAgoPipe, NotificationDialogComponent],
-  imports: [
-    CommonModule,
-    HttpClientModule,
-    MatIconModule,
-    MatChipsModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    NgxsModule.forFeature([NotificationState])
-  ],
-  providers: [
-    NotificationService
-  ],
-  exports: [
-    NotificationComponent,
-  ],
-  entryComponents: [NotificationDialogComponent]
+    declarations: [NotificationComponent, TimeAgoPipe, UTCToLocalTimePipe, NotificationDialogComponent],
+    imports: [
+        CommonModule,
+        HttpClientModule,
+        MatIconModule,
+        MatChipsModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatProgressSpinnerModule,
+        NgxsModule.forFeature([NotificationState])
+    ],
+    providers: [
+        NotificationService
+    ],
+    exports: [
+        NotificationComponent,
+    ]
 })
 export class NotificationModule {
   static forRoot(): ModuleWithProviders<NotificationModule> {

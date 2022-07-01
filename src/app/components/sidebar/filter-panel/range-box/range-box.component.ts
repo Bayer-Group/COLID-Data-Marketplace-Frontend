@@ -42,7 +42,6 @@ export class RangeBoxComponent implements OnInit {
   }
 
   rangeChanged(rangeSelection: RangeFilterSelection) {
-    console.log('changed range', rangeSelection);
     this.store.dispatch(new ChangeActiveRangeFilter(this.rangeFilter.key, rangeSelection, this.initialRangeBox));
   }
 

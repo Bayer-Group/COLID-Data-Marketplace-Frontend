@@ -6,7 +6,6 @@ import { LogLevel } from 'src/app/shared/models/logging/log-level';
 export class LogConsole implements LogPublisher {
 
     log(logLevel: LogLevel, entry: EdmLogEntry): Observable<boolean> {
-        console.log(entry);
         return observableOf(true);
     }
 

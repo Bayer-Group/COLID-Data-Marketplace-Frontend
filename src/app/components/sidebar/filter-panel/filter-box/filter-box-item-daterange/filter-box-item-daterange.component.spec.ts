@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { FilterBoxItemDaterangeComponent } from './filter-box-item-daterange.component';
 
@@ -6,7 +6,7 @@ describe('FilterBoxItemDaterangeComponent', () => {
   let component: FilterBoxItemDaterangeComponent;
   let fixture: ComponentFixture<FilterBoxItemDaterangeComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ FilterBoxItemDaterangeComponent ]
     })

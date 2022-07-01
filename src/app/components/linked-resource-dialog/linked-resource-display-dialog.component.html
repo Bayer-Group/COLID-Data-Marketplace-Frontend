@@ -1,7 +1,7 @@
 <div class="dialog-panel">
   <div *ngIf="document && metadata; else noData">
     <div mat-dialog-content>
-      <app-search-result [source]="document" [metadata]="metadata"></app-search-result>
+      <app-search-result [source]="document" [metadata]="metadata" [collapsible]="false"></app-search-result>
     </div>
 
     <div mat-dialog-actions>

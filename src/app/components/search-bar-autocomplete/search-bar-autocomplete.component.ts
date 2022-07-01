@@ -18,20 +18,14 @@ export class SearchBarAutocompleteComponent implements OnInit {
   constructor(private store: Store) { }
 
   ngOnInit() {
-    console.log("app-search-bar-autocomplete ngOnInit");
-
   }
 
   handleInputChange(searchText: string) {
-    console.log("app-search-bar-autocomplete handleInputChange");
-
     this.store.dispatch(new FetchAutocompleteResults(searchText)).subscribe();
     this.inputChange.emit(searchText);
   }
 
   handleSearchChange(searchText: string) {
-    console.log("app-search-bar-autocomplete handleSearchChange");
-
     this.searchChange.emit(searchText);
   }
 }

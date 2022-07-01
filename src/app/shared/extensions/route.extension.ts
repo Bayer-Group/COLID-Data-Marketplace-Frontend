@@ -2,8 +2,6 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 
 export class RouteExtension {
   public static SetRouteInStorage(route: ActivatedRouteSnapshot) {
-    console.log('Set route in storage', route);
-
     const urlSegments = new Array<string>();
     this.getUrlSegment(urlSegments, route);
 

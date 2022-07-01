@@ -1,4 +1,5 @@
 // Change of the global font size base for Bootstrap (needs to be set before importing bootstrap dependencies)
+@use '@angular/material' as mat;
 $font-size-base: 0.85rem;
 
 // Ng-Select
@@ -22,13 +23,12 @@ $font-size-base: 0.85rem;
 
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@import '~@angular/material/theming';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat-core();
+@include mat.core();
 
 /* For use in src/lib/core/theming/_palette.scss */
 $md-bayerbrightblue: (50 : #e0f7fd,
@@ -394,20 +394,20 @@ $md-bayerdarkpurple: (50 : #e9e4e7,
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$colid-data-marketplace-frontend-primary: mat-palette($md-bayerdarkblue, 500, 50, 900);
+$colid-data-marketplace-frontend-primary: mat.define-palette($md-bayerdarkblue, 500, 50, 900);
 
-$colid-data-marketplace-frontend-accent: mat-palette($md-bayerraspberry, 500, 50, 900);
+$colid-data-marketplace-frontend-accent: mat.define-palette($md-bayerraspberry, 500, 50, 900);
 
 // The warn palette is optional (defaults to red).
-$colid-data-marketplace-frontend-warn: mat-palette($md-bayerfuchsia);
+$colid-data-marketplace-frontend-warn: mat.define-palette($md-bayerfuchsia);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$colid-data-marketplace-frontend-theme: mat-light-theme($colid-data-marketplace-frontend-primary, $colid-data-marketplace-frontend-accent, $colid-data-marketplace-frontend-warn);
+$colid-data-marketplace-frontend-theme: mat.define-light-theme($colid-data-marketplace-frontend-primary, $colid-data-marketplace-frontend-accent, $colid-data-marketplace-frontend-warn);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include angular-material-theme($colid-data-marketplace-frontend-theme);
+@include mat.all-component-themes($colid-data-marketplace-frontend-theme);
 
 // Dark hues
 $bayer-dark-blue: rgb(16, 56, 79);

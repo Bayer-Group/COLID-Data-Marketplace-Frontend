@@ -1,17 +1,24 @@
-import { Component, Input, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { SearchHit, Document, DocumentMap, DocumentMapDirection, StringArrayMap } from '../../shared/models/search-result';
+import { Component, Input, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
+import { SearchHit, DocumentMap, DocumentMapDirection, StringArrayMap } from '../../shared/models/search-result';
 import { Constants } from 'src/app/shared/constants';
 import { environment } from 'src/environments/environment';
-import { getValueForKey, getPidUriForHref } from 'src/app/shared/operators/document-operators';
+import { getValueForKey, getUriForKey, getPidUriForHref } from 'src/app/shared/operators/document-operators';
 import { LogService } from 'src/app/core/logging/log.service';
-import { SearchState } from 'src/app/states/search.state';
+import { FetchLinkedTableandColumnResults, SearchState } from 'src/app/states/search.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { LinkedResourceDisplayDialog } from 'src/app/components/linked-resource-dialog/linked-resource-display-dialog.component';
 import { ColidEntrySubscriptionDto } from 'src/app/shared/models/user/colid-entry-subscription-dto';
 import { AddColidEntrySubscription, RemoveColidEntrySubscription, UserInfoState } from 'src/app/states/user-info.state';
-import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
+import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service'
+import { ColidEntrySubscriberCountState, FetchColidEntrySubscriptionNumbers } from '../../states/colid-entry-subcriber-count.state';
+import { SimilarityModalComponent } from 'src/app/components/search-result/similarity-modal/similarity-modal.component';
+import { ResourcePoliciesComponent } from './resource-policies/resource-policies.component';
+import { ResourcePoliciesState } from 'src/app/states/resource-policies.state';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { Schema_Support, SchemeUi } from 'src/app/shared/models/schemeUI';
+import { MetadataState } from 'src/app/states/metadata.state';
 
 
 @Component({
@@ -26,7 +33,11 @@ export class SearchResultComponent implements OnInit, OnDestroy {
   @Select(SearchState.getSearchText) searchTextObservable$: Observable<string>;
   @Select(SearchState.getSearchTimestamp) searchTimestampObservable$: Observable<Date>;
   @Select(UserInfoState.getColidEntrySubscriptions) colidEntrySubscriptions$: Observable<ColidEntrySubscriptionDto[]>;
-
+  @Select(ColidEntrySubscriberCountState.getSubscriptionNumbers) colidEntrySubscriptionNumbers$: Observable<ColidEntrySubscriptionDto[]>;
+  @Select(ResourcePoliciesState.getLoadingState) PoliciesLoadingState$: Observable<boolean>;
+  @Select(SearchState.getLinkedTableAndColumnResource) SchemeUI$: Observable<SchemeUi>;
+  @Select(SearchState.getLoading) loading$: Observable<boolean>;
+  @ViewChild('tabGroup') tabGroup;
   @Input() set result(value: SearchHit) {
     if (this._result) {
       this.onResultChange(value);
@@ -42,10 +53,32 @@ export class SearchResultComponent implements OnInit, OnDestroy {
     }
 
     this._source = value;
-    this.toggled = true;
+    this.expandView = true;
   };
 
   @Input() metadata: any;
+  @Input() collapsible: boolean = true;
+  @Input() expandByDefault: boolean = false;
+  @Input() index: number = 0;
+  @Output() schemeUiChange: EventEmitter<object> = new EventEmitter<object>();
+
+
+  get pidUri() {
+    var rawPidUri;
+    if (this._result != null) {
+      rawPidUri = this._result.id;
+    } else {
+      rawPidUri = this._source[Constants.Metadata.HasPidUri].outbound[0].uri;
+    }
+
+    return decodeURIComponent(rawPidUri);
+  }
+
+  get expanded() {
+    return this.expandView || this.expandByDefault;
+  }
+
+  expandView: boolean = false;
 
   developmentMode: boolean;
   constants = Constants;
@@ -57,6 +90,9 @@ export class SearchResultComponent implements OnInit, OnDestroy {
   colidEntrySubscriptions: ColidEntrySubscriptionDto[];
   isSubscribed: boolean;
 
+  resourceSubNumbers: ColidEntrySubscriptionDto[] = [];
+  ResourceNumSubscription: Subscription;
+
   versions: DocumentMapDirection;
   baseUriPointsAt: string;
   subjectPidUriMap = new Map<string, string>();
@@ -64,13 +100,21 @@ export class SearchResultComponent implements OnInit, OnDestroy {
   definitionHighlight: string[] = new Array<string>();
   resourceType: string[] = new Array<string>();
   details: DetailsViewModel[];
-
-  toggled: boolean = false;
-  toggledNested: any = {};
-
+  schemeUiDetail: SchemeUi;
+  showSchema: boolean = false;
+  distributionData: any[] = [];
+  showDistribution: boolean = false;
+  distributionKey = "https://pid.bayer.com/kos/19050/distribution";
+  linkedResourceData: any = [];
+  showLinkedResources: boolean = false;
+  linkedKey = "http://pid.bayer.com/kos/19050/LinkTypes";
+  activeTab: any[] = []
+  selectedPidUri: string = "";
+  isOpenSchemeUiTab: string = ""
+  expandedNested: any = {};
+  selectedIndex = 0;
   searchText: string;
   searchTimestamp: Date;
-
   InputType = InputType;
   constructor(
     private store: Store,
@@ -81,10 +125,13 @@ export class SearchResultComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.colidEntrySubscriptionsSubscription = this.colidEntrySubscriptions$.subscribe(colidEntrySubscriptions => {
       if (colidEntrySubscriptions != null) {
-        const pidUri = decodeURIComponent(this._result.id);
-        this.isSubscribed = colidEntrySubscriptions.some(ces => ces.colidPidUri === pidUri)
+        this.isSubscribed = colidEntrySubscriptions.some(ces => ces.colidPidUri === this.pidUri)
         this.colidEntrySubscriptions = colidEntrySubscriptions;
       }
+
+      this.ResourceNumSubscription = this.colidEntrySubscriptionNumbers$.subscribe(x => {
+        this.resourceSubNumbers = x;
+      });
     });
 
     this.developmentMode = !environment.production;
@@ -104,30 +151,81 @@ export class SearchResultComponent implements OnInit, OnDestroy {
     this.searchTimestampObservable$.subscribe(searchTimestamp => {
       this.searchTimestamp = searchTimestamp;
     });
+
+    if (this.details.find(x => x.key == this.distributionKey)) {
+      this.showDistribution = true;
+    }
+
+    if (this.details.find(x => x.key == this.linkedKey)) {
+      this.showLinkedResources = true;
+      this.linkedResourceData = this.details.find(x => x.key == this.linkedKey)
+      this.details = this.details.filter((x) => {
+        return x.key != this.linkedKey
+      })
+    }
+
+  }
+
+  expandPanel() {
+    this.expandView = true;
   }
 
   ngOnDestroy() {
     this.colidEntrySubscriptionsSubscription.unsubscribe();
+    this.ResourceNumSubscription.unsubscribe();
   }
 
   subscribeToResource(event) {
     this.preventOpeningResultDetails(event);
 
-    const pidUri = decodeURIComponent(this._result.id);
-    let colidEntrySubscriptionDto = new ColidEntrySubscriptionDto(pidUri);
+    let colidEntrySubscriptionDto = new ColidEntrySubscriptionDto(this.pidUri);
     this.store.dispatch(new AddColidEntrySubscription(colidEntrySubscriptionDto)).subscribe(() => {
       this.snackBar.success('Resource subscribed', 'The resource has been subscribed successfully.');
     });
   }
 
+  findSimilarResources(event) {
+    this.preventOpeningResultDetails(event);
+    const pidUri = decodeURIComponent(this._result.id);
+
+    const dialogRef = this.dialog.open(SimilarityModalComponent, {
+      data: {
+        pidUri: pidUri,
+        label: this._result.source["https://pid.bayer.com/kos/19050/hasLabel"]["outbound"][0].value,
+        source: this._result.source
+      },
+      width: 'auto',
+      height: 'auto'
+    });
+  }
+
+  findPolicies(event) {
+    this.preventOpeningResultDetails(event);
+    const pidUri = decodeURIComponent(this._result.id);
+    const dialogRef = this.dialog.open(ResourcePoliciesComponent, {
+      data: {
+        pidUri: pidUri
+      }
+    });
+
+  }
+
   unsubscribeFromResource(event) {
     this.preventOpeningResultDetails(event);
 
-    const pidUri = decodeURIComponent(this._result.id);
-    let colidEntrySubscriptionDto = new ColidEntrySubscriptionDto(pidUri);
+    let colidEntrySubscriptionDto = new ColidEntrySubscriptionDto(this.pidUri);
     this.store.dispatch(new RemoveColidEntrySubscription(colidEntrySubscriptionDto)).subscribe(() => {
       this.snackBar.success('Resource unsubscribed', 'The resource has been unsubscribed successfully.');
     });
+  }
+
+  getNumSubscribers(): number {
+    var sr = 0;
+    if (this.resourceSubNumbers.find(x => x.colidPidUri === this.pidUri)) {
+      sr = this.resourceSubNumbers.find(x => x.colidPidUri === this.pidUri).subscriptions;
+    }
+
+    return sr;
   }
 
   openInKnowledgeGraphExplorer(event) {
@@ -151,16 +249,60 @@ export class SearchResultComponent implements OnInit, OnDestroy {
     window.open(url, '_blank');
   }
 
+  openInColidEditor(event) {
+    this.preventOpeningResultDetails(event);
+
+    this.logger.info("PID_RESULT_PAGE_RESOURCE_EDIT_CLICKED",
+      {
+        'searchText': this.searchText,
+        'searchTimestamp': this.searchTimestamp,
+        'resourcePIDUri': getPidUriForHref(this.details)[0],
+      });
+    event.cancelBubble = true;
+
+    const internalResourceId = getPidUriForHref(this.details)[0];
+    // we need to replace the # with the encoded character %23,
+    // otherwise the value can not be passed as query parameter
+    const encodedId = internalResourceId.replace(new RegExp('(\#)', "g"), "%23");
+    if (event.stopPropagation) {
+      event.stopPropagation();
+    }
+
+    const url = `${environment.pidUrl}resource?pidUri=${encodedId}`;
+    window.open(url, '_blank');
+  }
+
+  openInResourceRelationshipManager(event) {
+    this.preventOpeningResultDetails(event);
+
+    this.logger.info("DMP_RESULT_PAGE_RESOURCE_RRM_CLICKED",
+      {
+        'searchText': this.searchText,
+        'searchTimestamp': this.searchTimestamp,
+        'resourcePIDUri': getPidUriForHref(this.details)[0],
+      });
+    event.cancelBubble = true;
+    const internalResourceId = getPidUriForHref(this.details)[0];
+    // we need to replace the # with the encoded character %23,
+    // otherwise the value can not be passed as query parameter
+    const encodedId = internalResourceId.replace(new RegExp('(\#)', "g"), "%23");
+    if (event.stopPropagation) {
+      event.stopPropagation();
+    }
+    const url = `${environment.rrmUrl}?baseNode=${encodedId}`;
+    window.open(url, '_blank');
+  }
+
   preventOpeningResultDetails(event) {
     event.preventDefault();
     event.stopPropagation();
   }
 
   toggleShowingNested(key: string) {
-    if (this.toggledNested[key]) {
-      this.toggledNested[key] = false;
+    if (this.expandedNested[key]) {
+      this.expandedNested[key] = false;
     } else {
-      this.toggledNested[key] = true;
+      this.expandedNested[key] = true;
     }
   }
 
@@ -178,6 +320,8 @@ export class SearchResultComponent implements OnInit, OnDestroy {
       return orderCompare;
     });
 
+    //We are remove table and colum from linked resouece,we will show in schema Ui
+    this.removeTableandColumn(orderable);
     this.details = orderable;
   }
 
@@ -194,11 +338,13 @@ export class SearchResultComponent implements OnInit, OnDestroy {
       return orderCompare;
     });
 
+    //We are remove table and colum from linked resouece,we will show in schema Ui
+    this.removeTableandColumn(orderable);
     this.details = orderable;
   }
 
-  onResultClicked(): void {
-    this.toggled = true;
+  onResultClicked(expanded): void {
+    this.expandView = !expanded;
     this.logger.info("DMP_RESULT_PAGE_RESOURCE_CLICKED",
       {
         'searchText': this.searchText,
@@ -208,6 +354,78 @@ export class SearchResultComponent implements OnInit, OnDestroy {
         'clickedLinkType': this._source[Constants.Metadata.EntityType].outbound[0].uri,
         'clickedLinkCategory': 'https://pid.bayer.com/kos/19050/PID_Concept'
       });
+  }
+
+  removeTableandColumn(orderable) {
+    /***********************We check resouece type*********************************/
+    var currentResourceType = orderable.find(x => x.key == Constants.Metadata.EntityType).valueEdge[0]
+    /***********************We check Linked resource from current resource type*********************************/
+    var link = orderable.find(x => x.key == Constants.Resource.Groups.LinkTypes)
+    if (link) {
+
+      var nested = [...link.nested]; //
+      var nestedInbound = [...link.nestedInbound];
+
+      var currentTaxonmony = this.metadata[Constants.Metadata.EntityType].properties.taxonomy;
+      /***********************We get all dataset type from metadata*********************************/
+      var datasets = currentTaxonmony?.filter(x => x.properties[Schema_Support.Subset][0] == Schema_Support.Dataset)
+      /***********************We check current resource is dataset or not*********************************/
+      var existDataset = datasets?.find(x => x.id == currentResourceType)
+
+      /***********************We check if resource type is table or dataset*********************************/
+      if (existDataset || Schema_Support.Table == currentResourceType) {
+        nested.forEach((x) => {
+          var nestedresourceType = x.value.find(x => x.key == Constants.Metadata.EntityType).valueEdge[0]
+          if (Schema_Support.Table == nestedresourceType || Schema_Support.Column == nestedresourceType) {
+            this.showSchema = true; //Show Schema Tab
+            var index = link.nested.indexOf(x);
+            //remove from linked list if linked resource type is table or column
+            link.nested.splice(index, 1);
+          }
+
+        });
+        //Linked resource is delete from linked list if resource is table or column from nestedInbund
+        nestedInbound.forEach((x) => {
+          var nestedInboundresourceType = x.value.find(x => x.key == Constants.Metadata.EntityType).valueEdge[0]
+          if (Schema_Support.Table == nestedInboundresourceType || Schema_Support.Column == nestedInboundresourceType) {
+            this.showSchema = true; //Show Schema Tab
+            var index = link.nestedInbound.indexOf(x);
+            //remove from linked list if linked resource type is table or column
+            link.nestedInbound.splice(index, 1);
+          }
+        });
+      }
+      // resource type is column
+      else if (Schema_Support.Column == currentResourceType) {
+        nested.forEach((x) => {
+          var nestedresourceType = x.value.find(x => x.key == Constants.Metadata.EntityType).valueEdge[0]
+          if (Schema_Support.Column == nestedresourceType) {
+            this.showSchema = true; //Show Schema Tab
+            var index = link.nested.indexOf(x);
+            //remove from linked list if linked resource type is column
+            link.nested.splice(index, 1);
+          }
+        });
+        //Linked resource is delete from linked list if resource is  column nestedInbound
+        nestedInbound.forEach((x) => {
+          var nestedInboundresourceType = x.value.find(x => x.key == Constants.Metadata.EntityType).valueEdge[0]
+          if (Schema_Support.Column == nestedInboundresourceType) {
+            this.showSchema = true; //Show Schema Tab
+            var index = link.nestedInbound.indexOf(x);
+            //remove from linked list if linked resource type is column
+            link.nestedInbound.splice(index, 1);
+          }
+        });
+      }
+      else {
+        this.showSchema = false; //hide Schema Tab
+      }
+      // resource is not availabe in linked resource,we remove linked resource from list
+      if (link.nested.length == 0 && link.nestedInbound.length == 0) {
+        var linkedindex = orderable.indexOf(link);
+        orderable.splice(linkedindex, 1)
+      }
+    }
   }
 
   onLinkClicked(detail: DetailsViewModel, event: Event): void {
@@ -238,8 +456,8 @@ export class SearchResultComponent implements OnInit, OnDestroy {
   }
 
   GetMetadataOfDistributionEndpoint(distributionEndpoint) {
-    var label = getValueForKey(distributionEndpoint, Constants.Metadata.EntityType);
-    return this.metadata['https://pid.bayer.com/kos/19050/distribution'].nestedMetadata.find(m => m.label == label[0]);
+    var entityTypeUri = getUriForKey(distributionEndpoint, Constants.Metadata.EntityType);
+    return this.metadata['https://pid.bayer.com/kos/19050/distribution'].nestedMetadata.find(m => m.key == entityTypeUri[0]);
   }
 
   parseItemsToDetailsList(items: DocumentMap, parentKey: string, highlights: StringArrayMap): DetailsViewModel[] {
@@ -247,8 +465,6 @@ export class SearchResultComponent implements OnInit, OnDestroy {
 
     for (const key of Object.keys(items)) {
       const item: DocumentMapDirection = items[key];
-      if (parentKey && key === Constants.Metadata.HasLabel) {
-      }
       const orderableItem = this.parseItemToDetailsViewModel(key, item, parentKey, items[Constants.Metadata.EntityType].outbound[0].uri, highlights);
       if (orderableItem !== null) {
         orderable.push(orderableItem);
@@ -296,17 +512,23 @@ export class SearchResultComponent implements OnInit, OnDestroy {
 
       nested = item.outbound.map(n => {
         var parsedItem = this.parseItemsToDetailsList(n.value, n.edge, nestedHighlighting);
-        this.subjectPidUriMap.set(n.uri, n.value[Constants.Metadata.HasPidUri].outbound[0].value);
 
-        return { edge: n.edge, value: parsedItem };
+        if (n.value[Constants.Metadata.HasPidUri] != null) {
+          this.subjectPidUriMap.set(n.uri, n.value[Constants.Metadata.HasPidUri].outbound[0].value);
+        }
+
+        return { edge: n.edge, id: n.uri, value: parsedItem };
       });
 
       nestedHighlighting = highlightingForNestedObject(highlight, key, "inbound")
       nestedInbound = item.inbound.map(n => {
         var parsedItem = this.parseItemsToDetailsList(n.value, n.edge, nestedHighlighting);
-        this.subjectPidUriMap.set(n.uri, n.value[Constants.Metadata.HasPidUri].outbound[0].value);
 
-        return { edge: n.edge, value: parsedItem };
+        if (n.value[Constants.Metadata.HasPidUri] != null) {
+          this.subjectPidUriMap.set(n.uri, n.value[Constants.Metadata.HasPidUri].outbound[0].value);
+        }
+
+        return { edge: n.edge, id: n.uri, value: parsedItem };
       });
     }
 
@@ -334,15 +556,21 @@ export class SearchResultComponent implements OnInit, OnDestroy {
         groupOrder = metaProps[Constants.Shacl.Group].order;
         if (!nestedField && !propertyKey) {
           switch (groupOrder) {
-            case 10: this.label = value; return null;
-            case 20: this.definitionHighlight = value; return null;
+            case 1: this.label = replaceSpecialCharectorFromText(value); return null;
+            case 2: this.definitionHighlight = replaceSpecialCharectorFromText(value); return null;
+
+            case 10: this.label = replaceSpecialCharectorFromText(value);; return null;
+            case 20: this.definitionHighlight = replaceSpecialCharectorFromText(value); return null;
           }
         }
       }
 
+      let inputType = metaProps[Constants.Metadata.Datatype] === Constants.Metadata.Type.DateTime ? InputType.Date : InputType.HTML;
+
       // Only set in main resource and not in nested, since propertyKey is only set for nested properties.
-      if (metaProps[Constants.Metadata.HasPidUri] === Constants.Metadata.HasPidUri || metaProps[Constants.Metadata.HasPidUri] === Constants.Metadata.HasBaseUri) {
+      if (this.isPermanentIdentifier(metaProps)) {
         valueForHref = item.outbound.map(t => t.value);
+        inputType = InputType.Link;
       }
 
       // Only set in main resource and not in nested, since propertyKey is only set for nested properties.
@@ -350,10 +578,7 @@ export class SearchResultComponent implements OnInit, OnDestroy {
         this.resourceType = item.outbound.map(t => t.uri);
       }
 
-      let inputType = metaProps[Constants.Metadata.Datatype] === Constants.Metadata.Type.DateTime ? InputType.Date : InputType.HTML;
-      if (!nestedField && valueForHref && value.some(t => t.startsWith("http://") || t.startsWith("https://"))) {
-        inputType = InputType.Link;
-      } else if (metaProps[Constants.Metadata.HasPidUri] === Constants.Metadata.HasVersion) {
+      if (metaProps[Constants.Metadata.HasPidUri] === Constants.Metadata.HasVersion) {
         inputType = InputType.Version
       }
 
@@ -372,6 +597,34 @@ export class SearchResultComponent implements OnInit, OnDestroy {
       };
     }
     return null;
+  }
+
+  GetSchemeUI(event: MatTabChangeEvent, details) {
+    //this.activeTab="";
+    var pidUri = details.find(x => x.key == 'http://pid.bayer.com/kos/19014/hasPID').valueEdge[0];
+    if (event.tab.textLabel == "Schema") {
+      //this.activeTab.push(pidUri);
+      var schemeStatus = { isAdd: true, activetabList: pidUri }
+      this.selectedIndex = event.index
+      this.schemeUiChange.emit(schemeStatus);
+      //var pidUri = details.find(x => x.key == 'http://pid.bayer.com/kos/19014/hasPID').valueEdge[0];
+      this.store.dispatch(new FetchLinkedTableandColumnResults(pidUri)).subscribe(result => {
+        this.schemeUiDetail = new SchemeUi();
+        this.schemeUiDetail = result.search.linkedTableAndcolumnResource
+      });
+    } else if (event.tab.textLabel == "Distribution Endpoint") {
+      this.distributionData = details.find(x => x.key == 'https://pid.bayer.com/kos/19050/distribution')
+    } else {
+      this.selectedIndex = event.index
+      this.activeTab.push(pidUri)
+      var schemeStatus = { isAdd: false, activetabList: pidUri }
+      this.schemeUiChange.emit(schemeStatus);
+    }
+  }
+
+
+  private isPermanentIdentifier(metaProps: any): boolean {
+    return metaProps[Constants.Metadata.RDFS.Range] === Constants.Identifier.Type;
   }
 }
 
@@ -412,6 +665,32 @@ function getPlainText(htmlText: string) {
   return temp.textContent || temp.innerText || "";
 }
 
+//this function remove special chrector from htmltext
+function replaceSpecialCharectorFromText(textArray: string[]) {
+  return textArray.map(x => replaceSpecialChars(x));
+}
+
+function replaceSpecialChars(str: string) {
+  str = str.replace(/[ÀÁÂÃÅ]/g, "A");
+  str = str.replace(/[ÈÉÊË]/g, "E");
+  str = str.replace(/[ÌÍÎ]/g, "I");
+  str = str.replace(/[ÒÓÔÕ]/g, "O");
+  str = str.replace(/[ÙÚÛ]/g, "U");
+  str = str.replace(/[åàáâãåå]/g, "a");
+  str = str.replace(/[èéêë]/g, "e");
+  str = str.replace(/[ìíî]/g, "i");
+  str = str.replace(/[òóôõø]/g, "o");
+  str = str.replace(/[ùúû]/g, "u");
+  str = str.replace(/[Ç]/g, "C");
+  str = str.replace(/[Ð]/g, "D");
+  str = str.replace(/[Ñ]/g, "N");
+  str = str.replace(/[Ý]/g, "Y");
+  str = str.replace(/[ç]/g, "c");
+  str = str.replace(/[ñ]/g, "n");
+  str = str.replace(/[ý]/g, "y");
+
+  return str;
+}
 
 export class DetailsViewModel {
   key: string;
@@ -430,6 +709,7 @@ export class DetailsViewModel {
 
 export class DetailsViewModelNested {
   edge: string;
+  id: string;
   value: DetailsViewModel[]
 }
 

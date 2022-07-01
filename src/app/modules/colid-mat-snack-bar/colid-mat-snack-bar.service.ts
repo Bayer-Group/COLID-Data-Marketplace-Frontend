@@ -26,6 +26,9 @@ export class ColidMatSnackBarService {
   success(header: string, message: string, data: any = null) {
     this.openSnackbar(header, message, data, 'success-snackbar', ColidMatSnackBarType.SUCCESS, 2000);
   }
+  successCustomDuration(header: string, message: string, data: any=null, duration:number){
+    this.openSnackbar(header, message, data, 'success-snackbar', ColidMatSnackBarType.SUCCESS, duration);
+  }
 
   info(header: string, message: string, data: any = null) {
     this.openSnackbar(header, message, data, 'info-snackbar', ColidMatSnackBarType.INFO,2000);

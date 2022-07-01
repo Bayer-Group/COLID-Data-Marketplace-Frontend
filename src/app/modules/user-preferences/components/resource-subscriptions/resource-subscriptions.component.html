@@ -1,6 +1,6 @@
 <div class="row p-2 justify-content-between">
     <div class="col-auto">
-        <h2>Resource Subscriptions</h2>
+        <h2>Resource subscriptions</h2>
     </div>
     <div class="col-auto">
         <button mat-raised-button color="primary" (click)="reloadColidEntrySubscriptions()">
@@ -15,7 +15,7 @@
             <mat-list-item *ngFor="let colidEntrySubscription of colidEntrySubscriptions | keyvalue">
                 <ds-icon mat-list-icon class="mr-2" iconType="S3" [tooltipDisabled]="false" [delay]="300"
                     [icon]="colidEntrySubscription.value.resourceType"></ds-icon>
-                <a mat-line class="d-flex justify-content-between" href="{colidUrl}/resource?pidUri={colidEntrySubscription.key}" target="_blank" style="width: fit-content;">
+                <a mat-line class="d-flex justify-content-between" href="{{colidUrl}}resource?pidUri={{colidEntrySubscription.key}}" target="_blank" style="width: fit-content;">
                     <div class="d-flex align-items-center">
                         <h5 class="mb-1">{{colidEntrySubscription.value.label}}</h5> &nbsp;&nbsp;
                         <mat-icon style="font-size: large">open_in_new</mat-icon>

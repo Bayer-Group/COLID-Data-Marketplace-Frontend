@@ -2,6 +2,7 @@ import { Selector, State, StateContext, Action } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
 import { StatusBuildInformationDto } from '../shared/models/status/status-build-information-dto';
 import { StatusApiService } from '../core/http/status.api.service';
+import { Injectable } from '@angular/core';
 
 export class FetchBuildInformation {
     static readonly type = '[BuildInformation] Fetch buildInformation';
@@ -18,7 +19,7 @@ export class StatusStateModel {
         buildInformation: null
     }
 })
-
+@Injectable()
 export class StatusState {
     constructor(private statusApiService: StatusApiService) { }
 
@@ -29,8 +30,6 @@ export class StatusState {
 
     @Action(FetchBuildInformation)
     FetchBuildInformation({ patchState }: StateContext<StatusStateModel>, { }: FetchBuildInformation) {
-        console.log("StatusState FetchBuildInformation");
-
         return this.statusApiService.getBuildInformation().pipe(tap((res: StatusBuildInformationDto)  => {
             patchState({
                 buildInformation: res

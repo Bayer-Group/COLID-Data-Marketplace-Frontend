@@ -3,6 +3,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CustomMaterialIcon } from '../models/custom-material-icon';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 declare const InstallTrigger: any;
 
@@ -63,7 +64,7 @@ export class ColidIconsService {
   getEncodedS3Url(str: string): string {
     str = this.encodeString(str);
     str = this.replaceSpecialCharacter(str);
-    return 'https://dataservices-icons.s3.eu-central-1.amazonaws.com/' + str + '.svg';
+    return environment.colidIconsUrl + str + '.svg';
   }
 }
 

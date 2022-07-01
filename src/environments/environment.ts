@@ -27,8 +27,10 @@ export const environment = {
   build: {
     ciJobId: '$BUILD_CIJOBID',
     ciPipelineId: '$BUILD_CIPIPELINEID',
-    ciCommitSha:  '$BUILD_CICOMMITSHA',
+    ciCommitSha: '$BUILD_CICOMMITSHA',
   },
   pidUrl: 'http://localhost:4200/',
-  kgeUrl: 'http://localhost:4400/'
+  kgeUrl: 'https://kge.example.com/',
+  rrmUrl: 'http://localhost:4305/',
+  colidIconsUrl: 'https://dataservices-icons.dev.colid.int.bayer.com/'
 };

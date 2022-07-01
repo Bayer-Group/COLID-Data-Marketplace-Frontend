@@ -60,9 +60,11 @@ export const Constants = {
     },
     EntityType: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
     Datatype: 'http://www.w3.org/ns/shacl#datatype',
+    Comment: 'http://www.w3.org/2000/01/rdf-schema#comment',
     HasLabel: 'https://pid.bayer.com/kos/19050/hasLabel',
     HasBaseUri: 'https://pid.bayer.com/kos/19050/hasBaseURI',
     HasResourceDefinition: 'https://pid.bayer.com/kos/19050/hasResourceDefinition',
+    HasPIDEditorialNote: 'https://pid.bayer.com/kos/19050/hasPIDEditorialNote',
     DateCreated: 'https://pid.bayer.com/kos/19050/dateCreated',
     LastChangeDateTime: 'https://pid.bayer.com/kos/19050/lastChangeDateTime',
     HasConsumerGroup: 'https://pid.bayer.com/kos/19050#hasConsumerGroup',
@@ -74,7 +76,16 @@ export const Constants = {
     PidUriTemplateSuffix: 'https://pid.bayer.com/kos/19050#hasPidUriTemplateSuffix',
     DistributionEndpointLifecycleStatus: 'https://pid.bayer.com/kos/19050/hasDistributionEndpointLifecycleStatus',
     ContactPerson: 'https://pid.bayer.com/kos/19050/hasContactPerson',
-    HasNetworkedResourceLabel: 'https://pid.bayer.com/kos/19050/hasNetworkedResourceLabel'
+    HasNetworkedResourceLabel: 'https://pid.bayer.com/kos/19050/hasNetworkedResourceLabel',
+    HasDataCategory: 'https://pid.bayer.com/kos/19050/hasDataCategory',
+    HasCountryContext : 'https://pid.bayer.com/kos/19050/hasCountryContext',
+    RDFS: {
+      Range: 'http://www.w3.org/2000/01/rdf-schema#range'
+    },
+    DataSteward: 'https://pid.bayer.com/kos/19050/hasDataSteward'
+  },
+  Identifier: {
+    Type: 'http://pid.bayer.com/kos/19014/PermanentIdentifier'
   },
   DistributionEndpoint: {
     LifecycleStatus: {

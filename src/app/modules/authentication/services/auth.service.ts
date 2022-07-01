@@ -1,4 +1,5 @@
 import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { IdentityProvider } from './identity-provider.service';
 import { ColidAccount } from '../models/colid-account.model';
@@ -12,36 +13,32 @@ export class AuthService {
 
   constructor(@Inject(IDENT_PROV) private identityProvider: IdentityProvider, private router: Router) { }
 
-  get currentIdentity(): ColidAccount {
+  get currentIdentity$(): Observable<ColidAccount> {
     return this.identityProvider.getAccount();
   }
 
-  get currentEmail(): string {
-    return this.currentIdentity.email;
+  get currentEmail$(): Observable<string> {
+    return this.currentIdentity$.pipe(map(id => id ? id.email : null));
   }
 
-  get currentName(): string {
-    return this.currentIdentity.name;
+  get currentName$(): Observable<string> {
+    return this.currentIdentity$.pipe(map(id => id ? id.name : null));
   }
 
-  get currentUserId(): string {
-    return this.currentIdentity.accountIdentifier;
+  get currentUserId$(): Observable<string> {
+    return this.currentIdentity$.pipe(map(id => id ? id.accountIdentifier : null));
   }
 
-  get isLoggedIn(): boolean {
-    return this.identityProvider.isLoggedIn;
+  get isLoggedIn$(): Observable<boolean> {
+    return this.identityProvider.isLoggedIn$;
   }
 
   get loginInProgress(): boolean {
     return this.identityProvider.loginInProgress();
   }
 
-  get currentUserRoles(): any {
-    return this.currentIdentity.roles;
-  }
-
-  get isAuthorized(): Observable<boolean> {
-    return of(this.isLoggedIn);
+  get currentUserRoles$(): Observable<any> {
+    return this.currentIdentity$.pipe(map(id => id ? id.roles : []));
   }
 
   get isLoadingUser(): boolean {
@@ -52,21 +49,21 @@ export class AuthService {
     return localStorage.getItem('msal.idtoken')
   }
 
-  checkAccount() {
-    if (!this.isLoggedIn) {
-      if (!this.loginInProgress) {
-        this.login();
+  subscribeCheckAccount() {
+    return this.isLoggedIn$.subscribe(val => {
+      if (!val && !this.loginInProgress) {
+        this.login()
+      } else {
+        this.redirect()
       }
-    } else {
-      this.redirect();
-    }
+    })
   }
 
   redirect() {
     const redirectPathString = window.sessionStorage.getItem('url');
     const queryParamString = window.sessionStorage.getItem('queryParams');
 
-    if (redirectPathString == null && queryParamString == null) {
+    if (redirectPathString == null || queryParamString == null) {
       this.router.navigate(['']);
       return;
     }
@@ -77,7 +74,14 @@ export class AuthService {
   }
 
   login() {
-    this.identityProvider.login();
+    // If the login is happening in a Iframe we need to delay it so it does not create a infinte loop
+    if (window.self !== window.top) {
+      setTimeout(() => {
+        this.identityProvider.login();
+      }, 5000)
+    } else {
+      this.identityProvider.login();
+    }
   }
 
   logout() {

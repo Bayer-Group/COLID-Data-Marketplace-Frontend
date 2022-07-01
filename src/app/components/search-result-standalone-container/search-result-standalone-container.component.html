@@ -1,0 +1,21 @@
+
+<ng-container *ngIf="pidUri != ''">
+    <ng-container *ngIf="!loading && searchResult != null"> 
+    
+        <ng-container *ngIf="searchResult && searchResult.hits && metadata != null">
+            <div class="standalone-result">
+                <app-search-result #res [result]="searchResult.hits.hits[0]" [expandByDefault]="true" [collapsible]="false" [metadata]="metadata"></app-search-result>
+            </div> 
+        </ng-container>
+        
+    </ng-container>
+    <ng-container *ngIf="loading"> 
+     <mat-spinner style="margin:0 auto; margin-top: 10%;" mode="indeterminate"></mat-spinner>
+    </ng-container>
+    
+</ng-container>
+<ng-container *ngIf="pidUri == ''">
+    <div>
+        <span>Please select a resource in order to display the details</span>
+    </div>
+</ng-container>

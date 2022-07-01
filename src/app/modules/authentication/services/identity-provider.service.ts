@@ -1,9 +1,10 @@
 import { ColidAccount } from '../models/colid-account.model';
+import { Observable } from 'rxjs';
 
 export interface IdentityProvider {
-  getAccount(): ColidAccount;
+  getAccount(): Observable<ColidAccount>;
   loginInProgress(): boolean;
-  isLoggedIn: boolean;
+  isLoggedIn$: Observable<boolean>;
   login(): void;
   logout(): void;
 }

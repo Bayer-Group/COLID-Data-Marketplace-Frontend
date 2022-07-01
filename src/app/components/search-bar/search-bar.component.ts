@@ -26,13 +26,9 @@ export class SearchBarComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log("app-search-bar ngOnInit");
-
   }
 
   onInputChange(text: string) {
-    console.log("app-search-bar onInputChange");
-
     if (this.blockInputChange === false) {
       this.inputChange.emit(text);
     }
@@ -41,7 +37,6 @@ export class SearchBarComponent implements OnInit {
   }
 
   onEnter(text: string) {
-    console.log("app-search-bar onEnter");
     this.autocomplete.closePanel();
     
     this.blockInputChange = true;
@@ -52,7 +47,6 @@ export class SearchBarComponent implements OnInit {
   }
 
   handleOptionSelected(event: MatAutocompleteSelectedEvent){
-    console.log("app-search-bar autocomplete option selected", event);
     this.onEnter(event.option.value);
   }
 }

@@ -1,9 +1,12 @@
 <ensure-browser-support>
-  <app-navbar (toggleNotification)="notificationSidenav.toggle()"></app-navbar>
+  <ng-container *ngIf="!hideToolbar">
+    <app-navbar (toggleNotification)="notificationSidenav.toggle()"></app-navbar>
+  </ng-container>
+  
   <mat-sidenav-container hasBackdrop="false">
     <mat-sidenav class="notification" #notificationSidenav disableClose="true" mode="over" position="end">
       <colid-notification (closeSidebar)="notificationSidenav.toggle()"
-        [user]="authService.currentIdentity.accountIdentifier" [sidebarOpen]="notificationSidenav.opened">
+        [user]="currentAccountIdentifier$ | async" [sidebarOpen]="notificationSidenav.opened">
       </colid-notification>
     </mat-sidenav>
     <router-outlet></router-outlet>

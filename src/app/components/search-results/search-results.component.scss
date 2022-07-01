@@ -12,3 +12,22 @@
 .loading-batch-spinner {
     margin-bottom: 30px !important;
 }
+
+.alert {
+    display: inline-flex;
+    vertical-align: middle;
+}
+
+.alert > mat-icon {
+    margin-right: 15px;
+}
+.checkbox{
+    margin: 12px;
+    float: left;
+   }
+
+    .searchresultlist{
+        margin-left: 20px; 
+        max-width:53%; 
+        flex: 0 0 58.3333333333%;
+    }

@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { State, Action, StateContext, Selector} from '@ngxs/store';
 
 export class SetSidebarOpened {
@@ -30,7 +31,7 @@ export class SidebarStateModel {
     sidebarMode: 'side'
   }
 })
-
+@Injectable()
 export class SidebarState {
 
   constructor() { }

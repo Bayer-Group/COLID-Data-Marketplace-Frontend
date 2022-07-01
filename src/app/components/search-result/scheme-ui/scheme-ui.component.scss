@@ -1,0 +1,66 @@
+
+
+// .header{
+//     background-color: #002e46;
+//     color:white;
+// }
+
+//    ::ng-deep .mat-expansion-panel-body {
+//     padding-left: 0 !important;
+//     padding-bottom: 0 !important;
+//     display: inline-block;
+//     max-width: 100%!important;
+//     overflow: auto;
+//   }
+
+  
+//   th, td {
+//     border: 1px solid #bbb;
+//     padding: 2px 8px 0;
+//     text-align: left;
+//   }
+
+  
+ 
+  .mat-cell,
+  .mat-header-cell {
+    word-wrap: initial;
+    display: table-cell;
+    padding: 0px 10px;
+    line-break: unset;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: middle;
+    padding-left: 2px !important;
+  }
+
+  // ::ng-deep .mat-checkbox {
+  //   padding-left: 0 !important;
+  //   height: auto !important;
+  //   font-size: 0.8rem !important;
+  // }
+  
+//   .mat-row,
+//   .mat-header-row {
+//     display: table-row;
+//     height: 40px;
+//   }
+
+.column-container {
+  margin-top: 24px;
+}
+
+.filter-mode{
+  margin-right: 15px;
+  display:table-caption; 
+  width: 0px; 
+}
+
+.standalone-column-container {
+  margin-top: -46px;
+}
+
+.column-table {
+  box-shadow: none;
+}

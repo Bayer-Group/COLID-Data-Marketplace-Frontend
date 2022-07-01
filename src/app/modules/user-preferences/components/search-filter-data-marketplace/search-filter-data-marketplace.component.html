@@ -1,10 +1,113 @@
-<div class="row p-2">
-  <div class="col">
-      <h1>Search Filters for Data Marketplace</h1>
+<div class="row p-2 justify-content-between">
+  <div class="col-auto">
+      <h2>Saved searches and subscriptions</h2>
   </div>
+  <!-- <div class="col-auto">
+      <button mat-raised-button color="primary">
+          <mat-icon fontSet="material-icons-outlined">refresh</mat-icon>
+          Refresh
+      </button>
+  </div> -->
 </div>
-<div class="row">
+<br>
+
+<div class="row justify-content-center">
+ 
+  <div class="col-11 ng-star-inserted" *ngIf="!loading; else spinner">
+    <div class="w-100">
+      <span class="mr-0">
+        If you select a search interval, this search will be performed automatically and you will receive a notification when
+        results change.
+      </span>
+    </div>
+    <br>
+
+    <div class="w-100">
+      <span class="mr-0">
+        Saved searches can be executed via execute search button.
+      </span>
+    </div>
+    <br>
+    <br>
+  <div *ngIf="userSearchFilters.length > 0; else emptyResults">
+    <mat-accordion multi="false">
+        <mat-expansion-panel *ngFor="let userSearchFilter of userSearchFilters">
+            <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <div >
+                      <div class="d-flex align-items-center">
+                        <h5 class="mb-1">{{userSearchFilter.name}}</h5>
+                        </div>
+                        </div>
+                  </mat-panel-title>
+                  <mat-panel-description class="mt-2">
+                    <button mat-icon-button class="border-button mr-2"  matTooltip="Execute search">
+                    <mat-icon class="mr-1" (click)="getStateInitializationActionsFromQueryParams(userSearchFilter)" fontSet="material-icons-outlined">search</mat-icon>
+                  </button>
+                      <button mat-icon-button class="border-button mr-2"  matTooltip="Subscribe to saved search"
+                        *ngIf="!userSearchFilter.storedQuery" (click)="onOpenIntervalNotificationDiallog(userSearchFilter)">
+                          <mat-icon>notifications_none</mat-icon>
+                      </button>
+        
+                      <button mat-icon-button class="border-button mr-2"  matTooltip="Unsubscribe from saved search"
+                         *ngIf="userSearchFilter.storedQuery" (click)="onUnsubscribeIntervalNotification(userSearchFilter)">
+                          <mat-icon>notifications_active</mat-icon>
+                      </button>
+                        
+                      <button mat-icon-button class="border-button mr-2" matTooltip="Delete saved search" (click)="removeSearchFilters(userSearchFilter)">
+                        <mat-icon fontSet="material-icons-outlined">delete</mat-icon>
+                    </button>
+                    
+                  </mat-panel-description>   
+            </mat-expansion-panel-header>
+            <!-- <ng-template matExpansionPanelContent> -->
+              <mat-divider class="my-1"></mat-divider>
+              <div>
+                <div class="row pb-1 ng-star-inserted">
+                  <div class="col-3 ng-star-inserted">
+                    <span class="small text-muted text-uppercase lead">Search Term</span>
+                  </div>
+                  <div class="col-9 ng-star-inserted" >
+                    <span class="ng-star-inserted">{{userSearchFilter.searchTerm}}</span>
+                  </div>
+                </div>
+               
+                <div class="row pb-1 ng-star-inserted" *ngFor="let details of userSearchFilter.filterJson.aggregations | keyvalue">
+                  <div class="col-3 ng-star-inserted">
+                    <span class="small text-muted text-uppercase lead">{{getAggregationLabel(details.key)}}</span>
+                  </div>
+                  <div class="col-9 ng-star-inserted" >
+                    <span class="ng-star-inserted">{{details.value}}</span>
+                  </div>
+                </div>
+
+                <div class="row pb-1 ng-star-inserted" *ngFor="let details of userSearchFilter.filterJson.ranges | keyvalue">
+                  <div class="col-3 ng-star-inserted">
+                    <span class="small text-muted text-uppercase lead">{{getAggregationLabel(details.key)}}</span>
+                  </div>
+                  <div class="col-9 ng-star-inserted" >
+                    <span class="ng-star-inserted">{{details.value.from}} to {{details.value.to}}</span>
+                  </div>
+                </div>
+              </div>
+             <hr>
+          <!-- </ng-template> -->
+        </mat-expansion-panel>
+       
+    </mat-accordion> 
+    
+  </div>
+</div>  
+</div>
+<ng-template #spinner>
+  <app-colid-spinner></app-colid-spinner>
+</ng-template>
+
+<ng-template #emptyResults>
   <div class="col-12">
-      Please come back later. We will provide you with exciting features here!
+      <div class="mt-4 text-center">
+          <h4 class="mb-0">You don't have any resource search filters set up yet.</h4>
+          <h4>You can save your custom filters from the home page.</h4>
+      </div>
   </div>
-</div>
+</ng-template>

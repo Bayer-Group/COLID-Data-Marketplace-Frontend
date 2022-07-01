@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { Selector, State, StateContext, Action, Store } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
 import { MessageDto } from 'src/app/shared/models/user/message-dto';
@@ -33,7 +34,7 @@ export class NotificationStateModel {
     notifications: null
   }
 })
-
+@Injectable()
 export class NotificationState {
   constructor(private notificationApiService: NotificationService) { }
 

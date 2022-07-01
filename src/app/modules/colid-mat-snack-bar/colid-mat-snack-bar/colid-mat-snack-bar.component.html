@@ -19,7 +19,7 @@
     <h4 *ngIf="data.header">{{data.header}}</h4>
     <p *ngIf="data.message">{{data.message}}</p>
     <div style="text-align: right;">
-      <button *ngIf="data.data" mat-button (click)="copy()">Copy</button>
+      <button *ngIf="data.data" mat-button [cdkCopyToClipboard]="data | json">Copy</button>
       <button mat-button (click)="dismiss()">Dismiss</button>
     </div>
   </div>

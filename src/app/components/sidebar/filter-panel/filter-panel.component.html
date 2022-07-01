@@ -1,12 +1,12 @@
 <div class="filter-panel-container">
   <div class="filter-panel-main" *ngIf="mainAggregationFilters && activeAggregations; else loading">
-    <app-filter-box *ngFor="let filter of mainAggregationFilters" [filterType]="'checkbox'"
+    <app-filter-box *ngFor="let filter of mainAggregationFilters" [filterType]="'checkBoxHierarchy'"
       [initialFilterBox]="initialFilterPanel" [activeAggregationBuckets]="activeAggregations.get(filter.key)"
       [aggregation]="filter">
     </app-filter-box>
   </div>
 
-  <div class="centered-item" *ngIf="aggregationFilters && activeAggregations; else loading">
+  <div class="centered-item" *ngIf="aggregationFilters && activeAggregations && aggregationFilters.length">
       <app-filter-box *ngFor="let filter of aggregationFilters" [initialFilterBox]="initialFilterPanel"
         [activeAggregationBuckets]="activeAggregations.get(filter.key)" [filterType]="filter.taxonomy ? 'taxonomy' : 'select'" [aggregation]="filter">
       </app-filter-box>
@@ -18,17 +18,28 @@
       </div>
   </div>
 
-  <div class="d-flex justify-content-around filter-panel-buttons">
-    <button mat-stroked-button color="primary" (click)="resetActiveAggregation()">
-      <mat-icon fontSet="material-icons-outlined">undo</mat-icon>
-      Reset filters
-    </button>
+  <div class="d-flex justify-content-around filter-panel-buttons" *ngIf="(mainAggregationFilters || aggregationFilters) && (mainAggregationFilters.length || aggregationFilters.length)">
+      <button mat-stroked-button color="primary" (click)="resetActiveAggregation()">
+        <mat-icon fontSet="material-icons-outlined">undo</mat-icon>
+        Reset filters
+      </button>
+      <!-- <button mat-stroked-button color="primary" (click)="addSearchFilterLinkClicked($event)" [disabled]="(!searchText && checkNullActiveAggregations() && checkNullActiveRangeFilters())">
+        <mat-icon fontSet="material-icons-outlined">save</mat-icon>
+        Save Filter
+      </button> -->
+  </div>
+
+  <div class="d-flex justify-content-center" *ngIf="aggregationFilters && activeAggregations && aggregationFilters.length == 0">
+    <div class="col align-items-center mt-4 loading">
+      <mat-icon class="d-flex justify-content-center filter-panel-no-filters-icon" fontSet="material-icons-outlined">info</mat-icon>
+      <div class="d-flex justify-content-center filter-panel-no-filters-text">No filters are available for the current search.<br>Please try another search term.</div>
+    </div>
   </div>
 
 </div>
 <ng-template #loading>
-  <div class="row justify-content-center mt-4 loading">
-    <div class="col-auto">
+  <div class="d-flex justify-content-center mt-4 loading">
+    <div class="justify-content-center my-5">
       <app-colid-spinner></app-colid-spinner>
     </div>
   </div>

@@ -1,15 +1,20 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { FilterState } from 'src/app/states/filter.state';
+import { Component, OnInit, Input, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { FetchFilter, FilterState } from 'src/app/states/filter.state';
 import { Observable, Subscription, combineLatest } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 import { Aggregation } from 'src/app/shared/models/aggregation';
-import { ResetActiveAggregationBuckets, SearchState, SearchStateModel, OverwriteActiveAggregationBuckets, OverwriteActiveRangeFilters } from '../../../states/search.state';
+import { ResetActiveAggregationBuckets, SearchState, SearchStateModel, OverwriteActiveAggregationBuckets, OverwriteActiveRangeFilters, FetchSearchResult } from '../../../states/search.state';
 import { RangeFilter } from 'src/app/shared/models/range-filter';
 import { ActiveRangeFilters } from 'src/app/shared/models/active-range-filters';
 import { Constants } from 'src/app/shared/constants';
 import { UserInfoState } from 'src/app/states/user-info.state';
 import { SearchFilterDataMarketplaceDto } from 'src/app/shared/models/user/search-filter-data-marketplace-dto';
 import { objectToMap } from 'src/app/shared/converters/map-object.converter';
+import { mapToObject } from 'src/app/shared/converters/map-object.converter';
+import { MatDialog } from '@angular/material/dialog';
+import { LogService } from 'src/app/core/logging/log.service';
+import { SearchFilterDialogComponent } from 'src/app/components/sidebar/search-filter-dialog/search-filter-dialog.component';
+import { FetchResourceTypeHierarchy } from 'src/app/states/metadata.state';
 
 
 @Component({
@@ -24,6 +29,7 @@ export class FilterPanelComponent implements OnInit, OnDestroy {
   @Select(SearchState.getActiveAggregations) activeAggregations$: Observable<Map<string, string[]>>;
   @Select(SearchState.getActiveRangeFilters) activeRangeFilters$: Observable<ActiveRangeFilters>;
   @Select(UserInfoState.getDefaultSearchFilterDataMarketplace) defaultSearchFilterDataMarketplace$: Observable<SearchFilterDataMarketplaceDto>;
+  @Select(SearchState.getSearchText) searchText$: Observable<string>;
 
   aggregationFilters: Aggregation[];
   mainAggregationFilters: Aggregation[];
@@ -32,20 +38,33 @@ export class FilterPanelComponent implements OnInit, OnDestroy {
 
   activeAggregations: Map<string, string[]>;
   activeRangeFilters: ActiveRangeFilters;
+  searchText: string;
 
   combineLatestSubscription: Subscription;
 
   @Select(SearchState) searchState: Observable<SearchStateModel>;
 
-  loading: boolean;
-
   @Input() initialFilterPanel: boolean = false;
 
-  constructor(private store: Store) { }
+  constructor(private store: Store,
+    private cdr: ChangeDetectorRef,
+    private logger: LogService,
+    private dialog: MatDialog) { }
 
   ngOnInit() {
-    this.aggregationFilters$.subscribe(aggregationFilters => this.initializeFilters(aggregationFilters));
-    this.activeAggregations$.subscribe(activeAggregations => this.activeAggregations = activeAggregations);
+    this.store.dispatch(new FetchResourceTypeHierarchy()).subscribe();
+
+    this.aggregationFilters$.subscribe(aggregationFilters => {
+      if (aggregationFilters == null) {
+        this.store.dispatch(new FetchFilter()).subscribe();
+      } else {
+        this.initializeFilters(aggregationFilters)
+      }
+    });
+
+    this.activeAggregations$.subscribe(activeAggregations => {
+      this.activeAggregations = activeAggregations
+    });
     this.activeRangeFilters$.subscribe(activeRangeFilters => {
       this.activeRangeFilters = activeRangeFilters
     });
@@ -63,6 +82,7 @@ export class FilterPanelComponent implements OnInit, OnDestroy {
         this.store.dispatch(new OverwriteActiveRangeFilters(defaultRangeFilters, true)).subscribe();
       }
     });
+    this.searchText$.subscribe(searchText => this.searchText = searchText);
   }
 
   ngOnDestroy() {
@@ -85,6 +105,7 @@ export class FilterPanelComponent implements OnInit, OnDestroy {
       this.aggregationFilters = orderedAggFilters.filter(a => !this.isMainAggFilter(a));
       this.mainAggregationFilters = orderedAggFilters.filter(a => this.isMainAggFilter(a));
     }
+    this.cdr.detectChanges()
   }
 
   isMainAggFilter(aggregation: Aggregation) {
@@ -93,5 +114,34 @@ export class FilterPanelComponent implements OnInit, OnDestroy {
 
   resetActiveAggregation() {
     this.store.dispatch(new ResetActiveAggregationBuckets(true)).subscribe();
+  }
+
+  checkNullActiveAggregations() {
+    let values = Array.from(this.activeAggregations.values())
+    const allUndefined = values.every(v => v === undefined);
+    return allUndefined;
+  }
+  checkNullActiveRangeFilters() {
+    return Object.keys(this.activeRangeFilters).length === 0 && this.activeRangeFilters.constructor === Object;
+  }
+
+  addSearchFilterLinkClicked(event: Event): void {
+    event.preventDefault();
+    const activeAggregationFilters = mapToObject(this.activeAggregations);
+    const activeRangeFilters = this.activeRangeFilters;
+    const searchText = this.searchText;
+    this.logger.info("DMP_SAVE_SEARCH_FILTER_LINK_CLICKED",
+      {
+        'searchText': searchText,
+        'activeRangeFilters': activeRangeFilters,
+        'activeAggregationFilters': activeAggregationFilters
+      });
+    this.dialog.open(SearchFilterDialogComponent, {
+      data: {
+        searchText: searchText,
+        activeRangeFilters: activeRangeFilters,
+        activeAggregationFilters: activeAggregationFilters
+      }
+    });
   }
 }

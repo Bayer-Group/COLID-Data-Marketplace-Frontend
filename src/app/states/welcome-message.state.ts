@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { Selector, State, StateContext, Action } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
 import { WelcomeMessageApiService } from '../core/http/welcome-message.api.sevice';
@@ -18,7 +19,7 @@ export class WelcomeMessageStateModel {
         welcomeMessage: null
     }
 })
-
+@Injectable()
 export class WelcomeMessageState {
 
     constructor(private welcomeMessageApiService: WelcomeMessageApiService) { }

@@ -1,3 +1,4 @@
+import { DocumentMap } from 'src/app/shared/models/search-result';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -6,6 +7,7 @@ import { SearchResult } from '../../shared/models/search-result';
 import { map } from 'rxjs/operators';
 import { ActiveRangeFilters } from '../../shared/models/active-range-filters';
 import { AggregationsResultDto } from '../../shared/models/aggregations-result-dto';
+
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +45,46 @@ export class SearchService {
     return this.httpClient.post<SearchResult>(this.baseUrl + 'search', searchRequestObject);
   }
 
+  searchDocument(pidUri: any): Observable<SearchResult>{
+    return this.httpClient.get<DocumentMap>(this.baseUrl + 'document?id=' + pidUri).pipe(map(result => {
+      var output =
+      {
+        hits: {
+          hits : [
+            {  
+              id: pidUri,
+              score: 0,
+              source: result,
+              highlight: {},
+              index: "",
+              innerHits: {},
+              matchedQueries: [],
+              nested: null,
+              primaryTerm: null,
+              routing: null,
+              sequenceNumber: null,
+              sorts: [],
+              type: "_doc",
+              version: 0
+            }
+          ],
+          total: 1
+        },
+        originalSearchTerm: null,
+        suggestedSearchTerm: null,
+        aggregations: [],//done
+        rangeFilters: [],
+        suggest: {}
+      };
+      return output;
+    }));
+  }
+
+  startExport(requestBody: any): Observable<any> {
+    const url = environment.colidApiUrl + '/export';
+    return this.httpClient.post<any>(url, requestBody);
+  }
+
   fetchAutoCompleteResults(searchTerm: string): Observable<string[]> {
     //return this.getMockData("./assets/mockdata/api_search_suggest_mock.json");
     return this.httpClient.get<string[]>(this.baseUrl + 'search/suggest?q=' + searchTerm).pipe(map(r => {
@@ -60,5 +102,15 @@ export class SearchService {
 
   getMockData(filename: string): Observable<any> {
     return this.httpClient.get<SearchResult>(filename);
+  }
+
+  fetchLinkedTableandColumnResourceById(id){
+    const url = environment.colidApiUrl + `/resource/linkedTableAndColumnResource?pidUri=${id}`;
+    return this.httpClient.get<any>(url);
+  }
+
+  fetchSchemaUIItems(resourceIdList:any): Observable<any> {
+    const uri=this.baseUrl + 'getSchemaUIResource'
+    return this.httpClient.post<any>(uri,resourceIdList);
   }
 }

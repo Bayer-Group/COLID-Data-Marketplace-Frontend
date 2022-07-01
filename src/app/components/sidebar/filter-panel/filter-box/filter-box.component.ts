@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
+import { Component, OnInit, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { AggregationBucket } from 'src/app/shared/models/aggregation-bucket';
 import { Store } from '@ngxs/store';
 import { Aggregation, AggregationType } from 'src/app/shared/models/aggregation';
@@ -13,11 +13,13 @@ enum CollapseStates {
 
 @Component({
   selector: 'app-filter-box',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+
   templateUrl: './filter-box.component.html',
   styleUrls: ['./filter-box.component.scss']
 })
 export class FilterBoxComponent implements OnInit {
-  
+
   constructor(private store: Store) {
   }
 
@@ -28,7 +30,7 @@ export class FilterBoxComponent implements OnInit {
   @Input() activeAggregationBuckets: string[];
   @Input() initialFilterBox: boolean = false;
 
-  @Input() filterType: 'taxonomy' | 'checkbox' | 'select' = "checkbox";
+  @Input() filterType: 'taxonomy' | 'checkbox' | 'checkBoxHierarchy' | 'select' = "checkbox";
 
   aggregationType = AggregationType;
   visibleBuckets: AggregationBucket[] = [];
@@ -38,9 +40,10 @@ export class FilterBoxComponent implements OnInit {
   canShowLess: boolean;
   canShowAll: boolean;
   collapseState: CollapseStates;
+  selectedBoxes: any[] = []
 
   changeActiveAggregationBucketList = new Observable<any>();
-  
+
   ngOnInit() {
     this.setCollapseState(this.filterType === 'checkbox' ? CollapseStates.Initial : CollapseStates.All);
   }
@@ -82,6 +85,23 @@ export class FilterBoxComponent implements OnInit {
       this.store.dispatch(new ChangeActiveAggregationBuckets(this.aggregation, bucket, active, this.initialFilterBox)).subscribe();
     }
   }
+
+  filterHierarchyItemsChanged(bucketIds: string[]) {
+    var bucketNames = []
+
+    bucketIds.forEach(item => {
+      var suffixIndex = item.indexOf('#')
+      var trimmed = item.substring(0, suffixIndex)
+      if(!bucketNames.includes(trimmed)){
+        bucketNames.push(trimmed)
+      }
+    })
+
+    if (this.aggregation) {
+      this.store.dispatch(new ChangeActiveAggregationBucketList(this.aggregation, bucketNames, this.initialFilterBox)).subscribe();
+    }
+  }
+
 
   filterItemsChanged(buckets: string[]) {
     if (this.aggregation) {

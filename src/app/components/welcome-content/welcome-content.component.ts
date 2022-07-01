@@ -27,7 +27,6 @@ export class WelcomeContentComponent implements OnInit {
 
   handleInputChange(searchText: string) {
     this.searchText = searchText;
-    console.log("app-welcome-content handleInputChange");
   }
 
   search() {

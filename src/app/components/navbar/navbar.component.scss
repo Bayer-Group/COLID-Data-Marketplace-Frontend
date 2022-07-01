@@ -11,8 +11,12 @@ $mat-toolbar-height: 54px;
 }
 
 .mat-flat-button {
-    line-height: 32px;
+   line-height: 32px;  
+   overflow: hidden;
+   text-overflow: ellipsis !important;
+
 }
+
 
 img {
     margin-right: 10px;

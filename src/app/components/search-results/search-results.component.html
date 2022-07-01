@@ -2,7 +2,7 @@
   <ng-container *ngIf="(isInvalidSearchQuery | async) === false; else invalidSearchQuery">
     <ng-container *ngIf="searchResult && searchResult.hits; else noSearchResult">
       <div class="row">
-        <div class="col">
+        <div class="col d-flex">
           <div class="search-hints">
             <small class="text-muted">
               {{searchResult.hits.total}} results for
@@ -10,34 +10,43 @@
               <span *ngIf="!(correctedSearchText$ | async)">{{searchTextObservable$ | async}}</span>
             </small>
 
-            <div *ngIf="correctedSearchText$ | async as corrected" class="alert alert-light mt-3" role="alert">
+            <div *ngIf="correctedSearchText$ | async as corrected" class="alert alert-light mt-3 flex-fill"
+              role="alert">
               <mat-icon fontSet="material-icons-outlined">help</mat-icon>
-              Your original search term did not return any results, here are the results for
-              <strong>{{corrected}}</strong> instead.
+              <div>Your original search term did not return any results, here are the results for
+                <strong>{{corrected}}</strong> instead.
+              </div>
             </div>
 
-            <div *ngIf="didYouMean$ | async as dym" class="alert alert-light mt-3" role="alert">
+            <div *ngIf="didYouMean$ | async as dym" class="alert alert-light mt-3 flex-fill" role="alert">
               <mat-icon fontSet="material-icons-outlined">help</mat-icon>
-              Did you mean <a href="javascript:void(0)" (click)="acceptDidYouMean(dym)"><strong>{{dym}}</strong></a>?
+              <div>Did you mean <a href="javascript:void(0)"
+                  (click)="acceptDidYouMean(dym)"><strong>{{dym}}</strong></a>?
+              </div>
             </div>
           </div>
         </div>
       </div>
       <ng-container *ngIf="metadata; else loading">
-        <div infiniteScroll class="search-results" [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" [scrollWindow]="false"
-          [immediateCheck]="true" (scrolled)="nextBatch($event, searchResult.hits.total)" #searchResults>
+        <div infiniteScroll class="search-results" [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+          [scrollWindow]="false" [immediateCheck]="true" (scrolled)="nextBatch($event, searchResult.hits.total)"
+          #searchResults>
           <div class="row my-1 mx-0" *ngFor="let hit of searchResult.hits.hits; let index = index">
-            <div class="col-xl-7">
-              <app-search-result [result]="hit" [metadata]="metadata"></app-search-result>
+            <div *ngIf="skipResult.indexOf(hit.id) == -1" [ngClass]="[getActiveTab(hit.id)? 'col-xl-12' : 'col-xl-7']">
+              <ng-container *ngIf="showCheckbox">
+                <input type="checkbox" class="checkbox" [id]="hit.id" (change)="checkboxChanged($event)" />
+              </ng-container>
+              <app-search-result [result]="hit" [index]="index" [metadata]="metadata" (schemeUiChange)=schemeUi($event)>
+              </app-search-result>
             </div>
           </div>
           <div class="row loading-batch-spinner" [hidden]="!loadingBatch">
             <div class="col mx-1">
-              <div class="row justify-content-center mt-4">
-                <div class="col-auto">
-                    <app-colid-spinner></app-colid-spinner>
+              <div class="mt-4">
+                <div class="col-xl-7">
+                  <app-colid-spinner></app-colid-spinner>
                 </div>
-            </div>
+              </div>
             </div>
           </div>
         </div>
@@ -45,37 +54,34 @@
     </ng-container>
 
     <ng-template #noResults>
-      <div class="row">
-        <div class="col">
-          <div class="alert alert-primary mt-3" role="alert">
-            <mat-icon fontSet="material-icons-outlined">info</mat-icon>
-            No results for your query.
+      <div class="col-xl-7 d-flex">
+        <div class="alert alert-primary mt-3 flex-fill" role="alert">
+          <mat-icon fontSet="material-icons-outlined">info</mat-icon>
+          <div>No results for your query.
           </div>
         </div>
       </div>
     </ng-template>
     <ng-template #noSearchResult>
-      <div class="row">
-        <div class="col">
-          <div class="alert alert-warning mt-3" role="alert">
-            <mat-icon fontSet="material-icons-outlined">info</mat-icon>
-            Something went wrong with your search. Please contact an administrator.
+      <div class="col-xl-7 d-flex">
+        <div class="alert alert-warning mt-3 flex-fill" role="alert">
+          <mat-icon fontSet="material-icons-outlined">info</mat-icon>
+          <div>Something went wrong with your search. Please contact an administrator.
           </div>
         </div>
       </div>
     </ng-template>
   </ng-container>
   <ng-template #invalidSearchQuery>
-    <div class="row">
-      <div class="col">
-        <div class="alert alert-warning mt-3" role="alert">
-          <p>
-            <mat-icon fontSet="material-icons-outlined">info</mat-icon>
-            Your search term contained some illegal characters and your search could not be completed.
-          </p>
-          <p>If you want to search for something like <code>A/C</code>, please prepend the special character
-            <code>/</code> with a backslash: <code>A\/C</code></p>
+    <div class="col-xl-7 d-flex">
+      <div class="alert alert-warning mt-3 flex-fill" role="alert">
+        <mat-icon fontSet="material-icons-outlined">info</mat-icon>
+        <div>
+          Your search term contained some illegal characters and your search could not be completed.
         </div>
+        <p>If you want to search for something like <code>A/C</code>, please prepend the special character
+          <code>/</code> with a backslash: <code>A\/C</code>
+        </p>
       </div>
     </div>
   </ng-template>
@@ -83,8 +89,8 @@
 
 <ng-template #loading>
   <div class="row justify-content-center mt-4">
-      <div class="col-auto">
-          <app-colid-spinner></app-colid-spinner>
-      </div>
+    <div class="col-xl-7">
+      <app-colid-spinner></app-colid-spinner>
+    </div>
   </div>
 </ng-template>

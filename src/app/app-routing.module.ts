@@ -7,10 +7,12 @@ import { UnauthorizedComponent } from './shared/components/unauthorized/unauthor
 import { LoggedInComponent } from './shared/components/logged-in/logged-in.component';
 import { LoginInProgressComponent } from './shared/components/login-in-progress/login-in-progress.component';
 import { AuthGuardService } from './modules/authentication/guards/auth-guard.service';
+import { SearchResultStandaloneContainerComponent } from './components/search-result-standalone-container/search-result-standalone-container.component';
 
 const welcomeRoute = { path: '', component: WelcomeComponent, canActivate: [AuthGuardService] };
 const searchRoute = { path: 'search', component: SearchComponent, canActivate: [AuthGuardService] };
 const helpRoute = { path: 'help', component: HelpComponent, canActivate: [AuthGuardService] };
+const detailRoute = { path: 'resource-detail', component: SearchResultStandaloneContainerComponent, canActivate: [AuthGuardService]};
 
 const unauthorizedRoute = { path: 'unauthorized', component: UnauthorizedComponent };
 const loggedInRoute = { path: 'logged-in', component: LoggedInComponent };
@@ -28,13 +30,14 @@ const routes: Routes = [
   loginInProgressRoute,
   welcomeRoute,
   searchRoute,
+  detailRoute,
   helpRoute,
   userPreferencesRoute,
   catchAll
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'ignore' })],
+  imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'ignore', relativeLinkResolution: 'legacy' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

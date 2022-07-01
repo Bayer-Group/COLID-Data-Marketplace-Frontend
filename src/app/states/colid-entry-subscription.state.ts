@@ -4,6 +4,7 @@ import { ColidEntrySubscriptionDto } from 'src/app/shared/models/user/colid-entr
 import { ResourceOverviewCTO } from 'src/app/shared/models/resources/resource-overview-cto';
 import { ResourceApiService } from 'src/app/core/http/resource.api.service';
 import { ResourceSearchDTO } from 'src/app/shared/models/resources/resource-search-dto';
+import { Injectable } from '@angular/core';
 
 export class FetchColidEntrySubscriptions {
     static readonly type = '[ColidEntrySubscription] Fetch ColidEntrySubscriptions';
@@ -22,7 +23,7 @@ export class ColidEntrySubscriptionsStateModel {
         colidEntrySubscriptions: null
     }
 })
-
+@Injectable()
 export class ColidEntrySubscriptionsState {
     constructor(private resourceApiService: ResourceApiService) { }
 

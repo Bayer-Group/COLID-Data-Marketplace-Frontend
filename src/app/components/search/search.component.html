@@ -7,11 +7,32 @@
     <mat-sidenav-content>
       <div class="h-content m-0 justify-content-center">
       <div class="d-flex flex-column">
-        <div class="flex-fill m-0 col-xl-7">
-            <app-search-bar-autocomplete [initialSearchText]="searchText$ | async"
+        <div class="flex-fill m-0">
+          <div class="d-flex mb-2">
+            <div class="p-2 flex-grow-1">
+              <app-search-bar-autocomplete [initialSearchText]="searchText$ | async"
               (searchChange)="handleSearchChange($event)" (inputChange)="handleInputChange($event)">
             </app-search-bar-autocomplete>
+            </div>
+            <ng-container *ngIf="!button">
+
+            <div class="p-3">
+              <button mat-stroked-button matTooltip="Save search and subscribe for automated execution"
+                color="primary" (click)="addSearchFilterLinkClicked($event)" [disabled]="(checkSearchText() && checkNullActiveAggregations() && checkNullActiveRangeFilters())">
+                <mat-icon fontSet="material-icons-outlined">save</mat-icon>
+                Save Search
+              </button>
+            </div>
+            <!-- <div class="p-3">  
+              <button mat-stroked-button matTooltip="Export search results" color="primary" (click)="startExport()">
+                <mat-icon fontSet="material-icons-outlined">get_app</mat-icon>
+                Export results
+              </button>
+            </div> -->
+            </ng-container>
           </div>
+        </div>
+
           <div class="flex-fill">
             <app-search-results (changePage)="pageChanged($event)"></app-search-results>
           </div>

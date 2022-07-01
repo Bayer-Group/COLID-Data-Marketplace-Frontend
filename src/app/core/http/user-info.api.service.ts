@@ -6,6 +6,7 @@ import { UserDto } from 'src/app/shared/models/user/user-dto';
 import { ColidEntrySubscriptionDto } from 'src/app/shared/models/user/colid-entry-subscription-dto';
 import { SearchFilterDataMarketplaceDto } from 'src/app/shared/models/user/search-filter-data-marketplace-dto';
 import { MessageConfigDto } from 'src/app/shared/models/user/message-config-dto';
+import { StoredQueryDto } from 'src/app/shared/models/user/stored-query-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -58,5 +59,43 @@ export class UserInfoApiService {
   setMessageConfig(id: string, messageConfigDto: MessageConfigDto): Observable<any> {
     const url = `${environment.appDataApiUrl}/Users/${id}/messageconfig`;
     return this.httpClient.put(url, messageConfigDto);
+  }
+
+  removeSearchFilterDataMarketplace(id: string, searchFilterDataMarketplaceId: number): Observable<any> {
+    const url = `${environment.appDataApiUrl}/Users/${id}/searchFiltersDataMarketplace/${searchFilterDataMarketplaceId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      body: null
+    };
+    return this.httpClient.delete(url, httpOptions);
+  }
+
+  getStoredQueryDataMarketplace(id: string): Observable<any> {
+    const url = `${environment.appDataApiUrl}/Users/${id}/subscribedSearchFiltersDataMarketplace`;
+    return this.httpClient.get<SearchFilterDataMarketplaceDto[]>(url);
+  }
+
+  getSearchFiltersDataMarketplace(id: string): Observable<any> {
+    const url = `${environment.appDataApiUrl}/Users/${id}/searchFiltersDataMarketplace`;
+    return this.httpClient.get<SearchFilterDataMarketplaceDto[]>(url);
+  }
+
+  getAllStoredQueryDataMarketplace(): Observable<any> {
+    const url = `${environment.appDataApiUrl}/Users/allSubscribedSearchFiltersDataMarketplace`;
+    return this.httpClient.get<SearchFilterDataMarketplaceDto[]>(url);
+  }
+  
+  addStoredQueryDataMarketplace(id: string, storedQueryDto: StoredQueryDto): Observable<any> {
+    const url = `${environment.appDataApiUrl}/Users/${id}/subscribeToSearchFilterDataMarketplace`;
+    return this.httpClient.put(url, storedQueryDto);
+  }
+
+  removeStoredQueryDataMarketplace(id: string, searchFilterDataMarketplaceId: number): Observable<any> {
+    const url = `${environment.appDataApiUrl}/Users/${id}/removeSubscriptionFromSearchFilterDataMarketplace/${searchFilterDataMarketplaceId}`;
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      body: null
+    };
+    return this.httpClient.delete(url, httpOptions);
   }
 }

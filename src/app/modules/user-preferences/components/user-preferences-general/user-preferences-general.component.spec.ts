@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { UserPreferencesGeneralComponent } from './user-preferences-general.component';
 
@@ -6,7 +6,7 @@ describe('UserPreferencesGeneralComponent', () => {
   let component: UserPreferencesGeneralComponent;
   let fixture: ComponentFixture<UserPreferencesGeneralComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ UserPreferencesGeneralComponent ]
     })

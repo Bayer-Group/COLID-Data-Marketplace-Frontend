@@ -19,33 +19,40 @@ import { MatButtonModule } from '@angular/material/button';
 import { NgxsModule } from '@ngxs/store';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from 'src/app/shared/shared-module';
-
+import { MatTableModule } from '@angular/material/table' ;
+import { MatExpansionModule } from '@angular/material/expansion';
+import { IntervalNotificationDiallogComponent } from './interval-notification-diallog/interval-notification-diallog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 @NgModule({
-  declarations: [
-    ResourceSubscriptionsComponent,
-    SearchFilterDataMarketplaceComponent,
-    SearchSubscriptionsComponent,
-    UserPreferencesComponent,
-    UserPreferencesGeneralComponent,
-    UserPreferencesSidebarComponent
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    UserPreferencesRoutingModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatCardModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatSelectModule,
-    MatChipsModule,
-    MatTooltipModule,
-    ColidIconsModule,
-    MatButtonModule,
-    MatSidenavModule,
-    NgxsModule
-  ]
+    declarations: [
+        ResourceSubscriptionsComponent,
+        SearchFilterDataMarketplaceComponent,
+        SearchSubscriptionsComponent,
+        UserPreferencesComponent,
+        UserPreferencesGeneralComponent,
+        UserPreferencesSidebarComponent,
+        IntervalNotificationDiallogComponent
+    ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        UserPreferencesRoutingModule,
+        MatSidenavModule,
+        MatIconModule,
+        MatListModule,
+        MatCardModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatSelectModule,
+        MatChipsModule,
+        MatTooltipModule,
+        ColidIconsModule,
+        MatButtonModule,
+        MatSidenavModule,
+        NgxsModule,
+        MatTableModule,
+        MatExpansionModule,
+        MatDialogModule
+    ]
 })
 export class UserPreferencesModule { }

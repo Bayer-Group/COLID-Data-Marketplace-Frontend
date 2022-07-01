@@ -24,7 +24,7 @@ export class ColidIconsModule {
     library.addIconPacks(fas);
   }
 
-  static forRoot(): ModuleWithProviders  {
+  static forRoot(): ModuleWithProviders<ColidIconsModule>  {
     return {
       ngModule: ColidIconsModule,
       providers: [ColidIconsService]

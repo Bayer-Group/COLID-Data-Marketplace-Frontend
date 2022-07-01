@@ -9,9 +9,9 @@
     "declaration": false,
     "module": "esnext",
     "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2015",
+    "emitDecoratorMetadata": true,
+    "target": "es6",
     "typeRoots": [
       "node_modules/@types"
     ],

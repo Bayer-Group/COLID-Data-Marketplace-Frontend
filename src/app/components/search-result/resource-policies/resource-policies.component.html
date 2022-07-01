@@ -1,0 +1,106 @@
+<div class="dialog-panel">
+    <mat-dialog-content class="mat-typography">
+        <div *ngIf="retentionClassPolicies.length > 0"> 
+            
+            <h3 class="warning">Downloaded all retention classes and filtered down to {{retentionClassPolicies.length}} retention class(es) using the data categories. <br> Note that the country context is not used since it is not supported by the Api.</h3>
+             
+              <ng-container *ngFor="let rcp of retentionClassPolicies"> 
+                  <h2 class="justify-content-center">{{rcp.className}}</h2>
+            
+            <ng-container *ngIf="rcp.policies.length==0">
+                <h2 class="col-12 indentation">No retention rules found for this retention class</h2>
+            </ng-container>
+              <ng-container *ngFor="let policy of rcp.policies">
+            
+              <div class="row">
+                  <div class="col-12 indentation">
+                      <mat-card>
+                          <h3><a target="_blank" rel="noopener noreferrer" href={{policy.url}}>{{policy.ruleName}}</a></h3>
+                          <div class="row">
+                              <div class="col-4 d-flex align-items-center">
+                                  <b>retentionTriggerId</b>
+                                </div>
+                                <div class="col-8 d-flex flex-column align-items-center">
+                                    {{policy.retentionTriggerId}}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 d-flex align-items-center">
+                                    <b>retentionTrigger</b>
+                                  </div>
+                                  <div class="col-8 d-flex flex-column align-items-center">
+                                      {{policy.retentionTrigger}}
+                                  </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-4 d-flex align-items-center">
+                                    <b>retentionTriggerDescription</b>
+                                  </div>
+                                  <div class="col-8 d-flex flex-column align-items-center">
+                                      {{policy.retentionTriggerDescription}}
+                                  </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-4 d-flex align-items-center">
+                                    <b>jurisdiction</b>
+                                  </div>
+                                  <div class="col-8 d-flex flex-column align-items-center">
+                                      {{policy.jurisdiction}}
+                                  </div>
+                              </div>
+                            <div class="row">
+                                <div class="col-4 d-flex align-items-center">
+                                    <b>minRetentionPeriod</b>
+                                  </div>
+                                  <div class="col-8 d-flex flex-column align-items-center">
+                                      {{policy.minRetentionPeriod}}
+                                  </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-4 d-flex align-items-center">
+                                    <b>minRetentionPeriodUnits</b>
+                                  </div>
+                                  <div class="col-8 d-flex flex-column align-items-center">
+                                      {{policy.minRetentionPeriodUnits}}
+                                  </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-4 d-flex align-items-center">
+                                    <b>maxRetentionPeriod</b>
+                                  </div>
+                                  <div class="col-8 d-flex flex-column align-items-center">
+                                      {{policy.maxRetentionPeriod}}
+                                  </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-4 d-flex align-items-center">
+                                    <b>maxRetentionPeriodUnits</b>
+                                  </div>
+                                  <div class="col-8 d-flex flex-column align-items-center">
+                                      {{policy.maxRetentionPeriodUnits}}
+                                  </div>
+                              </div>
+                        </mat-card>
+                    </div>
+                </div>
+                <br>
+            </ng-container>
+            <br>
+            </ng-container>
+        </div>  
+            <ng-container *ngIf="retentionClassPolicies.length == 0"  >
+                <div class="row p-2">
+                    <div class="col">
+                        <h2>Unfortunately, there are no retention rules available for this resource.</h2>
+                    </div>
+                  </div>
+              </ng-container>
+    </mat-dialog-content>
+    
+    <mat-dialog-actions  class="d-flex justify-content-center align-items-end">
+         <button mat-raised-button mat-dialog-close cdkFocusInitial>
+            <mat-icon fontSet="material-icons-outlined">close</mat-icon>
+            Close
+        </button>
+    </mat-dialog-actions>
+</div>

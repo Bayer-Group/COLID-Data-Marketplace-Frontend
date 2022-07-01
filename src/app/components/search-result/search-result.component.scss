@@ -1,11 +1,17 @@
 .border-button {
   border: 1px solid currentColor !important;
   border-color: rgba(0, 0, 0, 0.12) !important;
+  margin-left: 4px !important;
+
 }
 
 .beta-feature-tag {
   font-size: 0.8rem;
   vertical-align: top;
+}
+
+.mat-expansion-panel-header[aria-disabled=true] {
+  color: rgba(0, 0, 0, 0.87) !important;
 }
 
 .result {
@@ -15,8 +21,7 @@
 
 .result-header {
   cursor: pointer !important;
-
-  &:hover {
+ &:hover {
     background-color: whitesmoke;
     border-radius: 0.3rem;
   }
@@ -25,6 +30,10 @@
 .result-description {
   font-size: 0.94rem;
   margin-bottom: unset !important;
+  word-break: break-word;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  width: 111% !important;
 }
 
 ::ng-deep .mat-expansion-panel:not([class*="mat-elevation-z"]) {
@@ -40,6 +49,25 @@
 ::ng-deep .mat-expansion-panel-body {
   padding-left: 0 !important;
   padding-bottom: 0 !important;
+  display: inline-block;
+  max-width: 100%!important;
+  overflow: auto;
+}
+
+::ng-deep .result-description > p {
+  margin-bottom: 0px;
+}
+
+.badge {
+  font-weight: 500 !important;
+}
+
+mat-panel-description {
+  display: flex!important;
+  justify-content: flex-end;
+  align-items:flex-start;
+  color: black;
+  height: -webkit-fit-content;
 }
 
 .line-clamp {
@@ -47,20 +75,52 @@
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
+ }
+ .justify-content-start{
+  flex-wrap: wrap;
+  justify-content: flex-start !important;
+ }
+
+
+ ::ng-deep mat-tab-body-wrapper {
+  width: 100%;
 }
 
-.badge {
-  font-weight: 500 !important;
+.mat-expansion-panel-content {
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  width: max-content;
+}
+.searchresultlist{
+  margin-left: 20px;
+  max-width:none;
+  flex:none;
 }
 
-.bayerblue-a100 {
-  background-color: #dbedff;
-  border-color: #dbedff !important;
+.mat-tab-labels {
+  margin-top: 15px;
 }
 
-mat-panel-description {
-  display: flex !important;
-  justify-content: flex-end;
-  align-items: center;
-  color: black;
+::ng-deep .mat-tab-label{
+  color:black;
+  height: 40px !important;
+  max-width:30px !important
+
+}
+
+::ng-deep.mat-tab-label-active{
+  opacity: 1.0!important;
+}
+
+::ng-deep .mat-row {
+  height: auto;
+}
+
+::ng-deep .mat-cell {
+  padding: 8px 8px 8px 0;
+}
+
+.details-container {
+  margin-top: 10px;
 }
