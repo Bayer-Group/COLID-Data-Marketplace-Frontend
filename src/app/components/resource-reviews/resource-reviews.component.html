@@ -1,0 +1,86 @@
+<div class="m-4 justify-content-center">
+    <h1>Resource Reviews</h1>
+    <ng-container *ngIf="(consumerGroups$ | async) as consumerGroups">
+        <mat-form-field *ngIf="consumerGroups.length !== 0 && consumerGroups.length > 1; else displayConsumerGroup" class="mr-5">
+            <mat-label>Selected Consumer Group</mat-label>
+            <mat-select [value]="selectedConsumerGroupId" (valueChange)="selectConsumerGroup($event)">
+                <mat-option *ngFor="let consumerGroup of consumerGroups" [value]="consumerGroup.id">
+                    {{ consumerGroup.name }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <ng-template #displayConsumerGroup>
+            <span class="mr-5">Consumer Group: {{ defaultConsumerGroup }}</span>
+        </ng-template>
+    </ng-container>
+    <span class="mr-2">Show reviews due until:</span>
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Choose a date</mat-label>
+        <input matInput [matDatepicker]="picker" [value]="selectedUTCDate" (dateChange)="selectDate($event)">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <table mat-table [dataSource]="dataSource" matSort matSortActive="reviewDueDate" matSortDirection="asc" matSortDisableClear>
+        <ng-container matColumnDef="resourceName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Resource Name</th>
+            <td mat-cell *matCellDef="let review">
+                <div class="d-flex align-items-center px-2" (click)="showResourceDetails(review.pidUri)" matTooltip="Show Resource Details">
+                    <ds-icon class="mr-2" iconType="S3" [tooltipDisabled]="false" [delay]="300" [icon]="review.resourceType"></ds-icon>
+                    <span>{{ review.resourceName }}</span>
+                </div>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="reviewDueDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Review Due Date</th>
+            <td mat-cell *matCellDef="let review" [class.red-text]="isDateDue(review.reviewDueDate)">{{ review.reviewDueDate | date: 'dd.MM.yyyy' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataSteward">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Data Steward</th>
+            <td mat-cell *matCellDef="let review">
+                <ng-container *ngFor="let steward of review.dataSteward">
+                    {{ steward }}
+                    <br />
+                </ng-container>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="reviewCycle">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Review Cycle</th>
+            <td mat-cell *matCellDef="let review">{{ review.reviewCycle | reviewCycle }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastReviewer">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Reviewer</th>
+            <td mat-cell *matCellDef="let review">{{ review.lastReviewer }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actionButtons">
+            <th mat-header-cell *matHeaderCellDef class="action-items-column"></th>
+            <td mat-cell *matCellDef="let review" class="action-items-column">
+                <div style="display: flex">
+                    <button mat-icon-button (click)="editResource(review.pidUri)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+                <button *ngIf="!review.currentlyLoading" mat-icon-button (click)="confirmReview(review.pidUri)" matTooltip="Confirm Resource" [disabled]="review.resourceReviewed"><mat-icon>checklist</mat-icon></button>
+                <button mat-icon-button *ngIf="review.currentlyLoading" disabled>
+                    <app-colid-spinner [diameter]="36" [strokeWidth]="2"></app-colid-spinner>
+                </button>
+                </div>
+                
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnsToDisplay; let entry" [class.reviewed-resource]="entry.resourceReviewed"></tr>
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" [attr.colspan]="columnsToDisplay.length">
+              No data matching the filter.
+            </td>
+          </tr>
+    </table>
+    <div *ngIf="isLoading$ | async" class="loading">
+        <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+    </div>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10"></mat-paginator>
+</div>

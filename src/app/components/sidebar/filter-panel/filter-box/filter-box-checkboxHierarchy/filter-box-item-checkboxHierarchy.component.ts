@@ -1,12 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AggregationBucket } from 'src/app/shared/models/aggregation-bucket';
-import { MetadataState } from 'src/app/states/metadata.state';
+import { DisableResourceTypeItem, EnableResourceTypeItem, MetadataState, ToggleCategoryFilterTab, ToggleResourceTypeItem } from 'src/app/states/metadata.state';
 import { Observable, Subscription } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 import { CheckboxHierarchyDTO } from 'src/app/shared/models/checkboxHierarchy-dto';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { SelectionModel } from '@angular/cdk/collections';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-filter-box-item-checkboxHierarchy',
@@ -16,13 +16,13 @@ import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree'
 export class FilterBoxItemCheckboxHierarchyComponent implements OnInit {
   @Select(MetadataState.getMetadata) metadata$: Observable<any>;
   @Select(MetadataState.getResourceTypeHierarchy) resourceHierarchy$: Observable<CheckboxHierarchyDTO[]>;
+  @Select(MetadataState.getActiveNodes) activeNodes$: Observable<string[]>;
+  @Select(MetadataState.getActiveCategoryTab) activeCategoryTab$: Observable<number>;
 
   resourceHierarchy: CheckboxHierarchyDTO[];
-
+  activeTab: number;
+  activeNodes: string[]
   @Input() key: string;
-
-  checkboxHierarchyTreeData: CheckboxHierarchyDTO[] = [];
-  treeDataNodeList: CheckboxHierarchyDTO[] = []; //linear list of all nodes
 
   _buckets: any;
   aggregationBuckets: AggregationBucket[] = [];
@@ -31,18 +31,16 @@ export class FilterBoxItemCheckboxHierarchyComponent implements OnInit {
     this.aggregationBuckets = values;
     this.normalizeAggregationBuckets()
   }
-
-
   @Output() changeFilterBuckets: EventEmitter<string[]> = new EventEmitter<string[]>();
 
   _activeAggregationBuckets: string[] = [];
 
   @Input() set activeAggregationBuckets(values: string[]) {
-    if (values != null) {
+    if (values && this.nameIdMap) {
       this._activeAggregationBuckets = values;
       setTimeout(() => {
-        this.rewriteValues();
-      }, 0)
+        this.setActiveFilter();
+      }, 50)
     }
   };
 
@@ -61,39 +59,49 @@ export class FilterBoxItemCheckboxHierarchyComponent implements OnInit {
   dataSource: MatTreeFlatDataSource<CheckboxHierarchyDTO, CheckboxHierarchyDTO>;
 
   nameIdMap = new Map<string, string[]>();
-
-  /** The selection for checklist */
-  checklistSelection: SelectionModel<CheckboxHierarchyDTO>;
-
-  get isCheckboxHierarchy(): boolean { return this.checkboxHierarchyTreeData.some(t => t.hasChild); }
+  treeDataNodeList: CheckboxHierarchyDTO[] = []; //linear list of all nodes
 
   constructor(private store: Store) { }
 
+  checkboxHierarchyTreeData: CheckboxHierarchyDTO[];
+
   ngOnInit() {
+    this.activeCategoryTab$.subscribe(x => {
+      this.activeTab = x;
+    })
+    this.activeNodes$.subscribe(x => {
+      this.activeNodes = x;
+    })
     this.resourceHierarchy$.subscribe(r => {
-      var exist = this.checkboxHierarchyTreeData
       if (r) {
-        this.checkboxHierarchyTreeData = r
+        this.checkboxHierarchyTreeData = r;
         this.initTree();
       }
     });
-
-
   }
 
-
+  tabChanged(tabChangeEvent: MatTabChangeEvent): void {
+    this.store.dispatch(new ToggleCategoryFilterTab(tabChangeEvent.index)).subscribe();
+    this.emitLastChange();
+  }
 
   initTree() {
-
     this.AddAllNonInstantiableNodes(this.checkboxHierarchyTreeData)
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<CheckboxHierarchyDTO>(this.getLevel, this.isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-
-    this.checklistSelection = new SelectionModel<CheckboxHierarchyDTO>(true /* multiple */);
     this.dataSource.data = this.checkboxHierarchyTreeData;
     this.rewriteValues();
+  }
 
+  setActiveFilter() {
+    if (this._activeAggregationBuckets) {
+      var idList = []
+      this._activeAggregationBuckets.forEach(x => {
+        idList = [...idList, ...this.nameIdMap.get(x)]
+      })
+      this.store.dispatch(new EnableResourceTypeItem(idList)).subscribe();
+    }
   }
 
   AddAllNonInstantiableNodes(nodeList: CheckboxHierarchyDTO[]) {
@@ -103,21 +111,23 @@ export class FilterBoxItemCheckboxHierarchyComponent implements OnInit {
           "key": node.name,
           "doc_count": 0
         }
-        this.aggregationBuckets.push(element)
-
-
-
-        this.AddAllNonInstantiableNodes(node.children)
-      } else {
-        var idList = this.nameIdMap.get(node.name)
-        if (!idList) {
-          idList = []
+        if (!this.aggregationBuckets.some(x => x.key == node.name)) {
+          this.aggregationBuckets.push(element)
         }
-        idList.push(node.id)
-        this.nameIdMap.set(node.name, idList)
+        this.AddAllNonInstantiableNodes(node.children)
       }
+      var idList = this.nameIdMap.get(node.name)
+      if (!idList) {
+        idList = []
+      }
+      if (!idList.includes(node.id)) {
+        idList.push(node.id)
+      }
+      this.nameIdMap.set(node.name, idList)
 
-      this.treeDataNodeList.push(node)
+      if ((node.id != null && !this.treeDataNodeList.some(x => x.id == node.id))) {
+        this.treeDataNodeList.push(node)
+      }
     });
   }
 
@@ -138,6 +148,8 @@ export class FilterBoxItemCheckboxHierarchyComponent implements OnInit {
 
   hasChild = (_: number, _nodeData: CheckboxHierarchyDTO) => _nodeData.hasChild;
 
+
+
   /** Transformer to convert nested node to flat node. Record the nodes in maps for later use. */
   transformer(node: CheckboxHierarchyDTO, level: number) {
     node.level = level;
@@ -146,68 +158,81 @@ export class FilterBoxItemCheckboxHierarchyComponent implements OnInit {
 
   /** Whether all the descendants of the node are selected. */
   descendantsAllSelected(node: CheckboxHierarchyDTO): boolean {
-    const descendants = this.treeControl.getDescendants(node);
-    const descAllSelected = descendants.every(child =>
-      this.checklistSelection.isSelected(child)
-    );
+
+    if (!node) {
+      return;
+    }
+    const descendants = this.treeControl.getDescendants(node).filter(x => x.instantiable);
+    if (descendants.length > 0) {
+      const descAllSelected = descendants.every(child => this.activeNodes.includes(child.id)
+      );
+      return descAllSelected;
+    } else {
+      return false;
+    }
+
+  }
+  categoryAllSelected(node: CheckboxHierarchyDTO): boolean {
+    if (!node) {
+      return;
+    }
+    const descAllSelected = node.children.every(child => this.activeNodes.includes(child.id));
+
     return descAllSelected;
   }
-
   /** Whether part of the descendants are selected */
   descendantsPartiallySelected(node: CheckboxHierarchyDTO): boolean {
     const descendants = this.treeControl.getDescendants(node);
-    const result = descendants.some(child => this.checklistSelection.isSelected(child));
+    const result = descendants.some(child => this.activeNodes.includes(child.id));
     var jo = result && !this.descendantsAllSelected(node);
     return jo
   }
 
   /** Toggle the item selection. Select/deselect all the descendants node */
   itemSelectionToggle(node: CheckboxHierarchyDTO, initial: boolean = false): void {
-    this.checklistSelection.toggle(node);
     const descendants = this.treeControl.getDescendants(node);
 
-    if (this.checklistSelection.isSelected(node)) {
-      this.checklistSelection.select(...descendants)
+    var ids = [];
+    if (this.descendantsAllSelected(node)) {
+      ids = descendants.map(x => x.id);
       descendants.forEach(y => {
         this.treeDataNodeList.forEach(x => {
           if (x.name == y.name && x.id != y.id) {
-            this.checklistSelection.select(x)
+            ids.push(x.id);
           }
         })
-
       })
+      //ids.push(node.id)
+      this.store.dispatch(new DisableResourceTypeItem(ids)).subscribe();
     } else {
-      this.checklistSelection.deselect(...descendants);
       descendants.forEach(y => {
+        if (!this.activeNodes.includes(y.id)) {
+          ids.push(y.id);
+        }
         this.treeDataNodeList.forEach(x => {
-          if (x.name == y.name && x.id != y.id) {
-            this.checklistSelection.deselect(x)
+          if (x.name == y.name && x.id != y.id && ids.includes(y.id)) {
+            ids.push(x.id);
           }
         })
-
       })
-    }
+      //ids.push(node.id)
+      this.store.dispatch(new EnableResourceTypeItem(ids)).subscribe();
 
-    // Force update for the parent
-    descendants.every(child =>
-      this.checklistSelection.isSelected(child)
-    );
+    }
     this.checkAllParentsSelection(node);
     this.emitLastChange(initial);
   }
 
   /** Toggle a leaf item selection. Check all the parents to see if they changed */
   leafItemSelectionToggle(node: CheckboxHierarchyDTO, initial: boolean = false): void {
-    this.checklistSelection.toggle(node);
-    this.checkAllParentsSelection(node);
+    this.store.dispatch(new ToggleResourceTypeItem(node.id)).subscribe();
     this.treeDataNodeList.forEach(x => {
       if (x.name == node.name && x.id != node.id) {
-        this.checklistSelection.toggle(x);
         this.checkAllParentsSelection(x);
+        this.store.dispatch(new ToggleResourceTypeItem(x.id)).subscribe();
       }
     })
-
-
+    this.checkAllParentsSelection(node);
     this.emitLastChange(initial);
   }
 
@@ -222,16 +247,11 @@ export class FilterBoxItemCheckboxHierarchyComponent implements OnInit {
 
   /** Check root node checked state and change it accordingly */
   checkRootNodeSelection(node: CheckboxHierarchyDTO): void {
-    const nodeSelected = this.checklistSelection.isSelected(node);
+    const nodeSelected = this.activeNodes.includes(node.id);
     const descendants = this.treeControl.getDescendants(node);
     const descAllSelected = descendants.every(child =>
-      this.checklistSelection.isSelected(child)
+      this.activeNodes.includes(node.id)
     );
-    if (nodeSelected && !descAllSelected) {
-      this.checklistSelection.deselect(node);
-    } else if (!nodeSelected && descAllSelected) {
-      this.checklistSelection.select(node);
-    }
   }
 
   /* Get the parent node of a node */
@@ -259,9 +279,6 @@ export class FilterBoxItemCheckboxHierarchyComponent implements OnInit {
     if (this.dataSource) {
 
       this.dataSource.data = this.filterIndexedCheckboxHierarchyItems(this.checkboxHierarchyTreeData, this.aggregationBuckets)
-
-      this.handleNodeList(this._activeAggregationBuckets, this.checkboxHierarchyTreeData);
-
       this.treeControl.dataNodes.forEach(s => {
         //if (this.descendantsPartiallySelected(s) || this.checklistSelection.isSelected(s)){
         this.treeControl.expand(s);
@@ -273,63 +290,43 @@ export class FilterBoxItemCheckboxHierarchyComponent implements OnInit {
   filterIndexedCheckboxHierarchyItems(treeData: CheckboxHierarchyDTO[], aggregationBuckets: AggregationBucket[]): CheckboxHierarchyDTO[] {
     if (treeData) {
 
-      const indexedItems = treeData.filter(t => aggregationBuckets.some(a => a.key === t.name));
+      var indexedItems = treeData.filter(t => aggregationBuckets.some(a => a.key === t.name));
       indexedItems.forEach(i => {
         if (i.hasChild) {
           i.children = this.filterIndexedCheckboxHierarchyItems(i.children, aggregationBuckets);
         }
       });
-      return indexedItems;
+      const test = indexedItems.filter(ie => (ie.children.length > 0 && ie.hasChild) || (!ie.hasChild));
+      return test;
     }
   }
 
-  handleNodeList(identifiers: string[], results: CheckboxHierarchyDTO[]) {
 
-    var idList = [];
-    identifiers.forEach(x => idList = [...idList, ...this.nameIdMap.get(x)])
-
-    if (identifiers == null || this.checklistSelection == null) return;
-
-    if (this.treeControl == null || this.treeControl.dataNodes == null) return;
-
-
-
-    results.forEach(t => {
-      if (t.instantiable &&
-        idList.includes(t.id)
-      ) {
-        if (!this.checklistSelection.isSelected(t)) {
-          if (t.hasChild) {
-            this.itemSelectionToggle(t, true);
-          } else {
-            this.leafItemSelectionToggle(t, true);
-          }
-        }
-      } else {
-        this.handleNodeList(identifiers, t.children);
-      }
-    });
-  }
 
   emitLastChange(initial: boolean = false) {
     if (initial) return;
 
     const activeBuckets = this.filterDuplicatesAndRemoveChildNodes();
-    if (this._activeAggregationBuckets != null && activeBuckets.length === this._activeAggregationBuckets.length && activeBuckets.every(t => this._activeAggregationBuckets.includes(t))) {
-      return;
-    }
     this.changeFilterBuckets.emit(activeBuckets);
   }
 
   filterDuplicatesAndRemoveChildNodes(): string[] {
-    var result: string[] = []
-    this.checklistSelection.selected.forEach(e => {
-      if (e.instantiable && !result.includes(e.id)) {
-        result.push(e.id)
+    var result: string[] = [];
+    this.treeDataNodeList.forEach(e => {
+      if (this.activeNodes.includes(e.id)) {
+
+        if (this.activeTab == 0) {
+          if (e.isCategory) {
+            var parent = this.treeDataNodeList.find(x => x.name == e.parentName);
+            if (this.categoryAllSelected(parent)) {
+              result.push(e.id);
+            }
+          }
+        } else {
+          result.push(e.id);
+        }
       }
-    });
-
-
+    })
     return result
   }
 }

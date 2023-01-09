@@ -24,9 +24,9 @@
         <button mat-icon-button (click)="onClickButtonRight()" *ngIf="images.length > 1">
           <mat-icon matTooltip="Next image">navigate_next</mat-icon>
         </button>
-        <!--<button mat-icon-button cdkFocusInitial>
-          <mat-icon matTooltip="Download" (click)="onClickButtonDownload()">arrow_downward</mat-icon>
-        </button>-->
+        <button mat-icon-button cdkFocusInitial>
+          <a href="{{imageUrl}}" download><mat-icon matTooltip="Download">arrow_downward</mat-icon></a>
+        </button>
       </div>
     </div>
   </div>

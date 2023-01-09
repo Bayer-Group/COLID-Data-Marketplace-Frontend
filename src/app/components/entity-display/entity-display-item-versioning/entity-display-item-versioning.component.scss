@@ -1,0 +1,16 @@
+@import "../../../../styles.scss";
+
+.mat-standard-chip {
+    border-radius: 10px;
+    min-height: 20px;
+    padding: 0px 6px;
+}
+
+.current-version {
+    color: white !important;
+    background-color: $bayer-dark-blue !important;
+}
+
+.c-pointer {
+    cursor: pointer;
+}

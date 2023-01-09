@@ -4,17 +4,23 @@ import { CommonModule } from '@angular/common';
 
 // Material
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { EditorAccessControlDirective } from './directives/editor-access-control.directive';
+import { MetadataGroupByPipe } from './pipes/metadata-group-by.pipe';
 
 @NgModule({
   declarations: [
-    ColidSpinnerComponent
+    ColidSpinnerComponent,
+    EditorAccessControlDirective,
+    MetadataGroupByPipe,
   ],
   imports: [
     CommonModule,
     MatProgressSpinnerModule
   ],
   exports: [
-    ColidSpinnerComponent
+    ColidSpinnerComponent,
+    MetadataGroupByPipe,
+    EditorAccessControlDirective,
   ]
 })
 export class SharedModule { }

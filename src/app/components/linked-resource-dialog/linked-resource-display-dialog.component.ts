@@ -3,11 +3,12 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
 import { MetadataState } from 'src/app/states/metadata.state';
-import { DocumentMap } from 'src/app/shared/models/search-result';
+import { DocumentMap, SearchHit } from 'src/app/shared/models/search-result';
 import { DocumentService } from 'src/app/core/http/document.service';
 
 export interface DialogData {
   id: string;
+  confirmReview: boolean;
 }
 
 @Component({
@@ -22,7 +23,7 @@ export class LinkedResourceDisplayDialog implements OnInit, OnDestroy {
   documentData: DialogData;
   document: DocumentMap;
   metadata: any = null;
-
+  hit: SearchHit = null;
   error: string = null;
 
   constructor(
@@ -37,6 +38,23 @@ export class LinkedResourceDisplayDialog implements OnInit, OnDestroy {
       .subscribe(
         (doc: DocumentMap) => {
           this.document = doc
+          var result = {
+            id: this.documentData.id,
+            score: 0,
+            source: doc,
+            highlight: {},
+            index: "",
+            innerHits: {},
+            matchedQueries: [],
+            nested: null,
+            primaryTerm: null,
+            routing: null,
+            sequenceNumber: null,
+            sorts: [],
+            type: "_doc",
+            version: 0
+          };
+          this.hit = result;
         },
         error => {
           if(error.status == 404) {
@@ -62,5 +80,9 @@ export class LinkedResourceDisplayDialog implements OnInit, OnDestroy {
 
   openInEditor(): void {
     window.open(this.documentData.id, "_blank");
+  }
+
+  confirmReview(): void {
+    this.dialogRef.close(true);
   }
 }

@@ -1,14 +1,27 @@
 <ensure-browser-support>
   <ng-container *ngIf="!hideToolbar">
-    <app-navbar (toggleNotification)="notificationSidenav.toggle()"></app-navbar>
+    <app-navbar (toggleNotification)="toggleSidenav('notification')"
+      (toggleFavorite)="toggleSidenav('favorite')">
+    </app-navbar>
   </ng-container>
-  
+
   <mat-sidenav-container hasBackdrop="false">
     <mat-sidenav class="notification" #notificationSidenav disableClose="true" mode="over" position="end">
-      <colid-notification (closeSidebar)="notificationSidenav.toggle()"
-        [user]="currentAccountIdentifier$ | async" [sidebarOpen]="notificationSidenav.opened">
-      </colid-notification>
+      <ng-container *ngIf="activeSidebar=='notification'">
+        <colid-notification (closeSidebar)="toggleSidenav('notification')" [user]="currentAccountIdentifier$ | async"
+          [sidebarOpen]="notificationSidenav.opened">
+        </colid-notification>
+      </ng-container>
+
+      <ng-container *ngIf="activeSidebar=='favorite'">
+        <colid-favorites (closeSidebar)="toggleSidenav('favorite')" [user]="currentAccountIdentifier$ | async"
+          [sidebarOpen]="notificationSidenav.opened">
+        </colid-favorites>
+      </ng-container>
+
     </mat-sidenav>
     <router-outlet></router-outlet>
+
   </mat-sidenav-container>
+
 </ensure-browser-support>

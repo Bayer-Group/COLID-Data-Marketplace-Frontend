@@ -12,8 +12,7 @@
     </p>
 
     <p>
-      <mat-radio-group aria-label="Select an option" [(ngModel)]="exportOptions.exportFormat"
-        (change)="exportOptionChanged($event)">
+      <mat-radio-group aria-label="Select an option" [(ngModel)]="exportOptions.exportFormat">
         <mat-radio-button value="excelTemplate">Data Import Template compatible</mat-radio-button><br />
         <mat-radio-button value="readableExcel">Individually configurable file (metadata in columns and resources in rows)</mat-radio-button>
       </mat-radio-group>
@@ -22,7 +21,6 @@
       <b>Individual configuration:</b>
     </p>
     <p>
-
       <mat-checkbox [(ngModel)]="exportOptions.includeHeader"
         [disabled]="exportOptions.exportFormat == 'excelTemplate'">
         Include header with search information
@@ -35,16 +33,8 @@
         <mat-radio-button value="uris">...URIs</mat-radio-button>
       </mat-radio-group>
     </p>
-    <!-- <p>
-      <label id="excel-content-radio-group-label">Export...</label><br />
-      <mat-radio-group aria-label="Select an option" [(ngModel)]="exportOptions.exportContent"
-        [disabled]="exportOptions.exportFormat == 'excelTemplate'">
-        <mat-radio-button value="onlyUri">... only identifiers</mat-radio-button><br />
-        <mat-radio-button value="uriAndMeta">... URIs and metadata</mat-radio-button>
-      </mat-radio-group>
-    </p> -->
-
-    <mat-dialog-actions>
+  </div>
+  <mat-dialog-actions align="center">
       <button mat-raised-button (click)="startExport()">
         <mat-icon fontSet="material-icons-outlined">get_app</mat-icon>
         Start Export
@@ -54,9 +44,4 @@
         Close
       </button>
     </mat-dialog-actions>
-  </div>
-  <!-- Export header -->
-  <!-- Only URIs or URIs and metadata -->
-
-  <!-- Export format: Human readable or data import compatible-->
 </div>

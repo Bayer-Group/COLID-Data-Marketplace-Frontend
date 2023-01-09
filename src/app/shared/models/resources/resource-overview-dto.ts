@@ -7,4 +7,5 @@ export class ResourceOverviewDTO {
   lifeCycleStatus: string;
   publishedVersion: string;
   changeRequester: string;
+  properties: {}
 }

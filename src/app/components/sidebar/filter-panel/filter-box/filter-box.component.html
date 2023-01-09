@@ -4,7 +4,7 @@
   <div *ngIf="filterType === 'select'">
     <ng-select [appearance]="'outline'" [items]="visibleBuckets" [multiple]="true" [closeOnSelect]="false"
       [searchable]="true" bindLabel="key" bindValue="key" placeholder="{{aggregation.label}}"
-      [ngModel]="activeAggregationBuckets" (onDebounce)="multiSelectFilterItemsChanged($event)" [debounce]="300">
+      [ngModel]="activeAggregationBuckets" (change)="multiSelectFilterItemsChanged($event)">
       <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
         <div class="d-flex justify-content-between">
           <span>

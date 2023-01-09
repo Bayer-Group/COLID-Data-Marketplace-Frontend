@@ -16,17 +16,23 @@
             <div class="col-12">
                 <table class="result-table">
                     <tr>
-                        <td valign="top" nowrap><span class="small text-muted text-uppercase lead">PID URI</span></td>
+                        <td valign="top" nowrap>
+                            <span class="small text-muted text-uppercase lead cursor-pointer" (click)="openDescriptionDialog(hasPIDURI, 'PID URI')">PID URI</span>
+                        </td>
                         <td></td>
                         <td><span innerHTML="{{pidUrl || 'N/A' }}"></span></td>
                     </tr>
                     <tr>
-                        <td valign="top" nowrap><span class="small text-muted text-uppercase lead">Definition</span></td>
+                        <td valign="top" nowrap>
+                            <span class="small text-muted text-uppercase lead cursor-pointer" (click)="openDescriptionDialog(hasDefinition, 'Definition')">Definition</span>
+                        </td>
                         <td></td>
                         <td><span innerHTML="{{definition || 'N/A' }}"></span></td>
                     </tr>
                     <tr>
-                        <td valign="top" nowrap><span class="small text-muted text-uppercase lead">Resource Type</span></td>
+                        <td valign="top" nowrap>
+                            <span class="small text-muted text-uppercase lead cursor-pointer" (click)="openDescriptionDialog(hasResourceType, 'Resource Type')">Resource Type</span>
+                        </td>
                         <td></td>
                         <td><span innerHTML="{{type || 'N/A' }}"></span></td>
                     </tr>

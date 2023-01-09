@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy} from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation} from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { UserInfoState, RemoveSearchFilterDataMarketplace, RemoveStoredQueryToSearchFiltersDataMarketplace, FetchSearchFilterDataMarketplace } from 'src/app/states/user-info.state';
 import { SearchFilterDataMarketplaceDto } from 'src/app/shared/models/user/search-filter-data-marketplace-dto';
@@ -18,7 +18,8 @@ import { mapToObject } from 'src/app/shared/converters/map-object.converter';
 @Component({
   selector: 'app-search-filter-data-marketplace',
   templateUrl: './search-filter-data-marketplace.component.html',
-  styleUrls: ['./search-filter-data-marketplace.component.scss']
+  styleUrls: ['./search-filter-data-marketplace.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class SearchFilterDataMarketplaceComponent implements OnInit, OnDestroy {
   @Select(UserInfoState.getUserSearchFilters) userSearchFilters$: Observable<SearchFilterDataMarketplaceDto[]>;

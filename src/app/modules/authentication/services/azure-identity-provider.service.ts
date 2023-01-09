@@ -1,21 +1,21 @@
-import { Injectable, Inject, OnDestroy } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { IdentityProvider } from './identity-provider.service';
 import { ColidAccount } from '../models/colid-account.model';
-import { MsalService, MsalBroadcastService } from '@azure/msal-angular';
+import { MsalService,  MsalBroadcastService } from '@azure/msal-angular';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
-import { map, takeUntil, filter } from 'rxjs/operators';
+import { mergeMap, map, filter ,takeUntil} from 'rxjs/operators';
 import { EventMessage, EventType, InteractionStatus } from '@azure/msal-browser';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AzureIdentityProvider implements IdentityProvider {
+
   isLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private readonly _destroying$ = new Subject<void>();
   loggingIn: boolean = false;
   loginDisplay: boolean = false;
   currentStatus: InteractionStatus = InteractionStatus.None;
-
   constructor(@Inject(MsalService) private msalService: MsalService, private broadcastService: MsalBroadcastService) {
     this.isLoggedIn$.next(this.checkLoggedIn());
 
@@ -75,10 +75,7 @@ export class AzureIdentityProvider implements IdentityProvider {
           }
         }
       )
-
-
   }
-
 
   checkLoggedIn(): boolean {
     const loggedIn = this.msalService.instance.getAllAccounts().length > 0;
@@ -87,19 +84,6 @@ export class AzureIdentityProvider implements IdentityProvider {
       return tokenValid;
     } else {
       return false;
-    }
-
-
-    //return this.msalService.getAccount() != null && +(this.msalService.getAccount().idToken).exp > new Date().getSeconds()
-  }
-
-  checkAndSetAkivAccount() {
-
-    let activeAccount = this.msalService.instance.getActiveAccount();
-
-    if (!activeAccount && this.msalService.instance.getAllAccounts().length > 0) {
-      let accounts = this.msalService.instance.getAllAccounts();
-      return this.msalService.instance.setActiveAccount(accounts[0]);
     }
   }
 
@@ -128,22 +112,26 @@ export class AzureIdentityProvider implements IdentityProvider {
 
   async login(): Promise<void> {
     // If the login is happening in a Iframe we need to delay it so it does not create a infinte loop
-    if (this.currentStatus == InteractionStatus.None) {
-      if (window.self !== window.top) {
-        setTimeout(async () => {
-          await this.msalService.loginPopup();
-        }, 5000)
-      } else {
-        await this.msalService.loginPopup();
+    this.broadcastService.inProgress$.pipe(
+      filter((status: InteractionStatus) => status === InteractionStatus.None),
+      takeUntil(this._destroying$)
+    ).subscribe(
+      () => {
+        if (window.self !== window.top) {
+          setTimeout(async () => {
+            await this.msalService.loginRedirect();
+          }, 5000)
+        } else {
+          this.msalService.loginRedirect();
+        }
       }
-    }
+    )
+    // if (this.currentStatus == InteractionStatus.None) {
+      
+    // }
   }
 
-  logout() {
+  logout(): void {
     this.msalService.logout();
-  }
-
-  setLoginDisplay() {
-    this.loginDisplay = this.msalService.instance.getAllAccounts().length > 0;
   }
 }

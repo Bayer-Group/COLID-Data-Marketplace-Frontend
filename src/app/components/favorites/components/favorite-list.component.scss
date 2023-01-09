@@ -1,0 +1,39 @@
+.buttons {
+  margin-left: 8px;
+}
+
+.favorites-area {
+  width: 100%;
+
+  // Small devices (landscape phones, 576px and up)
+  @media (min-width: 576px) {
+      width: 500px;
+      max-width: 500px;
+  }
+}
+
+.entry:hover {
+  cursor: pointer;
+}
+
+.dialog {
+  border: lightgray solid 2px;
+}
+
+// .ng-container .ng-appearance-outline:after {
+//   border: solid 1px rgba(0,0,0,0.12);
+//   border-radius: 5px;
+//   height: calc(100% - 0.5em);
+//   pointer-events: none;
+//   transition: border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+// }
+
+// .ng-container:after {
+//   border-bottom: thin solid rgba(0,0,0,0.42);
+//   content: '';
+//   width: 100%;
+//   bottom: 0;
+//   left: 0;
+//   position: absolute;
+//   transition: border-color 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+// }

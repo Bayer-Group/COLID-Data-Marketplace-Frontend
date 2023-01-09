@@ -30,7 +30,8 @@ export const environment = {
     ciCommitSha:  '$BUILD_CICOMMITSHA',
   },
   pidUrl: 'http://localhost:4200/',
-  kgeUrl: 'http://localhost:4400/',
-  rrmUrl: 'http://localhost:4305/',
-  colidIconsUrl : 'https://dataservices-icons.dev.colid.int.bayer.com/'
+  kgeUrl: 'https://kge.example.com/',
+  rrmUrl: 'http://localhost:4400/',
+  colidIconsUrl : 'https://dataservices-icons.dev.colid.int.bayer.com/',
+  cookieSharingSubDomain: 'localhost'
 };

@@ -3,7 +3,7 @@ import { FetchFilter, FilterState } from 'src/app/states/filter.state';
 import { Observable, Subscription, combineLatest } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 import { Aggregation } from 'src/app/shared/models/aggregation';
-import { ResetActiveAggregationBuckets, SearchState, SearchStateModel, OverwriteActiveAggregationBuckets, OverwriteActiveRangeFilters, FetchSearchResult } from '../../../states/search.state';
+import { ResetActiveAggregationBuckets, SearchState, SearchStateModel, OverwriteActiveAggregationBuckets, OverwriteActiveRangeFilters } from '../../../states/search.state';
 import { RangeFilter } from 'src/app/shared/models/range-filter';
 import { ActiveRangeFilters } from 'src/app/shared/models/active-range-filters';
 import { Constants } from 'src/app/shared/constants';
@@ -14,7 +14,8 @@ import { mapToObject } from 'src/app/shared/converters/map-object.converter';
 import { MatDialog } from '@angular/material/dialog';
 import { LogService } from 'src/app/core/logging/log.service';
 import { SearchFilterDialogComponent } from 'src/app/components/sidebar/search-filter-dialog/search-filter-dialog.component';
-import { FetchResourceTypeHierarchy } from 'src/app/states/metadata.state';
+import { ClearResourceTypeItem, FetchResourceTypeHierarchy, MetadataState } from 'src/app/states/metadata.state';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -30,6 +31,7 @@ export class FilterPanelComponent implements OnInit, OnDestroy {
   @Select(SearchState.getActiveRangeFilters) activeRangeFilters$: Observable<ActiveRangeFilters>;
   @Select(UserInfoState.getDefaultSearchFilterDataMarketplace) defaultSearchFilterDataMarketplace$: Observable<SearchFilterDataMarketplaceDto>;
   @Select(SearchState.getSearchText) searchText$: Observable<string>;
+  @Select(MetadataState.getMetadata) metadata$: Observable<any>;
 
   aggregationFilters: Aggregation[];
   mainAggregationFilters: Aggregation[];
@@ -49,7 +51,8 @@ export class FilterPanelComponent implements OnInit, OnDestroy {
   constructor(private store: Store,
     private cdr: ChangeDetectorRef,
     private logger: LogService,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.store.dispatch(new FetchResourceTypeHierarchy()).subscribe();
@@ -113,7 +116,9 @@ export class FilterPanelComponent implements OnInit, OnDestroy {
   }
 
   resetActiveAggregation() {
-    this.store.dispatch(new ResetActiveAggregationBuckets(true)).subscribe();
+    const params = this.route.snapshot.queryParams;
+    this.store.dispatch(new ClearResourceTypeItem());
+    this.store.dispatch(new ResetActiveAggregationBuckets(Object.entries(params).length > 0));
   }
 
   checkNullActiveAggregations() {

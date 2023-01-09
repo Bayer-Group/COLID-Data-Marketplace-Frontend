@@ -212,14 +212,14 @@ export class SchemeUIComponent implements OnInit, OnChanges, OnDestroy {
     event.preventDefault();
     var pidUri = table['http://pid.bayer.com/kos/19014/hasPID'].outbound[0].value;
     this.dialog.open(LinkedResourceDisplayDialog, {
-      data: { id: pidUri }
+      data: { id: pidUri, confirmReview: false }
     });
   }
 
   clickColumn(event: Event, pidUri: string) {
     event.preventDefault();
     this.dialog.open(LinkedResourceDisplayDialog, {
-      data: { id: pidUri }
+      data: { id: pidUri, confirmReview: false }
     });
   }
 

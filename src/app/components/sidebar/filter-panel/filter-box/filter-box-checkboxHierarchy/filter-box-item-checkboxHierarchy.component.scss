@@ -2,14 +2,12 @@
     min-height: unset;
   }
   
-  .mat-icon-button {
-    height: unset;
-    width: 20px;
-    line-height: unset;
-  }
-  .mat-icon {
-    font-size: 15px;
-  }
-  ::ng-deep mat-checkbox label {
-    margin-bottom: 0 !important;
-  }
+.mat-icon-button {
+  height: unset;
+  width: 20px;
+  line-height: unset;
+}
+
+.mat-icon {
+  font-size: 15px;
+}

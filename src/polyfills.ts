@@ -18,11 +18,6 @@ import '@angular/localize/init';
  * Learn more in https://angular.io/guide/browser-support
  */
 
-/***************************************************************************************************
- * BROWSER POLYFILLS
- */
- import 'core-js';   // Run `npm install --save classlist.js`.   // Run `npm install --save web-animations-js`.
-
 /**
  * By default, zone.js will patch all possible macroTask and DomEvents
  * user can disable parts of macroTask/DomEvents patch by setting following flags

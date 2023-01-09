@@ -1,0 +1,19 @@
+<div class="dialog">
+    <h1 mat-dialog-title>New Favorite List</h1>
+    <form [formGroup]="favoritesForm" >
+    <p>
+      <mat-form-field style="width: 100%;" appearance="outline">
+        <input required formControlName="name" matInput placeholder="Name" >
+      </mat-form-field>
+    </p>
+  </form>
+    <div mat-dialog-action align="end" class="button">
+      <button mat-stroked-button color="primary" mat-dialog-close>
+        Cancel
+      </button>
+      <button style="margin-left: 8px;" mat-flat-button color="primary" mat-dialog-close cdkFocusInitial (click)="createFavorite()">
+        Create
+      </button>
+  
+    </div>
+  </div>
