@@ -35,12 +35,10 @@
             <mat-expansion-panel-header>
                   <mat-panel-title>
                     <div >
-                      <div class="d-flex align-items-center">
-                        <h5 class="mb-1">{{userSearchFilter.name}}</h5>
-                        </div>
-                        </div>
+                      <h5 class="mb-1">{{userSearchFilter.name}}</h5>
+                    </div>
                   </mat-panel-title>
-                  <mat-panel-description class="mt-2">
+                  <mat-panel-description style="flex-grow: 0; justify-content: right;">
                     <button mat-icon-button class="border-button mr-2"  matTooltip="Execute search">
                     <mat-icon class="mr-1" (click)="getStateInitializationActionsFromQueryParams(userSearchFilter)" fontSet="material-icons-outlined">search</mat-icon>
                   </button>
@@ -54,7 +52,7 @@
                           <mat-icon>notifications_active</mat-icon>
                       </button>
                         
-                      <button mat-icon-button class="border-button mr-2" matTooltip="Delete saved search" (click)="removeSearchFilters(userSearchFilter)">
+                      <button mat-icon-button class="border-button" matTooltip="Delete saved search" (click)="removeSearchFilters(userSearchFilter)">
                         <mat-icon fontSet="material-icons-outlined">delete</mat-icon>
                     </button>
                     
@@ -90,7 +88,7 @@
                   </div>
                 </div>
               </div>
-             <hr>
+             <mat-divider class="my-1"></mat-divider>
           <!-- </ng-template> -->
         </mat-expansion-panel>
        

@@ -1,0 +1,43 @@
+.icon-100 {
+    font-size: 100px;
+    height: 100px;
+    width: auto;
+}
+
+.favorites-area {
+    width: 100%;
+
+    // Small devices (landscape phones, 576px and up)
+    @media (min-width: 576px) {
+        width: 500px;
+        max-width: 500px;
+    }
+}
+
+mat-icon.close {
+    &:hover {
+        cursor: pointer;
+        font-weight: bold;
+    }
+}
+
+.entry:hover {
+    cursor: pointer;
+}
+
+::ng-deep .favorites-item-sb>.mat-expansion-panel-header {
+    padding-left: 2 !important;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    height: auto !important;
+    font-size: 0.8rem !important;
+}
+
+.result-header {
+    display: flex;
+    align-items: center;
+}
+
+.favorite-title {
+    max-width: 90%;
+}

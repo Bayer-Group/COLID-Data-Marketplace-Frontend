@@ -21,7 +21,6 @@ export interface FilterStateModel {
   loading: boolean;
   aggregationFilters: Aggregation[];
   rangeFilters: RangeFilter[];
-  checkboxIds: string[];
 }
 
 @State<FilterStateModel>({
@@ -30,8 +29,6 @@ export interface FilterStateModel {
     loading: false,
     aggregationFilters: null,
     rangeFilters: null,
-    // Hardcoded data for testing and development, remove before pushing
-    checkboxIds: []
   }
 })
 @Injectable()
@@ -46,13 +43,6 @@ export class FilterState {
   public static getRangeFilters(state: FilterStateModel) {
     return state.rangeFilters;
   }
-
-  // Getter function for selected checkbox id's
-  @Selector()
-  public static getcheckboxIds(state: FilterStateModel) {
-    return state.checkboxIds;
-  }
-
 
   @Selector()
   public static loading(state: FilterStateModel) {
@@ -81,13 +71,13 @@ export class FilterState {
     });
   }
 
-
-  @Action(SetTypeItems)
-  SetTypeItems({patchState }: StateContext<FilterStateModel>, { typeItemIds }: SetTypeItems) {
-    
+  @Action(SetFilterItems)
+  setFilter({ patchState }: StateContext<FilterStateModel>, { aggregations, rangeFilters }: SetFilterItems) {
     patchState({
-      checkboxIds:typeItemIds
+      loading: false,
+      aggregationFilters: aggregations,
+      rangeFilters: rangeFilters
     });
-  }
 
+  }
 }

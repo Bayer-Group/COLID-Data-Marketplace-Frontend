@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, of, Subscription, forkJoin } from 'rxjs';
+import { Observable, of, Subscription, EMPTY } from 'rxjs';
 import { ActivatedRoute, Router, NavigationEnd, Params } from '@angular/router';
 import { Select, Store, Actions, ofActionDispatched, ofActionCompleted } from '@ngxs/store';
 import {
@@ -9,7 +9,8 @@ import {
   SearchState,
   RefreshRoute,
   OverwriteActiveRangeFilters,
-  ResetActiveAggregationBuckets
+  ResetActiveAggregationBuckets,
+  ClearSelectedPIDURIs,
 } from 'src/app/states/search.state';
 import { SidebarState, SetSidebarOpened } from 'src/app/states/sidebar.state';
 import { jsonToStringMap } from 'src/app/shared/converters/string-map-object.converter';
@@ -19,12 +20,19 @@ import { LogService } from 'src/app/core/logging/log.service';
 import { MatDialog } from '@angular/material/dialog';
 import { mapToObject } from 'src/app/shared/converters/map-object.converter';
 import { ExportDialogComponent } from '../export-dialog/export-dialog.component';
-import { tap } from 'rxjs/operators';
+import { switchMap, take, tap } from 'rxjs/operators';
 import { RRMState } from 'src/app/states/rrm.state';
-import { SearchResult } from "src/app/shared/models/search-result";
+import { SearchHit, SearchResult } from "src/app/shared/models/search-result";
 import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
-import { ExportWarningDialogComponent } from '../export-warning-dialog/export-warning-dialog.component';
+import { MultiselectWarningDialogComponent } from '../multiselect-warning-dialog/multiselect-warning-dialog.component';
 import { SetFromRRM, SetSourceDialog } from 'src/app/states/rrm.state';
+import { FavoritesState } from '../favorites/favorites.state';
+import { AddFavoriteDialogComponent } from '../favorites/components/add-favorite-dialog/add-favorite-dialog.component';
+import { environment } from 'src/environments/environment';
+import { ExportService } from 'src/app/core/http/export.service';
+import { ExportSettings } from 'src/app/shared/models/export/export-settings';
+import { CookieService } from 'ngx-cookie';
+import { ClearResourceTypeItem } from 'src/app/states/metadata.state';
 
 @Component({
   selector: 'app-search',
@@ -38,8 +46,14 @@ export class SearchComponent implements OnInit, OnDestroy {
   @Select(SidebarState.sidebarOpened) sidebarOpened$: Observable<any>;
   @Select(SidebarState.sidebarMode) sidebarMode$: Observable<any>;
   @Select(SearchState.getSearchResult) searchResult$: Observable<SearchResult>;
+  @Select(SearchState.getAllPidUrisOfSearchResult) pidUrisSearchResult$: Observable<string[]>;
+  @Select(SearchState.getSelectedPIDURIs) selectedPIDURIs$: Observable<string[]>;
 
+
+  private masterSubscription: Subscription = new Subscription();
   searchCounter: number = 1;
+  private _result: SearchHit;
+  private pidUris: string[] = [];
 
   @Select(RRMState.getFromRRM) buttons$: Observable<boolean>;
   button: boolean = false;
@@ -53,16 +67,19 @@ export class SearchComponent implements OnInit, OnDestroy {
   activeRangeFilters: ActiveRangeFilters;
   searchText: string;
   searchResult: SearchResult;
+  pidUrisSearchResult: string[];
   exportLimit: number = 500;
 
-  constructor(private route: ActivatedRoute, private router: Router, private store: Store, private actions$: Actions, private logger: LogService,
-    private dialog: MatDialog, private snackBar: ColidMatSnackBarService) {
+  constructor(private route: ActivatedRoute, private router: Router, private store: Store, private cookieService: CookieService, private logger: LogService,
+    private dialog: MatDialog, private snackBar: ColidMatSnackBarService, private exportService: ExportService) {
     var state = JSON.parse(this.route.snapshot.queryParamMap.get('fromRRM'));
     this.store.dispatch(new SetFromRRM(state));
+    
 
     var sourceDialog = this.route.snapshot.queryParamMap.get('sourceDialog');
     this.store.dispatch(new SetSourceDialog(sourceDialog));
-    
+     
+
     this.buttons$.pipe(
       tap(
         s => {
@@ -73,38 +90,94 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const initActions = this.getStateInitializationActionsFromQueryParams();
-
-    this.store.dispatch([...initActions, new RefreshRoute()]).subscribe();
     //this.aggregationFilters$.subscribe(aggregationFilters => this.initializeFilters(aggregationFilters));
-    this.activeAggregations$.subscribe(activeAggregations => this.activeAggregations = activeAggregations);
-    this.activeRangeFilters$.subscribe(activeRangeFilters => {
+    const initActions = this.getStateInitializationActionsFromQueryParams();
+    this.store.dispatch([...initActions, new RefreshRoute()])
+    this.masterSubscription.add(this.activeAggregations$.subscribe(activeAggregations => this.activeAggregations = activeAggregations));
+    this.masterSubscription.add(this.activeRangeFilters$.subscribe(activeRangeFilters => {
       this.activeRangeFilters = activeRangeFilters
-    });
-    this.searchText$.subscribe(searchText => this.searchText = searchText);
+    }));
+    this.masterSubscription.add(this.searchText$.subscribe(searchText => this.searchText = searchText));
     this.routerSubscription = this.router.events.subscribe(r => {
       if (r instanceof NavigationEnd) {
         const navigationActions = this.getStateInitializationActionsFromQueryParams();
-        this.store.dispatch(navigationActions).subscribe()
+        this.store.dispatch(navigationActions)
       }
     });
 
-    this.routeSubscription = this.route.queryParams.subscribe((val) => {
-      this.store.dispatch(new FetchSearchResult(this.route));
-    });
+    this.routeSubscription = this.route.queryParams.pipe(
+      switchMap(_ => {
+        return this.store.dispatch(new FetchSearchResult(this.route))
+      })
+    ).subscribe();
 
-    this.searchResult$.subscribe(s => {
-      this.searchResult = s;
-    });
+    this.masterSubscription.add(this.searchResult$.subscribe(s => {this.searchResult = s}));
+    this.masterSubscription.add(this.pidUrisSearchResult$.subscribe(pidUris => this.pidUrisSearchResult = pidUris));
   }
 
   ngOnDestroy() {
     this.routeSubscription.unsubscribe();
+    this.routerSubscription.unsubscribe();
+    this.masterSubscription.unsubscribe()
     this.store.dispatch(new ResetActiveAggregationBuckets(false))
+    this.store.dispatch(new ClearResourceTypeItem())
+  }
+
+  receiveMessage(event: any) {
+    const message = event.data.message;
+    if (message == "selectedPidURIs") {
+      let uris: string[] = event.data.value;
+      this.pidUris = [];
+      uris.forEach(
+        u => {
+          this.pidUris.push(decodeURIComponent(u));
+        }
+      )
+    }
+    console.log(this.pidUris);
+  }
+
+  openInRRM() {
+    this.selectedPIDURIs$.pipe(take(1)).subscribe(pidUris => {
+      // take only the first 40 PID URIs as the cookie has a memory limit
+      this.cookieService.putObject("selectedResources", pidUris.slice(0, 40), { domain: environment.cookieSharingSubDomain });
+      this.store.dispatch(new ClearSelectedPIDURIs());
+      const url = `${environment.rrmUrl}?viewSelectedResources=true`;
+      window.open(url, "_blank");
+    })
+  }
+
+  openFavoritesDialog() {
+    this.selectedPIDURIs$.pipe(
+      take(1),
+      tap((pidUris: string[]) => {
+        if (pidUris.length <= this.exportLimit) {
+          this.dialog.open(AddFavoriteDialogComponent, {
+            height: '400px',
+            width: '500px',
+            data: {
+              multiSelect : true
+            }
+          });
+        } else {
+          this.dialog.open(MultiselectWarningDialogComponent, {
+            width: "500px",
+            data: {
+              dialogTitle: "Favorites List Warning",
+              dialogContent: `
+                Selected elements can not be added to a favorite list because it contains more than 500 results.
+                <br />
+                Please refine your selection to less than 500 results.`
+            }
+          });
+          this.store.dispatch(new ClearSelectedPIDURIs());
+        }
+      })
+    ).subscribe();
   }
 
   closeSidebar() {
-    this.store.dispatch(new SetSidebarOpened(false)).subscribe();
+    this.store.dispatch(new SetSidebarOpened(false));
   }
 
   getStateInitializationActionsFromQueryParams(): any {
@@ -139,9 +212,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   handleSearchChange(searchText: string) {
     this.searchCounter++;
     this.store.dispatch(new ChangeSearchText(searchText, false));
-  }
-
-  handleInputChange(searchText: string) {
   }
 
   pageChanged(page: any) {
@@ -188,21 +258,85 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
   }
 
-  startExport(): void {
+  startExportResults(): void {
     if (this.searchResult.hits.total <= this.exportLimit) {
       const dialogRef = this.dialog.open(ExportDialogComponent, {
-        width: "600px",
-        height: "500px",
+        width: "50vw",
       });
-
-      dialogRef.afterClosed().subscribe((result) => {
-      });
+      dialogRef.afterClosed().pipe(
+        switchMap((exportSettings: ExportSettings) => {
+          if (exportSettings) {
+            const payload = this.exportService.getExportResultsPayload(exportSettings, this.route);
+            return this.exportService.startExcelExport(payload).pipe(
+              tap((_) => {
+                this.snackBar.successCustomDuration(
+                  "Export started",
+                  "Your export has been started. It could take some minutes, until the download link will appear in your notifications",
+                  null,
+                  5000);
+              }))
+          } else {
+            return EMPTY;
+          }
+        })
+      ).subscribe();
     } else {
-      this.dialog.open(ExportWarningDialogComponent, {
+      this.dialog.open(MultiselectWarningDialogComponent, {
         width: "500px",
-        height: "225px",
+        data: {
+          dialogTitle: "Export Warning!",
+          dialogContent: `
+            This list cannot be exported because it contains more than 500 results.
+            <br />
+            Please refine your search to return less than 500 results.`
+        }
       });
     }
+  }
+
+  startExportSelectedResults(): void {
+    this.selectedPIDURIs$.pipe(
+      take(1),
+      switchMap((pidUris: string[]) => {
+        if (pidUris.length <= this.exportLimit) {
+          const dialogRef = this.dialog.open(ExportDialogComponent, {
+            width: "50vw",
+          });
+          return dialogRef.afterClosed().pipe(
+            switchMap((exportSettings: ExportSettings) => {
+              if (exportSettings) {
+                const payload = this.exportService.getExportSelectedResultsPayload(exportSettings,pidUris);
+                return this.exportService.startExcelExport(payload).pipe(
+                  tap(_ => {
+                    this.snackBar.successCustomDuration(
+                      "Export started",
+                      "Your export has been started. It could take some minutes, until the download link will appear in your notifications",
+                      null,
+                      5000
+                    );
+                    this.store.dispatch(new ClearSelectedPIDURIs());
+                  })
+                );
+              }
+              return EMPTY;            
+            })
+          )
+        } else {
+          this.dialog.open(MultiselectWarningDialogComponent, {
+            width: "500px",
+            data: {
+              dialogTitle: "Export Warning!",
+              dialogContent: `
+                This list cannot be exported because it contains more than 500 results.
+                <br />
+                Please refine your selection to less than 500 results.`
+            }
+          });
+          this.store.dispatch(new ClearSelectedPIDURIs());
+          return EMPTY;
+        }
+      })
+    ).subscribe();
   }
 
 }

@@ -1,0 +1,27 @@
+.sidebar-content-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.detail-container {
+    width: 80%;
+}
+
+.sidebar-container {
+    padding-top: 32px;
+    width: 20%;
+}
+
+.personal-note-container {
+    margin-bottom: 12px;
+}
+
+.favorite-title {
+    display: inline-block;
+    max-width: 85%;
+}
+
+.result-header {
+    display: flex;
+    align-items: center;
+}

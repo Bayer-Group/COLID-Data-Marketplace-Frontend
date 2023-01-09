@@ -1,0 +1,34 @@
+table {
+    width: 100%;
+}
+
+.mat-column-resourceName, .mat-column-dataSteward {
+    width: 25%;
+    word-wrap: break-word;
+}
+
+.action-items-column {
+    width: 120px;
+    text-align: right;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    padding: 4rem;
+}
+
+.red-text {
+    color: red
+}
+
+.reviewed-resource {
+    opacity: 0.5;
+}
+
+.no-data-found {
+    padding: 2rem;
+    text-align: center;
+}

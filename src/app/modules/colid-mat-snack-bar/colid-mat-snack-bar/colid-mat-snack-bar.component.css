@@ -8,4 +8,5 @@ p {
 
 .mat-icon {
   font-size: 45px;
+  overflow: unset;
 }

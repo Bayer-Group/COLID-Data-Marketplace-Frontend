@@ -10,6 +10,7 @@
   vertical-align: top;
 }
 
+
 .mat-expansion-panel-header[aria-disabled=true] {
   color: rgba(0, 0, 0, 0.87) !important;
 }
@@ -19,43 +20,44 @@
   border-radius: 0.3rem;
 }
 
-.result-header {
-  cursor: pointer !important;
- &:hover {
-    background-color: whitesmoke;
-    border-radius: 0.3rem;
-  }
+::ng-deep .result-header {
+  flex-direction: row;
+  align-items: center;
 }
+
+
+::ng-deep .result-header > .buttons {
+  float: right;
+  display: flex;
+}
+
 
 .result-description {
   font-size: 0.94rem;
   margin-bottom: unset !important;
-  word-break: break-word;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  width: 111% !important;
-}
-
-::ng-deep .mat-expansion-panel:not([class*="mat-elevation-z"]) {
-  box-shadow: none;
+  text-align: justify;
+  width: auto;
 }
 
 ::ng-deep .mat-expansion-panel-header {
-  padding-left: 0 !important;
+  padding-left: 2 !important;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   height: auto !important;
-  font-size: 0.8rem !important;
 }
 
 ::ng-deep .mat-expansion-panel-body {
-  padding-left: 0 !important;
-  padding-bottom: 0 !important;
-  display: inline-block;
+  padding-left: 2 !important;
+  //display: inline-block;
   max-width: 100%!important;
   overflow: auto;
 }
 
 ::ng-deep .result-description > p {
   margin-bottom: 0px;
+  width: 100%;
 }
 
 .badge {
@@ -83,14 +85,14 @@ mat-panel-description {
 
 
  ::ng-deep mat-tab-body-wrapper {
-  width: 100%;
+  width: max-content;
 }
 
 .mat-expansion-panel-content {
   display: flex;
   flex-direction: column;
   overflow: visible;
-  width: max-content;
+  width: 100%;
 }
 .searchresultlist{
   margin-left: 20px;
@@ -123,4 +125,28 @@ mat-panel-description {
 
 .details-container {
   margin-top: 10px;
+}
+
+::ng-deep .mat-tooltip {
+  max-width: 500px;
+  font-size: 13px;
+}
+
+::ng-deep .cursor-pointer {
+  cursor: pointer;
+}
+
+.parent{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.child{
+  margin:auto
+}
+
+span {
+  align-self: end
 }

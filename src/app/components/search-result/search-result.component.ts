@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { SearchHit, DocumentMap, DocumentMapDirection, StringArrayMap } from '../../shared/models/search-result';
 import { Constants } from 'src/app/shared/constants';
 import { environment } from 'src/environments/environment';
@@ -10,7 +10,7 @@ import { Observable, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { LinkedResourceDisplayDialog } from 'src/app/components/linked-resource-dialog/linked-resource-display-dialog.component';
 import { ColidEntrySubscriptionDto } from 'src/app/shared/models/user/colid-entry-subscription-dto';
-import { AddColidEntrySubscription, RemoveColidEntrySubscription, UserInfoState } from 'src/app/states/user-info.state';
+import { AddColidEntrySubscription, RemoveColidEntryFavorite, RemoveColidEntrySubscription, UserInfoState } from 'src/app/states/user-info.state';
 import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service'
 import { ColidEntrySubscriberCountState, FetchColidEntrySubscriptionNumbers } from '../../states/colid-entry-subcriber-count.state';
 import { SimilarityModalComponent } from 'src/app/components/search-result/similarity-modal/similarity-modal.component';
@@ -18,7 +18,11 @@ import { ResourcePoliciesComponent } from './resource-policies/resource-policies
 import { ResourcePoliciesState } from 'src/app/states/resource-policies.state';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Schema_Support, SchemeUi } from 'src/app/shared/models/schemeUI';
-import { MetadataState } from 'src/app/states/metadata.state';
+import { Favorites } from 'src/app/shared/models/favorites';
+import { FavoritesState, FetchFavorites } from '../favorites/favorites.state';
+import { AddFavoriteDialogComponent } from '../favorites/components/add-favorite-dialog/add-favorite-dialog.component';
+import { ViewDescriptionDialogComponent } from '../search-result/view-description-dialog/view-description-dialog.component';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 @Component({
@@ -26,7 +30,7 @@ import { MetadataState } from 'src/app/states/metadata.state';
   templateUrl: './search-result.component.html',
   styleUrls: ['./search-result.component.scss']
 })
-export class SearchResultComponent implements OnInit, OnDestroy {
+export class SearchResultComponent implements OnInit, OnDestroy, OnChanges {
   private _result: SearchHit;
   private _source: DocumentMap;
 
@@ -34,9 +38,11 @@ export class SearchResultComponent implements OnInit, OnDestroy {
   @Select(SearchState.getSearchTimestamp) searchTimestampObservable$: Observable<Date>;
   @Select(UserInfoState.getColidEntrySubscriptions) colidEntrySubscriptions$: Observable<ColidEntrySubscriptionDto[]>;
   @Select(ColidEntrySubscriberCountState.getSubscriptionNumbers) colidEntrySubscriptionNumbers$: Observable<ColidEntrySubscriptionDto[]>;
+  @Select(FavoritesState.getFavorites) favorites$: Observable<Favorites>;
   @Select(ResourcePoliciesState.getLoadingState) PoliciesLoadingState$: Observable<boolean>;
   @Select(SearchState.getLinkedTableAndColumnResource) SchemeUI$: Observable<SchemeUi>;
   @Select(SearchState.getLoading) loading$: Observable<boolean>;
+  @Select(FavoritesState.getFavoriteUriList) favUris$: Observable<string[]>;
   @ViewChild('tabGroup') tabGroup;
   @Input() set result(value: SearchHit) {
     if (this._result) {
@@ -74,6 +80,11 @@ export class SearchResultComponent implements OnInit, OnDestroy {
     return decodeURIComponent(rawPidUri);
   }
 
+  get entityType() {
+    const rawEntityType = this._source[Constants.Metadata.EntityType].outbound[0].uri;
+    return decodeURIComponent(rawEntityType);
+  }
+
   get expanded() {
     return this.expandView || this.expandByDefault;
   }
@@ -87,8 +98,11 @@ export class SearchResultComponent implements OnInit, OnDestroy {
   label: string[] = new Array<string>();
 
   colidEntrySubscriptionsSubscription: Subscription;
-  colidEntrySubscriptions: ColidEntrySubscriptionDto[];
+  colidEntrySubscriptions: ColidEntrySubscriptionDto[] = [];
+  favoritesAdded: Favorites;
+  favorites: Favorites;
   isSubscribed: boolean;
+  isFavorited: boolean = false;
 
   resourceSubNumbers: ColidEntrySubscriptionDto[] = [];
   ResourceNumSubscription: Subscription;
@@ -111,16 +125,35 @@ export class SearchResultComponent implements OnInit, OnDestroy {
   activeTab: any[] = []
   selectedPidUri: string = "";
   isOpenSchemeUiTab: string = ""
+  nextReviewDate: string = ""
   expandedNested: any = {};
   selectedIndex = 0;
   searchText: string;
   searchTimestamp: Date;
   InputType = InputType;
+  currentUTCDate : number;
+
   constructor(
     private store: Store,
     private logger: LogService,
     private snackBar: ColidMatSnackBarService,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private sanitizer: DomSanitizer) { }
+
+
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(this.details){
+      if (this.details.find(x => x.key == this.linkedKey)) {
+        this.showLinkedResources = true;
+        this.linkedResourceData = this.details.find(x => x.key == this.linkedKey);
+        this.details = this.details.filter((x) => {
+          return x.key != this.linkedKey;
+        });
+      }
+    }
+    
+  }
 
   ngOnInit() {
     this.colidEntrySubscriptionsSubscription = this.colidEntrySubscriptions$.subscribe(colidEntrySubscriptions => {
@@ -128,11 +161,14 @@ export class SearchResultComponent implements OnInit, OnDestroy {
         this.isSubscribed = colidEntrySubscriptions.some(ces => ces.colidPidUri === this.pidUri)
         this.colidEntrySubscriptions = colidEntrySubscriptions;
       }
-
       this.ResourceNumSubscription = this.colidEntrySubscriptionNumbers$.subscribe(x => {
         this.resourceSubNumbers = x;
       });
     });
+
+    this.favUris$.subscribe(r => {
+      this.isFavorited = r.indexOf(this.pidUri) > -1;
+    })
 
     this.developmentMode = !environment.production;
     if (this._result != null) {
@@ -158,12 +194,33 @@ export class SearchResultComponent implements OnInit, OnDestroy {
 
     if (this.details.find(x => x.key == this.linkedKey)) {
       this.showLinkedResources = true;
-      this.linkedResourceData = this.details.find(x => x.key == this.linkedKey)
+      this.linkedResourceData = this.details.find(x => x.key == this.linkedKey);
       this.details = this.details.filter((x) => {
-        return x.key != this.linkedKey
-      })
+        return x.key != this.linkedKey;
+      });
+    }
+    const today = new Date();
+    this.currentUTCDate = Date.UTC(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+    
+    if (this.details.find(x => x.key == Constants.Metadata.HasNextReviewDueDate)) {
+      this.nextReviewDate = this.details.find(x => x.key == Constants.Metadata.HasNextReviewDueDate).value[0]
     }
 
+  }
+
+  NextReviewDateIsDue(){
+    const date = new Date(this.nextReviewDate)
+    let resourceDueDateUTC = Date.UTC(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
+
+    return resourceDueDateUTC < this.currentUTCDate;
   }
 
   expandPanel() {
@@ -219,6 +276,43 @@ export class SearchResultComponent implements OnInit, OnDestroy {
     });
   }
 
+  //Favorites
+
+  openFavoritesDialog(event) {
+    this.preventOpeningResultDetails(event);
+    const pidUri = decodeURIComponent(this._result.id);
+    const dialogRef = this.dialog.open(AddFavoriteDialogComponent, {
+      height: '400px',
+      width: '500px',
+      data: {
+        pidUri: pidUri,
+        multiSelect : false
+      }
+    });
+    }
+
+
+    openDescriptionDialog(comment, label, description) {
+      if(comment || description){
+        const dialogRef = this.dialog.open(ViewDescriptionDialogComponent, {
+          width: '400px',
+          height: 'auto',
+          data: {
+            comment: comment,
+            label: label,
+            description: description
+          }
+        });
+      }
+    }
+  
+   removeFromFavorites(event) {
+      this.preventOpeningResultDetails(event);
+
+      //TODO: Implement
+    }
+
+
   getNumSubscribers(): number {
     var sr = 0;
     if (this.resourceSubNumbers.find(x => x.colidPidUri === this.pidUri)) {
@@ -237,14 +331,10 @@ export class SearchResultComponent implements OnInit, OnDestroy {
         'searchTimestamp': this.searchTimestamp,
         'resourcePIDUri': getPidUriForHref(this.details)[0],
       });
-    event.cancelBubble = true;
     const internalResourceId = this._source.internalResourceId.outbound[0].uri;
     // we need to replace the # with the encoded character %23,
     // otherwise the value can not be passed as query parameter
     const encodedId = internalResourceId.replace(new RegExp('(\#)', "g"), "%23");
-    if (event.stopPropagation) {
-      event.stopPropagation();
-    }
     const url = `${environment.kgeUrl}?store=colid&profile=colid&baseNode=${encodedId}`;
     window.open(url, '_blank');
   }
@@ -258,15 +348,11 @@ export class SearchResultComponent implements OnInit, OnDestroy {
         'searchTimestamp': this.searchTimestamp,
         'resourcePIDUri': getPidUriForHref(this.details)[0],
       });
-    event.cancelBubble = true;
 
     const internalResourceId = getPidUriForHref(this.details)[0];
     // we need to replace the # with the encoded character %23,
     // otherwise the value can not be passed as query parameter
     const encodedId = internalResourceId.replace(new RegExp('(\#)', "g"), "%23");
-    if (event.stopPropagation) {
-      event.stopPropagation();
-    }
 
     const url = `${environment.pidUrl}resource?pidUri=${encodedId}`;
     window.open(url, '_blank');
@@ -281,20 +367,15 @@ export class SearchResultComponent implements OnInit, OnDestroy {
         'searchTimestamp': this.searchTimestamp,
         'resourcePIDUri': getPidUriForHref(this.details)[0],
       });
-    event.cancelBubble = true;
     const internalResourceId = getPidUriForHref(this.details)[0];
     // we need to replace the # with the encoded character %23,
     // otherwise the value can not be passed as query parameter
     const encodedId = internalResourceId.replace(new RegExp('(\#)', "g"), "%23");
-    if (event.stopPropagation) {
-      event.stopPropagation();
-    }
     const url = `${environment.rrmUrl}?baseNode=${encodedId}`;
     window.open(url, '_blank');
   }
 
   preventOpeningResultDetails(event) {
-    event.preventDefault();
     event.stopPropagation();
   }
 
@@ -438,7 +519,7 @@ export class SearchResultComponent implements OnInit, OnDestroy {
     event.preventDefault();
     this.logger.info("DMP_RESULT_PAGE_RESOURCE_VERSION_LINK_CLICKED", this.generateLogEntry(detail, version.value[Constants.Metadata.HasPidUri].value));
     this.dialog.open(LinkedResourceDisplayDialog, {
-      data: { id: version.value[Constants.Metadata.HasPidUri].value }
+      data: { id: version.value[Constants.Metadata.HasPidUri].value, confirmReview: false }
     });
   }
 
@@ -593,7 +674,9 @@ export class SearchResultComponent implements OnInit, OnDestroy {
         valueEdge: valueEdge,
         inputType: inputType,
         nested: nested,
-        nestedInbound: nestedInbound
+        nestedInbound: nestedInbound,
+        comment: metaProps[Constants.Shacl.Comment],
+        description: metaProps[Constants.Shacl.Description]
       };
     }
     return null;
@@ -705,6 +788,8 @@ export class DetailsViewModel {
 
   nested: DetailsViewModelNested[];
   nestedInbound: DetailsViewModelNested[];
+  comment: string;
+  description: string;
 }
 
 export class DetailsViewModelNested {

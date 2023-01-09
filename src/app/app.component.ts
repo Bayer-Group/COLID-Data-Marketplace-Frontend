@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { FetchBuildInformation } from './states/status.state';
 import { MetadataState, FetchMetadata } from './states/metadata.state';
@@ -7,11 +7,15 @@ import { SetSidebarMode, ToggleSidebar, SetSidebarOpened } from './states/sideba
 import { EnsureBrowserSupportService } from './modules/browser-support/services/ensure-browser-support.service';
 import { ColidIconsService } from './modules/colid-icons/services/colid-icons.service';
 import { CustomMaterialIcon } from './modules/colid-icons/models/custom-material-icon';
-import { SetLastLoginDataMarketplace, FetchUser } from './states/user-info.state';
+import { SetLastLoginDataMarketplace, FetchUser, FetchConsumerGroupsByUser } from './states/user-info.state';
 import { AuthService } from './modules/authentication/services/auth.service';
 import { FetchNotifications } from './modules/notification/notification.state'
 import { map, switchMap, tap } from 'rxjs/operators';
 import { RRMState } from './states/rrm.state';
+import { FetchFavorites } from './components/favorites/favorites.state';
+import { MatSidenav } from '@angular/material/sidenav';
+import { ThisReceiver } from '@angular/compiler';
+import { Event, NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -19,15 +23,24 @@ import { RRMState } from './states/rrm.state';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+
+  @ViewChild('notificationSidenav') sidenav: MatSidenav
   @Select(MetadataState.getMetadataTypes) metadataTypes$: Observable<any>;
   @Select(RRMState.getFromRRM) hideToolbar$: Observable<boolean>;
+
   hideToolbar: boolean = false;
+  activeSidebar: string = "notification";
+  openedSidenav: boolean = false;
+  currentRoute: string = "";
+
+
   private readonly _destroying$ = new Subject<void>();
   constructor(
     private browserSupport: EnsureBrowserSupportService,
     private store: Store,
     public authService: AuthService,
-    private iconService: ColidIconsService) {
+    private iconService: ColidIconsService,
+    private router: Router) {
     this.hideToolbar$.pipe(
       tap(
         s => {
@@ -35,6 +48,34 @@ export class AppComponent implements OnInit {
         }
       )
     ).subscribe();
+    this.router.events.subscribe((event: Event) => {
+      if (event instanceof NavigationEnd) {
+        this.currentRoute = event.url
+      }
+    })
+  }
+
+  toggleSidenav(type: string){
+    console.log(type)
+    if (type === 'favorite' && this.currentRoute.startsWith('/favorite')) {
+      return;
+    }
+    //when sidenav type is changed
+    if(this.activeSidebar != type) {
+      this.activeSidebar = type;
+      if(!this.openedSidenav) {
+        this.openedSidenav = !this.openedSidenav;
+      }
+    } else {
+      this.openedSidenav = !this.openedSidenav;
+    }
+
+    if(this.openedSidenav){
+      this.sidenav.open();
+    } else {
+      this.sidenav.close();
+    }
+
   }
 
   ngOnInit() {
@@ -75,7 +116,9 @@ export class AppComponent implements OnInit {
     })
     ).pipe(switchMap(identity => {
       if (identity) {
-        return this.store.dispatch([new FetchUser(identity.accountIdentifier, identity.email), new FetchNotifications(identity.accountIdentifier)])
+        console.log("Account identifier is", identity.accountIdentifier);
+        return this.store.dispatch([new FetchUser(identity.accountIdentifier, identity.email), new FetchNotifications(identity.accountIdentifier), new FetchFavorites(identity.accountIdentifier), new FetchConsumerGroupsByUser()])
+        //return this.store.dispatch([new FetchUser(identity.accountIdentifier, identity.email), new FetchFavorites(identity.accountIdentifier)])
       }
     })).pipe(switchMap(() => {
       return this.store.dispatch(new SetLastLoginDataMarketplace());
@@ -116,4 +159,5 @@ export class AppComponent implements OnInit {
   toggleNavbar() {
     this.store.dispatch(new ToggleSidebar()).subscribe();
   }
+
 }

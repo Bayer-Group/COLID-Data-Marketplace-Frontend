@@ -1,4 +1,4 @@
-<div class="filter-panel-container">
+<div class="filter-panel-container" *ngIf="(metadata$ | async); else loading">
   <div class="filter-panel-main" *ngIf="mainAggregationFilters && activeAggregations; else loading">
     <app-filter-box *ngFor="let filter of mainAggregationFilters" [filterType]="'checkBoxHierarchy'"
       [initialFilterBox]="initialFilterPanel" [activeAggregationBuckets]="activeAggregations.get(filter.key)"

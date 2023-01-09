@@ -12,7 +12,11 @@ export class MockIdentityProvider implements IdentityProvider {
   constructor() { }
 
   getAccount(): Observable<ColidAccount>{
-    const idTokenClaimes: any = { roles: [ Constants.Authentication.Roles.Administration ]};
+    const idTokenClaimes = [
+      Constants.Authentication.Roles.Administration,
+      "PID.Group10Data.ReadWrite",
+      "PID.Group11Data.ReadWrite",
+    ];
     return of(new ColidAccount('SuperAdmin', 'superadmin@bayer.com', '87654321-4321-4321-4321-210987654321', idTokenClaimes))
   }
 

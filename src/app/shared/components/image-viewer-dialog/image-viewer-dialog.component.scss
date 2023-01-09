@@ -23,3 +23,9 @@ lib-ngx-image-zoom ::ng-deep .ngxImageZoomContainer > img {
     font-size: 1.2em;
     font-weight: bold;
 }
+
+a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

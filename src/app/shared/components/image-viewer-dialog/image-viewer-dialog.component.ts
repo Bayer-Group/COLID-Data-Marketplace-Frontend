@@ -58,31 +58,6 @@ export class ImageViewerDialogComponent {
     this.setImage(this.currentIndex);
   }
 
-  onClickButtonDownload() {
-    const imgName = this.imageUrl.substr(this.imageUrl.lastIndexOf('/') + 1);
-    this.httpClient.get(this.imageUrl, {responseType: 'blob' as 'json'})
-      .subscribe((res: any) => {
-        const file = new Blob([res], {type: res.type});
- 
-        const blob = window.URL.createObjectURL(file);
-        const link = document.createElement('a');
-        link.href = blob;
-        link.download = imgName;
- 
-        // Version link.click() to work at firefox
-        link.dispatchEvent(new MouseEvent('click', {
-          bubbles: true,
-          cancelable: true,
-          view: window
-        }));
- 
-        setTimeout(() => { // firefox
-          window.URL.revokeObjectURL(blob);
-          link.remove();
-        }, 100);
-      });
-  }
-
   setImage(index: number) {
     this.imageUrl = this.images[index]['id'];
     this.imageThumbnailUrl = this.images[index]['id'];

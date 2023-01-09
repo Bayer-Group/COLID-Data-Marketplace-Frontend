@@ -1,6 +1,7 @@
 export const environment = {
   Label: 'Local',
   production: false,
+  environment: 'development',
   allowAnonymous: true,
   interceptors: [],
   pageSize: 10,
@@ -32,5 +33,6 @@ export const environment = {
   pidUrl: 'http://localhost:4200/',
   kgeUrl: 'https://kge.example.com/',
   rrmUrl: 'http://localhost:4305/',
-  colidIconsUrl: 'https://dataservices-icons.dev.colid.int.bayer.com/'
+  colidIconsUrl: 'https://dataservices-icons.dev.colid.int.bayer.com/',
+  cookieSharingSubDomain: 'localhost'
 };

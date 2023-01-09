@@ -15,7 +15,12 @@
         <table class="result-table">
           <tr *ngFor="let metadata of sortedMetadataProperties">
             <ng-container *ngIf="IsVisibleProperty(metadata)">
-              <td><span class="small text-muted text-uppercase lead">{{metadata.properties[constants.Shacl.Name]}}</span></td>
+              <td>
+                <span class="small text-muted text-uppercase lead cursor-pointer" 
+                  (click)="openMetaDescriptionDialog(metadata.properties[constants.Shacl.Comment], metadata.properties[constants.Shacl.Name], metadata.properties[constants.Shacl.Description])">
+                  {{metadata.properties[constants.Shacl.Name]}}
+                </span>
+              </td>
               <td></td>
               <ng-container [ngSwitch]="GetMetadataKey(metadata)">  
                 <td *ngSwitchCase="constants.Metadata.DistributionEndpointLifecycleStatus"><span

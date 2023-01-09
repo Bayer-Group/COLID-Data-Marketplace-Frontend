@@ -28,6 +28,7 @@ import { NgxsModule } from '@ngxs/store';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { QuillModule, QuillConfig } from "ngx-quill";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -88,8 +89,6 @@ library.add(
 
 // Services
 import { LogService } from './core/logging/log.service';
-import { CheckForUpdateService } from './shared/services/update/check-for-update.service';
-import { PromptUpdateService } from './shared/services/update/prompt-update.service';
 
 // States
 import { FilterState } from './states/filter.state';
@@ -100,6 +99,7 @@ import { SidebarState } from './states/sidebar.state';
 import { UserInfoState } from './states/user-info.state';
 import { WelcomeMessageState } from './states/welcome-message.state'
 import { ColidEntrySubscriberCountState } from './states/colid-entry-subcriber-count.state'
+import { TaxonomyState } from "./states/taxonomy.state";
 
 // Provider
 import { DatePipe } from '@angular/common';
@@ -131,7 +131,6 @@ import { FilterBoxItemTaxonomyComponent } from './components/sidebar/filter-pane
 import { UserInfoApiService } from './core/http/user-info.api.service';
 import { ColidSnackBarModule } from './modules/colid-mat-snack-bar/colid-mat-snack-bar.module';
 import { ColidDefaultInterceptor } from './core/interceptors/colid-default.interceptor';
-import { ServiceWorkerModule } from '@angular/service-worker';
 import { ColidIconsModule } from './modules/colid-icons/colid-icons.module';
 import { BrowserSupportModule } from './modules/browser-support/browser-support.module';
 import { SimilarityModalComponent } from './components/search-result/similarity-modal/similarity-modal.component';
@@ -151,16 +150,56 @@ import { JoinPipe } from './shared/pipes/join.pipe';
 import { SearchFilterDialogComponent } from './components/sidebar/search-filter-dialog/search-filter-dialog.component';
 import { ExportDialogComponent } from './components/export-dialog/export-dialog.component';
 import { RRMState } from './states/rrm.state';
-import { ActivatedRoute, Router } from '@angular/router';
 import { SearchResultStandaloneContainerComponent } from './components/search-result-standalone-container/search-result-standalone-container.component';
 import { SchemeUIComponent } from './components/search-result/scheme-ui/scheme-ui.component';
-import { ExportWarningDialogComponent } from './components/export-warning-dialog/export-warning-dialog.component';
+import { MultiselectWarningDialogComponent } from './components/multiselect-warning-dialog/multiselect-warning-dialog.component';
 import { ColumnsNamePipe } from './shared/pipes/columnsName.pipe';
 import { MsalBroadcastService, MsalGuard, MsalModule, MsalService } from '@azure/msal-angular';
 import { MsalRedirectComponent } from './modules/authentication/services/msal.redirect.component';
 import { FilterBoxItemCheckboxHierarchyComponent } from './components/sidebar/filter-panel/filter-box/filter-box-checkboxHierarchy/filter-box-item-checkboxHierarchy.component';
 import { BrowserCacheLocation, InteractionType, LogLevel, PublicClientApplication } from '@azure/msal-browser';
 import { isIE, loggerCallback } from './modules/authentication/azure-authentication.module';
+import { FavoritesState } from './components/favorites/favorites.state';
+import { FavoritesComponent } from './components/favorites/favorites.component';
+import { CreateFavoriteListComponent } from './components/favorites/components/create-favorite-list/create-favorite-list.component';
+import { EditFavoriteListComponent } from './components/favorites/components/edit-favorite-list/edit-favorite-list.component';
+import { AddFavoriteDialogComponent } from './components/favorites/components/add-favorite-dialog/add-favorite-dialog.component';
+import { DeleteFavoriteListComponent } from './components/favorites/components/delete-favorite-list/delete-favorite-list.component';
+import { RemoveFavoriteEntryComponent } from './components/favorites/components/remove-favorite-entry/remove-favorite-entry.component';
+import { EditFavoriteEntryComponent } from './components/favorites/components/edit-favorite-entry/edit-favorite-entry.component';
+import { FavoritesOpenComponent } from './components/favorites/components/favorites-open/favorites-open.component';
+import { FavoritesService } from './components/favorites/services/favorites.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { LoadingIndicatorPipe } from './shared/pipes/loadingIndicator.pipe';
+import { MapPipe } from "./shared/pipes/map.pipe";
+
+import { ResourceReviewsComponent } from './components/resource-reviews/resource-reviews.component';
+import { ReviewCyclePipe } from './shared/pipes/review-cycle.pipe';
+import { ReviewState } from './states/review.state';
+import { BypassSanitizerPipe } from './shared/pipes/bypassSanitizer.pipe';
+import { ResourceHistoricComponent } from './components/resource-historic/resource-historic.component';
+import { EntityDisplayComponent } from './components/entity-display/entity-display.component';
+import { EntityDisplayImageComponent } from './components/entity-display/entity-display-image/entity-display-image.component';
+import { EntityDisplayGroupComponent } from './components/entity-display/entity-display-group/entity-display-group.component';
+import { EntityDisplayItemComponent } from './components/entity-display/entity-display-item/entity-display-item.component';
+import { EntityDisplayItemTaxonomyComponent } from './components/entity-display/entity-display-item-taxonomy/entity-display-item-taxonomy.component';
+import { EntityDisplayItemVersioningComponent } from './components/entity-display/entity-display-item-versioning/entity-display-item-versioning.component';
+import { FavoriteListComponent } from './components/favorites/components/favorite-list/favorite-list.component';
+import { CookieModule } from 'ngx-cookie';
+
+// Global quill config for form items
+const globalQuillConfig: QuillConfig = {
+  modules: {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+      ['blockquote'],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+      ['clean'],                                        // remove formatting button
+      ['link']                                          // link
+    ]
+  }
+}
 
 const states = [
   FilterState,
@@ -173,7 +212,10 @@ const states = [
   WelcomeMessageState,
   ColidEntrySubscriberCountState,
   ColidEntrySubscriptionsState,
-  ResourcePoliciesState
+  ResourcePoliciesState,
+  FavoritesState,
+  ReviewState,
+  TaxonomyState,
 ];
 const protectedResourceMap = new Map(Object.entries(environment.adalConfig.protectedResourceMap));
 declare module "@angular/core" {
@@ -216,7 +258,10 @@ declare module "@angular/core" {
     ExportDialogComponent,
     HighlightPipe,
     JoinPipe,
+    MapPipe,
     ColumnsNamePipe,
+    BypassSanitizerPipe,
+    LoadingIndicatorPipe,
     FilterBoxItemTaxonomyComponent,
     FilterBoxItemCheckboxHierarchyComponent,
     ImageViewerDialogComponent,
@@ -225,7 +270,25 @@ declare module "@angular/core" {
     ResourcePoliciesComponent,
     SearchFilterDialogComponent,
     SchemeUIComponent,
-    ExportWarningDialogComponent
+    MultiselectWarningDialogComponent, 
+    FavoritesComponent,
+    CreateFavoriteListComponent,
+    EditFavoriteListComponent,
+    AddFavoriteDialogComponent,
+    DeleteFavoriteListComponent,
+    RemoveFavoriteEntryComponent,
+    EditFavoriteEntryComponent,
+    FavoritesOpenComponent,
+    ResourceReviewsComponent,
+    ReviewCyclePipe,
+    ResourceHistoricComponent,
+    EntityDisplayComponent,
+    EntityDisplayImageComponent,
+    EntityDisplayGroupComponent,
+    EntityDisplayItemComponent,
+    EntityDisplayItemTaxonomyComponent,
+    EntityDisplayItemVersioningComponent,
+    FavoriteListComponent
   ],
   imports: [
     MsalModule.forRoot(new PublicClientApplication({//MSAL Config
@@ -267,9 +330,12 @@ declare module "@angular/core" {
     AppMaterialModule,
     HttpClientModule,
     FontAwesomeModule,
+    QuillModule.forRoot(globalQuillConfig),
     NgxsModule.forRoot(states),
     NgxsRouterPluginModule.forRoot(),
-    NgxsLoggerPluginModule.forRoot(),
+    NgxsLoggerPluginModule.forRoot({
+      disabled: true
+    }),
     TooltipModule.forRoot(),
     BrowserAnimationsModule,
     InfiniteScrollModule,
@@ -282,7 +348,7 @@ declare module "@angular/core" {
     NotificationModule.forRoot(),
     SharedModule,
     NgxImageZoomModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    CookieModule.withOptions(),
   ],
   providers: [
     DatePipe,
@@ -294,16 +360,17 @@ declare module "@angular/core" {
     StatusApiService,
     UserInfoApiService,
     WelcomeMessageApiService,
-    CheckForUpdateService,
-    PromptUpdateService,
-    ResourceApiService,
     ResourceApiService,
     { provide: HTTP_INTERCEPTORS, useClass: ColidDefaultInterceptor, multi: true },
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     MsalService,
     MsalGuard,
-    MsalBroadcastService
+    MsalBroadcastService,
+    FavoritesService,
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatDialogRef, useValue: {} },
   ],
+  exports: [],
   bootstrap: [AppComponent, MsalRedirectComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

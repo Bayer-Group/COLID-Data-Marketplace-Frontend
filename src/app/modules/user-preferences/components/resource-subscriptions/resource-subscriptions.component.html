@@ -50,6 +50,8 @@
                     (click)="subscribeToResource(colidEntrySubscription.key)">
                     <mat-icon>notifications_none</mat-icon>
                 </button>
+                <div mat-line matTooltip="{{colidEntrySubscription.value.definition.substring(0,1000)}}...">
+                    {{colidEntrySubscription.value.definition}}</div> 
             </mat-list-item>
         </mat-list>
     </div>

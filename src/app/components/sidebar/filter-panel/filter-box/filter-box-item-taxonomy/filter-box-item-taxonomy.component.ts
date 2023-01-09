@@ -56,7 +56,7 @@ export class FilterBoxItemTaxonomyComponent implements OnInit, OnDestroy {
   dataSource: MatTreeFlatDataSource<TaxonomyDTO, TaxonomyDTO>;
 
   /** The selection for checklist */
-  checklistSelection: SelectionModel<TaxonomyDTO>;
+  checklistSelection: SelectionModel<TaxonomyDTO> = new SelectionModel<TaxonomyDTO>(true /* multiple */);;
 
   get isTaxonomy(): boolean { return this.taxonomyTreeData.some(t => t.hasChild); }
 
@@ -80,7 +80,6 @@ export class FilterBoxItemTaxonomyComponent implements OnInit, OnDestroy {
     this.treeControl = new FlatTreeControl<TaxonomyDTO>(this.getLevel, this.isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
-    this.checklistSelection = new SelectionModel<TaxonomyDTO>(true /* multiple */);
     this.dataSource.data = this.taxonomyTreeData;
     this.rewriteValues();
   }

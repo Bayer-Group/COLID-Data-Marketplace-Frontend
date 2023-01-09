@@ -5,6 +5,10 @@ import { ResourceOverviewCTO } from "src/app/shared/models/resources/resource-ov
 import { Observable } from "rxjs";
 import { ResourceSearchDTO } from "src/app/shared/models/resources/resource-search-dto";
 import { CheckboxHierarchyDTO } from "src/app/shared/models/checkboxHierarchy-dto";
+import { ResourceOverviewDTO } from "src/app/shared/models/resources/resource-overview-dto";
+import { ResourceRevisionHistory } from "src/app/shared/models/resources/historic-resource-overview-dto";
+
+const DEFAULT_CONSUMER_GROUP: string = "https://pid.bayer.com/kos/19050#0adfd47a-8334-4fc3-a551-4caee0029b9c";
 
 @Injectable({
   providedIn: "root",
@@ -28,6 +32,30 @@ export class ResourceApiService {
 
   getHierarchy(): Observable<CheckboxHierarchyDTO[]> {
     return this.httpClient.get<CheckboxHierarchyDTO[]>(environment.colidApiUrl + '/metadata/hierarchyDmp');
+  }
+
+  getDueReviews(consumerGroupId: string, endDate: string): Observable<ResourceOverviewDTO[]> {
+    const params = new HttpParams()
+      .set('consumerGroup', encodeURI(consumerGroupId))
+      .set('endDate', endDate);
+
+    return this.httpClient.get<ResourceOverviewDTO[]>(environment.colidApiUrl + '/resource/dueReviews', {
+      params: params 
+    });
+  }
+
+  confirmReview(pidUri: string): Observable<ResourceOverviewDTO> {
+    const params = new HttpParams()
+      .set('pidUri', encodeURI(pidUri));
+
+    return this.httpClient.put<ResourceOverviewDTO>(environment.colidApiUrl + '/resource/confirmReview', {}, { params: params });
+  }
+
+  getResourceRevisionHistory(resourcePidUri: string): Observable<ResourceRevisionHistory[]> {
+    const url = `${environment.colidApiUrl}/resource/resourcerevisionshistory`;
+    let params = new HttpParams()
+      .set('pidUri', resourcePidUri);
+    return this.httpClient.get<ResourceRevisionHistory[]>(url, {params});
   }
 
   toHttpParams(obj: Object): HttpParams {

@@ -1,0 +1,18 @@
+<div class="dialog">
+  <h2 mat-dialog-title>Remove Items</h2>
+
+  <ng-container>
+    <div mat-dialog-content>
+      Are you sure you want to remove the selected resources from this list?
+    </div>
+    <div mat-dialog-action align="end" class="button">
+      <button mat-stroked-button color="primary" mat-dialog-close>
+        Cancel
+      </button>
+      <button class="buttons" mat-flat-button color="primary" mat-dialog-close cdkFocusInitial
+        (click)="confirm()">
+        Remove
+      </button>
+    </div>
+  </ng-container>
+</div>

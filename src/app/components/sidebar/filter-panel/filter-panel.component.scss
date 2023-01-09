@@ -13,18 +13,28 @@ $mat-toolbar-height: 54px;
   display: flex;
   flex-direction: column;
   max-width: 30vw;
+  width: 30vw;
 }
 
 .filter-panel-main {
   flex-grow: 0;
-  padding: 0.5rem 0 0.5rem 0;
+
+  @media (max-width: 1540px) {
+    flex: 1;
+    overflow-y: auto;
+  }
+ // padding: 0.5rem 0 0.5rem 0;
 }
 
 .centered-item {
   flex-grow: 1;
-  overflow-y: scroll;
+  overflow-y: auto;
   padding-top: 0.8rem;
   padding-bottom: 0.8rem;
+
+  @media (max-width: 1540px) {
+    flex: 1
+  }
 }
 
 .filter-panel-buttons {
@@ -35,7 +45,7 @@ $mat-toolbar-height: 54px;
 }
 
 .loading {
-  min-width: 414px;
+  width: 30vw;
 }
 
 .filter-panel-no-filters-icon {

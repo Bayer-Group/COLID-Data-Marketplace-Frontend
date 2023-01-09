@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { SearchState } from 'src/app/states/search.state';
 import { Select } from '@ngxs/store';
 import { Constants } from 'src/app/shared/constants';
+import { ViewDescriptionDialogComponent } from '../../search-result/view-description-dialog/view-description-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-distribution-endpoint',
@@ -35,7 +37,14 @@ export class DistributionEndpointComponent implements OnInit {
   searchText: string;
   searchTimestamp: Date;
 
-  constructor(private logger: LogService) { }
+  metaLabel: string;
+  comment: string;
+  metaDescription: string;
+  
+
+  constructor(
+    private logger: LogService,
+    private dialog: MatDialog) { }
 
   ngOnInit() {
     if (this.metadata) {
@@ -45,7 +54,6 @@ export class DistributionEndpointComponent implements OnInit {
     this.distributionType = getValueForKey(this.endpoint, Constants.Metadata.EntityType)[0];
     this.distributionTypeKey = getUriForKey(this.endpoint, Constants.Metadata.EntityType)[0];
     this.pidUrlForHref = getPidUriForHref(this.endpoint)[0];
-
     this.sortedMetadataProperties = this.metadata.properties.slice().sort((left,right) => {
         const orderCompare = left.properties[Constants.Shacl.Order] - right.properties[Constants.Shacl.Order];
         return orderCompare;
@@ -102,4 +110,19 @@ export class DistributionEndpointComponent implements OnInit {
             'clickedLinkCategory': 'https://pid.bayer.com/kos/19050/distribution'
           });
   }
+
+  openMetaDescriptionDialog(comment, metalabel, metaDescription) {
+    if(comment || metaDescription){
+      const dialogRef = this.dialog.open(ViewDescriptionDialogComponent, {
+        width: '450px',
+        height: 'auto',
+        data: {
+          comment: comment,
+          label: metalabel,
+          description: metaDescription
+        }
+      });
+    }
+  }
+
 }

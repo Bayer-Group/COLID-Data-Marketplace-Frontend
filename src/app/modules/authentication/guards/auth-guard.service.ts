@@ -9,9 +9,9 @@ import { RouteExtension } from 'src/app/shared/extensions/route.extension';
 })
 export class AuthGuardService implements CanActivate {
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(protected authService: AuthService, protected router: Router) { }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  canActivate(route: ActivatedRouteSnapshot) {
     return this.authService.isLoggedIn$.pipe(map(isLoggedIn => this.processLoggedIn(isLoggedIn, route)));
   }
 

@@ -36,4 +36,11 @@ div[hidden] {
     padding-left: 10px !important;
     padding-right: 10px !important;
   }
+
+  @media (max-width: 1540px) {
+    .ng-dropdown-panel .ng-dropdown-panel-items {
+      max-height: 20vh;
+    }
+  }
 }
+

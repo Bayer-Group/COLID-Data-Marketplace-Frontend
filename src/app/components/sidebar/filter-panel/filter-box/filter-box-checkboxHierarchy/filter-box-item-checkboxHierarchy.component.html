@@ -1,12 +1,10 @@
+<mat-tab-group dynamicHeight [selectedIndex]="activeTab" (selectedTabChange)="tabChanged($event)">
+    <mat-tab label="CATEGORIES">
 
+        <ng-container *ngIf="checkboxHierarchyTreeData && activeNodes">
+            <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
 
-    <mat-tab-group   dynamicHeight>
-        <mat-tab label="CATEGORIES"> 
-            
-            <ng-container *ngIf="checkboxHierarchyTreeData && checklistSelection">
-                <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-                    
-                     <!--   
+                <!--   
                         <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding matTreeNodePaddingIndent="20">
                           <ng-container *ngIf="!node.instantiable">
               
@@ -22,49 +20,53 @@
                       </mat-tree-node>
                       
                    -->
-              
-                      <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="20">
-                          <ng-container *ngIf="!node.instantiable && node.isCategory">
-              
-                             <!-- [indeterminate]="descendantsPartiallySelected(node)"[checked]="descendantsAllSelected(node)"-->
-                              <mat-checkbox color="active" [checked]="descendantsAllSelected(node)"
-                               (change)="itemSelectionToggle(node)">
-                              {{node.name}}
-                          </mat-checkbox>
-                          <button mat-icon-button matTreeNodeToggle>
-                              <mat-icon class="categoryHelp" matTooltip={{node.description}}>
-                                  {{'help_outline'}}
-                                </mat-icon>
-                            </button>
-                          
-                      </ng-container>
-                    </mat-tree-node>
-                 
-                </mat-tree>
-              </ng-container>
-        </mat-tab>
-        
-        
-        <mat-tab label="TYPES"> 
-            
-            <ng-container *ngIf="checkboxHierarchyTreeData && checklistSelection">
-              <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-                  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding matTreeNodePaddingIndent="20" >
+
+                <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding
+                    matTreeNodePaddingIndent="20">
+                    <ng-container *ngIf="!node.instantiable && node.isCategory">
+
+                        <!-- [indeterminate]="descendantsPartiallySelected(node)"[checked]="descendantsAllSelected(node)"-->
+                        <mat-checkbox color="active" [checked]="descendantsAllSelected(node)"
+                            (change)="itemSelectionToggle(node)">
+                            {{node.name}}
+                        </mat-checkbox>
+                        <button mat-icon-button matTreeNodeToggle>
+                            <mat-icon class="categoryHelp" matTooltip={{node.description}}>
+                                {{'help_outline'}}
+                            </mat-icon>
+                        </button>
+
+                    </ng-container>
+                </mat-tree-node>
+
+            </mat-tree>
+        </ng-container>
+    </mat-tab>
+
+
+    <mat-tab label="TYPES">
+
+        <ng-container *ngIf="checkboxHierarchyTreeData && activeNodes">
+            <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+                <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding
+                    matTreeNodePaddingIndent="20">
                     <ng-container *ngIf="!node.isCategory">
 
-                        
+
                         <button mat-icon-button disabled></button>
-                        <mat-checkbox class="checklist-leaf-node" color="active" [checked]="checklistSelection.isSelected(node)"
-                        (change)="leafItemSelectionToggle(node)">
-                        {{node.name}}
-                    </mat-checkbox>
-                    <div class="ml-2" style="margin-top: -0.15rem"><span class="badge badge-pill badge-light"
-                        style="font-weight: normal !important;">{{_buckets[node.name] ? _buckets[node.name] : ""}}</span>
-                    </div>
-                </ng-container>
-                  </mat-tree-node>
-            
-                  <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="20" >
+                        <mat-checkbox class="checklist-leaf-node" color="active"
+                            [checked]="activeNodes.includes(node.id)" (change)="leafItemSelectionToggle(node)">
+                            {{node.name}}
+                        </mat-checkbox>
+                        <div class="ml-2" style="margin-top: -0.15rem"><span class="badge badge-pill badge-light"
+                                style="font-weight: normal !important;">{{_buckets[node.name] ? _buckets[node.name] :
+                                ""}}</span>
+                        </div>
+                    </ng-container>
+                </mat-tree-node>
+
+                <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding
+                    matTreeNodePaddingIndent="20">
                     <ng-container *ngIf="!node.isCategory">
 
                         <button mat-icon-button matTreeNodeToggle>
@@ -73,17 +75,15 @@
                             </mat-icon>
                         </button>
                         <mat-checkbox color="active" [checked]="descendantsAllSelected(node)"
-                        [indeterminate]="descendantsPartiallySelected(node)" (change)="itemSelectionToggle(node)">
-                        {{node.name}}
-                    </mat-checkbox>
-                    
-                    </ng-container>  
-                  </mat-tree-node>
-              </mat-tree>
-            </ng-container>
-            
-            
-        </mat-tab>
-    </mat-tab-group>
+                            [indeterminate]="descendantsPartiallySelected(node)" (change)="itemSelectionToggle(node)">
+                            {{node.name}}
+                        </mat-checkbox>
 
-    
+                    </ng-container>
+                </mat-tree-node>
+            </mat-tree>
+        </ng-container>
+
+
+    </mat-tab>
+</mat-tab-group>

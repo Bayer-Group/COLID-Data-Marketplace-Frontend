@@ -31,8 +31,8 @@
         </div>
       </div>
       <div class="row mt-4 justify-content-center" *ngIf="(welcomeMessage$ | async) as welcomeMessage">
-        <div class="col-auto" style="height: fit-content;">
-          <div [innerHTML]="transformYourHtml(welcomeMessage.content)"></div>
+        <div class="col-12 col-lg-8" style="height: fit-content;">
+          <quill-view-html [content]="welcomeMessage.content" theme="snow"></quill-view-html>
         </div>
       </div>
     </div>

@@ -567,3 +567,12 @@ mat-icon.published {
 mat-icon.error {
   color: $bayer-raspberry;
 }
+
+mat-checkbox label {
+  margin-bottom: 0 !important;
+  white-space: pre-wrap !important;
+}
+
+mat-panel-description {
+  flex-grow: 0 !important;
+}

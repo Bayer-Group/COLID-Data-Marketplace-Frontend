@@ -4,7 +4,7 @@
 }
 
 .search-results {
-    height: calc(100vh - 144px) !important;
+    height: calc(100vh - 180px) !important;
     overflow-y:scroll;
     overflow-x:hidden;
 }
@@ -31,3 +31,12 @@
         max-width:53%; 
         flex: 0 0 58.3333333333%;
     }
+.select-all-container {
+    padding-left: 15px;
+    font-size: medium;
+}
+
+hr {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+}

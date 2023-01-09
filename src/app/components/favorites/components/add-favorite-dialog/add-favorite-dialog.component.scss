@@ -1,0 +1,42 @@
+.dialog {
+    border: lightgray solid 2px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.dialog > h1 {
+    padding-left: 16px;
+    padding-top: 24px;
+}
+
+.lists-list {
+    display: flex;
+    flex-direction: column;
+    max-height: 60%;
+    height: 60%;
+    overflow: auto;
+}
+
+.fl-checkbox {
+    border-top: 1px solid lightgray;
+    padding-left: 12px;
+    padding-top: 6px;
+    padding-bottom: 4px;
+    cursor: pointer;
+}
+
+.mat-checkbox-checked {
+    background-color: rgb(240,240,240);
+}
+
+.fl-checkbox:last-of-type {
+    border-bottom: 1px solid lightgray;
+}
+
+.menu-actions {
+    align-self: flex-end;
+    margin-right: 12px;
+}

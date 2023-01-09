@@ -5,11 +5,15 @@ import { IdentityProvider } from './identity-provider.service';
 import { ColidAccount } from '../models/colid-account.model';
 import { Injectable, Inject } from '@angular/core';
 import { IDENT_PROV } from 'src/app/shared/constants';
+import { Select } from '@ngxs/store';
+import { UserInfoState, UserInfoStateModel } from 'src/app/states/user-info.state';
+import { RolePermissions } from '../role-permissions';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  @Select(UserInfoState) userInfoState$: Observable<UserInfoStateModel>;
 
   constructor(@Inject(IDENT_PROV) private identityProvider: IdentityProvider, private router: Router) { }
 
@@ -41,12 +45,50 @@ export class AuthService {
     return this.currentIdentity$.pipe(map(id => id ? id.roles : []));
   }
 
+  get hasEditorFunctionalitiesPrivilege$(): Observable<boolean> {
+    const permissionRegex = new RegExp("^(PID|COLID)(.*)(ReadWrite)$");
+    return this.currentUserRoles$.pipe(
+      map(roles => {
+        if (roles == null) {
+          return false;
+        }
+        if (roles.length > 0) {
+          // filter out the 'Open For Everyone' consumer group
+          return roles.some((role) => permissionRegex.test(role) && !role.includes('Group10Data'));
+        }
+        return false;
+      })
+    )
+  }
+
+  get hasAdminPrivilege$(): Observable<boolean> {
+    return this.hasPrivileges(RolePermissions.Admin);
+  }
+
+  private hasPrivileges(rolePermissions: string[]): Observable<boolean> {
+    return this.currentUserRoles$.pipe(map(roles => {
+      if (roles == null) {
+        return false;
+      }
+      if (roles.length > 0) {
+        return roles.some(role => rolePermissions.includes(role))
+      }
+      return false;
+    }))
+  }
+
   get isLoadingUser(): boolean {
     return false;
   }
 
   get accessToken(): string {
     return localStorage.getItem('msal.idtoken')
+  }
+
+  get hasCreatePrivilege$(): Observable<boolean> {
+    return this.userInfoState$.pipe(
+      map(userInfo => userInfo.consumerGroups && userInfo.consumerGroups.length > 0)
+    )
   }
 
   subscribeCheckAccount() {

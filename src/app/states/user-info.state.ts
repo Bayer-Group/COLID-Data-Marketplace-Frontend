@@ -9,6 +9,9 @@ import { MessageConfigDto } from '../shared/models/user/message-config-dto';
 import { FetchColidEntrySubscriptionNumbers } from './colid-entry-subcriber-count.state';
 import { StoredQueryDto } from '../shared/models/user/stored-query-dto';
 import { Injectable } from '@angular/core';
+import { Favorites } from '../shared/models/favorites';
+import { ConsumerGroupApiService } from '../core/http/consumer-group.api.service';
+import { ConsumerGroupResultDTO } from '../shared/models/consumerGroups/ConsumerGroupResultDTO';
 
 export class FetchUser {
     static readonly type = '[User] Fetch User';
@@ -40,6 +43,16 @@ export class RemoveColidEntrySubscription {
     constructor(public colidEntrySubscriptionDto: ColidEntrySubscriptionDto) { }
 }
 
+export class AddColidEntryFavorite {
+    static readonly type = '[ColidEntryFavorite] Add Colid Entry Favorite';
+    constructor(public colidEntryFavorite: Favorites) { }
+}
+
+export class RemoveColidEntryFavorite {
+    static readonly type = '[ColidEntryFavorite] Remove Colid Entry Favorite';
+    constructor(public colidEntryFavorite: Favorites) { }
+}
+
 export class AddSearchFilterDataMarketplace {
     static readonly type = '[SearchFilterDataMarketplace] Add Search Filter DataMarketplace';
     constructor(public searchFilterDataMarketplaceDto: SearchFilterDataMarketplaceDto) { }
@@ -69,19 +82,26 @@ export class RemoveStoredQueryToSearchFiltersDataMarketplace {
     constructor(public searchFilterDataMarketplaceId: number) { }
 }
 
+export class FetchConsumerGroupsByUser {
+    static readonly type = '[User] Fetch ConsumerGroups by user';
+    constructor() {}
+}
+
 export class UserInfoStateModel {
     user: UserDto;
+    consumerGroups: ConsumerGroupResultDTO[];
 }
 
 @State<UserInfoStateModel>({
     name: 'UserInfo',
     defaults: {
-        user: null
+        user: null,
+        consumerGroups: null
     }
 })
 @Injectable()
 export class UserInfoState {
-    constructor(private store: Store, private userInfoApiService: UserInfoApiService) { }
+    constructor(private store: Store, private userInfoApiService: UserInfoApiService, private consumerGroupApi: ConsumerGroupApiService) { }
 
     @Selector()
     public static getMessageConfig(state: UserInfoStateModel) {
@@ -110,6 +130,12 @@ export class UserInfoState {
 
         return null;
     }
+
+    @Selector() 
+    public static getConsumerGroups(state: UserInfoStateModel) {
+        return state.consumerGroups;
+    }
+
     @Action(FetchUser)
     fetchUser({ patchState }: StateContext<UserInfoStateModel>, { id, emailAddress }: FetchUser) {
         return this.userInfoApiService.getUser(id)
@@ -282,5 +308,16 @@ export class UserInfoState {
                 user: user
             });
         }));
+    }
+
+    @Action(FetchConsumerGroupsByUser)
+    fetchConsumerGroupsByUser({ patchState, getState}: StateContext<UserInfoStateModel>, {}: FetchConsumerGroupsByUser) {
+        return this.consumerGroupApi.getActiveEntities().pipe(
+            tap((consumerGroups: ConsumerGroupResultDTO[]) => {
+                patchState({
+                    consumerGroups
+                });
+            })
+        );
     }
 }

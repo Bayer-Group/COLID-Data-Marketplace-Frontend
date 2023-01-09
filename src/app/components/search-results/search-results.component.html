@@ -1,16 +1,16 @@
-<div *ngIf="!(searching$ | async); else loading">
+<div *ngIf="(searching$ | async) === false; else loading">
   <ng-container *ngIf="(isInvalidSearchQuery | async) === false; else invalidSearchQuery">
     <ng-container *ngIf="searchResult && searchResult.hits; else noSearchResult">
       <div class="row">
-        <div class="col d-flex">
-          <div class="search-hints">
-            <small class="text-muted">
+        <div class="col">
+          <div class="search-hints d-flex align-items-center">
+            <small class="text-muted mr-2">
               {{searchResult.hits.total}} results for
               <span *ngIf="correctedSearchText$ | async as corrected">{{corrected}}</span>
               <span *ngIf="!(correctedSearchText$ | async)">{{searchTextObservable$ | async}}</span>
             </small>
 
-            <div *ngIf="correctedSearchText$ | async as corrected" class="alert alert-light mt-3 flex-fill"
+            <div *ngIf="correctedSearchText$ | async as corrected" class="d-flex align-items-center"
               role="alert">
               <mat-icon fontSet="material-icons-outlined">help</mat-icon>
               <div>Your original search term did not return any results, here are the results for
@@ -18,7 +18,7 @@
               </div>
             </div>
 
-            <div *ngIf="didYouMean$ | async as dym" class="alert alert-light mt-3 flex-fill" role="alert">
+            <div *ngIf="didYouMean$ | async as dym" class="d-flex align-items-center">
               <mat-icon fontSet="material-icons-outlined">help</mat-icon>
               <div>Did you mean <a href="javascript:void(0)"
                   (click)="acceptDidYouMean(dym)"><strong>{{dym}}</strong></a>?
@@ -28,33 +28,38 @@
         </div>
       </div>
       <ng-container *ngIf="metadata; else loading">
-        <div infiniteScroll class="search-results" [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
-          [scrollWindow]="false" [immediateCheck]="true" (scrolled)="nextBatch($event, searchResult.hits.total)"
-          #searchResults>
-          <div class="row my-1 mx-0" *ngFor="let hit of searchResult.hits.hits; let index = index">
-            <div *ngIf="skipResult.indexOf(hit.id) == -1" [ngClass]="[getActiveTab(hit.id)? 'col-xl-12' : 'col-xl-7']">
-              <ng-container *ngIf="showCheckbox">
-                <input type="checkbox" class="checkbox" [id]="hit.id" (change)="checkboxChanged($event)" />
-              </ng-container>
-              <app-search-result [result]="hit" [index]="index" [metadata]="metadata" (schemeUiChange)=schemeUi($event)>
-              </app-search-result>
-            </div>
+       <div *ngIf="searchResult.hits.total > 0; else noResults">
+         <ng-container *ngIf="(selectedPIDURIs$ | async) as selectedPIDURIs">
+          <div class="select-all-container">
+            <mat-checkbox (change)="selectAllCheckboxChanged($event)" [checked]="pidUrisSearchResult.length !== 0 && selectedPIDURIs.length === pidUrisSearchResult.length">
+              <span style="margin-left: 24px">Select all</span>
+            </mat-checkbox>
+            <hr />
           </div>
-          <div class="row loading-batch-spinner" [hidden]="!loadingBatch">
-            <div class="col mx-1">
-              <div class="mt-4">
-                <div class="col-xl-7">
+          <div infiniteScroll class="search-results" [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+            [scrollWindow]="false" [immediateCheck]="true" (scrolled)="nextBatch(searchResult.hits.total)"
+            #searchResults>
+            <div class="row my-1 mx-0" *ngFor="let hit of searchResult.hits.hits; let index = index">
+              <div *ngIf="skipResult.indexOf(hit.id) == -1" class="d-flex align-items-center col-12">
+                <mat-checkbox class="mr-2" mat-list-icon [id]="hit.id" (change)="checkboxChanged($event)" [checked]="getResourceSelected(selectedPIDURIs, hit.id)">
+                </mat-checkbox>
+                <app-search-result [result]="hit" [index]="index" [metadata]="metadata" (schemeUiChange)=schemeUi($event) class="w-100">
+                </app-search-result>
+              </div>
+            </div>
+            <div [hidden]="!loadingBatch">
+              <div class="row loading-batch-spinner d-flex justify-content-center">
                   <app-colid-spinner></app-colid-spinner>
-                </div>
               </div>
             </div>
           </div>
-        </div>
+        </ng-container>
+       </div>
       </ng-container>
     </ng-container>
 
     <ng-template #noResults>
-      <div class="col-xl-7 d-flex">
+      <div class="col-12 d-flex">
         <div class="alert alert-primary mt-3 flex-fill" role="alert">
           <mat-icon fontSet="material-icons-outlined">info</mat-icon>
           <div>No results for your query.
@@ -63,7 +68,7 @@
       </div>
     </ng-template>
     <ng-template #noSearchResult>
-      <div class="col-xl-7 d-flex">
+      <div class="col-12 d-flex">
         <div class="alert alert-warning mt-3 flex-fill" role="alert">
           <mat-icon fontSet="material-icons-outlined">info</mat-icon>
           <div>Something went wrong with your search. Please contact an administrator.
@@ -73,7 +78,7 @@
     </ng-template>
   </ng-container>
   <ng-template #invalidSearchQuery>
-    <div class="col-xl-7 d-flex">
+    <div class="col-12 d-flex">
       <div class="alert alert-warning mt-3 flex-fill" role="alert">
         <mat-icon fontSet="material-icons-outlined">info</mat-icon>
         <div>
@@ -88,8 +93,8 @@
 </div>
 
 <ng-template #loading>
-  <div class="row justify-content-center mt-4">
-    <div class="col-xl-7">
+  <div class="w-100 mt-4">
+    <div class="d-flex justify-content-center">
       <app-colid-spinner></app-colid-spinner>
     </div>
   </div>

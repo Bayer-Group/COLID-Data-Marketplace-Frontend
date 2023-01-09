@@ -5,40 +5,86 @@ import { ResourceApiService } from 'src/app/core/http/resource.api.service';
 
 import { Constants } from '../shared/constants';
 import { CheckboxHierarchyDTO } from '../shared/models/checkboxHierarchy-dto';
+import { MetaDataProperty } from '../shared/models/metadata/meta-data-property';
+import { tap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
 
 export class FetchMetadata {
   static readonly type = '[Metadata] FetchMetadata';
 }
+export class FetchEntityMetadata {
+  static readonly type = '[Metadata] FetchEntityMetadata';
 
+  constructor(public entityType: string) {}
+}
 export class FetchMetadataTypes {
   static readonly type = '[Metadata] FetchMetadataTypes';
 }
-
 export class FetchResourceTypeHierarchy {
   static readonly type = '[Metadata] FetchResourceTypeHierarchy';
 }
-
+export class ToggleCategoryFilterTab {
+  static readonly type = '[Metadata] ToggleCategoryFilterTab';
+  constructor(public tabNumber : number) { }
+}
+export class ToggleResourceTypeItem {
+  static readonly type = '[Metadata] ToggleResourceTypeItem';
+  constructor(public id : string) { }
+}
+export class EnableResourceTypeItem {
+  static readonly type = '[Metadata] EnableResourceTypeItem';
+  constructor(public idList : string[]) { }
+}
+export class DisableResourceTypeItem {
+  static readonly type = '[Metadata] DisableResourceTypeItem';
+  constructor(public idList : string[]) { }
+}
+export class ClearResourceTypeItem {
+  static readonly type = '[Metadata] ClearResourceTypeItem';
+  constructor() { }
+}
 export interface MetadataStateModel {
   metadata: any;
+  entityMetadata: Map<string, Array<MetaDataProperty>>; 
   types: any;
   hierarchy:CheckboxHierarchyDTO[]
+  categoryTab:number
+  activeNodes:string[]
 }
-
 
 @State<MetadataStateModel>({
   name: 'metadata',
   defaults: {
     metadata: null,
+    entityMetadata: new Map<string, Array<MetaDataProperty>>(),
     types: null,
     hierarchy:null,
+    categoryTab:0,
+    activeNodes:[]
   }
 })
+
 @Injectable()
 export class MetadataState {
 
   @Selector()
+  public static getActiveCategoryTab(state: MetadataStateModel) {
+    return state.categoryTab;
+  }
+
+  @Selector()
+  public static getActiveNodes(state: MetadataStateModel) {
+    return state.activeNodes;
+  }
+
+  @Selector()
   public static getMetadata(state: MetadataStateModel) {
     return state.metadata;
+  }
+
+  @Selector()
+  public static getEntityMetadata(state: MetadataStateModel) {
+    return state.entityMetadata;
   }
 
   @Selector()
@@ -54,6 +100,66 @@ export class MetadataState {
   constructor(private metadataService: MetadataService, private resourceApiService: ResourceApiService) { }
 
   ngxsOnInit(ctx: StateContext<MetadataStateModel>) {
+  }
+
+  @Action(ToggleCategoryFilterTab)
+  toggleCategoryFilterTab({ patchState }: StateContext<MetadataStateModel>, {tabNumber}: ToggleCategoryFilterTab) {
+    patchState({
+      categoryTab: tabNumber
+    });
+   
+  }
+
+  @Action(ToggleResourceTypeItem)
+  toggleResourceTypeItem({ getState,patchState }: StateContext<MetadataStateModel>, {id}: ToggleResourceTypeItem) {
+    var list = getState().activeNodes
+    if(!list.includes(id)){
+      list.push(id)
+    }else{
+      const index = list.indexOf(id, 0);
+      if (index > -1) {
+        list.splice(index, 1);
+      }
+    }
+    patchState({
+      activeNodes: list
+    });
+  }
+
+  @Action(EnableResourceTypeItem)
+  EnableResourceTypeItem({ getState,patchState }: StateContext<MetadataStateModel>, {idList}: EnableResourceTypeItem) {  
+    var list = getState().activeNodes
+    idList.forEach(element => {
+      if(!list.includes(element)){
+        list.push(element)
+      }
+    });
+
+    patchState({
+      activeNodes: list
+    });
+  }
+  @Action(DisableResourceTypeItem)
+  DisableResourceTypeItem({ getState,patchState }: StateContext<MetadataStateModel>, {idList}: DisableResourceTypeItem) {
+    var list = getState().activeNodes
+    idList.forEach(element => {
+      if(list.includes(element)){
+        const index = list.indexOf(element, 0);
+        if (index > -1) {
+          list.splice(index, 1);
+        }
+      }
+    });
+    patchState({
+      activeNodes: list
+    });
+  }
+
+  @Action(ClearResourceTypeItem)
+  ClearResourceTypeItem({patchState }: StateContext<MetadataStateModel>, {}: ClearResourceTypeItem) {
+    patchState({
+      activeNodes: []
+    });
   }
 
   @Action(FetchResourceTypeHierarchy)
@@ -77,6 +183,24 @@ export class MetadataState {
         metadata: res
       });
     });
+  }
+
+  @Action(FetchEntityMetadata)
+  fetchEntityMetadata(ctx: StateContext<MetadataStateModel>, action: FetchEntityMetadata) {
+    const state = ctx.getState();
+    if (state.entityMetadata.has(action.entityType)) {
+      return EMPTY;
+    }
+
+    return this.metadataService.getEntityMetadata(action.entityType).pipe(
+      tap(res => {
+        const entityMetadataMap = ctx.getState().entityMetadata;
+        entityMetadataMap.set(action.entityType, res);
+        ctx.patchState({
+          entityMetadata: entityMetadataMap,
+        });
+      })
+    );
   }
 
   @Action(FetchMetadataTypes)

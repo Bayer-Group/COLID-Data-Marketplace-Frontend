@@ -23,7 +23,6 @@ import { BrowserCacheLocation, InteractionType, IPublicClientApplication, LogLev
 export const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
 export function loggerCallback(logLevel: LogLevel, message: string) {
-  //console.log(message);
 }
 
 export function MSALInstanceFactory(): IPublicClientApplication {

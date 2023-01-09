@@ -4,6 +4,7 @@
       font-size: 30px !important;
       height: 30px !important;
       width: 30px !important;
+      overflow: inherit;
     }
   }
   .icon-25 {
@@ -11,12 +12,24 @@
       font-size: 25px !important;
       height: 25px !important;
       width: 25px !important;
+      overflow: inherit;
     }
   }
   .icon-20 {
     .mat-icon {
       height: 20px !important;
       width: 20px !important;
+      overflow: inherit;
     }
+  }
+  .icon-15 {
+    .mat-icon {
+      height: 20px !important;
+      width: 20px !important;
+      overflow: inherit;
+    }
+  }
+  .ql-editor {
+  padding: unset !important;
   }
 }

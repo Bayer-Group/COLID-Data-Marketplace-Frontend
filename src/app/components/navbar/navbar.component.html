@@ -1,11 +1,11 @@
-<mat-toolbar class="align-items-center" color="primary">
+<mat-toolbar class="align-items-center" color="primary" >
   <mat-toolbar-row>
     <span class="menu-spacer"></span>
     <button mat-icon-button (click)="toggleNavbar()" color="white">
       <mat-icon>menu</mat-icon>
     </button>
 
-    <a href="">
+    <a [routerLink]="'/'">
       <img src="assets/BAG_COLID-Visual_white_lh.svg" height="29" alt="COLID">
     </a>
     <div class="app-title">Data Marketplace
@@ -14,7 +14,7 @@
       </span>
     </div>
 
-    <button mat-flat-button  class="ml-4 d-none d-md-block" title="Want to register resources? Go to COLID Editor"  id="button-sidebar-pid-link" (click)="goToEditor()">
+    <button *ngIf="hasCreatePrivilege$ | async" mat-flat-button  class="ml-4 d-none d-md-block" title="Want to register resources? Go to COLID Editor"  id="button-sidebar-pid-link" (click)="goToEditor()">
     Want to register resources? Go to COLID Editor
     </button>
     
@@ -22,6 +22,11 @@
     Want to link resources? Go to Resource Relationship Manager
     </button>
     <span class="filler"></span>
+
+    <button mat-icon-button (click)="toggleFavorite.emit()" matTooltip="Favorites">
+    <mat-icon >bookmark_active</mat-icon>
+    </button>
+
     <button mat-icon-button (click)="toggleNotification.emit()" matTooltip="Notifications">
       <mat-icon *ngIf="newNotifications === 0">notifications_none</mat-icon>
       <mat-icon *ngIf="newNotifications !== 0" [matBadge]="newNotifications" matBadgeColor="warn">notifications_active</mat-icon>
@@ -54,14 +59,19 @@
           <mat-icon fontSet="material-icons-outlined">save</mat-icon>
           <span>Save default filters</span>
         </button>
-        <button mat-menu-item
-          matTooltip="Save search and subscribe for automated execution"
-          (click)="addSearchFilterLinkClicked($event)" [disabled]="(checkSearchText() && checkNullActiveAggregations() && checkNullActiveRangeFilters())">
-          <mat-icon fontSet="material-icons-outlined">save</mat-icon>
-          <span>Save search</span>
-        </button>
       </mat-menu> 
-</div>
+    </div>
+    <button *ngIf="hasEditorFunctionalitiesPrivilege$ | async" mat-icon-button matTooltip="Editor Functionalities" [matMenuTriggerFor]="editorMenu">
+        <mat-icon>build</mat-icon>
+    </button>
+        
+      <mat-menu #editorMenu="matMenu">
+        <button mat-menu-item [routerLink]="'resource-reviews'">
+          <mat-icon fontSet="material-icons-outlined">rate_review</mat-icon>
+          <span>Resource Reviews</span>
+        </button>
+      </mat-menu>
+
     <button mat-icon-button matTooltip="Help" [routerLink]="'/help'">
       <mat-icon>help_outline</mat-icon>
     </button>

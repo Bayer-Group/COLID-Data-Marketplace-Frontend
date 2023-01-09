@@ -1,0 +1,37 @@
+<div class="dialog">
+  <h1 mat-dialog-title>Add to favorites lists:</h1>
+  <div class="lists-list">
+    <ng-container *ngIf="data.multiSelect">
+      <mat-checkbox
+        class="fl-checkbox"
+        *ngFor="let favorite of favorites"
+         (change)="checkboxChanged($event, favorite.id)">
+        {{ favorite.name }}
+      </mat-checkbox>
+    </ng-container>
+    <ng-container *ngIf="!data.multiSelect">
+      <mat-checkbox
+        class="fl-checkbox"
+        *ngFor="let favorite of favorites"
+        [checked]="previousFavoriteListIds.indexOf(favorite.id) > -1"
+        [disabled]="previousFavoriteListIds.indexOf(favorite.id) > -1"
+        (change)="checkboxChanged($event, favorite.id)">
+        {{ favorite.name }}
+      </mat-checkbox>
+    </ng-container>
+  <div class="fl-checkbox" (click)="createFavoriteList()">
+      + Create List
+  </div>
+  </div>
+  <div mat-dialog-actions class="menu-actions" align="end">
+    <button color="primary" mat-stroked-button mat-dialog-close>Cancel</button>
+    <button
+      class="buttons"
+      mat-flat-button
+      color="primary"
+      mat-dialog-close
+      cdkFocusInitial
+      [disabled]="selectedFavoriteListIds.length === 0"
+      (click)="addFavorite()">Save</button>
+  </div>
+</div>

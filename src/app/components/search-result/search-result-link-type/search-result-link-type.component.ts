@@ -8,6 +8,7 @@ import { LogService } from 'src/app/core/logging/log.service';
 import { Constants } from 'src/app/shared/constants';
 import { MatDialog } from '@angular/material/dialog';
 import { LinkedResourceDisplayDialog } from '../../linked-resource-dialog/linked-resource-display-dialog.component';
+import { ViewDescriptionDialogComponent } from '../../search-result/view-description-dialog/view-description-dialog.component';
 
 @Component({
   selector: 'app-search-result-link-type',
@@ -31,9 +32,16 @@ export class SearchResultLinkTypeComponent implements OnInit {
   type: string;
   description: string;
   edgeLabel: string;
+  comment: string;
+  metaDescription: string;
 
   searchText: string;
   searchTimestamp: Date;
+
+  hasPIDURI: string;
+  hasDefinition: string;
+  hasResourceType: string;
+
 
   constructor(
     private logger: LogService,
@@ -49,6 +57,13 @@ export class SearchResultLinkTypeComponent implements OnInit {
     this.pidUrlForHref = getPidUriForHref(this.linkType)[0];
     this.definition = getValueForKey(this.linkType, Constants.Metadata.HasResourceDefinition)[0];
     this.type = getUriForKey(this.linkType, Constants.Metadata.EntityType)[0];
+    
+    this.hasPIDURI = 'http://pid.bayer.com/kos/19014/hasPID';
+    this.hasDefinition = 'https://pid.bayer.com/kos/19050/hasResourceDefinition';
+    this.hasResourceType = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+
+    // this.comment = this.metadata[this.edge].properties[Constants.Shacl.Comment];
+    // this.metaDescription = this.metadata[this.edge].properties[Constants.Shacl.Description];
 
     this.searchTextObservable$.subscribe(searchText => {
       this.searchText = searchText;
@@ -75,7 +90,24 @@ export class SearchResultLinkTypeComponent implements OnInit {
     });
 
     this.dialog.open(LinkedResourceDisplayDialog, {
-      data: {id: this.pidUrlForHref}
+      data: {id: this.pidUrlForHref, confirmReview: false}
     });
+  }
+
+  openDescriptionDialog(metaPID, metalabel) {
+    this.comment = this.metadata[metaPID].properties[Constants.Shacl.Comment];
+    this.metaDescription = this.metadata[metaPID].properties[Constants.Shacl.Description];
+    console.log(this.metaDescription, this.comment);
+    if(this.comment || this.metaDescription){
+      const dialogRef = this.dialog.open(ViewDescriptionDialogComponent, {
+        width: '400px',
+        height: 'auto',
+        data: {
+          comment: this.comment,
+          label: metalabel,
+          description: this.metaDescription
+        }
+      });
+    }
   }
 }
