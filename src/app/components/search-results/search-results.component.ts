@@ -131,8 +131,8 @@ export class SearchResultsComponent implements OnInit {
           this.filterInfo.sourceDialog == "addResource"
         ) {
           let filterOutTypes: string[] = [
-            "https://pid.bayer.com/kos/19050/444586",
-            "https://pid.bayer.com/kos/19050/444582",
+            Constants.ResourceTypes.Table,
+            Constants.ResourceTypes.Column,
           ];
 
           this.searchResult.hits.hits.forEach((hit) => {

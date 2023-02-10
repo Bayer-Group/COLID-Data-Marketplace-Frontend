@@ -24,6 +24,7 @@ import { EditFavoriteEntryComponent } from "./components/edit-favorite-entry/edi
 import { Router } from "@angular/router";
 import { CreateFavoriteListComponent } from "./components/create-favorite-list/create-favorite-list.component";
 import { EditFavoriteListComponent } from "./components/edit-favorite-list/edit-favorite-list.component";
+import { Constants } from 'src/app/shared/constants';
 
 @Component({
   selector: "colid-favorites",
@@ -51,6 +52,8 @@ export class FavoritesComponent implements OnInit, OnDestroy {
       this.fetchFavorites();
     }
   }
+
+  label = Constants.Metadata.HasLabel
 
   @Output() closeSidebar: EventEmitter<any> = new EventEmitter();
 

@@ -49,15 +49,18 @@ export class SchemeUIComponent implements OnInit, OnChanges, OnDestroy {
   tables: any[] = [];
   linkedColumn: any[] = [];
   columnNormalMode: any[];
-  columnAfterFiltermode: any[] = ['https://pid.bayer.com/kos/19050/hasLabel'];
+  columnAfterFiltermode: any[] = [Constants.Metadata.HasLabel];
 
 
-  icon = "https://pid.bayer.com/kos/19050/444586";
-  dateCreated = "https://pid.bayer.com/kos/19050/dateCreated";
-  lastChnagedByDate = "https://pid.bayer.com/kos/19050/lastChangeDateTime";
-  nameColumn = "https://pid.bayer.com/kos/19050/hasLabel";
-  orderNumber = "http://www.w3.org/ns/shacl#order";
+  icon = Constants.ResourceTypes.Table;
+  dateCreated = Constants.Metadata.DateCreated;
+  lastChnagedByDate = Constants.Metadata.LastChangeDateTime;
+  nameColumn = Constants.Metadata.HasLabel;
+  orderNumber = Constants.Shacl.Order;
   someDataSubscription: any
+  hasPIDURI = Constants.Metadata.HasPidUri
+  hasResourceDefinition = Constants.Metadata.HasResourceDefinition
+  author = Constants.Metadata.Author
 
   constructor(private documentService: DocumentService, private datePipe: DatePipe,
     private store: Store, private cd: ChangeDetectorRef, private ngZone: NgZone, private dialog: MatDialog) {
@@ -161,7 +164,7 @@ export class SchemeUIComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   rowResult(row, columnName, element) {
-    const pidUri: string = element["http://pid.bayer.com/kos/19014/hasPID"].outbound[0].value;
+    const pidUri: string = element[this.hasPIDURI].outbound[0].value;
     if (row && row.outbound && row.outbound.length > 0) {
       if (columnName == this.dateCreated || columnName == this.lastChnagedByDate) {
         return [this.datePipe.transform(row.outbound[0].value, 'yyyy-MM-dd hh:mm')]
@@ -210,7 +213,7 @@ export class SchemeUIComponent implements OnInit, OnChanges, OnDestroy {
 
   clickTable(event: Event, table: any) {
     event.preventDefault();
-    var pidUri = table['http://pid.bayer.com/kos/19014/hasPID'].outbound[0].value;
+    var pidUri = table[this.hasPIDURI].outbound[0].value;
     this.dialog.open(LinkedResourceDisplayDialog, {
       data: { id: pidUri, confirmReview: false }
     });
@@ -247,7 +250,7 @@ export class SchemeUIComponent implements OnInit, OnChanges, OnDestroy {
 
   orderByColumn(columnName) {
     if (this.metadata[columnName]) {
-      if (columnName == "http://pid.bayer.com/kos/19050/LinkTypes" || columnName == "https://pid.bayer.com/kos/19050/distribution") {
+      if (columnName == Constants.Shacl.Groups.LinkTypes || columnName == Constants.DistributionEndpoint.DistributionKey) {
         return "";
       }
       var name = this.metadata[columnName].properties[Constants.Shacl.Name]

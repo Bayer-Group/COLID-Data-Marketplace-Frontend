@@ -107,7 +107,7 @@ export class DistributionEndpointComponent implements OnInit {
             'clickedLink': this.pidUrlForHref,
             'clickedLinkEdge': Constants.Metadata.HasPidUri,
             'clickedLinkType': this.endpoint.find(d => d.key === Constants.Metadata.EntityType).valueEdge[0],
-            'clickedLinkCategory': 'https://pid.bayer.com/kos/19050/distribution'
+            'clickedLinkCategory': Constants.DistributionEndpoint.DistributionKey
           });
   }
 

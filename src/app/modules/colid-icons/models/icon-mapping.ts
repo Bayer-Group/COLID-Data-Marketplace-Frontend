@@ -1,5 +1,7 @@
+import { Constants } from 'src/app/shared/constants';
+
 export const IconMapping = {
-  'https://pid.bayer.com/kos/19050/draft': { icon: 'pencil-alt', tooltip: 'Draft' },
-  'https://pid.bayer.com/kos/19050/published': { icon: 'cloud-upload-alt', tooltip: 'Published' },
-  'https://pid.bayer.com/kos/19050/markedForDeletion': { icon: 'trash-alt', tooltip: 'Marked For Deletion' },
+  [Constants.Resource.LifeCycleStatus.Draft]: { icon: 'pencil-alt', tooltip: 'Draft' },
+  [Constants.Resource.LifeCycleStatus.Published]: { icon: 'cloud-upload-alt', tooltip: 'Published' },
+  [Constants.Resource.LifeCycleStatus.MarkedDeletion]: { icon: 'trash-alt', tooltip: 'Marked For Deletion' },
 }

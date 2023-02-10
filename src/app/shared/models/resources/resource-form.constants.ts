@@ -1,3 +1,5 @@
+import { Constants } from 'src/app/shared/constants';
+
 export const FieldTypeMapping = {
   "http://www.w3.org/2001/XMLSchema#dateTime": "datetime",
   "http://www.w3.org/2001/XMLSchema#boolean": "boolean",
@@ -7,7 +9,7 @@ export const FieldTypeMapping = {
 };
 
 export const MetaDataPropertyIdentifier = {
-  targetUri: "http://pid.bayer.com/kos/19014/hasNetworkAddress",
-  pidUri: "http://pid.bayer.com/kos/19014/hasPID",
-  baseUri: "https://pid.bayer.com/kos/19050/hasBaseURI",
+  targetUri: Constants.Metadata.HasTargetUri,
+  pidUri: Constants.Metadata.HasPidUri,
+  baseUri: Constants.Metadata.HasBaseUri,
 };

@@ -5,7 +5,7 @@ export const environment = {
   allowAnonymous: true,
   interceptors: [],
   pageSize: 10,
-  dmpCoreApiUrl: 'http://localhost:51800/api/',
+  dmpCoreApiUrl: 'http://localhost:51801/api/',
   appDataApiUrl: 'http://localhost:51810/api',
   colidApiUrl: 'http://localhost:51770/api/v3',
   loggingUrl: 'http://localhost:51800/api/log',
@@ -34,5 +34,6 @@ export const environment = {
   kgeUrl: 'https://kge.example.com/',
   rrmUrl: 'http://localhost:4305/',
   colidIconsUrl: 'https://dataservices-icons.dev.colid.int.bayer.com/',
-  cookieSharingSubDomain: 'localhost'
+  cookieSharingSubDomain: 'localhost',
+  baseUrl: 'bayer.com',
 };

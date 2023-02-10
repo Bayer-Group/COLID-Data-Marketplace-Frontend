@@ -62,7 +62,7 @@ export class SimilarityModalComponent implements OnInit {
       this.docs = data.docs
 
       data.docs.forEach(element => {
-        let pidUri = element['http://pid.bayer.com/kos/19014/hasPID']
+        let pidUri = element[Constants.Metadata.HasPidUri]
         this.documentService.getDocument(pidUri)
           .subscribe(
             (doc: DocumentMap) => {

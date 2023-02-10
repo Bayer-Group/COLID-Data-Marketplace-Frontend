@@ -38,7 +38,7 @@
                           </ds-icon>
   
                           <span class="ml-2 favorite-title" (click)="openFavoritesPage(favorite.id, favoriteEntries[favorite.id][pidUri]['EntryId'][0], pidUri, favoriteEntries[favorite.id][pidUri]['PersonalNote'][0])">
-                            {{favoriteEntries[favorite.id][pidUri]["https://pid.bayer.com/kos/19050/hasLabel"].outbound[0].value}}
+                            {{favoriteEntries[favorite.id][pidUri][label].outbound[0].value}}
                           </span>
                         </div>
                       </div>

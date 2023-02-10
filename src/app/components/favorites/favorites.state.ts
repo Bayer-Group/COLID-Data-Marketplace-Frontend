@@ -12,6 +12,7 @@ import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/col
 import { FavoriteListEntry, FavoriteListEntryMetadata, FavoriteListMetadata, Favorites } from "src/app/shared/models/favorites";
 import { MessageDto } from "src/app/shared/models/user/message-dto";
 import { FavoritesService } from "./services/favorites.service";
+import { Constants } from 'src/app/shared/constants';
 
 export class FetchFavorites {
   static readonly type = "[Favorite] Fetch favorites";
@@ -295,7 +296,7 @@ export class FavoritesState {
                 })
               }),
               favoriteListEntryList: patch({
-                [action.favoriteListId]: removeItem<any>(e => e["http://pid.bayer.com/kos/19014/hasPID"]["outbound"][0].value == action.pidUri)
+                [action.favoriteListId]: removeItem<any>(e => e[Constants.Metadata.HasPidUri]["outbound"][0].value == action.pidUri)
               })
             })
           );

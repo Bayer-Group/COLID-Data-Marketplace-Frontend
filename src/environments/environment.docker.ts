@@ -33,5 +33,6 @@ export const environment = {
   kgeUrl: 'https://kge.example.com/',
   rrmUrl: 'http://localhost:4400/',
   colidIconsUrl : 'https://dataservices-icons.dev.colid.int.bayer.com/',
-  cookieSharingSubDomain: 'localhost'
+  cookieSharingSubDomain: 'localhost',
+  baseUrl: 'bayer.com'
 };

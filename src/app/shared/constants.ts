@@ -1,11 +1,15 @@
 export const IDENT_PROV = 'IdentityProvider';
+import { environment } from 'src/environments/environment';
 
 export const Constants = {
   ResourceTypes: {
-    ConsumerGroup: "https://pid.bayer.com/kos/19050#ConsumerGroup",
+    ConsumerGroup: `https://pid.${environment.baseUrl}/kos/19050#ConsumerGroup`,
+    Table : `https://pid.${environment.baseUrl}/kos/19050/444586`,
+    Column: `https://pid.${environment.baseUrl}/kos/19050/444582`,
+    Dataset: `https://pid.${environment.baseUrl}/kos/19050/NonRDFDataset`,
   },
   ConsumerGroup: {
-    HasPidUriTemplate: "https://pid.bayer.com/kos/19050#hasPidUriTemplate",
+    HasPidUriTemplate: `https://pid.${environment.baseUrl}/kos/19050#hasPidUriTemplate`,
   },
   Authentication: {
     Roles: {
@@ -25,11 +29,12 @@ export const Constants = {
   },
   OWL: {
     Class: "http://www.w3.org/2002/07/owl#Class",
+    SubClass: 'http://www.w3.org/2000/01/rdf-schema#subClassOf'
   },
   Shacl: {
     Group: "http://www.w3.org/ns/shacl#group",
     Groups: {
-      LinkTypes: "http://pid.bayer.com/kos/19050/LinkTypes",
+      LinkTypes: `http://pid.${environment.baseUrl}/kos/19050/LinkTypes`,
     },
     Name: "http://www.w3.org/ns/shacl#name",
     Order: "http://www.w3.org/ns/shacl#order",
@@ -39,28 +44,28 @@ export const Constants = {
   },
   Resource: {
     // For Resource Id
-    Prefix: "https://pid.bayer.com/kos/19050#",
+    Prefix: `https://pid.${environment.baseUrl}/kos/19050#`,
     LifeCycleStatus: {
-      Draft: "https://pid.bayer.com/kos/19050/draft",
-      Published: "https://pid.bayer.com/kos/19050/published",
-      Historic: "https://pid.bayer.com/kos/19050/historic",
-      MarkedDeletion: "https://pid.bayer.com/kos/19050/markedForDeletion",
+      Draft: `https://pid.${environment.baseUrl}/kos/19050/draft`,
+      Published: `https://pid.${environment.baseUrl}/kos/19050/published`,
+      Historic: `https://pid.${environment.baseUrl}/kos/19050/historic`,
+      MarkedDeletion: `https://pid.${environment.baseUrl}/kos/19050/markedForDeletion`,
     },
     Groups: {
       InvisibleTechnicalInformation:
-        "http://pid.bayer.com/kos/19050/InvisibleTechnicalInformation",
+      `http://pid.${environment.baseUrl}/kos/19050/InvisibleTechnicalInformation`,
       TechnicalInformation:
-        "https://pid.bayer.com/kos/19050/TechnicalInformation",
-      LinkTypes: "http://pid.bayer.com/kos/19050/LinkTypes",
+      `https://pid.${environment.baseUrl}/kos/19050/TechnicalInformation`,
+      LinkTypes: `http://pid.${environment.baseUrl}/kos/19050/LinkTypes`,
       DistributionEndpoints:
-        "http://pid.bayer.com/kos/19050/DistributionEndpoints",
-      Images: "https://pid.bayer.com/kos/19050/AttachmentsPropertyGroup",
+      `http://pid.${environment.baseUrl}/kos/19050/DistributionEndpoints`,
+      Images: `https://pid.${environment.baseUrl}/kos/19050/AttachmentsPropertyGroup`,
     },
   },
   Metadata: {
-    Author: "https://pid.bayer.com/kos/19050/author",
-    HasDraftVersion: "https://pid.bayer.com/kos/19050/hasDraftVersion",
-    HasPublishedVersion: "https://pid.bayer.com/kos/19050/hasPublishedVersion",
+    Author: `https://pid.${environment.baseUrl}/kos/19050/author`,
+    HasDraftVersion: `https://pid.${environment.baseUrl}/kos/19050/hasDraftVersion`,
+    HasPublishedVersion: `https://pid.${environment.baseUrl}/kos/19050/hasPublishedVersion`,
     Type: {
       Decimal: "http://www.w3.org/2001/XMLSchema#decimal",
       Boolean: "http://www.w3.org/2001/XMLSchema#boolean",
@@ -76,56 +81,63 @@ export const Constants = {
     Datatype: "http://www.w3.org/ns/shacl#datatype",
     Comment: "http://www.w3.org/2000/01/rdf-schema#comment",
     Group: "http://www.w3.org/ns/shacl#group",
-    HasLabel: "https://pid.bayer.com/kos/19050/hasLabel",
-    HasBaseUri: "https://pid.bayer.com/kos/19050/hasBaseURI",
+    HasLabel: `https://pid.${environment.baseUrl}/kos/19050/hasLabel`,
+    HasBaseUri: `https://pid.${environment.baseUrl}/kos/19050/hasBaseURI`,
     HasResourceDefinition:
-      "https://pid.bayer.com/kos/19050/hasResourceDefinition",
-    HasPIDEditorialNote: "https://pid.bayer.com/kos/19050/hasPIDEditorialNote",
-    DateCreated: "https://pid.bayer.com/kos/19050/dateCreated",
-    LastChangeDateTime: "https://pid.bayer.com/kos/19050/lastChangeDateTime",
-    LastReviewDateTime: "https://pid.bayer.com/kos/19050/hasLastReviewDate",
-    HasConsumerGroup: "https://pid.bayer.com/kos/19050#hasConsumerGroup",
-    HasLastChangeUser: "https://pid.bayer.com/kos/19050/lastChangeUser",
-    HasVersion: "https://pid.bayer.com/kos/19050/hasVersion",
-    HasPidUri: "http://pid.bayer.com/kos/19014/hasPID",
-    HasTargetUri: "http://pid.bayer.com/kos/19014/hasNetworkAddress",
+    `https://pid.${environment.baseUrl}/kos/19050/hasResourceDefinition`,
+    HasPIDEditorialNote: `https://pid.${environment.baseUrl}/kos/19050/hasPIDEditorialNote`,
+    DateCreated: `https://pid.${environment.baseUrl}/kos/19050/dateCreated`,
+    LastChangeDateTime: `https://pid.${environment.baseUrl}/kos/19050/lastChangeDateTime`,
+    LastReviewDateTime: `https://pid.${environment.baseUrl}/kos/19050/hasLastReviewDate`,
+    HasConsumerGroup: `https://pid.${environment.baseUrl}/kos/19050#hasConsumerGroup`,
+    HasLastChangeUser: `https://pid.${environment.baseUrl}/kos/19050/lastChangeUser`,
+    HasVersion: `https://pid.${environment.baseUrl}/kos/19050/hasVersion`,
+    HasPidUri: `http://pid.${environment.baseUrl}/kos/19014/hasPID`,
+    HasTargetUri: `http://pid.${environment.baseUrl}/kos/19014/hasNetworkAddress`,
     PidUriTemplateIdType:
-      "https://pid.bayer.com/kos/19050#hasPidUriTemplateIdType",
+    `https://pid.${environment.baseUrl}/kos/19050#hasPidUriTemplateIdType`,
     PidUriTemplateSuffix:
-      "https://pid.bayer.com/kos/19050#hasPidUriTemplateSuffix",
+    `https://pid.${environment.baseUrl}/kos/19050#hasPidUriTemplateSuffix`,
     DistributionEndpointLifecycleStatus:
-      "https://pid.bayer.com/kos/19050/hasDistributionEndpointLifecycleStatus",
-    ContactPerson: "https://pid.bayer.com/kos/19050/hasContactPerson",
+    `https://pid.${environment.baseUrl}/kos/19050/hasDistributionEndpointLifecycleStatus`,
+    ContactPerson: `https://pid.${environment.baseUrl}/kos/19050/hasContactPerson`,
     HasNetworkedResourceLabel:
-      "https://pid.bayer.com/kos/19050/hasNetworkedResourceLabel",
-    HasDataCategory: "https://pid.bayer.com/kos/19050/hasDataCategory",
-    HasCountryContext: "https://pid.bayer.com/kos/19050/hasCountryContext",
+    `https://pid.${environment.baseUrl}/kos/19050/hasNetworkedResourceLabel`,
+    HasDataCategory: `https://pid.${environment.baseUrl}/kos/19050/hasDataCategory`,
+    HasCountryContext: `https://pid.${environment.baseUrl}/kos/19050/hasCountryContext`,
     HasNextReviewDueDate:
-      "https://pid.bayer.com/kos/19050/hasNextReviewDueDate",
+    `https://pid.${environment.baseUrl}/kos/19050/hasNextReviewDueDate`,
     HasReviewCyclePolicy:
-      "https://pid.bayer.com/kos/19050/hasResourceReviewCyclePolicy",
-    HasLastReviewer: "https://pid.bayer.com/kos/19050/hasLastReviewer",
-    LifeCycleStatus: "https://pid.bayer.com/kos/19050/hasEntryLifecycleStatus",
+    `https://pid.${environment.baseUrl}/kos/19050/hasResourceReviewCyclePolicy`,
+    HasLastReviewer: `https://pid.${environment.baseUrl}/kos/19050/hasLastReviewer`,
+    LifeCycleStatus: `https://pid.${environment.baseUrl}/kos/19050/hasEntryLifecycleStatus`,
     RDFS: {
       Range: "http://www.w3.org/2000/01/rdf-schema#range",
       Label: "http://www.w3.org/2000/01/rdf-schema#label",
     },
-    HasAttachment: "https://pid.bayer.com/kos/19050/hasAttachment",
-    DataSteward: "https://pid.bayer.com/kos/19050/hasDataSteward",
+    HasAttachment: `https://pid.${environment.baseUrl}/kos/19050/hasAttachment`,
+    DataSteward: `https://pid.${environment.baseUrl}/kos/19050/hasDataSteward`,
     NodeKind: "http://www.w3.org/ns/shacl#nodeKind",
-    Keywords: "https://pid.bayer.com/kos/19050/47119343",
+    Keywords: `https://pid.${environment.baseUrl}/kos/19050/47119343`,
     ContainsTherapeuticAreas:
-      "https://pid.bayer.com/d188c668-b710-45b2-9631-faf29e85ac8d/contains_information_about_therapeutic_area",
+    `https://pid.${environment.baseUrl}/d188c668-b710-45b2-9631-faf29e85ac8d/contains_information_about_therapeutic_area`,
     ContainsRwdDimensions:
-      "https://pid.bayer.com/d188c668-b710-45b2-9631-faf29e85ac8d/contains_rwd_dimension",
-    MainDistribution: "https://pid.bayer.com/kos/19050/mainDistribution",
+    `https://pid.${environment.baseUrl}/d188c668-b710-45b2-9631-faf29e85ac8d/contains_rwd_dimension`,
+    MainDistribution: `https://pid.${environment.baseUrl}/kos/19050/mainDistribution`,
+    PIDClass: `https://pid.${environment.baseUrl}/kos/19050/PID_Concept`,
+    BaseURIPointsAt: `https://pid.${environment.baseUrl}/kos/19050/baseURIPointsAt`,
+    HasVersions: `https://pid.${environment.baseUrl}/kos/19050/hasVersions`,
   },
   Identifier: {
-    Type: "http://pid.bayer.com/kos/19014/PermanentIdentifier",
+    Type: `http://pid.${environment.baseUrl}/kos/19014/PermanentIdentifier`,
   },
   DistributionEndpoint: {
     LifecycleStatus: {
-      Active: "https://pid.bayer.com/kos/19050/active",
+      Active: `https://pid.${environment.baseUrl}/kos/19050/active`,
     },
+    DistributionKey: `https://pid.${environment.baseUrl}/kos/19050/distribution`
   },
+  Assets: {
+    Logo: `https://shared.${environment.baseUrl}/img/logo.svg`
+  }
 };

@@ -7,7 +7,7 @@
 
         <div *ngIf="showCheckbox">
 
-          <b>{{table.resourceDetail['https://pid.bayer.com/kos/19050/hasLabel'].outbound[0].value}}</b>
+          <b>{{table.resourceDetail[nameColumn].outbound[0].value}}</b>
 
 
 
@@ -19,9 +19,9 @@
             </code> -->
 
             <ng-container *ngIf="linkedColumnDetail">
-              <mat-checkbox [value]="linkedColumnDetail['http://pid.bayer.com/kos/19014/hasPID'].outbound[0].value"
+              <mat-checkbox [value]="linkedColumnDetail[hasPIDURI].outbound[0].value"
                 (change)="checkboxChanged($event)" class="filter-mode">
-                {{linkedColumnDetail['https://pid.bayer.com/kos/19050/hasLabel'].outbound[0].value}}</mat-checkbox>
+                {{linkedColumnDetail[nameColumn].outbound[0].value}}</mat-checkbox>
             </ng-container>
           </ng-container>
         </div>
@@ -35,7 +35,7 @@
                   <div class="result-header h4 align-items-center mr-0">
                     <ds-icon class="icon-25" iconType="S3" [tooltipDisabled]="false" [delay]="300" [icon]="icon">
                     </ds-icon>
-                    {{table.resourceDetail['https://pid.bayer.com/kos/19050/hasLabel'].outbound[0].value}}
+                    {{table.resourceDetail[nameColumn].outbound[0].value}}
                   </div>
                 </div>
               </mat-title>
@@ -49,8 +49,8 @@
                       class="small text-muted text-uppercase lead">LABEL</span></div>
                   <div class="col-9 ng-star-inserted">
                     <span _ngcontent-ctu-c16="">
-                      <a [href]="table.resourceDetail['http://pid.bayer.com/kos/19014/hasPID'].outbound[0].value"
-                        (click)="clickTable($event, table.resourceDetail)">{{table.resourceDetail['https://pid.bayer.com/kos/19050/hasLabel'].outbound[0].value}}</a></span>
+                      <a [href]="table.resourceDetail[hasPIDURI].outbound[0].value"
+                        (click)="clickTable($event, table.resourceDetail)">{{table.resourceDetail[nameColumn].outbound[0].value}}</a></span>
                   </div>
                 </div>
               </div>
@@ -63,7 +63,7 @@
                       class="small text-muted text-uppercase lead">DEFINITION</span></div>
                   <div class="col-9 ng-star-inserted">
                     <span _ngcontent-ctu-c16=""
-                      [innerHTML]="table.resourceDetail['https://pid.bayer.com/kos/19050/hasResourceDefinition'].outbound[0].value"></span>
+                      [innerHTML]="table.resourceDetail[hasResourceDefinition].outbound[0].value"></span>
                   </div>
                 </div>
               </div>
@@ -76,9 +76,9 @@
                   <div class="col-3 ng-star-inserted"><span _ngcontent-ctu-c16=""
                       class="small text-muted text-uppercase lead">PID URI</span></div>
                   <div class="col-9 ng-star-inserted">
-                    <a [href]="table.resourceDetail['http://pid.bayer.com/kos/19014/hasPID'].outbound[0].value"
+                    <a [href]="table.resourceDetail[hasPIDURI].outbound[0].value"
                       class="ng-star-inserted"><span
-                        _ngcontent-ctu-c16="">{{table.resourceDetail['http://pid.bayer.com/kos/19014/hasPID'].outbound[0].value}}</span></a>
+                        _ngcontent-ctu-c16="">{{table.resourceDetail[hasPIDURI].outbound[0].value}}</span></a>
                   </div>
                 </div>
               </div>
@@ -91,7 +91,7 @@
                       class="small text-muted text-uppercase lead">AUTHOR</span></div>
                   <div class="col-9 ng-star-inserted">
                     <span
-                      _ngcontent-ctu-c16="">{{table.resourceDetail['https://pid.bayer.com/kos/19050/author'].outbound[0].value}}</span>
+                      _ngcontent-ctu-c16="">{{table.resourceDetail[author].outbound[0].value}}</span>
                   </div>
                 </div>
               </div>
@@ -104,7 +104,7 @@
                       class="small text-muted text-uppercase lead">DATE CREATED</span></div>
                   <div class="col-9 ng-star-inserted">
                     <span
-                      _ngcontent-ctu-c16="">{{table.resourceDetail['https://pid.bayer.com/kos/19050/dateCreated'].outbound[0].value
+                      _ngcontent-ctu-c16="">{{table.resourceDetail[dateCreated].outbound[0].value
                       |
                       date: 'yyyy-MM-dd hh:mm'}}</span>
                   </div>
@@ -134,8 +134,8 @@
                             <ng-container *ngIf="columnName == nameColumn">
 
                               <a [ngStyle]="{'padding-left.px': (element.subIndex * 10)}"
-                                href="{{element['http://pid.bayer.com/kos/19014/hasPID'].outbound[0].value}}"
-                                (click)="clickColumn($event, element['http://pid.bayer.com/kos/19014/hasPID'].outbound[0].value)"
+                                href="{{element[hasPIDURI].outbound[0].value}}"
+                                (click)="clickColumn($event, element[hasPIDURI].outbound[0].value)"
                                 [innerHTML]="element[columnName].outbound[0].value">
                               </a>
 
@@ -177,8 +177,8 @@
           <ng-container *ngIf="showCheckbox">
             <ng-container *ngFor="let element of dataSource">
               <mat-checkbox (change)="checkboxChanged($event)"
-                [value]="element['http://pid.bayer.com/kos/19014/hasPID'].outbound[0].value" class="filter-mode">
-                {{element['https://pid.bayer.com/kos/19050/hasLabel'].outbound[0].value}}</mat-checkbox>
+                [value]="element[hasPIDURI].outbound[0].value" class="filter-mode">
+                {{element[nameColumn].outbound[0].value}}</mat-checkbox>
             </ng-container>
 
           </ng-container>
@@ -203,8 +203,8 @@
 
                   <ng-container *ngIf="columnName == nameColumn">
                     <a [ngStyle]="{'padding-left.px': (element.subIndex * 10)}"
-                      href="{{element['http://pid.bayer.com/kos/19014/hasPID'].outbound[0].value}}"
-                      (click)="clickColumn($event, element['http://pid.bayer.com/kos/19014/hasPID'].outbound[0].value)"
+                      href="{{element[hasPIDURI].outbound[0].value}}"
+                      (click)="clickColumn($event, element[hasPIDURI].outbound[0].value)"
                       [innerHTML]="element[columnName].outbound[0].value">
                     </a>
 

@@ -61,6 +61,8 @@ export class SearchResultComponent implements OnInit, OnDestroy, OnChanges {
     this._source = value;
     this.expandView = true;
   };
+  attachment =  Constants.Metadata.HasAttachment 
+  version = Constants.Metadata.HasVersion
 
   @Input() metadata: any;
   @Input() collapsible: boolean = true;
@@ -118,10 +120,10 @@ export class SearchResultComponent implements OnInit, OnDestroy, OnChanges {
   showSchema: boolean = false;
   distributionData: any[] = [];
   showDistribution: boolean = false;
-  distributionKey = "https://pid.bayer.com/kos/19050/distribution";
+  distributionKey = Constants.DistributionEndpoint.DistributionKey;
   linkedResourceData: any = [];
   showLinkedResources: boolean = false;
-  linkedKey = "http://pid.bayer.com/kos/19050/LinkTypes";
+  linkedKey = Constants.Shacl.Groups.LinkTypes;
   activeTab: any[] = []
   selectedPidUri: string = "";
   isOpenSchemeUiTab: string = ""
@@ -248,7 +250,7 @@ export class SearchResultComponent implements OnInit, OnDestroy, OnChanges {
     const dialogRef = this.dialog.open(SimilarityModalComponent, {
       data: {
         pidUri: pidUri,
-        label: this._result.source["https://pid.bayer.com/kos/19050/hasLabel"]["outbound"][0].value,
+        label: this._result.source[Constants.Metadata.HasLabel]["outbound"][0].value,
         source: this._result.source
       },
       width: 'auto',
@@ -433,7 +435,7 @@ export class SearchResultComponent implements OnInit, OnDestroy, OnChanges {
         'resourcePIDUri': getPidUriForHref(this.details)[0],
         'resourceLastChangeDate': getValueForKey(this.details, Constants.Metadata.LastChangeDateTime)[0],
         'clickedLinkType': this._source[Constants.Metadata.EntityType].outbound[0].uri,
-        'clickedLinkCategory': 'https://pid.bayer.com/kos/19050/PID_Concept'
+        'clickedLinkCategory': Constants.Metadata.PIDClass
       });
   }
 
@@ -532,13 +534,13 @@ export class SearchResultComponent implements OnInit, OnDestroy, OnChanges {
       'clickedLink': clickedLink,
       'clickedLinkEdge': detail.key,
       'clickedLinkType': this._source[Constants.Metadata.EntityType].outbound[0].uri,
-      'clickedLinkCategory': 'https://pid.bayer.com/kos/19050/PID_Concept'
+      'clickedLinkCategory': Constants.Metadata.PIDClass
     }
   }
 
   GetMetadataOfDistributionEndpoint(distributionEndpoint) {
     var entityTypeUri = getUriForKey(distributionEndpoint, Constants.Metadata.EntityType);
-    return this.metadata['https://pid.bayer.com/kos/19050/distribution'].nestedMetadata.find(m => m.key == entityTypeUri[0]);
+    return this.metadata[Constants.DistributionEndpoint.DistributionKey].nestedMetadata.find(m => m.key == entityTypeUri[0]);
   }
 
   parseItemsToDetailsList(items: DocumentMap, parentKey: string, highlights: StringArrayMap): DetailsViewModel[] {
@@ -557,10 +559,10 @@ export class SearchResultComponent implements OnInit, OnDestroy, OnChanges {
   parseItemToDetailsViewModel(key: string, item: DocumentMapDirection, propertyKey: string, propertyType: string, highlight: StringArrayMap): DetailsViewModel {
     if (!key || !item) {
       return null;
-    } else if (key === 'https://pid.bayer.com/kos/19050/hasVersions') {
+    } else if (key === Constants.Metadata.HasVersions) {
       this.versions = item;
       return null;
-    } else if (key === 'https://pid.bayer.com/kos/19050/baseURIPointsAt') {
+    } else if (key === Constants.Metadata.BaseURIPointsAt) {
       this.baseUriPointsAt = item.outbound[0].value || item.outbound[0].uri;
     }
 
@@ -684,19 +686,19 @@ export class SearchResultComponent implements OnInit, OnDestroy, OnChanges {
 
   GetSchemeUI(event: MatTabChangeEvent, details) {
     //this.activeTab="";
-    var pidUri = details.find(x => x.key == 'http://pid.bayer.com/kos/19014/hasPID').valueEdge[0];
+    var pidUri = details.find(x => x.key == Constants.Metadata.HasPidUri).valueEdge[0];
     if (event.tab.textLabel == "Schema") {
       //this.activeTab.push(pidUri);
       var schemeStatus = { isAdd: true, activetabList: pidUri }
       this.selectedIndex = event.index
       this.schemeUiChange.emit(schemeStatus);
-      //var pidUri = details.find(x => x.key == 'http://pid.bayer.com/kos/19014/hasPID').valueEdge[0];
+      //var pidUri = details.find(x => x.key == 'http://pid.${environment.baseUrl}/kos/19014/hasPID').valueEdge[0];
       this.store.dispatch(new FetchLinkedTableandColumnResults(pidUri)).subscribe(result => {
         this.schemeUiDetail = new SchemeUi();
         this.schemeUiDetail = result.search.linkedTableAndcolumnResource
       });
     } else if (event.tab.textLabel == "Distribution Endpoint") {
-      this.distributionData = details.find(x => x.key == 'https://pid.bayer.com/kos/19050/distribution')
+      this.distributionData = details.find(x => x.key == Constants.DistributionEndpoint.DistributionKey)
     } else {
       this.selectedIndex = event.index
       this.activeTab.push(pidUri)

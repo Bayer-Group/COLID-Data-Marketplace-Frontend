@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { BUILD } from 'src/assets/build-variables';
 import { LogService } from 'src/app/core/logging/log.service';
 import { environment } from 'src/environments/environment';
+import { Constants } from 'src/app/shared/constants';
 
 @Component({
   selector: 'app-help',
@@ -17,7 +18,8 @@ export class HelpComponent implements OnInit {
 
   frontendBuildInformation = BUILD;
   releaseNotesUrl = environment.releaseNotesUrl;
-
+  logo = Constants.Assets.Logo
+  
   constructor(private store: Store, private logger: LogService) {
       this.logger.debug('ResourceHelpComponent constructor');
   }

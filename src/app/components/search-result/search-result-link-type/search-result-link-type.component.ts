@@ -58,9 +58,9 @@ export class SearchResultLinkTypeComponent implements OnInit {
     this.definition = getValueForKey(this.linkType, Constants.Metadata.HasResourceDefinition)[0];
     this.type = getUriForKey(this.linkType, Constants.Metadata.EntityType)[0];
     
-    this.hasPIDURI = 'http://pid.bayer.com/kos/19014/hasPID';
-    this.hasDefinition = 'https://pid.bayer.com/kos/19050/hasResourceDefinition';
-    this.hasResourceType = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+    this.hasPIDURI = Constants.Metadata.HasPidUri;
+    this.hasDefinition = Constants.Metadata.HasResourceDefinition;
+    this.hasResourceType = Constants.Metadata.EntityType;
 
     // this.comment = this.metadata[this.edge].properties[Constants.Shacl.Comment];
     // this.metaDescription = this.metadata[this.edge].properties[Constants.Shacl.Description];
@@ -86,7 +86,7 @@ export class SearchResultLinkTypeComponent implements OnInit {
       'clickedLinkEdge': Constants.Metadata.HasPidUri,
       'clickedLinkType': this.linkType.find(d => d.key === Constants.Metadata.EntityType).valueEdge[0],
       'linkedResourceEdge': this.metadata[this.edge].properties[Constants.Metadata.HasPidUri],
-      'clickedLinkCategory': 'https://pid.bayer.com/kos/19050/LinkedTypes'
+      'clickedLinkCategory': Constants.Shacl.Groups.LinkTypes
     });
 
     this.dialog.open(LinkedResourceDisplayDialog, {

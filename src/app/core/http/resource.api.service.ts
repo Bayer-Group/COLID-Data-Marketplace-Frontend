@@ -8,7 +8,6 @@ import { CheckboxHierarchyDTO } from "src/app/shared/models/checkboxHierarchy-dt
 import { ResourceOverviewDTO } from "src/app/shared/models/resources/resource-overview-dto";
 import { ResourceRevisionHistory } from "src/app/shared/models/resources/historic-resource-overview-dto";
 
-const DEFAULT_CONSUMER_GROUP: string = "https://pid.bayer.com/kos/19050#0adfd47a-8334-4fc3-a551-4caee0029b9c";
 
 @Injectable({
   providedIn: "root",

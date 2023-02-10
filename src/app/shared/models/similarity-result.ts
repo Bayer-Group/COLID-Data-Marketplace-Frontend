@@ -1,10 +1,16 @@
-export class SimilarityDoc{
-    'https://pid.bayer.com/kos/19050/hasLabel': string;
-    'http://www.w3.org/1999/02/22-rdf-syntax-ns#type': string;
-    'https://pid.bayer.com/kos/19050/hasResourceDefinition': string
-    'score_combined': number;
-    'http://pid.bayer.com/kos/19014/hasPID': string;
+import { Constants } from 'src/app/shared/constants';
 
+export const HasLabel: string = Constants.Metadata.HasLabel
+export const EntityType: string = Constants.Metadata.EntityType
+export const HasResourceDefinition: string = Constants.Metadata.HasResourceDefinition
+export const HasPidUri: string = Constants.Metadata.HasPidUri
+
+export interface SimilarityDoc{
+     HasLabel: string;
+     EntityType: string;
+     HasResourceDefinition: string
+    'score_combined': number;
+     HasPidUri: string;
 }
 
 export class SimilarityResult {

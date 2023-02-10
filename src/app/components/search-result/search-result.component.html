@@ -155,7 +155,7 @@
                         <div class="col-12">
                           <ng-container [ngSwitch]="detail.key">
                             <ng-container *ngSwitchCase="
-                                'https://pid.bayer.com/kos/19050/hasAttachment'
+                                attachment
                               ">
                               <div class="d-flex justify-content-start">
                                 <ng-container *ngFor="
@@ -227,7 +227,7 @@
                             onVersionLinkClicked(detail, previous, $event)
                           " class="badge badge-light">{{
                           previous.value[
-                          "https://pid.bayer.com/kos/19050/hasVersion"
+                          version
                           ].value
                           }}</a>
                         <span class="mx-1">-</span>
@@ -241,7 +241,7 @@
                             next.value[constants.Metadata.HasPidUri].value
                           " (click)="onVersionLinkClicked(detail, next, $event)" class="badge badge-light">{{
                           next.value[
-                          "https://pid.bayer.com/kos/19050/hasVersion"
+                          version
                           ].value
                           }}</a>
                       </ng-container>
