@@ -1,28 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { StatusBuildInformationDto } from 'src/app/shared/models/status/status-build-information-dto';
-import { StatusState, FetchBuildInformation } from 'src/app/states/status.state';
-import { Observable } from 'rxjs';
-import { BUILD } from 'src/assets/build-variables';
-import { LogService } from 'src/app/core/logging/log.service';
-import { environment } from 'src/environments/environment';
-import { Constants } from 'src/app/shared/constants';
+import { Component } from "@angular/core";
+import { Select, Store } from "@ngxs/store";
+import { StatusBuildInformationDto } from "src/app/shared/models/status/status-build-information-dto";
+import { StatusState } from "src/app/states/status.state";
+import { Observable } from "rxjs";
+import { LogService } from "src/app/core/logging/log.service";
+import { environment } from "src/environments/environment";
+import { Constants } from "src/app/shared/constants";
 
 @Component({
-  selector: 'app-help',
-  templateUrl: './help.component.html',
-  styleUrls: ['./help.component.scss']
+  selector: "app-help",
+  templateUrl: "./help.component.html",
+  styleUrls: ["./help.component.scss"],
 })
-export class HelpComponent implements OnInit {
-  @Select(StatusState.getBuildInformation) buildInformation$: Observable<StatusBuildInformationDto>;
+export class HelpComponent {
+  @Select(StatusState.getBuildInformation)
+  buildInformation$: Observable<StatusBuildInformationDto>;
 
-  frontendBuildInformation = BUILD;
   releaseNotesUrl = environment.releaseNotesUrl;
-  logo = Constants.Assets.Logo
-  
-  constructor(private store: Store, private logger: LogService) {
-      this.logger.debug('ResourceHelpComponent constructor');
-  }
+  logo = Constants.Assets.Logo;
 
-  ngOnInit() { }
+  constructor(private store: Store, private logger: LogService) {
+    this.logger.debug("ResourceHelpComponent constructor");
+  }
 }

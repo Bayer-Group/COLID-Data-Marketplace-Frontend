@@ -1,0 +1,187 @@
+<div
+  class="table-content"
+  #infiniteScroller
+  infiniteScroll
+  [infiniteScrollDistance]="1"
+  [infiniteScrollThrottle]="50"
+  [scrollWindow]="false"
+  (scrolled)="onScrolled($event)"
+>
+  <table
+    #linkHistoryTable
+    mat-table
+    [dataSource]="historyItems"
+    matSort
+    (matSortChange)="onSortChange($event)"
+  >
+    <ng-container matColumnDef="source">
+      <th mat-header-cell *matHeaderCellDef>
+        <div class="cell-content">
+          <div class="label-header">Source</div>
+        </div>
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        class="clickable-item"
+        (click)="openInDMPResourceDetailView(element.source)"
+        [matTooltip]="'View in Resource Detail View'"
+      >
+        {{ element.sourceName }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="sourceType">
+      <th mat-header-cell *matHeaderCellDef>Type</th>
+      <td mat-cell *matCellDef="let element">
+        <div style="display: flex; align-items: center">
+          <ds-icon
+            class="icon-32"
+            [icon]="element.sourceType"
+            [iconType]="S3"
+            [tooltipDisabled]="false"
+            [delay]="300"
+          >
+          </ds-icon>
+        </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="target">
+      <th mat-header-cell *matHeaderCellDef>
+        <div class="cell-content">
+          <div class="label-header">Target</div>
+        </div>
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        class="clickable-item"
+        (click)="openInDMPResourceDetailView(element.target)"
+        [matTooltip]="'View in Resource Detail View'"
+      >
+        {{ element.targetName }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="targetType">
+      <th mat-header-cell *matHeaderCellDef>Type</th>
+      <td mat-cell *matCellDef="let element">
+        <div style="display: flex; align-items: center">
+          <ds-icon
+            class="icon-32"
+            [icon]="element.targetType"
+            [iconType]="S3"
+            [tooltipDisabled]="false"
+            [delay]="300"
+          >
+          </ds-icon>
+        </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="linkType">
+      <th mat-header-cell *matHeaderCellDef>Link Type</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.linkType.value }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="createdby">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div class="cell-content">
+          <div class="label-header">Created By</div>
+        </div>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.author }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="createddate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div class="cell-content">
+          <div class="label-header">Created On</div>
+        </div>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.dateCreated | date : "MM/dd/yyyy HH:mm" }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="deletedby">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div class="cell-content">
+          <div class="label-header">Deleted By</div>
+        </div>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.deletedBy }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="deletiondate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div class="cell-content">
+          <div class="label-header">Deleted On</div>
+        </div>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.dateDeleted | date : "MM/dd/yyyy HH:mm" }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div class="cell-content">
+          <div class="label-header">Status</div>
+        </div>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <div class="items-center">
+          <mat-icon
+            matTooltip="Deleted"
+            *ngIf="
+              element.linkStatus ===
+              constants.Metadata.Link.LifecycleStatus.Deleted
+            "
+            >delete_forever</mat-icon
+          >
+          <mat-icon
+            matTooltip="Created"
+            *ngIf="
+              element.linkStatus ===
+              constants.Metadata.Link.LifecycleStatus.Created
+            "
+            >cloud_upload</mat-icon
+          >
+        </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="restoreAction">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <button
+          *ngIf="
+            element.linkStatus ===
+            constants.Metadata.Link.LifecycleStatus.Deleted
+          "
+          mat-icon-button
+          [matTooltip]="'Restore Link'"
+          (click)="onRestoreLink(element)"
+        >
+          <mat-icon>history</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <tr
+      mat-header-row
+      *matHeaderRowDef="displayedColumns; sticky: true"
+      class="header-row"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      class="data-row"
+    ></tr>
+
+    <tr class="mat-row" *matNoDataRow [hidden]="isLoading$ | async">
+      <td class="mat-cell" colspan="11">No data matching the filter.</td>
+    </tr>
+  </table>
+  <mat-progress-bar
+    *ngIf="isLoading$ | async"
+    mode="indeterminate"
+  ></mat-progress-bar>
+</div>

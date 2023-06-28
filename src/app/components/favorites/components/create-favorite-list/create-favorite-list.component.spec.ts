@@ -1,16 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CreateFavoriteListComponent } from './create-favorite-list.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { CreateFavoriteListComponent } from "./create-favorite-list.component";
 
-
-describe('CreateFavoriteListComponent', () => {
+describe("CreateFavoriteListComponent", () => {
   let component: CreateFavoriteListComponent;
   let fixture: ComponentFixture<CreateFavoriteListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CreateFavoriteListComponent ]
-    })
-    .compileComponents();
+      declarations: [CreateFavoriteListComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +17,7 @@ describe('CreateFavoriteListComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

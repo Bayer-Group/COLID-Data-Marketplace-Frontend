@@ -27,10 +27,10 @@ bld/
 
 # IDE - VSCode
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions.json
 
 # Visual Studio 2015 cache/options directory
 .vs/
@@ -256,6 +256,7 @@ ModelManifest.xml
 \.idea.*
 
 # misc
+/.angular/cache
 /.sass-cache
 /connect.lock
 /coverage
@@ -269,4 +270,5 @@ testem.log
 .DS_Store
 Thumbs.db
 .npmrc
-.angular/
+
+package.lock.json

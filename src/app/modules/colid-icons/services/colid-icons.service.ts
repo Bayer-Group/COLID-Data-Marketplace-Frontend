@@ -1,34 +1,33 @@
-import { Injectable } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
-import { CustomMaterialIcon } from '../models/custom-material-icon';
-import { BehaviorSubject } from 'rxjs';
-import { environment } from 'src/environments/environment';
-
-declare const InstallTrigger: any;
+import { Injectable } from "@angular/core";
+import { MatIconRegistry } from "@angular/material/icon";
+import { DomSanitizer } from "@angular/platform-browser";
+import { CustomMaterialIcon } from "../models/custom-material-icon";
+import { BehaviorSubject } from "rxjs";
+import { environment } from "src/environments/environment";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class ColidIconsService {
-
   public _tooltipMapping = new Map<string, string>();
 
   public iconsRegistered$ = new BehaviorSubject<boolean>(false);
 
-  constructor(private iconRegistry: MatIconRegistry, private sanitizer: DomSanitizer) { }
-
+  constructor(
+    private iconRegistry: MatIconRegistry,
+    private sanitizer: DomSanitizer
+  ) {}
 
   registerSvgIcons(icons: CustomMaterialIcon[]) {
     this.iconsRegistered$.next(false);
-    icons.forEach(icon => {
+    icons.forEach((icon) => {
       this.registerSvgIcon(icon);
-    })
+    });
     this.iconsRegistered$.next(true);
   }
 
   registerSvgIcon(icon: CustomMaterialIcon) {
-    if (!this._tooltipMapping.has(icon.key)){
+    if (!this._tooltipMapping.has(icon.key)) {
       this.iconRegistry.addSvgIcon(
         icon.key,
         this.sanitizer.bypassSecurityTrustResourceUrl(icon.url)
@@ -43,7 +42,7 @@ export class ColidIconsService {
   }
 
   registerColidIcons(icons: CustomMaterialIcon[]) {
-    icons = icons.map(icon => {
+    icons = icons.map((icon) => {
       const key = this.encodeString(icon.key);
       icon.url = this.getEncodedS3Url(icon.key);
       icon.key = key;
@@ -58,13 +57,12 @@ export class ColidIconsService {
   }
 
   replaceSpecialCharacter(str: string): string {
-    return str.replace(/%/gi, "%25")
+    return str.replace(/%/gi, "%25");
   }
 
   getEncodedS3Url(str: string): string {
     str = this.encodeString(str);
     str = this.replaceSpecialCharacter(str);
-    return environment.colidIconsUrl + str + '.svg';
+    return environment.colidIconsUrl + str + ".svg";
   }
 }
-

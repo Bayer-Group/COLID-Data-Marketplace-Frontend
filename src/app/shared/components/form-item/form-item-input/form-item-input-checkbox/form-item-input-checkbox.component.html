@@ -1,0 +1,24 @@
+<mat-radio-group
+  [value]="internalValue"
+  [disabled]="readOnly"
+  (change)="handleValueChanged($event.value); internalValue = $event.value"
+>
+  <mat-radio-button
+    #input
+    [name]="id"
+    id="input_{{ id }}_true"
+    color="primary"
+    [checked]="internalValue === true"
+    value="true"
+    >True</mat-radio-button
+  >
+  <mat-radio-button
+    #input
+    [name]="id"
+    id="input_{{ id }}_false"
+    color="primary"
+    [checked]="internalValue === false"
+    value="false"
+    >False</mat-radio-button
+  >
+</mat-radio-group>

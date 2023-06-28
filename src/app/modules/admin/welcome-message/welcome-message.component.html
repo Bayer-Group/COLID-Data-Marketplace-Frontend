@@ -1,0 +1,41 @@
+<div class="row p-2">
+  <div class="col">
+    <h1 class="admin-tab-title">Welcome Messages</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <nav
+      mat-tab-nav-bar
+      animationDuration="0ms"
+      mat-align-tabs="start"
+      style="width: 100%"
+    >
+      <a
+        mat-tab-link
+        routerLink="edit/editor"
+        routerLinkActive
+        #editorLink="routerLinkActive"
+        [routerLinkActiveOptions]="{ exact: true }"
+        [active]="editorLink.isActive"
+      >
+        Editor
+      </a>
+      <a
+        mat-tab-link
+        routerLink="edit/datamarketplace"
+        routerLinkActive
+        #marketplaceLink="routerLinkActive"
+        [routerLinkActiveOptions]="{ exact: true }"
+        [active]="marketplaceLink.isActive"
+      >
+        Data Markeplace
+      </a>
+    </nav>
+  </div>
+</div>
+<div class="row mt-6">
+  <div class="col-12">
+    <router-outlet></router-outlet>
+  </div>
+</div>

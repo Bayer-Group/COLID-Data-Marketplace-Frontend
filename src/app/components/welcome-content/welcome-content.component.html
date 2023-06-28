@@ -1,53 +1,77 @@
-<div style="height: 100%; display: flex; flex-direction: column;">
-
+<div style="height: 100%; display: flex; flex-direction: column">
   <div class="row mt-6" style="flex-grow: 1">
     <div class="col-12">
       <div class="row justify-content-center">
         <div class="col-auto">
-          <img src="assets/BAG_COLID-Visual_coloured_with-Claim_lh.svg" alt="COLID" height="120em">
+          <img
+            src="assets/BAG_COLID-Visual_coloured_with-Claim_lh.svg"
+            alt="COLID"
+            height="120em"
+          />
         </div>
       </div>
       <div class="row mt-4 justify-content-center">
         <div class="col-auto">
-          <img src="assets/BAG_COLID-DM-Text_coloured_lh.svg" alt="Data Marketplace" height="50em">
+          <img
+            src="assets/BAG_COLID-DM-Text_coloured_lh.svg"
+            alt="Data Marketplace"
+            height="50em"
+          />
         </div>
       </div>
       <div class="row mt-5 justify-content-center">
         <div class="col-12 col-lg-8">
-          <app-search-bar-autocomplete class="full-width" (searchChange)="handleSearchChange($event)"
-            (inputChange)="handleInputChange($event)"></app-search-bar-autocomplete>
+          <app-search-bar-autocomplete
+            class="full-width"
+            (searchChange)="handleSearchChange($event)"
+            (inputChange)="handleInputChange($event)"
+          ></app-search-bar-autocomplete>
         </div>
       </div>
       <div class="row mt-2 justify-content-center">
         <div class="col-auto d-flex">
-          <button mat-raised-button class="text-large center-button" id="button-welcome-search" (click)="search()">
+          <button
+            mat-raised-button
+            class="text-large center-button"
+            id="button-welcome-search"
+            (click)="search()"
+          >
             COLID Search
           </button>
-      
-          <button mat-raised-button class="text-large ml-5 center-button" id="button-welcome-colid-link"
-            (click)="goToEditor()">
+
+          <button
+            mat-raised-button
+            class="text-large ms-5 center-button"
+            id="button-welcome-colid-link"
+            (click)="goToEditor()"
+          >
             Go to COLID Editor
           </button>
         </div>
       </div>
-      <div class="row mt-4 justify-content-center" *ngIf="(welcomeMessage$ | async) as welcomeMessage">
-        <div class="col-12 col-lg-8" style="height: fit-content;">
-          <quill-view-html [content]="welcomeMessage.content" theme="snow"></quill-view-html>
+      <div
+        class="row mt-4 justify-content-center"
+        *ngIf="welcomeMessage$ | async as welcomeMessage"
+      >
+        <div class="col-12 col-lg-8" style="height: fit-content">
+          <quill-view-html
+            [content]="welcomeMessage.content"
+            theme="snow"
+          ></quill-view-html>
         </div>
       </div>
     </div>
   </div>
 
-
   <div class="row justify-content-center">
     <div class="col-auto">
-      <img src="assets/BAG-logo.svg" alt="Bayer AG" height="120em">
+      <img src="assets/BAG-logo.svg" alt="Bayer AG" height="120em" />
     </div>
   </div>
 </div>
 
 <div class="rotated fixed d-none d-md-block">
-  <div style="font-size: 0.8em;">
+  <div style="font-size: 0.8em">
     <app-support-feedback-bar></app-support-feedback-bar>
   </div>
 </div>

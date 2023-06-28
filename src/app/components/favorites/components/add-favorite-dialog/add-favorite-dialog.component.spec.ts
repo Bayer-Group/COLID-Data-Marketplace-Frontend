@@ -1,16 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AddFavoriteDialogComponent } from './add-favorite-dialog.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { AddFavoriteDialogComponent } from "./add-favorite-dialog.component";
 
-
-describe('AddFavoriteDialogComponent', () => {
+describe("AddFavoriteDialogComponent", () => {
   let component: AddFavoriteDialogComponent;
   let fixture: ComponentFixture<AddFavoriteDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddFavoriteDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [AddFavoriteDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +17,7 @@ describe('AddFavoriteDialogComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

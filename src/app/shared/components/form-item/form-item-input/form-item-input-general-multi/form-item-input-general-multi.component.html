@@ -1,0 +1,47 @@
+<div
+  class="row mb-1"
+  *ngFor="let entity of internalValue; let i = index; trackBy: trackByIdx"
+>
+  <div class="col-10 pe-0">
+    <input
+      type="text"
+      class="form-control"
+      id="{{ name }}"
+      [readonly]="readOnly"
+      #input
+      [name]="name"
+      [(ngModel)]="internalValue[i]"
+      [debounce]="debounceTime"
+      (debounceHandler)="handleValueChanged(internalValue)"
+      [attr.name]="name"
+    />
+  </div>
+  <div class="col-2 pl-0">
+    <div class="row justify-content-end">
+      <button
+        mat-icon-button
+        color="primary"
+        id="btnRemove_{{ name | lastIndexString }}_{{ i }}"
+        *ngIf="internalValue.length > 1"
+        type="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+        (click)="removeSubGraphAtPosition(i)"
+      >
+        <mat-icon>remove</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        color="primary"
+        id="btnAdd_{{ name | lastIndexString }}"
+        *ngIf="internalValue.length === i + 1"
+        type="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+        (click)="addNewSubGraph()"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

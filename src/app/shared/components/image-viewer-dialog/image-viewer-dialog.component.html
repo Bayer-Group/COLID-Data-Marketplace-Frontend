@@ -5,27 +5,38 @@
     </button>
   </div>
   <div>
-      <lib-ngx-image-zoom
+    <lib-ngx-image-zoom
       [thumbImage]="imageThumbnailUrl"
       [fullImage]="imageUrl"
       [zoomMode]="'click'"
       [magnification]="1"
-      [enableScrollZoom]="true"></lib-ngx-image-zoom>
+      [enableScrollZoom]="true"
+    ></lib-ngx-image-zoom>
   </div>
   <div>
     <div class="bottom-bar d-flex justify-content-between">
-      <div class="d-flex flex-row comment ml-2">
-        {{comment}}
+      <div class="d-flex flex-row comment ms-2">
+        {{ comment }}
       </div>
       <div class="d-flex flex-row pl-4">
-        <button mat-icon-button (click)="onClickButtonLeft()" *ngIf="images.length > 1">
+        <button
+          mat-icon-button
+          (click)="onClickButtonLeft()"
+          *ngIf="images.length > 1"
+        >
           <mat-icon matTooltip="Previous image">navigate_before</mat-icon>
         </button>
-        <button mat-icon-button (click)="onClickButtonRight()" *ngIf="images.length > 1">
+        <button
+          mat-icon-button
+          (click)="onClickButtonRight()"
+          *ngIf="images.length > 1"
+        >
           <mat-icon matTooltip="Next image">navigate_next</mat-icon>
         </button>
         <button mat-icon-button cdkFocusInitial>
-          <a href="{{imageUrl}}" download><mat-icon matTooltip="Download">arrow_downward</mat-icon></a>
+          <a href="{{ imageUrl }}" download
+            ><mat-icon matTooltip="Download">arrow_downward</mat-icon></a
+          >
         </button>
       </div>
     </div>

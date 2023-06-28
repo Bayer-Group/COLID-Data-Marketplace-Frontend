@@ -15,6 +15,11 @@ div[hidden] {
 .badge {
   cursor: pointer;
   font-weight: normal !important;
+  color: black;
+}
+
+.badge-pill {
+  border-radius: 10rem;
 }
 
 .ng-select {

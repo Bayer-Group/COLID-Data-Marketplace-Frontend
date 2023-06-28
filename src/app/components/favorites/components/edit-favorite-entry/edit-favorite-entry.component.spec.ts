@@ -1,17 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { EditFavoriteEntryComponent } from './edit-favorite-entry.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { EditFavoriteEntryComponent } from "./edit-favorite-entry.component";
 
-
-
-describe('EditFavoriteEntryComponent', () => {
+describe("EditFavoriteEntryComponent", () => {
   let component: EditFavoriteEntryComponent;
   let fixture: ComponentFixture<EditFavoriteEntryComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EditFavoriteEntryComponent ]
-    })
-    .compileComponents();
+      declarations: [EditFavoriteEntryComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -20,7 +17,7 @@ describe('EditFavoriteEntryComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

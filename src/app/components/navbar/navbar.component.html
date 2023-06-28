@@ -1,4 +1,4 @@
-<mat-toolbar class="align-items-center" color="primary" >
+<mat-toolbar class="align-items-center" color="primary">
   <mat-toolbar-row>
     <span class="menu-spacer"></span>
     <button mat-icon-button (click)="toggleNavbar()" color="white">
@@ -6,35 +6,67 @@
     </button>
 
     <a [routerLink]="'/'">
-      <img src="assets/BAG_COLID-Visual_white_lh.svg" height="29" alt="COLID">
+      <img src="assets/BAG_COLID-Visual_white_lh.svg" height="29" alt="COLID" />
     </a>
-    <div class="app-title">Data Marketplace
-      <span *ngIf="(buildInformation$ | async) as buildInformation">{{buildInformation.versionNumber}}
-        <span>{{environmentLabel}}</span>
+    <div class="app-title">
+      Data Marketplace
+      <span *ngIf="buildInformation$ | async as buildInformation"
+        >{{ buildInformation.versionNumber }}
+        <span>{{ environmentLabel }}</span>
       </span>
     </div>
 
-    <button *ngIf="hasCreatePrivilege$ | async" mat-flat-button  class="ml-4 d-none d-md-block" title="Want to register resources? Go to COLID Editor"  id="button-sidebar-pid-link" (click)="goToEditor()">
-    Want to register resources? Go to COLID Editor
+    <button
+      *ngIf="hasCreatePrivilege$ | async"
+      mat-flat-button
+      class="ms-4 d-none d-md-block"
+      title="Want to register resources? Go to COLID Editor"
+      id="button-sidebar-pid-link"
+      (click)="goToEditor()"
+    >
+      Want to register resources? Go to COLID Editor
     </button>
-    
-    <button mat-flat-button class="ml-4 d-none d-md-block" title="Want to link resources? Go to Resource Relationship Manager" inline="true"  id="button-sidebar-rrm-link" (click)="goToRRM()">
-    Want to link resources? Go to Resource Relationship Manager
+
+    <button
+      mat-flat-button
+      class="ms-4 d-none d-md-block"
+      title="Want to link resources? Go to Resource Relationship Manager"
+      inline="true"
+      id="button-sidebar-rrm-link"
+      (click)="goToRRM()"
+    >
+      Want to link resources? Go to Resource Relationship Manager
     </button>
     <span class="filler"></span>
 
-    <button mat-icon-button (click)="toggleFavorite.emit()" matTooltip="Favorites">
-    <mat-icon >bookmark_active</mat-icon>
+    <button
+      mat-icon-button
+      (click)="toggleFavorite.emit()"
+      matTooltip="Favorites"
+    >
+      <mat-icon>bookmark_active</mat-icon>
     </button>
 
-    <button mat-icon-button (click)="toggleNotification.emit()" matTooltip="Notifications">
+    <button
+      mat-icon-button
+      (click)="toggleNotification.emit()"
+      matTooltip="Notifications"
+    >
       <mat-icon *ngIf="newNotifications === 0">notifications_none</mat-icon>
-      <mat-icon *ngIf="newNotifications !== 0" [matBadge]="newNotifications" matBadgeColor="warn">notifications_active</mat-icon>
+      <mat-icon
+        *ngIf="newNotifications !== 0"
+        [matBadge]="newNotifications"
+        matBadgeColor="warn"
+        >notifications_active</mat-icon
+      >
     </button>
 
     <div *ngIf="isLoggedIn$ | async">
-
-      <button class="d-none d-md-block" mat-icon-button [matMenuTriggerFor]="appMenu">
+      <button
+        class="d-none d-md-block"
+        mat-icon-button
+        [matMenuTriggerFor]="appMenu"
+      >
         <mat-icon>person</mat-icon>
       </button>
       <mat-menu #appMenu="matMenu">
@@ -46,6 +78,14 @@
           <mat-icon fontSet="material-icons-outlined">settings</mat-icon>
           <span>User Settings</span>
         </button>
+        <button
+          *ngIf="hasAdminPrivilege$ | async"
+          mat-menu-item
+          [routerLink]="'admin'"
+        >
+          <mat-icon fontSet="material-icons-outlined">security</mat-icon>
+          <span>Administration</span>
+        </button>
       </mat-menu>
 
       <mat-menu #usersettings="matMenu">
@@ -53,24 +93,31 @@
           <mat-icon fontSet="material-icons-outlined">settings</mat-icon>
           <span>Open User Settings</span>
         </button>
-        <button mat-menu-item
+        <button
+          mat-menu-item
           matTooltip="Saves the currently selected search filters as default for all future searches"
-          (click)="saveActiveAggregationAsDefault()">
+          (click)="saveActiveAggregationAsDefault()"
+        >
           <mat-icon fontSet="material-icons-outlined">save</mat-icon>
           <span>Save default filters</span>
         </button>
-      </mat-menu> 
-    </div>
-    <button *ngIf="hasEditorFunctionalitiesPrivilege$ | async" mat-icon-button matTooltip="Editor Functionalities" [matMenuTriggerFor]="editorMenu">
-        <mat-icon>build</mat-icon>
-    </button>
-        
-      <mat-menu #editorMenu="matMenu">
-        <button mat-menu-item [routerLink]="'resource-reviews'">
-          <mat-icon fontSet="material-icons-outlined">rate_review</mat-icon>
-          <span>Resource Reviews</span>
-        </button>
       </mat-menu>
+    </div>
+    <button
+      *ngIf="hasEditorFunctionalitiesPrivilege$ | async"
+      mat-icon-button
+      matTooltip="Editor Functionalities"
+      [matMenuTriggerFor]="editorMenu"
+    >
+      <mat-icon>build</mat-icon>
+    </button>
+
+    <mat-menu #editorMenu="matMenu">
+      <button mat-menu-item [routerLink]="'resource-reviews'">
+        <mat-icon fontSet="material-icons-outlined">rate_review</mat-icon>
+        <span>Resource Reviews</span>
+      </button>
+    </mat-menu>
 
     <button mat-icon-button matTooltip="Help" [routerLink]="'/help'">
       <mat-icon>help_outline</mat-icon>

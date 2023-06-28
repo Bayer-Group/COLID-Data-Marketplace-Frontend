@@ -1,26 +1,23 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { LogService } from 'src/app/core/logging/log.service';
+import { Component, Input } from "@angular/core";
+import { LogService } from "src/app/core/logging/log.service";
 
 @Component({
-  selector: 'app-feedback',
-  templateUrl: './feedback.component.html',
-  styleUrls: ['./feedback.component.scss']
+  selector: "app-feedback",
+  templateUrl: "./feedback.component.html",
+  styleUrls: ["./feedback.component.scss"],
 })
-export class FeedbackComponent implements OnInit {
-
+export class FeedbackComponent {
   isFeedbackPageVisible: boolean = true;
   iSentimentalScorePositive: boolean = null;
-  comment: string = '';
+  comment: string = "";
   isCommentShown: boolean = false;
 
-  logMessage = "dmp-feedback-component" 
+  logMessage = "dmp-feedback-component";
 
   @Input() payload: object;
   @Input() feature: string;
 
-  constructor(private logService: LogService) { }
-
-  ngOnInit(): void { }
+  constructor(private logService: LogService) {}
 
   selectSentimental(score: boolean) {
     this.iSentimentalScorePositive = score;
@@ -30,10 +27,10 @@ export class FeedbackComponent implements OnInit {
   sendFeedback() {
     this.isFeedbackPageVisible = false;
     this.logService.info(this.logMessage, {
-      "feature": this.feature,
-      "payload": this.payload,
-      "sentimental_score": this.iSentimentalScorePositive,
-      "comment": this.comment
+      feature: this.feature,
+      payload: this.payload,
+      sentimental_score: this.iSentimentalScorePositive,
+      comment: this.comment,
     });
   }
 }

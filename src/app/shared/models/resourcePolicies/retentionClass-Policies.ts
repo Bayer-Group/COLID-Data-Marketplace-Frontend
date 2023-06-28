@@ -1,8 +1,8 @@
-import { Policy } from "./policy"
+import { Policy } from "./policy";
 
-export class RetentionClassPolicies { 
-    classId:string
-    className:string
-    classDescription:string
-    policies: Policy[]
+export class RetentionClassPolicies {
+  classId: string;
+  className: string;
+  classDescription: string;
+  policies: Policy[];
 }

@@ -1,0 +1,67 @@
+<div class="row p-2">
+  <div class="col">
+    <h1 class="admin-tab-title">Consumer Groups</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <div *ngIf="consumerGroups$ | async as consumerGroups; else loading">
+      <mat-accordion multi="true">
+        <mat-expansion-panel *ngFor="let consumerGroup of consumerGroups">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ consumerGroup.name }}
+            </mat-panel-title>
+            <mat-panel-description>
+              <mat-chip [color]="isActive(consumerGroup) ? 'draft' : 'deleted'">
+                {{ getStatus(consumerGroup) }}</mat-chip
+              >
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <app-entity-display
+              [metadata]="metadata$ | async"
+              [entity]="consumerGroup"
+            >
+            </app-entity-display>
+            <div class="d-flex" style="justify-content: flex-end">
+              <action-button
+                color="white"
+                *ngIf="!isActive(consumerGroup)"
+                (click)="reactivateConsumerGroup(consumerGroup)"
+                [disabled]="isConsumerGroupReactivating != null"
+                [loading]="isConsumerGroupReactivating?.id === consumerGroup.id"
+                icon="replay"
+              >
+                Reactivate
+              </action-button>
+
+              <a
+                href
+                routerLink="./edit"
+                [queryParams]="{ id: consumerGroup.id }"
+                mat-raised-button
+                color="white"
+                *ngIf="isActive(consumerGroup)"
+              >
+                <mat-icon fontSet="material-icons-outlined">edit</mat-icon>
+                Edit
+              </a>
+            </div>
+          </ng-template>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col p-3 text-right">
+    <button mat-raised-button color="primary" (click)="createConsumerGroup()">
+      <mat-icon fontSet="material-icons-outlined">add</mat-icon>
+      Create
+    </button>
+  </div>
+</div>
+<ng-template #loading>
+  <app-colid-spinner></app-colid-spinner>
+</ng-template>

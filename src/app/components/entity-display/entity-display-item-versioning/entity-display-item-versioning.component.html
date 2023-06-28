@@ -1,6 +1,0 @@
-<mat-chip-list>
-  <ng-container *ngFor="let v of versions; let i = index">
-    <mat-chip [class.c-pointer]="v.version !== version" [class.current-version]="v.version === version">{{v.version}}</mat-chip>
-    <span class="mx-1" *ngIf="versions.length > 1 && versions.length !== (i + 1)">-</span>
-  </ng-container>
-</mat-chip-list>

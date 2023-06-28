@@ -1,23 +1,29 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { StatusState } from 'src/app/states/status.state';
-import { ToggleSidebar } from 'src/app/states/sidebar.state';
-import { Store, Select } from '@ngxs/store';
-import { StatusBuildInformationDto } from 'src/app/shared/models/status/status-build-information-dto';
-import { Observable, of, Subscription } from 'rxjs';
-import { Title } from '@angular/platform-browser';
-import { mapToObject } from 'src/app/shared/converters/map-object.converter';
-import { SearchFilterDataMarketplaceDto } from 'src/app/shared/models/user/search-filter-data-marketplace-dto';
-import { CreateDefaultSearchFilterDataMarketplace } from 'src/app/states/user-info.state';
-import { SearchFilterCollectionDto } from 'src/app/shared/models/user/search-filter-collection-dto';
-import { ActiveRangeFilters } from 'src/app/shared/models/active-range-filters';
-import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
-import { SearchState } from 'src/app/states/search.state';
-import { AuthService } from 'src/app/modules/authentication/services/auth.service';
-import { NotificationState } from 'src/app/modules/notification/notification.state';
-import { MessageDto } from 'src/app/shared/models/user/message-dto';
-import { Favorites } from 'src/app/shared/models/favorites';
-import { FavoritesState } from '../favorites/favorites.state';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  OnDestroy,
+} from "@angular/core";
+import { environment } from "src/environments/environment";
+import { StatusState } from "src/app/states/status.state";
+import { ToggleSidebar } from "src/app/states/sidebar.state";
+import { Store, Select } from "@ngxs/store";
+import { StatusBuildInformationDto } from "src/app/shared/models/status/status-build-information-dto";
+import { Observable, of, Subscription } from "rxjs";
+import { Title } from "@angular/platform-browser";
+import { mapToObject } from "src/app/shared/converters/map-object.converter";
+import { SearchFilterDataMarketplaceDto } from "src/app/shared/models/user/search-filter-data-marketplace-dto";
+import { CreateDefaultSearchFilterDataMarketplace } from "src/app/states/user-info.state";
+import { SearchFilterCollectionDto } from "src/app/shared/models/user/search-filter-collection-dto";
+import { ActiveRangeFilters } from "src/app/shared/models/active-range-filters";
+import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
+import { SearchState } from "src/app/states/search.state";
+import { AuthService } from "src/app/modules/authentication/services/auth.service";
+import { NotificationState } from "src/app/modules/notification/notification.state";
+import { MessageDto } from "src/app/shared/models/user/message-dto";
+import { Favorites } from "src/app/shared/models/favorites";
+import { FavoritesState } from "../favorites/favorites.state";
 
 @Component({
   selector: "app-navbar",
@@ -25,11 +31,16 @@ import { FavoritesState } from '../favorites/favorites.state';
   styleUrls: ["./navbar.component.scss"],
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-  @Select(StatusState.getBuildInformation) buildInformation$: Observable<StatusBuildInformationDto>;
-  @Select(SearchState.getActiveAggregations) activeAggregations$: Observable<Map<string, string[]>>;
+  @Select(StatusState.getBuildInformation)
+  buildInformation$: Observable<StatusBuildInformationDto>;
+  @Select(SearchState.getActiveAggregations) activeAggregations$: Observable<
+    Map<string, string[]>
+  >;
   @Select(SearchState.getActiveRangeFilters)
   activeRangeFilters$: Observable<ActiveRangeFilters>;
-  @Select(NotificationState.getNotifications) notifications$: Observable<MessageDto[]>;
+  @Select(NotificationState.getNotifications) notifications$: Observable<
+    MessageDto[]
+  >;
   @Select(FavoritesState.getFavorites) favorites$: Observable<Favorites>;
   @Select(SearchState.getSearchText) searchText$: Observable<string>;
 
@@ -50,7 +61,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private titleService: Title,
     private store: Store,
-    private snackBar: ColidMatSnackBarService,
+    private snackBar: ColidMatSnackBarService
   ) {
     this.titleService.setTitle(
       "COLID Data Marketplace " + this.environmentLabel
@@ -58,18 +69,30 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.masterSub.add(this.notifications$.subscribe((n) => {
-      this.newNotifications =
-        n != null ? n.filter((t) => t.readOn == null).length : 0;
-    }));
-    this.masterSub.add(this.favorites$.subscribe((newFavorites) => (this.newFavorites = newFavorites)));
-    this.masterSub.add(this.activeAggregations$.subscribe(
-      (activeAggregations) => (this.activeAggregations = activeAggregations)
-    ));
-    this.masterSub.add(this.activeRangeFilters$.subscribe((activeRangeFilters) => {
-      this.activeRangeFilters = activeRangeFilters;
-    }));
-    this.masterSub.add(this.searchText$.subscribe((searchText) => (this.searchText = searchText)));
+    this.masterSub.add(
+      this.notifications$.subscribe((n) => {
+        this.newNotifications =
+          n != null ? n.filter((t) => t.readOn == null).length : 0;
+      })
+    );
+    this.masterSub.add(
+      this.favorites$.subscribe(
+        (newFavorites) => (this.newFavorites = newFavorites)
+      )
+    );
+    this.masterSub.add(
+      this.activeAggregations$.subscribe(
+        (activeAggregations) => (this.activeAggregations = activeAggregations)
+      )
+    );
+    this.masterSub.add(
+      this.activeRangeFilters$.subscribe((activeRangeFilters) => {
+        this.activeRangeFilters = activeRangeFilters;
+      })
+    );
+    this.masterSub.add(
+      this.searchText$.subscribe((searchText) => (this.searchText = searchText))
+    );
   }
 
   ngOnDestroy() {
@@ -90,6 +113,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   get hasEditorFunctionalitiesPrivilege$(): Observable<boolean> {
     return this.authService.hasEditorFunctionalitiesPrivilege$;
+  }
+
+  get hasAdminPrivilege$(): Observable<boolean> {
+    return this.authService.hasAdminPrivilege$;
   }
 
   get hasCreatePrivilege$(): Observable<boolean> {
@@ -124,7 +151,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
         activeRangeFilters
       )
     );
-    this.store.dispatch(new CreateDefaultSearchFilterDataMarketplace(newDefaultSearchFilters))
+    this.store
+      .dispatch(
+        new CreateDefaultSearchFilterDataMarketplace(newDefaultSearchFilters)
+      )
       .subscribe(() => {
         this.snackBar.success(
           "Default filters",
@@ -132,5 +162,4 @@ export class NavbarComponent implements OnInit, OnDestroy {
         );
       });
   }
-
 }

@@ -1,15 +1,14 @@
-import { DocumentMap } from 'src/app/shared/models/search-result';
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { SearchResult } from '../../shared/models/search-result';
-import { map } from 'rxjs/operators';
-import { ActiveRangeFilters } from '../../shared/models/active-range-filters';
-import { AggregationsResultDto } from '../../shared/models/aggregations-result-dto';
-import { ExcelExportPayload } from '../../shared/models/export/excel-export-payload';
-import { Constants } from 'src/app/shared/constants';
-
+import { DocumentMap } from "src/app/shared/models/search-result";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "src/environments/environment";
+import { SearchResult } from "../../shared/models/search-result";
+import { map } from "rxjs/operators";
+import { ActiveRangeFilters } from "../../shared/models/active-range-filters";
+import { AggregationsResultDto } from "../../shared/models/aggregations-result-dto";
+import { ExcelExportPayload } from "../../shared/models/export/excel-export-payload";
+import { Constants } from "src/app/shared/constants";
 
 @Injectable({
   providedIn: "root",
@@ -66,12 +65,17 @@ export class SearchService {
       apiCallTime: new Date().toUTCString(),
       enableAggregation: false,
       enableSuggest: false,
-      fieldsToReturn: [Constants.Metadata.HasPidUri, Constants.Metadata.HasLabel]
+      fieldsToReturn: [
+        Constants.Metadata.HasPidUri,
+        Constants.Metadata.HasLabel,
+      ],
     };
 
-    return this.httpClient.post<SearchResult>(this.baseUrl + "search",searchRequestObject).pipe(
-      map(res => res.hits.hits.map(hit => decodeURIComponent(hit.id)))
-    );
+    return this.httpClient
+      .post<SearchResult>(this.baseUrl + "search", searchRequestObject)
+      .pipe(
+        map((res) => res.hits.hits.map((hit) => decodeURIComponent(hit.id)))
+      );
   }
 
   searchDocument(pidUri: any): Observable<SearchResult> {
@@ -106,6 +110,7 @@ export class SearchService {
             aggregations: [], //done
             rangeFilters: [],
             suggest: {},
+            took: 0,
           };
           return output;
         })
@@ -114,7 +119,6 @@ export class SearchService {
 
   startExcelExport(requestBody: ExcelExportPayload): Observable<any> {
     const url = environment.colidApiUrl + "/export";
-    console.log(requestBody);
     return this.httpClient.post<any>(url, requestBody);
   }
 

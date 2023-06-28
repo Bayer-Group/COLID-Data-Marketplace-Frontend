@@ -1,0 +1,58 @@
+<div>
+  <div class="row p-2">
+    <div class="col">
+      <h1 class="admin-tab-title">Broadcast message to all users</h1>
+    </div>
+  </div>
+
+  <form [formGroup]="editForm">
+    <div class="row p-2">
+      <div class="col-2">Subject</div>
+      <div class="col me-6">
+        <input
+          type="text"
+          class="form-control"
+          formControlName="subjectControl"
+          [readOnly]="isLoading"
+        />
+      </div>
+    </div>
+
+    <div class="row p-2">
+      <div class="col-2">Body</div>
+      <div class="col me-6 justify-content-center ql-editor">
+        <quill-editor
+          id="editControl"
+          [styles]="{ height: '300px' }"
+          [formats]="quillEditorConfig.Formats"
+          [modules]="quillEditorConfig.Modules"
+          [readOnly]="isLoading"
+          [disabled]="isLoading"
+          formControlName="bodyControl"
+        ></quill-editor>
+      </div>
+    </div>
+
+    <div class="w-100 d-flex p-2 justify-content-end">
+      <action-button
+        class="ms-3"
+        color="secondary"
+        (click)="onReset()"
+        icon="cancel"
+      >
+        Reset
+      </action-button>
+
+      <action-button
+        class="ms-3"
+        color="primary"
+        (click)="onSubmit()"
+        [disabled]="!editForm.valid || isLoading"
+        [loading]="isLoading"
+        icon="send"
+      >
+        Send
+      </action-button>
+    </div>
+  </form>
+</div>

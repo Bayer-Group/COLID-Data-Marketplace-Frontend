@@ -1,17 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ViewDescriptionDialogComponent } from './view-description-dialog.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ViewDescriptionDialogComponent } from "./view-description-dialog.component";
 
-
-
-describe('ViewDescriptionDialogComponent', () => {
+describe("ViewDescriptionDialogComponent", () => {
   let component: ViewDescriptionDialogComponent;
   let fixture: ComponentFixture<ViewDescriptionDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ViewDescriptionDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [ViewDescriptionDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -20,7 +17,7 @@ describe('ViewDescriptionDialogComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

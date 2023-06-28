@@ -1,16 +1,21 @@
-<div class="h-100" [class.is-mobile]="(sidebarMode$ | async) === 'over'" >
-
+<div class="h-100" [class.is-mobile]="(sidebarMode$ | async) === 'over'">
   <mat-sidenav-container autosize>
-    <mat-sidenav #sidenav [opened]="sidebarOpened$ | async" (closed)="setSidebarOpened(false)"
-      [mode]="sidebarMode$ | async" [fixedInViewport]="(sidebarMode$ | async) === 'over'" fixedTopGap="54">
+    <mat-sidenav
+      #sidenav
+      [opened]="sidebarOpened$ | async"
+      (closed)="setSidebarOpened(false)"
+      [mode]="sidebarMode$ | async"
+      [fixedInViewport]="(sidebarMode$ | async) === 'over'"
+      fixedTopGap="54"
+    >
       <app-user-preferences-sidebar></app-user-preferences-sidebar>
-      </mat-sidenav>
-      <mat-sidenav-content>
-          <div class="h-content m-4 justify-content-center">
-              <div class="container">
-                  <router-outlet></router-outlet>
-              </div>
-          </div>
-      </mat-sidenav-content>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="h-content m-4 justify-content-center">
+        <div class="container">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

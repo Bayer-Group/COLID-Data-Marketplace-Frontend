@@ -1,11 +1,18 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-    name: 'loadingIndicator'
+  name: "loadingIndicator",
 })
 export class LoadingIndicatorPipe implements PipeTransform {
-    transform(loadingIndicators: {favListId: string, loading: boolean}[], favoriteListId: string): boolean {
-        var indicatorIndex = loadingIndicators.findIndex(i => i.favListId == favoriteListId);
-        return (indicatorIndex > -1 ? loadingIndicators[indicatorIndex].loading : false);
-    }
+  transform(
+    loadingIndicators: { favListId: string; loading: boolean }[],
+    favoriteListId: string
+  ): boolean {
+    var indicatorIndex = loadingIndicators.findIndex(
+      (i) => i.favListId == favoriteListId
+    );
+    return indicatorIndex > -1
+      ? loadingIndicators[indicatorIndex].loading
+      : false;
+  }
 }

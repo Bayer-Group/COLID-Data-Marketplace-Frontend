@@ -1,6 +1,8 @@
 <div class="favorites-area px-4">
   <div class="d-flex py-2" style="justify-content: flex-end">
-    <mat-icon (click)="closeSidebar.emit()" class="close">arrow_right_alt</mat-icon>
+    <mat-icon (click)="closeSidebar.emit()" class="close"
+      >arrow_right_alt</mat-icon
+    >
   </div>
   <div class="d-flex justify-content-between">
     <h2>Favorites</h2>
@@ -13,8 +15,12 @@
       <mat-accordion multi>
         <hr class="mt-1" />
         <div class="justify-content-between">
-          <mat-expansion-panel class="favorites-item-sb mb-2" *ngFor="let favorite of favorites"
-            (opened)="fetchFavoriteListEntries(favorite.id)" [expanded]="false">
+          <mat-expansion-panel
+            class="favorites-item-sb mb-2"
+            *ngFor="let favorite of favorites"
+            (opened)="fetchFavoriteListEntries(favorite.id)"
+            [expanded]="false"
+          >
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <div>
@@ -23,35 +29,91 @@
                   </div>
                 </div>
               </mat-panel-title>
-
             </mat-expansion-panel-header>
             <!-- <ng-template matExpansionPanelContent> -->
             <mat-divider class="my-1"></mat-divider>
             <div>
-              <ng-container *ngIf="favoriteListEntries$ | async as favoriteEntries">
-                <ng-container *ngIf="(currentlyLoadingListIds$ | async) as currentlyLoadingListIds">
-                  <ng-container *ngIf="currentlyLoadingListIds.indexOf(favorite.id) === -1; else isLoading">
-                    <div *ngIf="entryListExists(favoriteEntries, favorite.id); else emptyEntries" class="block" style="position: relative;">
-                      <div *ngFor="let pidUri of getObjectKeys(favoriteEntries[favorite.id])" class="entry">
+              <ng-container
+                *ngIf="favoriteListEntries$ | async as favoriteEntries"
+              >
+                <ng-container
+                  *ngIf="
+                    currentlyLoadingListIds$ | async as currentlyLoadingListIds
+                  "
+                >
+                  <ng-container
+                    *ngIf="
+                      currentlyLoadingListIds.indexOf(favorite.id) === -1;
+                      else isLoading
+                    "
+                  >
+                    <div
+                      *ngIf="
+                        entryListExists(favoriteEntries, favorite.id);
+                        else emptyEntries
+                      "
+                      class="block"
+                      style="position: relative"
+                    >
+                      <div
+                        *ngFor="
+                          let pidUri of getObjectKeys(
+                            favoriteEntries[favorite.id]
+                          )
+                        "
+                        class="entry"
+                      >
                         <div class="result-header pt-2">
-                          <ds-icon class="icon-25" iconType="S3" [tooltipDisabled]="false" [delay]="300" [icon]="favoriteEntries[favorite.id][pidUri]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'].outbound[0].uri">
+                          <ds-icon
+                            class="icon-25"
+                            iconType="S3"
+                            [tooltipDisabled]="false"
+                            [delay]="300"
+                            [icon]="
+                              favoriteEntries[favorite.id][pidUri][
+                                'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
+                              ].outbound[0].uri
+                            "
+                          >
                           </ds-icon>
-  
-                          <span class="ml-2 favorite-title" (click)="openFavoritesPage(favorite.id, favoriteEntries[favorite.id][pidUri]['EntryId'][0], pidUri, favoriteEntries[favorite.id][pidUri]['PersonalNote'][0])">
-                            {{favoriteEntries[favorite.id][pidUri][label].outbound[0].value}}
+
+                          <span
+                            class="ms-2 favorite-title"
+                            (click)="
+                              openFavoritesPage(
+                                favorite.id,
+                                favoriteEntries[favorite.id][pidUri][
+                                  'EntryId'
+                                ][0],
+                                pidUri,
+                                favoriteEntries[favorite.id][pidUri][
+                                  'PersonalNote'
+                                ][0]
+                              )
+                            "
+                          >
+                            {{
+                              favoriteEntries[favorite.id][pidUri][label]
+                                .outbound[0].value
+                            }}
                           </span>
                         </div>
                       </div>
                     </div>
-                    <ng-template #emptyEntries> This list is empty </ng-template>
+                    <ng-template #emptyEntries>
+                      This list is empty
+                    </ng-template>
                   </ng-container>
                 </ng-container>
                 <ng-template #isLoading>
                   <div class="d-flex justify-content-center mt-2">
-                    <app-colid-spinner [diameter]="15" [strokeWidth]="2"></app-colid-spinner>
+                    <app-colid-spinner
+                      [diameter]="15"
+                      [strokeWidth]="2"
+                    ></app-colid-spinner>
                   </div>
                 </ng-template>
-              </ng-container> 
+              </ng-container>
             </div>
             <!-- </ng-template> -->
           </mat-expansion-panel>

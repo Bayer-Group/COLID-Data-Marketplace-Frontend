@@ -1,0 +1,9 @@
+mat-list-item {
+  height: fit-content !important;
+  font-size: 14px !important;
+}
+.modal-body{
+  overflow: auto;
+  height: calc(100vh - 200px);
+}
+

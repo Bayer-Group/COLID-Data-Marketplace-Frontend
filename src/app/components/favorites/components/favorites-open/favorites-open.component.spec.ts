@@ -1,15 +1,14 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FavoritesOpenComponent } from './favorites-open.component';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { FavoritesOpenComponent } from "./favorites-open.component";
 
-describe('FavoritesOpenComponent', () => {
+describe("FavoritesOpenComponent", () => {
   let component: FavoritesOpenComponent;
   let fixture: ComponentFixture<FavoritesOpenComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ FavoritesOpenComponent ]
-    })
-    .compileComponents();
+      declarations: [FavoritesOpenComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -18,7 +17,7 @@ describe('FavoritesOpenComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

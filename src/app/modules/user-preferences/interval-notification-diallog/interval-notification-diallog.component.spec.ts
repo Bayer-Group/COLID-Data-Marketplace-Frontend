@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { IntervalNotificationDiallogComponent } from './interval-notification-diallog.component';
+import { IntervalNotificationDiallogComponent } from "./interval-notification-diallog.component";
 
-describe('IntervalNotificationDiallogComponent', () => {
+describe("IntervalNotificationDiallogComponent", () => {
   let component: IntervalNotificationDiallogComponent;
   let fixture: ComponentFixture<IntervalNotificationDiallogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ IntervalNotificationDiallogComponent ]
-    })
-    .compileComponents();
+      declarations: [IntervalNotificationDiallogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('IntervalNotificationDiallogComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

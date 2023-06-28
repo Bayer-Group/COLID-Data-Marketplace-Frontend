@@ -1,0 +1,14 @@
+.size {
+    font-size: 15px;
+}
+fa-icon{
+    vertical-align: text-bottom !important;
+    cursor: pointer !important;
+}
+
+
+.subActive{
+    color: white;
+    background-color: #43ac6a;
+    border-color: #43ac6a;
+}

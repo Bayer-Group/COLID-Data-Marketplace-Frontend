@@ -1,0 +1,11 @@
+<input
+  type="number"
+  step="any"
+  class="form-control"
+  id="{{ name | lastIndexString }}"
+  #input
+  [name]="name"
+  [(ngModel)]="internalValue"
+  [readonly]="readOnly"
+  (change)="handleValueChanged(internalValue)"
+/>

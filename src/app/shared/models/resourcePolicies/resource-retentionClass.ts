@@ -1,6 +1,6 @@
-import { RetentionClassPolicies } from "./retentionClass-Policies"
+import { RetentionClassPolicies } from "./retentionClass-Policies";
 
-export class ResourceRetentionClasses { 
-    pidUri:string
-    retentionClassPolicies: RetentionClassPolicies[]
+export class ResourceRetentionClasses {
+  pidUri: string;
+  retentionClassPolicies: RetentionClassPolicies[];
 }

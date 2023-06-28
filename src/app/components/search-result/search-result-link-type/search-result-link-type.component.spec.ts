@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { SearchResultLinkTypeComponent } from './search-result-link-type.component';
+import { SearchResultLinkTypeComponent } from "./search-result-link-type.component";
 
-describe('SearchResultLinkTypeComponent', () => {
+describe("SearchResultLinkTypeComponent", () => {
   let component: SearchResultLinkTypeComponent;
   let fixture: ComponentFixture<SearchResultLinkTypeComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SearchResultLinkTypeComponent ]
-    })
-    .compileComponents();
+      declarations: [SearchResultLinkTypeComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('SearchResultLinkTypeComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

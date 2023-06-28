@@ -1,0 +1,27 @@
+<div
+  class="row p-0 m-0"
+  *ngFor="let groupedMetadata of metadata | groupByGroup; let i = index"
+>
+  <div class="col-12">
+    <ng-container
+      *ngIf="
+        isVisibleMetadataGroup(groupedMetadata.key) &&
+        !isAttachmentGroup(groupedMetadata.key)
+      "
+    >
+      <app-entity-display-group
+        [entityVersions]="entityVersions"
+        [group]="groupedMetadata.key"
+        [groupedMetadata]="groupedMetadata.value"
+        [entity]="entity"
+      ></app-entity-display-group>
+    </ng-container>
+    <ng-container *ngIf="isAttachmentGroup(groupedMetadata.key)">
+      <app-entity-display-image
+        [group]="groupedMetadata.key"
+        [groupedMetadata]="groupedMetadata.value"
+        [entity]="entity"
+      ></app-entity-display-image>
+    </ng-container>
+  </div>
+</div>

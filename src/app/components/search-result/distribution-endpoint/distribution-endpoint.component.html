@@ -1,32 +1,72 @@
 <div class="row m-2">
   <div class="col-auto p-0">
-      <ds-icon class="icon-20 mr-1" iconType="S3" [tooltipDisabled]="false" [delay]="300" [icon]="distributionTypeKey"></ds-icon>
+    <ds-icon
+      class="icon-20 me-1"
+      iconType="S3"
+      [tooltipDisabled]="false"
+      [delay]="300"
+      [icon]="distributionTypeKey"
+    ></ds-icon>
   </div>
   <div class="col-auto pl-1">
     <div class="row">
       <div class="col-12">
         <a class="h6" [href]="pidUrlForHref" (click)="onLinkClicked($event)">
-          <a tooltip="{{description}}" [delay]="500" innerHTML="{{distributionType}}: {{label}}"></a>
+          <a
+            tooltip="{{ description }}"
+            [delay]="500"
+            innerHTML="{{ distributionType }}: {{ label }}"
+          ></a>
         </a>
       </div>
     </div>
     <div class="row">
-      <div class="col-12">        
+      <div class="col-12">
         <table class="result-table">
           <tr *ngFor="let metadata of sortedMetadataProperties">
             <ng-container *ngIf="IsVisibleProperty(metadata)">
               <td>
-                <span class="small text-muted text-uppercase lead cursor-pointer" 
-                  (click)="openMetaDescriptionDialog(metadata.properties[constants.Shacl.Comment], metadata.properties[constants.Shacl.Name], metadata.properties[constants.Shacl.Description])">
-                  {{metadata.properties[constants.Shacl.Name]}}
+                <span
+                  class="small text-muted text-uppercase cursor-pointer"
+                  (click)="
+                    openMetaDescriptionDialog(
+                      metadata.properties[constants.Shacl.Comment],
+                      metadata.properties[constants.Shacl.Name],
+                      metadata.properties[constants.Shacl.Description]
+                    )
+                  "
+                >
+                  {{ metadata.properties[constants.Shacl.Name] }}
                 </span>
               </td>
               <td></td>
-              <ng-container [ngSwitch]="GetMetadataKey(metadata)">  
-                <td *ngSwitchCase="constants.Metadata.DistributionEndpointLifecycleStatus"><span
-                  class="badge badge-pill" [ngClass]="GetDistributionEndpointProperty(metadata).valueEdge[0] === constants.DistributionEndpoint.LifecycleStatus.Active ?  'badge-success' : 'badge-danger'"
-                  style="font-size: 0.87em; font-weight: 500;">{{GetDistributionEndpointPropertyValue(metadata)[0]}}</span></td>
-                <td *ngSwitchDefault><span innerHTML="{{GetDistributionEndpointPropertyValue(metadata) || 'N/A' }}"></span></td>
+              <ng-container [ngSwitch]="GetMetadataKey(metadata)">
+                <td
+                  *ngSwitchCase="
+                    constants.Metadata.DistributionEndpointLifecycleStatus
+                  "
+                >
+                  <span
+                    class="badge badge-pill"
+                    [ngClass]="
+                      GetDistributionEndpointProperty(metadata).valueEdge[0] ===
+                      constants.DistributionEndpoint.LifecycleStatus.Active
+                        ? 'badge-success'
+                        : 'badge-danger'
+                    "
+                    style="font-size: 0.87em; font-weight: 500"
+                    >{{
+                      GetDistributionEndpointPropertyValue(metadata)[0]
+                    }}</span
+                  >
+                </td>
+                <td *ngSwitchDefault>
+                  <span
+                    innerHTML="{{
+                      GetDistributionEndpointPropertyValue(metadata) || 'N/A'
+                    }}"
+                  ></span>
+                </td>
               </ng-container>
             </ng-container>
           </tr>
@@ -35,14 +75,14 @@
     </div>
     <div class="row">
       <div class="col-12 mt-1" *ngIf="baseUriPointsAt === pidUrlForHref">
-        <span class="badge badge-success" style="font-weight: 300;">
-          <mat-icon [inline]="true" class="mr-2">check</mat-icon>
+        <span class="badge badge-success" style="font-weight: 300">
+          <mat-icon [inline]="true" class="me-2">check</mat-icon>
           <strong>The base URI resolves to this endpoint.</strong>
         </span>
       </div>
     </div>
   </div>
   <div class="col-12 pl-0">
-    <hr class="m-1" *ngIf="!lastElement">
+    <hr class="m-1" *ngIf="!lastElement" />
   </div>
 </div>

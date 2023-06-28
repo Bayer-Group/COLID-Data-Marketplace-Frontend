@@ -1,0 +1,107 @@
+<div *ngIf="displayType === 'taxonomy'">
+  <app-entity-display-item-taxonomy
+    [metadataProperty]="metadataProperty"
+    [values]="entityProperty"
+  >
+  </app-entity-display-item-taxonomy>
+</div>
+
+<ng-container *ngIf="displayType === 'distribution'">
+  <mat-expansion-panel
+    *ngFor="let value of entityProperty; let i = index"
+    [expanded]="expanded"
+    class="mb-2"
+  >
+    <mat-expansion-panel-header class="py-2">
+      <mat-panel-title class="mat-expansion-panel-title">
+        <ds-icon
+          class="mr-1"
+          iconType="S3"
+          [tooltipDisabled]="false"
+          [icon]="value.properties[entityTypeURI][0]"
+        >
+        </ds-icon>
+        <app-entity-display-item-taxonomy
+          [range]="owlRange"
+          [values]="value.properties[entityTypeURI]"
+        >
+        </app-entity-display-item-taxonomy
+        >:
+        <span class="ml-1" [innerHTML]="getEndpointLabel(value)"></span>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-entity-display
+      [entity]="value"
+      [metadata]="nestedMetdata(value)"
+    ></app-entity-display>
+    <div class="col">
+      <div
+        class="d-flex badge badge-success align-items-center"
+        style="width: fit-content"
+        *ngIf="mainDistributionEndpoint"
+      >
+        The base URI resolves to this endpoint.
+      </div>
+    </div>
+  </mat-expansion-panel>
+</ng-container>
+
+<div
+  class="col"
+  *ngIf="displayType !== 'taxonomy' && displayType !== 'distribution'"
+>
+  <span class="row" *ngFor="let value of entityProperty; let i = index">
+    <ng-container [ngSwitch]="displayType">
+      <ng-container *ngSwitchCase="'datetime'">
+        <span>{{ value | date : "yyyy-MM-dd HH:mm" }}</span>
+      </ng-container>
+      <ng-container *ngSwitchCase="'url'">
+        <a
+          class="wordbreak"
+          [href]="value"
+          target="_blank"
+          rel="noopener noreferrer"
+          >{{ value }}</a
+        >
+      </ng-container>
+      <ng-container *ngSwitchCase="'version'">
+        <app-entity-display-item-versioning
+          [versions]="entityVersions"
+          [version]="value"
+        ></app-entity-display-item-versioning>
+      </ng-container>
+      <ng-container *ngSwitchCase="'externalUrl'">
+        <a
+          class="wordbreak"
+          [href]="'//' + value"
+          target="_blank"
+          rel="noopener noreferrer"
+          >{{ value }}</a
+        >
+      </ng-container>
+      <ng-container *ngSwitchCase="'identifier'">
+        <a
+          class="wordbreak"
+          [href]="value?.id"
+          target="_blank"
+          rel="noopener noreferrer"
+          >{{ value?.id }}</a
+        >
+      </ng-container>
+      <ng-container *ngSwitchCase="'email'">
+        <a class="wordbreak mr-2" [href]="'mailto:' + value">{{ value }}</a>
+      </ng-container>
+      <ng-container *ngSwitchCase="'html'">
+        <div class="ql-editor-parent w-100">
+          <quill-view-html
+            [content]="replaceSpecialCharacterFromText(value)"
+            theme="default"
+          ></quill-view-html>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        <div innerHtml="{{ value }}"></div>
+      </ng-container>
+    </ng-container>
+  </span>
+</div>

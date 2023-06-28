@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { FilterBoxItemSwitchComponent } from './filter-box-item-switch.component';
+import { FilterBoxItemSwitchComponent } from "./filter-box-item-switch.component";
 
-describe('FilterBoxItemSwitchComponent', () => {
+describe("FilterBoxItemSwitchComponent", () => {
   let component: FilterBoxItemSwitchComponent;
   let fixture: ComponentFixture<FilterBoxItemSwitchComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ FilterBoxItemSwitchComponent ]
-    })
-    .compileComponents();
+      declarations: [FilterBoxItemSwitchComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('FilterBoxItemSwitchComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

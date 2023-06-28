@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { FilterBoxItemTaxonomyComponent } from './filter-box-item-taxonomy.component';
+import { FilterBoxItemTaxonomyComponent } from "./filter-box-item-taxonomy.component";
 
-describe('FilterBoxItemTaxonomyComponent', () => {
+describe("FilterBoxItemTaxonomyComponent", () => {
   let component: FilterBoxItemTaxonomyComponent;
   let fixture: ComponentFixture<FilterBoxItemTaxonomyComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ FilterBoxItemTaxonomyComponent ]
-    })
-    .compileComponents();
+      declarations: [FilterBoxItemTaxonomyComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('FilterBoxItemTaxonomyComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

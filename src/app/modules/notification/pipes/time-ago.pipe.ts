@@ -1,22 +1,23 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-  name: 'timeAgo'
+  name: "timeAgo",
 })
 
 // Reference -> https://codersloth.com/blogs/a-simple-time-ago-pipe-to-display-relative-time-in-angular/
 export class TimeAgoPipe implements PipeTransform {
-
   // constructor(public datepipe: DatePipe){
-  
+
   // }
 
   transform(value: any): any {
     if (value) {
-      const differenceInSeconds = Math.floor((+new Date() - +new Date(value)) / 1000);
+      const differenceInSeconds = Math.floor(
+        (+new Date() - +new Date(value)) / 1000
+      );
       // less than 30 seconds ago will show as 'Just now'
-      if (differenceInSeconds < 30){
-        return 'Just now';
+      if (differenceInSeconds < 30) {
+        return "Just now";
       }
       /* 
       If you want to show a relative date up to months only
@@ -33,37 +34,32 @@ export class TimeAgoPipe implements PipeTransform {
       // const upperLimit = 31536000;
       // if(differenceInSeconds > upperLimit){
       //   return this.datepipe.transform(new Date(value), 'MMM d, y');
-      // } 
-      
-      
-      
+      // }
+
       // All values are in seconds
       const timeIntervals = {
-        'year': 31536000,
-        'month': 2592000,
-        'week': 604800,
-        'day': 86400,
-        'hour': 3600,
-        'minute': 60,
-        'second': 1,
+        year: 31536000,
+        month: 2592000,
+        week: 604800,
+        day: 86400,
+        hour: 3600,
+        minute: 60,
+        second: 1,
       };
       let counter;
       for (const i in timeIntervals) {
-          counter = Math.floor(differenceInSeconds / timeIntervals[i]);
-          if (counter > 0){
-            if (counter === 1) {
-              // singular (1 day ago)
-              return counter + ' ' + i + ' ago'; 
-            } else {
-                // plural (2 days ago)
-                return counter + ' ' + i + 's ago'; 
-            }
+        counter = Math.floor(differenceInSeconds / timeIntervals[i]);
+        if (counter > 0) {
+          if (counter === 1) {
+            // singular (1 day ago)
+            return counter + " " + i + " ago";
+          } else {
+            // plural (2 days ago)
+            return counter + " " + i + "s ago";
           }
-              
+        }
       }
-
     }
     return value;
   }
-
 }

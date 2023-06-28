@@ -1,74 +1,69 @@
 .icon-100 {
-    font-size: 100px;
-    height: 100px;
-    width: auto;
+  font-size: 100px;
+  height: 100px !important;
+  width: 100px !important
 }
 
 .notification-area {
-    width: 100%;
+  width: 100%;
 
-    // Small devices (landscape phones, 576px and up)
-    @media (min-width: 576px) {
-        width: 500px;
-        max-width: 500px;
-    }
+  // Small devices (landscape phones, 576px and up)
+  @media (min-width: 576px) {
+    width: 500px;
+    max-width: 500px;
+  }
 }
 
 mat-icon.close {
-    &:hover {
-        cursor: pointer;
-        font-weight: bold;
-    }
+  &:hover {
+    cursor: pointer;
+    font-weight: bold;
+  }
 }
 
 span.dismiss {
-    color: #0091df;
+  color: #0091df;
 
-    &:hover {
-        cursor: pointer;
-        font-weight: bold;
-    }
+  &:hover {
+    cursor: pointer;
+    font-weight: bold;
+  }
 }
 
 .notification-item {
-    mat-icon.close {
-        font-size: 15px;
-        height: 15px;
-        width: auto;
-        color: gray;
-    }
+  mat-icon.close {
+    font-size: 15px;
+    height: 15px;
+    color: gray;
+  }
 
-    &:hover {
-        .header , .body {
-            text-decoration: underline;
-            cursor: pointer;
-        }
-    }
-
-    &.new {
-        font-weight: 500;
-    }
-
-    .mat-standard-chip {
-        align-items: center;
-        padding: 2px 2px 0 2px;
-        border-radius: 0;
-        min-height: 20px;
-    }
-
-    .header {
-        //overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-    }
-
+  &:hover {
+    .header,
     .body {
-       // overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
+      text-decoration: underline;
+      cursor: pointer;
     }
+  }
+
+  &.new {
+    font-weight: 500;
+  }
+
+  .mat-standard-chip {
+    align-items: center;
+    padding: 2px 2px 0 2px;
+    border-radius: 0;
+    min-height: 20px;
+  }
+
+  .header {
+    font-weight: 500;
+  }
+
+  .body {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }

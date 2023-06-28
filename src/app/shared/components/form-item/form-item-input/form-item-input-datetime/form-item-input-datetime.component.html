@@ -1,0 +1,27 @@
+<input
+  *ngIf="readOnly"
+  type="datetime"
+  class="form-control"
+  #input
+  [name]="name"
+  [value]="internalValue | date : 'yyyy-MM-dd HH:mm'"
+  [readonly]="readOnly"
+/>
+
+<mat-form-field *ngIf="!readOnly" class="w-100" appearance="outline">
+  <input
+    id="{{ name | lastIndexString }}"
+    #input
+    [name]="name"
+    class="mat-datetime"
+    matInput
+    [matDatepicker]="picker"
+    [value]="internalValue"
+    placeholder="YYYY-MM-DD"
+    (dateChange)="handleDateChanged($event)"
+    (click)="picker.open()"
+    [errorStateMatcher]="matcher"
+  />
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>

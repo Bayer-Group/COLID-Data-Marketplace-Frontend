@@ -1,25 +1,34 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { combineLatest, Observable } from 'rxjs';
-import { concatMap, map, tap } from 'rxjs/operators';
-import { ResourceApiService } from 'src/app/core/http/resource.api.service';
-import { Constants } from 'src/app/shared/constants';
-import { MetaDataProperty } from 'src/app/shared/models/metadata/meta-data-property';
-import { ResourceRevisionHistory } from 'src/app/shared/models/resources/historic-resource-overview-dto';
-import { HistoryEntity } from 'src/app/shared/models/resources/history-entity';
-import { VersionProperty } from 'src/app/shared/models/resources/version-property';
-import { FetchEntityMetadata, MetadataState } from 'src/app/states/metadata.state';
+import {
+  Component,
+  OnInit,
+  Input,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { Select, Store } from "@ngxs/store";
+import { combineLatest, Observable } from "rxjs";
+import { concatMap, map, tap } from "rxjs/operators";
+import { ResourceApiService } from "src/app/core/http/resource.api.service";
+import { Constants } from "src/app/shared/constants";
+import { MetaDataProperty } from "src/app/shared/models/metadata/meta-data-property";
+import { HistoryEntity } from "src/app/shared/models/resources/history-entity";
+import { VersionProperty } from "src/app/shared/models/resources/version-property";
+import {
+  FetchEntityMetadata,
+  MetadataState,
+} from "src/app/states/metadata.state";
 
 @Component({
   selector: "app-resource-historic",
   templateUrl: "./resource-historic.component.html",
   styleUrls: ["./resource-historic.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResourceHistoricComponent implements OnInit {
   @Input() pidUri: string;
   @Input() entityType: string;
-  @Select(MetadataState.getEntityMetadata) entityMetadata$: Observable<Map<string, Array<MetaDataProperty>>>;
+  @Select(MetadataState.getEntityMetadata) entityMetadata$: Observable<
+    Map<string, Array<MetaDataProperty>>
+  >;
   historieEntities$: Observable<HistoryEntity[]>;
 
   constructor(
@@ -55,17 +64,25 @@ export class ResourceHistoricComponent implements OnInit {
                     entityVersion: this.getRemovalVersion(entity),
                     metadata: values.filter(
                       (x) => removalEntityProps.indexOf(x.key) > -1
-                    )
+                    ),
                   },
                   lastChangedByDateTime: this.getLastChangeDateTime(entity),
-                  lastChangeUser: ''
+                  lastChangeUser: "",
                 };
                 return historyEntity;
-              })
+              });
             }),
             tap((historieEntities) => this.sortHistory(historieEntities)),
-            tap((historieEntities) => historieEntities.forEach((entity, index) =>
-                  (entity.lastChangeUser = this.getLastChangeUser(historieEntities,entity,index))))
+            tap((historieEntities) =>
+              historieEntities.forEach(
+                (entity, index) =>
+                  (entity.lastChangeUser = this.getLastChangeUser(
+                    historieEntities,
+                    entity,
+                    index
+                  ))
+              )
+            )
           );
         })
       );
@@ -92,11 +109,12 @@ export class ResourceHistoricComponent implements OnInit {
         version: entity.additionals[Constants.Metadata.HasVersion][0],
         id: entity.name,
         pidUri: uri ? uri[0] : null,
+        baseUri: null,
       };
 
       return [version];
     }
-      
+
     return [];
   }
 
@@ -104,11 +122,12 @@ export class ResourceHistoricComponent implements OnInit {
     if (entity.removals[Constants.Metadata.HasVersion]) {
       const uri = entity.removals[Constants.Metadata.HasPidUri];
       let version: VersionProperty = {
-      version: entity.removals[Constants.Metadata.HasVersion][0],
-      id: entity.name,
-      pidUri: uri ? uri[0].id : null,
-    };
-    return [version];
+        version: entity.removals[Constants.Metadata.HasVersion][0],
+        id: entity.name,
+        pidUri: uri ? uri[0].id : null,
+        baseUri: null,
+      };
+      return [version];
     }
 
     return [];
@@ -140,11 +159,15 @@ export class ResourceHistoricComponent implements OnInit {
     if (
       entity.additions.entity.properties[Constants.Metadata.HasLastChangeUser]
     ) {
-      return entity.additions.entity.properties[Constants.Metadata.HasLastChangeUser][0];
+      return entity.additions.entity.properties[
+        Constants.Metadata.HasLastChangeUser
+      ][0];
     } else if (
       entity.additions.entity.properties[Constants.Metadata.HasLastReviewer]
     ) {
-      return entity.additions.entity.properties[Constants.Metadata.HasLastReviewer][0];
+      return entity.additions.entity.properties[
+        Constants.Metadata.HasLastReviewer
+      ][0];
     } else {
       let i = index + 1;
       return this.getPreLastchangeUser(entities, i);
@@ -154,9 +177,13 @@ export class ResourceHistoricComponent implements OnInit {
   getPreLastchangeUser(entities: HistoryEntity[], startIndex: number) {
     for (let index = startIndex; index < entities.length; index++) {
       if (
-        entities[index]["additions"]["entity"]["properties"][Constants.Metadata.HasLastChangeUser]
+        entities[index]["additions"]["entity"]["properties"][
+          Constants.Metadata.HasLastChangeUser
+        ]
       ) {
-        return entities[index]["additions"]["entity"]["properties"][Constants.Metadata.HasLastChangeUser][0];
+        return entities[index]["additions"]["entity"]["properties"][
+          Constants.Metadata.HasLastChangeUser
+        ][0];
       }
     }
   }

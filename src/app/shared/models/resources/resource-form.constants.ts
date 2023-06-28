@@ -1,4 +1,4 @@
-import { Constants } from 'src/app/shared/constants';
+import { Constants } from "src/app/shared/constants";
 
 export const FieldTypeMapping = {
   "http://www.w3.org/2001/XMLSchema#dateTime": "datetime",

@@ -1,4 +1,4 @@
-import { ActiveRangeFilters } from '../active-range-filters';
+import { ActiveRangeFilters } from "../active-range-filters";
 
 export class SearchFilterCollectionDto {
   aggregations: any;

@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { WelcomeContentComponent } from './welcome-content.component';
+import { WelcomeContentComponent } from "./welcome-content.component";
 
-describe('WelcomeContentComponent', () => {
+describe("WelcomeContentComponent", () => {
   let component: WelcomeContentComponent;
   let fixture: ComponentFixture<WelcomeContentComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ WelcomeContentComponent ]
-    })
-    .compileComponents();
+      declarations: [WelcomeContentComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('WelcomeContentComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

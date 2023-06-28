@@ -1,4 +1,15 @@
 <div class="custom-control custom-switch">
-  <input (change)="changeFilterItem()"  [checked]="active" type="checkbox" class="custom-control-input" id="{{aggregation.key}}">
-  <label class="custom-control-label" [class.text-primary]="active" [class.font-weight-bold]="active" for="{{aggregation.key}}"></label>
+  <input
+    (change)="changeFilterItem()"
+    [checked]="active"
+    type="checkbox"
+    class="custom-control-input"
+    id="{{ aggregation.key }}"
+  />
+  <label
+    class="custom-control-label"
+    [class.text-primary]="active"
+    [class.font-weight-bold]="active"
+    for="{{ aggregation.key }}"
+  ></label>
 </div>

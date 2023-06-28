@@ -6,7 +6,7 @@ import {
   Input,
   Inject,
   ChangeDetectionStrategy,
-  OnDestroy
+  OnDestroy,
 } from "@angular/core";
 import { MatDialog, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { BehaviorSubject, Observable, Subscription } from "rxjs";
@@ -24,7 +24,7 @@ import { EditFavoriteEntryComponent } from "./components/edit-favorite-entry/edi
 import { Router } from "@angular/router";
 import { CreateFavoriteListComponent } from "./components/create-favorite-list/create-favorite-list.component";
 import { EditFavoriteListComponent } from "./components/edit-favorite-list/edit-favorite-list.component";
-import { Constants } from 'src/app/shared/constants';
+import { Constants } from "src/app/shared/constants";
 
 @Component({
   selector: "colid-favorites",
@@ -53,7 +53,7 @@ export class FavoritesComponent implements OnInit, OnDestroy {
     }
   }
 
-  label = Constants.Metadata.HasLabel
+  label = Constants.Metadata.HasLabel;
 
   @Output() closeSidebar: EventEmitter<any> = new EventEmitter();
 
@@ -68,7 +68,7 @@ export class FavoritesComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public editData: any,
     private router: Router,
     private store: Store,
-    public dialog: MatDialog,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -76,7 +76,11 @@ export class FavoritesComponent implements OnInit, OnDestroy {
       this.fetchFavorites();
     }
     this.masterSub.add(
-      this.store.select(state => state.Favorites.currentlyLoadingListIds).subscribe(loadingListIds => this.currentlyLoadingListIds$.next(loadingListIds))
+      this.store
+        .select((state) => state.Favorites.currentlyLoadingListIds)
+        .subscribe((loadingListIds) =>
+          this.currentlyLoadingListIds$.next(loadingListIds)
+        )
     );
   }
 

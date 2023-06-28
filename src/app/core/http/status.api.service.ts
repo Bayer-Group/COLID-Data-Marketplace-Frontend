@@ -1,19 +1,30 @@
-import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { StatusBuildInformationDto } from '../../shared/models/status/status-build-information-dto';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable, map } from "rxjs";
+import { StatusBuildInformationDto } from "../../shared/models/status/status-build-information-dto";
+import { environment } from "src/environments/environment";
+import { RawDeploymentInformationDto } from "src/app/shared/models/status/raw-deployment-information-dto";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class StatusApiService {
-
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
   getBuildInformation(): Observable<StatusBuildInformationDto> {
-    const url = environment.dmpCoreApiUrl + 'status';
+    const url = environment.deploymentInfoUrl;
 
-    return this.httpClient.get<StatusBuildInformationDto>(url);
+    return this.httpClient.get<RawDeploymentInformationDto>(url).pipe(
+      map((res: RawDeploymentInformationDto) => {
+        let dmpInformation = res.services["dmp-ui"];
+        return {
+          versionNumber: res.version,
+          imageTags: dmpInformation.image_tags,
+          latestReleaseDate: new Date(
+            dmpInformation.image_pushed_at_epoch_utc_seconds * 1000
+          ),
+        } as StatusBuildInformationDto;
+      })
+    );
   }
 }

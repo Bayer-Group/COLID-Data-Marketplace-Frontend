@@ -1,19 +1,22 @@
 <div class="dialog">
-    <h1 mat-dialog-title>Rename Favorite List</h1>
-    
-    <p>
-      <mat-form-field style="width: 100%;" appearance="outline" >
-       <input matInput  [(ngModel)]="favoritesListName">
-      </mat-form-field>
-    </p>
+  <h1 mat-dialog-title>Rename Favorite List</h1>
 
-    <div mat-dialog-action align="end" class="button">
-      <button mat-stroked-button color="primary" mat-dialog-close>
-        Cancel
-      </button>
-      <button style="margin-left: 8px;" color="primary" mat-flat-button cdkFocusInitial (click)="editFavorite()">
-        Save
-      </button>
-  
-    </div>
+  <p>
+    <mat-form-field style="width: 100%" appearance="outline">
+      <input matInput [(ngModel)]="favoritesListName" />
+    </mat-form-field>
+  </p>
+
+  <div mat-dialog-action align="end" class="button">
+    <button mat-stroked-button color="primary" mat-dialog-close>Cancel</button>
+    <button
+      style="margin-left: 8px"
+      color="primary"
+      mat-flat-button
+      cdkFocusInitial
+      (click)="editFavorite()"
+    >
+      Save
+    </button>
   </div>
+</div>

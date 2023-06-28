@@ -1,0 +1,9 @@
+button[action] div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    app-colid-spinner {
+        margin-left: 5px;
+    }
+}

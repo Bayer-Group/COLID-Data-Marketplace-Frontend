@@ -1,0 +1,36 @@
+<form [formGroup]="editForm">
+  <div class="row">
+    <div class="col-12 justify-content-center welcome-message ql-editor">
+      <quill-editor
+        id="editControl"
+        [styles]="{ height: '400px' }"
+        [formats]="quillEditorConfig.Formats"
+        [modules]="quillEditorConfig.Modules"
+        [disabled]="isLoading"
+        [readOnly]="isLoading"
+        formControlName="editControl"
+      ></quill-editor>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 d-flex justify-content-end">
+      <action-button
+        color="secondary"
+        (click)="onResetWelcomeMessage()"
+        class="me-2"
+        [disabled]="isLoading"
+        icon="cancel"
+      >
+        Reset
+      </action-button>
+      <action-button
+        color="primary"
+        (click)="onSubmit()"
+        [loading]="isLoading"
+        icon="save"
+      >
+        Save
+      </action-button>
+    </div>
+  </div>
+</form>

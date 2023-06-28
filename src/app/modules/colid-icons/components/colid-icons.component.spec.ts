@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { ColidIconsComponent } from './colid-icons.component';
+import { ColidIconsComponent } from "./colid-icons.component";
 
-describe('ColidIconsComponent', () => {
+describe("ColidIconsComponent", () => {
   let component: ColidIconsComponent;
   let fixture: ComponentFixture<ColidIconsComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ColidIconsComponent ]
-    })
-    .compileComponents();
+      declarations: [ColidIconsComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('ColidIconsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

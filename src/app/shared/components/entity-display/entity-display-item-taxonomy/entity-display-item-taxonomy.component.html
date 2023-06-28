@@ -1,0 +1,15 @@
+<div
+  *ngIf="taxonomyList$ | async as taxonomyList"
+  class="d-flex"
+  [class.flex-column]="!isBadgeTaxonomy"
+>
+  <mat-chip-list *ngIf="isBadgeTaxonomy">
+    <mat-chip *ngFor="let taxonomy of taxonomyList" color="primary">{{
+      taxonomy.name
+    }}</mat-chip>
+  </mat-chip-list>
+
+  <div *ngIf="!isBadgeTaxonomy">
+    {{ taxonomyList | map : "name" | join }}
+  </div>
+</div>

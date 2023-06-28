@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { ResourcePoliciesComponent } from './resource-policies.component';
+import { ResourcePoliciesComponent } from "./resource-policies.component";
 
-describe('ResourcePoliciesComponent', () => {
+describe("ResourcePoliciesComponent", () => {
   let component: ResourcePoliciesComponent;
   let fixture: ComponentFixture<ResourcePoliciesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ResourcePoliciesComponent ]
-    })
-    .compileComponents();
+      declarations: [ResourcePoliciesComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('ResourcePoliciesComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

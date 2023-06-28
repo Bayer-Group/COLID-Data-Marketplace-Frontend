@@ -2,24 +2,26 @@
   <div class="col-2">
     <ng-container [ngSwitch]="data.type">
       <ng-container *ngSwitchCase="colidSnackBarType.SUCCESS">
-        <mat-icon >done</mat-icon>
+        <mat-icon>done</mat-icon>
       </ng-container>
       <ng-container *ngSwitchCase="colidSnackBarType.WARNING">
-        <mat-icon >warning</mat-icon>
+        <mat-icon>warning</mat-icon>
       </ng-container>
       <ng-container *ngSwitchCase="colidSnackBarType.ERROR">
-        <mat-icon >error_outline</mat-icon>
+        <mat-icon>error_outline</mat-icon>
       </ng-container>
       <ng-container *ngSwitchCase="colidSnackBarType.INFO">
-        <mat-icon >notifications_active</mat-icon>
+        <mat-icon>notifications_active</mat-icon>
       </ng-container>
     </ng-container>
   </div>
   <div class="col-10">
-    <h4 *ngIf="data.header">{{data.header}}</h4>
-    <p *ngIf="data.message">{{data.message}}</p>
-    <div style="text-align: right;">
-      <button *ngIf="data.data" mat-button [cdkCopyToClipboard]="data | json">Copy</button>
+    <h4 *ngIf="data.header" class="notification-header">{{ data.header }}</h4>
+    <p *ngIf="data.message">{{ data.message }}</p>
+    <div style="text-align: right">
+      <button *ngIf="data.data" mat-button [cdkCopyToClipboard]="data | json">
+        Copy
+      </button>
       <button mat-button (click)="dismiss()">Dismiss</button>
     </div>
   </div>

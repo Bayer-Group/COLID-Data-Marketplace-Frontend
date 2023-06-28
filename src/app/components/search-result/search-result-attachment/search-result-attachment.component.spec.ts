@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { SearchResultAttachmentComponent } from './search-result-attachment.component';
+import { SearchResultAttachmentComponent } from "./search-result-attachment.component";
 
-describe('SearchResultAttachmentComponent', () => {
+describe("SearchResultAttachmentComponent", () => {
   let component: SearchResultAttachmentComponent;
   let fixture: ComponentFixture<SearchResultAttachmentComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SearchResultAttachmentComponent ]
-    })
-    .compileComponents();
+      declarations: [SearchResultAttachmentComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('SearchResultAttachmentComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

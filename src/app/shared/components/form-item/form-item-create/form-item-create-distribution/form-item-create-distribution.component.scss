@@ -1,0 +1,15 @@
+.list-group {
+    margin-bottom: 10px;
+}
+
+.list-group-item.active {
+    background-color: var(--bayer-dark-blue) !important;
+    border-color: var(--bayer-dark-blue) !important;
+    background-image: none;
+}
+
+/* Override bootstrap reboot parts until removing the package */
+.mat-raised-button {
+  line-height: 36px !important;
+  border-radius: 4px !important;
+}

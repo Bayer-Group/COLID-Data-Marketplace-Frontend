@@ -1,25 +1,23 @@
-import { Component, EventEmitter, OnInit, Output} from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { Store, Select} from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { DomSanitizer } from '@angular/platform-browser';
-import { WelcomeMessageState } from 'src/app/states/welcome-message.state';
-import { WelcomeMessage } from 'src/app/shared/models/welcome-message';
+import { Component, EventEmitter, Output } from "@angular/core";
+import { environment } from "src/environments/environment";
+import { Select } from "@ngxs/store";
+import { Observable } from "rxjs";
+import { DomSanitizer } from "@angular/platform-browser";
+import { WelcomeMessageState } from "src/app/states/welcome-message.state";
+import { WelcomeMessage } from "src/app/shared/models/welcome-message";
 
 @Component({
-  selector: 'app-welcome-content',
-  templateUrl: './welcome-content.component.html',
-  styleUrls: ['./welcome-content.component.scss']
+  selector: "app-welcome-content",
+  templateUrl: "./welcome-content.component.html",
+  styleUrls: ["./welcome-content.component.scss"],
 })
-export class WelcomeContentComponent implements OnInit {
+export class WelcomeContentComponent {
   @Output() searchChange = new EventEmitter();
-  @Select(WelcomeMessageState.getWelcomeMessage) welcomeMessage$: Observable<WelcomeMessage>;
+  @Select(WelcomeMessageState.getWelcomeMessageDataMarketplace)
+  welcomeMessage$: Observable<WelcomeMessage>;
 
-  searchText: string = '*';
-  constructor(private sanitizer: DomSanitizer) { }
-
-  ngOnInit() {
-  }
+  searchText: string = "*";
+  constructor(private sanitizer: DomSanitizer) {}
 
   handleSearchChange(searchText: string) {
     this.searchChange.emit(searchText);
@@ -35,7 +33,7 @@ export class WelcomeContentComponent implements OnInit {
 
   goToEditor() {
     const url = environment.pidUrl;
-    window.open(url, '_blank');
+    window.open(url, "_blank");
   }
 
   transformYourHtml(htmlTextWithStyle) {

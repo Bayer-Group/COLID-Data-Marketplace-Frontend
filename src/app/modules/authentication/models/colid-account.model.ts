@@ -4,7 +4,12 @@ export class ColidAccount {
   accountIdentifier: string;
   roles: Array<string>;
 
-  constructor(name: string, email: string, accountIdentifier: string, roles: string[]){
+  constructor(
+    name: string,
+    email: string,
+    accountIdentifier: string,
+    roles: string[]
+  ) {
     this.name = name;
     this.email = email;
     this.accountIdentifier = accountIdentifier;

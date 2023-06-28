@@ -1,4 +1,4 @@
-FROM node:12-alpine as build-phase
+FROM node:14-alpine as build-phase
 
 ARG ANGULAR_ENVIRONMENT
 ENV ANGULAR_ENVIRONMENT=${ANGULAR_ENVIRONMENT}

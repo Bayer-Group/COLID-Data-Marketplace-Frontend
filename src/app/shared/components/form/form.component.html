@@ -1,0 +1,243 @@
+<ng-container *ngIf="_metaData && ontologyForm != null; else loadingTemplate">
+  <form
+    class="pt-4"
+    [formGroup]="ontologyForm"
+    (keydown.enter)="$event.preventDefault()"
+    novalidate
+  >
+    <ng-container *ngFor="let m of _metaData; let i = index">
+      <div [hidden]="isIgnoredProperty(m)">
+        <div
+          [hidden]="
+            isLinkingGroup(m) ||
+            (f[m.properties] &&
+              (f[m.properties[pidUriConstant]].value === null ||
+                f[m.properties[pidUriConstant]].value.length === 0))
+          "
+        >
+          <!--
+            Row for non-nested metadata fields
+          -->
+          <div
+            class="form-group row align-items-start"
+            *ngIf="m.nestedMetadata.length === 0"
+          >
+            <!--
+              Row label for non-nested fields
+            -->
+            <label
+              class="col-md-3 col-form-label colid-form-label"
+              *ngIf="!isLinkingGroup(m)"
+            >
+              <span
+                class="font-weight-bold"
+                [class.h3]="i === 0 && !nestedForm"
+                [class.lead]="i === 1 && !nestedForm"
+              >
+                {{ m.properties[constants.Metadata.Name] }}
+                <span
+                  *ngIf="m.properties[constants.Metadata.MinCount] >= 1"
+                  style="color: red"
+                  >*</span
+                >
+              </span>
+            </label>
+
+            <!--
+              Input form for non-nested fields
+            -->
+            <div
+              *ngIf="!isLinkingGroup(m)"
+              class="colid-form-item"
+              [class.col-md-9]="!isLinkingGroup(m)"
+              [class.col-md-12]="isLinkingGroup(m)"
+            >
+              <app-form-item
+                name="{{ m.properties[pidUriConstant] + indexerNested_ }}"
+                [formControl]="
+                  ontologyForm.controls[m.properties[pidUriConstant]]
+                "
+                [readOnly]="isFormItemReadOnly(m)"
+                [adminPrivilege]="adminPrivilege"
+                [metaData]="m"
+                [formReadOnly]="formReadOnly"
+                [formItemSettings]="formItemSettings"
+                [errors]="f[m.properties[pidUriConstant]].errors"
+                [fetched]="pidUriTemplatesFetched | async"
+                [presets]="pidUriTemplateNames"
+                [isNew]="isNew"
+                (valueChanged)="handleResourceFormItemChange($event)"
+              >
+              </app-form-item>
+              <small
+                class="form-text text-muted"
+                innerHTML="{{ m.properties[constants.Metadata.Comment] }}"
+              ></small>
+            </div>
+          </div>
+
+          <!--
+            Row for metadata fields with nested metadata
+          -->
+          <div
+            class="form-group row align-items-start"
+            *ngIf="m.nestedMetadata.length !== 0"
+          >
+            <label class="col-md-3 col-form-label">
+              <span
+                class="font-weight-bold"
+                [class.h3]="i === 0 && !nestedForm"
+                [class.lead]="i === 1 && !nestedForm"
+              >
+                {{ m.properties[constants.Metadata.Name] }}
+                <span
+                  *ngIf="m.properties[constants.Metadata.MinCount] >= 1"
+                  style="color: red"
+                  >*</span
+                >
+              </span>
+            </label>
+
+            <div class="col-md-9">
+              <!--
+                Part for nested distribution endpoints
+              -->
+              <app-form-item-create-distribution
+                *ngIf="m.key === distributionConstant"
+                [label]="m.properties[constants.Metadata.Name]"
+                [metaData]="m.nestedMetadata"
+                [placeholder]="placeholder"
+                [disabled]="formReadOnly"
+                (createDistributionEntity)="
+                  handleCreateNestedEntity(m.properties[pidUriConstant], $event)
+                "
+              >
+              </app-form-item-create-distribution>
+              <!--
+                Part for all other nested entities (e.g. attachments)
+              -->
+              <app-form-item-create-attachment
+                *ngIf="m.key === attachmentConstant"
+                [label]="m.properties[constants.Metadata.Name]"
+                [metaData]="m.nestedMetadata"
+                [disabled]="formReadOnly"
+                (createAttachment)="
+                  handleCreateNestedEntity(m.properties[pidUriConstant], $event)
+                "
+              >
+              </app-form-item-create-attachment>
+
+              <!--
+                Part for all other nested entities (e.g. attachments)
+              -->
+              <app-form-item-create-nested
+                *ngIf="
+                  m.key !== distributionConstant && m.key !== attachmentConstant
+                "
+                [label]="m.properties[constants.Metadata.Name]"
+                [metaData]="m.nestedMetadata"
+                [disabled]="formReadOnly"
+                (createNestedEntity)="
+                  handleCreateNestedEntity(m.properties[pidUriConstant], $event)
+                "
+              >
+              </app-form-item-create-nested>
+
+              <small
+                *ngIf="f[m.properties[pidUriConstant]].controls.length === 0"
+                class="form-text text-muted"
+                innerHTML="{{ m.properties[constants.Metadata.Comment] }}"
+              ></small>
+            </div>
+
+            <!--
+              Row for nested metadata fields with sub app-form
+            -->
+            <div class="col-md-12">
+              <div [formArrayName]="m.properties[pidUriConstant]">
+                <div
+                  *ngIf="f[m.properties[pidUriConstant]].controls.length !== 0"
+                >
+                  <div>
+                    <mat-card
+                      *ngFor="
+                        let control of f[m.properties[pidUriConstant]].controls;
+                        let i = index
+                      "
+                    >
+                      <app-form-item
+                        [name]="i"
+                        [indexerNested]="i"
+                        [formControl]="
+                          f[m.properties[pidUriConstant]].controls[i]
+                        "
+                        [readOnly]="isFormItemReadOnly(m)"
+                        [adminPrivilege]="adminPrivilege"
+                        [metaData]="m"
+                        [formReadOnly]="formReadOnly"
+                        [formItemSettings]="formItemSettings"
+                        [newNestedEntities]="newNestedEntities"
+                        [errors]="
+                          f[m.properties[pidUriConstant]].controls[i].errors
+                        "
+                        [fetched]="pidUriTemplatesFetched | async"
+                        [presets]="pidUriTemplateNames"
+                        [isNew]="isNew"
+                        (removeFormItem)="
+                          handleRemoveFormItem(m.properties[pidUriConstant], i)
+                        "
+                        [mainDistribution]="
+                          mainDistribution != null &&
+                          mainDistribution === control?.value?.id
+                        "
+                        (mainDistributionChanged)="
+                          handleMainDistributionChanged(control)
+                        "
+                        (attachmentUploaded)="handleAttachmentUploaded($event)"
+                        (valueChanged)="handleResourceFormItemChange($event)"
+                      >
+                      </app-form-item>
+                      <div
+                        class="row"
+                        *ngIf="
+                          f[m.properties[pidUriConstant]].controls.length !==
+                          i + 1
+                        "
+                      >
+                        <div class="col-12">
+                          <mat-divider class="my-3"></mat-divider>
+                        </div>
+                      </div>
+                    </mat-card>
+                  </div>
+                </div>
+              </div>
+              <app-form-item-errors
+                [name]="name"
+                [errors]="f[m.properties[pidUriConstant]].errors"
+              >
+              </app-form-item-errors>
+              <small
+                *ngIf="f[m.properties[pidUriConstant]].controls.length !== 0"
+                class="form-text text-muted"
+                innerHTML="{{ m.properties[constants.Metadata.Comment] }}"
+              ></small>
+            </div>
+          </div>
+          <mat-divider
+            class="my-3"
+            *ngIf="i === 1 && !nestedForm"
+          ></mat-divider>
+        </div>
+      </div>
+    </ng-container>
+  </form>
+</ng-container>
+
+<ng-template #loadingTemplate>
+  <div class="row justify-content-center mt-4">
+    <div class="col-auto">
+      <app-colid-spinner></app-colid-spinner>
+    </div>
+  </div>
+</ng-template>

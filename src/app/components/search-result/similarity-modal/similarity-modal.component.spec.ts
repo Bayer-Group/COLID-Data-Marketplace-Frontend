@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { SimilarityModalComponent } from './similarity-modal.component';
+import { SimilarityModalComponent } from "./similarity-modal.component";
 
-describe('SimilarityModalComponent', () => {
+describe("SimilarityModalComponent", () => {
   let component: SimilarityModalComponent;
   let fixture: ComponentFixture<SimilarityModalComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SimilarityModalComponent ]
-    })
-    .compileComponents();
+      declarations: [SimilarityModalComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('SimilarityModalComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

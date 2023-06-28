@@ -1,13 +1,24 @@
-import { Component, OnInit, Input, Output, ChangeDetectionStrategy } from '@angular/core';
-import { AggregationBucket } from 'src/app/shared/models/aggregation-bucket';
-import { Store } from '@ngxs/store';
-import { Aggregation, AggregationType } from 'src/app/shared/models/aggregation';
-import { ChangeActiveAggregationBuckets, ChangeActiveAggregationBucketList } from 'src/app/states/search.state';
+import {
+  Component,
+  OnInit,
+  Input,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { AggregationBucket } from "src/app/shared/models/aggregation-bucket";
+import { Store } from "@ngxs/store";
+import {
+  Aggregation,
+  AggregationType,
+} from "src/app/shared/models/aggregation";
+import {
+  ChangeActiveAggregationBuckets,
+  ChangeActiveAggregationBucketList,
+} from "src/app/states/search.state";
 
 enum CollapseStates {
   Initial,
   More,
-  All
+  All,
 }
 
 @Component({
@@ -102,8 +113,13 @@ export class FilterBoxComponent implements OnInit {
   filterItemChanged(active: boolean, bucket: AggregationBucket) {
     if (this.aggregation) {
       this.store.dispatch(
-          new ChangeActiveAggregationBuckets(this.aggregation,bucket,active,this.initialFilterBox)
+        new ChangeActiveAggregationBuckets(
+          this.aggregation,
+          bucket,
+          active,
+          this.initialFilterBox
         )
+      );
     }
   }
 
@@ -120,23 +136,35 @@ export class FilterBoxComponent implements OnInit {
 
     if (this.aggregation) {
       this.store.dispatch(
-          new ChangeActiveAggregationBucketList(this.aggregation,bucketNames,this.initialFilterBox)
+        new ChangeActiveAggregationBucketList(
+          this.aggregation,
+          bucketNames,
+          this.initialFilterBox
         )
+      );
     }
   }
 
   filterItemsChanged(buckets: string[]) {
     if (this.aggregation) {
       this.store.dispatch(
-        new ChangeActiveAggregationBucketList(this.aggregation,buckets,this.initialFilterBox)
-      )
+        new ChangeActiveAggregationBucketList(
+          this.aggregation,
+          buckets,
+          this.initialFilterBox
+        )
+      );
     }
   }
 
-  multiSelectFilterItemsChanged(buckets: [{key: string, doc_count: number}]) {
+  multiSelectFilterItemsChanged(buckets: [{ key: string; doc_count: number }]) {
     if (this.aggregation) {
       this.store.dispatch(
-        new ChangeActiveAggregationBucketList(this.aggregation,buckets.map(b => b.key),this.initialFilterBox)
+        new ChangeActiveAggregationBucketList(
+          this.aggregation,
+          buckets.map((b) => b.key),
+          this.initialFilterBox
+        )
       );
     }
   }

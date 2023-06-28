@@ -1,6 +1,6 @@
 export class CheckboxHierarchyDTO {
   instantiable: boolean;
-  isCategory:boolean;
+  isCategory: boolean;
   hasParent: boolean;
   parentName: string;
   id: string;

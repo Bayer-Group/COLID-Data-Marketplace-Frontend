@@ -1,34 +1,72 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <script>
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        registrations.forEach(registration => {
+          console.info("Service worker successfully unregistered", registration);
+          registration.unregister();
+        });
+      });
+    </script>
+    <title>COLID Data Marketplace</title>
+    <base href="/" />
 
-<head>
-  <meta charset="utf-8">
-  <meta charset="utf-8">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
-  <title>COLID Data Marketplace</title>
-  <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="assets/BAG_COLID-Visual_coloured_Signet_lh.svg"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+      rel="stylesheet"
+    />
+    <link rel="apple-touch-icon" href="./assets/icons/icon-120x120.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="120x120"
+      href="./assets/icons/icon-120x120.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="152x152"
+      href="./assets/icons/icon-152x152.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="167x167"
+      href="./assets/icons/icon-167x167.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./assets/icons/icon-180x180.png"
+    />
+    <meta name="theme-color" content="#002e46" />
+  </head>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="assets/BAG_COLID-Visual_coloured_Signet_lh.svg">
-  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
-  <link
-    href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
-    rel="stylesheet" />
-  <link rel="apple-touch-icon" href="./assets/icons/icon-120x120.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="./assets/icons/icon-120x120.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="./assets/icons/icon-152x152.png">
-  <link rel="apple-touch-icon" sizes="167x167" href="./assets/icons/icon-167x167.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/icon-180x180.png">
-  <meta name="theme-color" content="#002e46">
-</head>
-
-<body>
-  <app-root></app-root>
-  <app-redirect></app-redirect>
-  <noscript>Please enable JavaScript to continue using this application.</noscript>
-</body>
-
+  <body>
+    <app-root></app-root>
+    <app-redirect></app-redirect>
+    <noscript
+      >Please enable JavaScript to continue using this application.</noscript
+    >
+  </body>
 </html>

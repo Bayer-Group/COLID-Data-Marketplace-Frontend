@@ -1,17 +1,31 @@
-import { Component, OnInit, EventEmitter, Output, ViewChild, ElementRef, Input } from '@angular/core';
-import { SearchResult } from 'src/app/shared/models/search-result';
-import { Select, Store } from '@ngxs/store';
-import { SearchState, ChangeSearchText, FetchNextSearchResult, AddSelectedPIDURI, RemoveSelectedPIDURI, AddSelectedPIDURIs, ClearSelectedPIDURIs } from '../../states/search.state';
-import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { FetchMetadata, MetadataState } from 'src/app/states/metadata.state';
-import { ErrorCode } from 'src/app/shared/models/dmp-exception';
-import { map, tap } from 'rxjs/operators';
-import { LogService } from 'src/app/core/logging/log.service';
-import { ActivatedRoute } from '@angular/router';
-import { RRMState } from 'src/app/states/rrm.state';
-import { Constants } from 'src/app/shared/constants';
-import { SelectionModel } from '@angular/cdk/collections';
+import {
+  Component,
+  OnInit,
+  EventEmitter,
+  Output,
+  ViewChild,
+  ElementRef,
+  Input,
+} from "@angular/core";
+import { SearchResult } from "src/app/shared/models/search-result";
+import { Select, Store } from "@ngxs/store";
+import {
+  SearchState,
+  ChangeSearchText,
+  FetchNextSearchResult,
+  AddSelectedPIDURI,
+  RemoveSelectedPIDURI,
+  AddSelectedPIDURIs,
+  ClearSelectedPIDURIs,
+} from "../../states/search.state";
+import { Observable } from "rxjs";
+import { environment } from "src/environments/environment";
+import { FetchMetadata, MetadataState } from "src/app/states/metadata.state";
+import { ErrorCode } from "src/app/shared/models/dmp-exception";
+import { map } from "rxjs/operators";
+import { LogService } from "src/app/core/logging/log.service";
+import { ActivatedRoute } from "@angular/router";
+import { SelectionModel } from "@angular/cdk/collections";
 
 @Component({
   selector: "app-search-results",
@@ -26,12 +40,11 @@ export class SearchResultsComponent implements OnInit {
   @Select(SearchState.getDidYouMean) didYouMean$: Observable<string>;
   @Select(SearchState.getPage) page$: Observable<number>;
   @Select(SearchState.getSearching) searching$: Observable<boolean>;
-  @Select(SearchState.getSelectedPIDURIs) selectedPIDURIs$: Observable<string[]>;
+  @Select(SearchState.getSelectedPIDURIs) selectedPIDURIs$: Observable<
+    string[]
+  >;
   @Select(MetadataState.getMetadata) metadata$: Observable<any>;
   @Select(SearchState.getErrorCode) errorCode$: Observable<ErrorCode>;
-  @Select(RRMState.getFromRRM) showCheckbox$: Observable<boolean>;
-  @Select(RRMState.getFilterMode) filterMode$: Observable<boolean>;
-  @Select(RRMState.getSourceDialog) sourceDialog$: Observable<string>;
   @Input() pidUrisSearchResult: string[];
   isInvalidSearchQuery: Observable<boolean>;
   currentPage = 1;
@@ -40,12 +53,8 @@ export class SearchResultsComponent implements OnInit {
   didYouMean: string = null;
   metadata: any = null;
   loadingBatch = false;
-  skipResult = [];
-  sourceDialog: string = "addResource";
-  filterInfo = {
-    filterMode: false,
-    sourceDialog: "addResource",
-  };
+  developmentMode: boolean = !environment.production;
+
   showCheckbox: boolean = false;
   activeTablist: any[] = [];
   selection = new SelectionModel<any>(true, []);
@@ -62,23 +71,6 @@ export class SearchResultsComponent implements OnInit {
     this.isInvalidSearchQuery = this.errorCode$.pipe(
       map((e) => e === ErrorCode.INVALID_SEARCH_TERM)
     );
-
-    var state = JSON.parse(this.route.snapshot.queryParamMap.get("fromRRM"));
-    // this.store.dispatch(new SetFromRRM(state))
-    this.sourceDialog$
-      .pipe(
-        tap((s) => {
-          this.filterInfo.sourceDialog = s;
-        })
-      )
-      .subscribe();
-    this.showCheckbox$
-      .pipe(
-        tap((s) => {
-          this.showCheckbox = s;
-        })
-      )
-      .subscribe();
   }
 
   getResourceSelected(selectedPIDURIs: string[], pidUri: string) {
@@ -103,9 +95,6 @@ export class SearchResultsComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(new FetchMetadata()).subscribe();
     this.logger.info("DMP_RESULT_PAGE_OPENED");
-    this.filterInfo.filterMode = JSON.parse(
-      this.route.snapshot.queryParamMap.get("filterView")
-    );
     this.metadata$.subscribe((met) => {
       this.metadata = met;
     });
@@ -121,28 +110,10 @@ export class SearchResultsComponent implements OnInit {
           this.searchResult != null &&
           this.searchResults != null &&
           this.searchResults.nativeElement.scrollHeight <=
-            this.searchResults.nativeElement.offsetHeight && 
+            this.searchResults.nativeElement.offsetHeight &&
           this.searchResults.nativeElement.offsetHeight > 0
         ) {
           this.nextBatch(this.searchResult.hits.total);
-        }
-        if (
-          this.filterInfo.filterMode &&
-          this.filterInfo.sourceDialog == "addResource"
-        ) {
-          let filterOutTypes: string[] = [
-            Constants.ResourceTypes.Table,
-            Constants.ResourceTypes.Column,
-          ];
-
-          this.searchResult.hits.hits.forEach((hit) => {
-            let hitResourceType = hit.source[
-              Constants.Metadata.EntityType
-            ].outbound.map((t) => t.uri);
-            if (filterOutTypes.includes(hitResourceType[0])) {
-              this.skipResult.push(hit.id);
-            }
-          });
         }
       }, 100);
     });
@@ -187,10 +158,5 @@ export class SearchResultsComponent implements OnInit {
         );
       }
     }
-  }
-
-  getActiveTab(piduri) {
-    var id = decodeURIComponent(piduri);
-    return this.activeTablist.includes(id);
   }
 }

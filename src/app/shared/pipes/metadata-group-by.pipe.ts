@@ -1,7 +1,7 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import { MetaDataProperty } from '../models/metadata/meta-data-property';
-import { MetaDataPropertyGroup } from '../models/metadata/meta-data-property-group';
-import { Constants } from 'src/app/shared/constants';
+import { Pipe, PipeTransform } from "@angular/core";
+import { MetaDataProperty } from "../models/metadata/meta-data-property";
+import { MetaDataPropertyGroup } from "../models/metadata/meta-data-property-group";
+import { Constants } from "src/app/shared/constants";
 
 @Pipe({
   name: "groupByGroup",

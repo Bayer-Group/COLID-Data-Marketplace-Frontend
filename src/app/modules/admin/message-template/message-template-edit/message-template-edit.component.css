@@ -1,0 +1,7 @@
+[mat-raised-button] ~ [mat-raised-button] {
+      margin-left: 1rem;
+  }
+
+.message-template-body {
+      margin-top: 15px;
+  }

@@ -1,0 +1,72 @@
+<form
+  class="message-template-form"
+  [formGroup]="templateForm"
+  (ngSubmit)="onSubmit()"
+>
+  <div class="row ms-1">
+    <div class="col-3 text-muted d-flex align-items-center">Subject:</div>
+    <div class="col-9">
+      <mat-form-field class="w-100 subject-form-field">
+        <input
+          matInput
+          formControlName="subjectControl"
+          id="inputSubject"
+          name="inputSubject"
+          [value]="messageTemplate.subject"
+          (focus)="onFocus('subjectControl')"
+        />
+      </mat-form-field>
+      <ng-container *ngIf="f['subjectControl'].errors as errors">
+        <mat-error *ngIf="errors['required']">Required</mat-error>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="row mt-3 ms-1">
+    <div class="col-3 text-muted message-template-body">Body:</div>
+    <div class="col-9">
+      <mat-form-field class="w-100 body-form-field">
+        <textarea
+          matInput
+          [formControl]="f['bodyControl']"
+          id="inputBody"
+          name="inputBody"
+          (focus)="onFocus('bodyControl')"
+          [value]="messageTemplate.body"
+          style="overflow: hidden"
+          cdkTextareaAutosize
+          #autosize="cdkTextareaAutosize"
+          cdkAutosizeMinRows="1"
+          cdkAutosizeMaxRows="10"
+        ></textarea>
+        <mat-error *ngIf="f['bodyControl'].errors">Required</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row mt-3 ms-1" *ngIf="placeholders[messageTemplate.type]">
+    <div class="col-3 text-muted d-flex align-items-center">Placeholders:</div>
+    <div class="col-9">
+      <mat-chip-list>
+        <mat-chip
+          *ngFor="let placeholder of placeholders[messageTemplate.type]"
+          (click)="onPlaceholder(placeholder)"
+        >
+          {{ placeholder }}
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+  </div>
+
+  <div class="row mt-4 justify-content-end">
+    <div class="col-auto">
+      <button mat-raised-button type="button" (click)="onReset()" class="me-3">
+        <mat-icon fontSet="material-icons-outlined">cancel</mat-icon>
+        Reset
+      </button>
+      <button mat-raised-button type="submit" color="primary">
+        <mat-icon fontSet="material-icons-outlined">save</mat-icon>
+        Save
+      </button>
+    </div>
+  </div>
+</form>

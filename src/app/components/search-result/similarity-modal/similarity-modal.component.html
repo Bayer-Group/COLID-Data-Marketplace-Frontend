@@ -1,47 +1,56 @@
 <div class="dialog-panel">
-    <div mat-dialog-content *ngIf="docs.length > 0 && !loading; else noData">
-        <mat-panel-title>
-            <div>
-                <div class="result-header h4 align-items-center mr-0">
-                    Similar resources to "{{data.label}}"
-                </div>
-            </div>
-        </mat-panel-title>
-
-        <span *ngIf="metadata != null">
-            <div *ngFor="let document of documents; index as i;">
-                <app-search-result [result]="searchHits[i]" [metadata]="metadata">
-                </app-search-result>
-            </div>
-        </span>
-    </div>
-
-    <ng-template #noData>
-        <div mat-dialog-content>
-            <div class="d-flex justify-content-center align-items-center flex-column" *ngIf="!loading">
-                <div>
-                    <mat-icon class="icon-error" fontSet="material-icons-outlined">error_outline</mat-icon>
-                </div>
-                <div class="text-error" *ngIf="error">
-                    {{error}}
-                </div>
-                <div class="text-error" *ngIf="docs.length == 0 && !error">
-                    No similar resources could be found.
-                </div>
-            </div>
-            <div *ngIf="loading && !error" class="mt-4">
-                <div class="d-flex justify-content-center text-error">
-                    <app-colid-spinner></app-colid-spinner>
-                </div>
-            </div>
+  <div mat-dialog-content *ngIf="docs.length > 0 && !loading; else noData">
+    <mat-panel-title>
+      <div>
+        <div class="result-header h4 align-items-center me-0">
+          Similar resources to "{{ data.label }}"
         </div>
-    </ng-template>
-    
-    <div mat-dialog-actions class="d-flex justify-content-center align-items-end">
-        <app-feedback class="mr-5" [payload]="{pidUri: pidUri, returnedPids: returnedPids}" [feature]="'similarity-check'"></app-feedback>
-        <button mat-raised-button (click)="closeDialog()">
-            <mat-icon fontSet="material-icons-outlined">close</mat-icon>
-            Close
-        </button>
+      </div>
+    </mat-panel-title>
+
+    <span *ngIf="metadata != null">
+      <div *ngFor="let document of documents; index as i">
+        <app-search-result [result]="searchHits[i]" [metadata]="metadata">
+        </app-search-result>
+      </div>
+    </span>
+  </div>
+
+  <ng-template #noData>
+    <div mat-dialog-content>
+      <div
+        class="d-flex justify-content-center align-items-center flex-column"
+        *ngIf="!loading"
+      >
+        <div>
+          <mat-icon class="icon-error" fontSet="material-icons-outlined"
+            >error_outline</mat-icon
+          >
+        </div>
+        <div class="text-error" *ngIf="error">
+          {{ error }}
+        </div>
+        <div class="text-error" *ngIf="docs.length === 0 && !error">
+          No similar resources could be found.
+        </div>
+      </div>
+      <div *ngIf="loading && !error" class="mt-4">
+        <div class="d-flex justify-content-center text-error">
+          <app-colid-spinner></app-colid-spinner>
+        </div>
+      </div>
     </div>
+  </ng-template>
+
+  <div mat-dialog-actions class="d-flex justify-content-center align-items-end">
+    <app-feedback
+      class="me-5"
+      [payload]="{ pidUri: pidUri, returnedPids: returnedPids }"
+      [feature]="'similarity-check'"
+    ></app-feedback>
+    <button mat-raised-button (click)="closeDialog()">
+      <mat-icon fontSet="material-icons-outlined">close</mat-icon>
+      Close
+    </button>
+  </div>
 </div>

@@ -1,0 +1,35 @@
+<div class="row p-2">
+  <div class="col">
+    <h1 class="admin-tab-title">Message Templates</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <div *ngIf="messageTemplates$ | async as messageTemplates; else loading">
+      <mat-accordion multi="true">
+        <mat-expansion-panel *ngFor="let messageTemplate of messageTemplates">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ messageTemplate.type }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <ng-template matExpansionPanelContent>
+            <app-message-template-edit
+              [messageTemplate]="messageTemplate"
+            ></app-message-template-edit>
+          </ng-template>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="row justify-content-center mt-4">
+    <div class="col-auto">
+      <app-colid-spinner></app-colid-spinner>
+    </div>
+  </div>
+</ng-template>

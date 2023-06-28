@@ -1,17 +1,30 @@
-<div class="px-3" *ngIf="aggregation.buckets ">
-
+<div class="px-3" *ngIf="aggregation.buckets">
   <!-- Filter as dropdown -->
   <div *ngIf="filterType === 'select'">
-    <ng-select [appearance]="'outline'" [items]="visibleBuckets" [multiple]="true" [closeOnSelect]="false"
-      [searchable]="true" bindLabel="key" bindValue="key" placeholder="{{aggregation.label}}"
-      [ngModel]="activeAggregationBuckets" (change)="multiSelectFilterItemsChanged($event)">
-      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+    <ng-select
+      [appearance]="'outline'"
+      [items]="visibleBuckets"
+      [multiple]="true"
+      [closeOnSelect]="false"
+      [searchable]="true"
+      bindLabel="key"
+      bindValue="key"
+      placeholder="{{ aggregation.label }}"
+      [ngModel]="activeAggregationBuckets"
+      (change)="multiSelectFilterItemsChanged($event)"
+    >
+      <ng-template
+        ng-option-tmp
+        let-item="item"
+        let-index="index"
+        let-search="searchTerm"
+      >
         <div class="d-flex justify-content-between">
           <span>
-            {{item.key}}
+            {{ item.key }}
           </span>
-          <span class="badge badge-pill badge-light" style="align-self: center;">
-            {{item.doc_count}}
+          <span class="badge badge-pill badge-light" style="align-self: center">
+            {{ item.doc_count }}
           </span>
         </div>
       </ng-template>
@@ -20,20 +33,30 @@
 
   <!-- Filter as checkbox -->
   <div *ngIf="filterType === 'checkbox'">
-    <div class="text-muted" style="cursor:pointer">
+    <div class="text-muted" style="cursor: pointer">
       <span style="font-weight: 550">
-        {{aggregation.label}}
+        {{ aggregation.label }}
       </span>
     </div>
-    <app-filter-box-item (changeFilterBucket)="filterItemChanged($event, bucket)" [active]="active(bucket)"
-      [key]="aggregation.key" [bucket]="bucket" *ngFor="let bucket of visibleBuckets">
+    <app-filter-box-item
+      (changeFilterBucket)="filterItemChanged($event, bucket)"
+      [active]="active(bucket)"
+      [key]="aggregation.key"
+      [bucket]="bucket"
+      *ngFor="let bucket of visibleBuckets"
+    >
     </app-filter-box-item>
     <span class="mt-1">
       <a href="javascript:void(0)" *ngIf="canShowMore" (click)="showMore()">
         <mat-icon [inline]="true">expand_more</mat-icon>
         Show more
       </a>
-      <a href="javascript:void(0)" class="mr-2" *ngIf="canShowAll" (click)="showAll()">
+      <a
+        href="javascript:void(0)"
+        class="me-2"
+        *ngIf="canShowAll"
+        (click)="showAll()"
+      >
         <mat-icon [inline]="true">expand_more</mat-icon>
         Show all
       </a>
@@ -46,36 +69,48 @@
 
   <!-- Filter as taxonomy -->
   <div *ngIf="filterType === 'taxonomy'">
-    <div class="d-flex justify-content-between align-items-center text-uppercase text-muted" style="cursor:pointer"
-      (click)="hidden = !hidden">
-      <span><small style="font-weight: 600">{{aggregation.label}}</small></span>
+    <div
+      class="d-flex justify-content-between align-items-center text-uppercase text-muted"
+      style="cursor: pointer"
+      (click)="hidden = !hidden"
+    >
+      <span
+        ><small style="font-weight: 600">{{ aggregation.label }}</small></span
+      >
       <small>
         <mat-icon *ngIf="hidden">expand_more</mat-icon>
         <mat-icon *ngIf="!hidden">expand_less</mat-icon>
       </small>
     </div>
     <div [style.display]="hidden ? 'none' : 'block'">
-      <app-filter-box-item-taxonomy [key]="aggregation.key" [activeAggregationBuckets]="activeAggregationBuckets"
-        [buckets]="visibleBuckets" (changeFilterBuckets)="filterItemsChanged($event)">
+      <app-filter-box-item-taxonomy
+        [key]="aggregation.key"
+        [activeAggregationBuckets]="activeAggregationBuckets"
+        [buckets]="visibleBuckets"
+        (changeFilterBuckets)="filterItemsChanged($event)"
+      >
       </app-filter-box-item-taxonomy>
     </div>
-    <hr *ngIf="!last" class="my-1">
+    <hr *ngIf="!last" class="my-1" />
   </div>
 
   <!-- Filter as checkBoxHierarchy -->
 
   <div *ngIf="filterType === 'checkBoxHierarchy'">
-    <div class="text-muted" style="cursor:pointer">
+    <div class="text-muted" style="cursor: pointer">
       <span style="font-weight: 550">
-        {{aggregation.label}}
+        {{ aggregation.label }}
       </span>
     </div>
     <div [style.display]="hidden ? 'none' : 'block'">
-      <app-filter-box-item-checkboxHierarchy [key]="aggregation.key"
-        [activeAggregationBuckets]="activeAggregationBuckets" [buckets]="visibleBuckets"
-        (changeFilterBuckets)="filterHierarchyItemsChanged($event)" [resourceHierarchy]="resourceHierarchy">
+      <app-filter-box-item-checkboxHierarchy
+        [key]="aggregation.key"
+        [activeAggregationBuckets]="activeAggregationBuckets"
+        [buckets]="visibleBuckets"
+        (changeFilterBuckets)="filterHierarchyItemsChanged($event)"
+        [resourceHierarchy]="resourceHierarchy"
+      >
       </app-filter-box-item-checkboxHierarchy>
     </div>
   </div>
-
 </div>

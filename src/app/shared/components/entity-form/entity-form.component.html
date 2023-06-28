@@ -1,0 +1,94 @@
+<div class="row p-2">
+  <div class="col-12" *ngIf="isNew || _entity; else loadingTemplate">
+    <div class="w-100" *ngIf="entityForm; else loadingTemplate">
+      <form [formGroup]="entityForm" class="w-100">
+        <div *ngFor="let m of metaData">
+          <div class="form-group row align-items-start">
+            <label class="col-md-3 col-form-label">
+              <span class="font-weight-bold">
+                {{ m.properties[constants.Metadata.Name] }}
+                <span
+                  *ngIf="m.properties[constants.Metadata.MinCount] !== '0'"
+                  style="color: red"
+                  >*</span
+                >
+              </span>
+            </label>
+            <div class="col-md-9">
+              <app-form-item
+                name="{{ m.properties[constants.Metadata.HasPidUri] }}"
+                [formControl]="
+                  entityForm.controls[
+                    m.properties[constants.Metadata.HasPidUri]
+                  ]
+                "
+                [metaData]="m"
+                [readOnly]="null"
+                [errors]="f[m.properties[constants.Metadata.HasPidUri]].errors"
+                [formReadOnly]="formReadOnly"
+                [formItemSettings]="formItemSettings"
+              >
+              </app-form-item>
+              <small
+                class="form-text text-muted"
+                innerHTML="{{ m.properties[constants.Metadata.Comment] }}"
+              ></small>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <action-button
+            color="white"
+            (click)="cancelEditing()"
+            class="me-2"
+            icon="cancel"
+          >
+            Cancel
+          </action-button>
+
+          <ng-content select="[buttons]"></ng-content>
+
+          <action-button
+            color="accent"
+            (click)="confirmAndDelete()"
+            *ngIf="!isNew && isDeletable"
+            class="me-2"
+            [disabled]="actionButtonDisabled"
+            [loading]="actionButtonLoading('delete')"
+            icon="delete_forever"
+          >
+            Delete
+          </action-button>
+
+          <action-button
+            *ngIf="!isNew"
+            color="primary"
+            (click)="editEntity()"
+            action="save"
+            [disabled]="actionButtonDisabled"
+            [loading]="actionButtonLoading('save')"
+            icon="save"
+          >
+            Save
+          </action-button>
+
+          <action-button
+            color="primary"
+            (click)="createEntity()"
+            *ngIf="isNew"
+            [disabled]="actionButtonDisabled"
+            [loading]="actionButtonLoading('create')"
+            icon="create"
+          >
+            Create
+          </action-button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<ng-template #loadingTemplate>
+  <app-colid-spinner></app-colid-spinner>
+</ng-template>

@@ -1,0 +1,228 @@
+<div [ngClass]="{ 'is-invalid': errors && fieldType !== 'nested' }">
+  <ng-container [ngSwitch]="fieldType" [class.i]>
+    <app-form-item-input-datetime
+      *ngSwitchCase="'datetime'"
+      #input
+      [name]="name"
+      [(ngModel)]="internalValue"
+      [readOnly]="readonly || formReadOnly"
+      [adminPrivilege]="adminPrivilege"
+      (valueChanged)="handleInputValueChanged($event)"
+    >
+    </app-form-item-input-datetime>
+
+    <app-form-item-input-multiselect
+      *ngSwitchCase="'list'"
+      #input
+      [name]="name"
+      [(ngModel)]="internalValue"
+      [attr.name]="name"
+      id="{{ name }}"
+      [readOnly]="readonly || formReadOnly"
+      [adminPrivilege]="adminPrivilege"
+      [multiselectSettings]="multiselectSettings"
+      (valueChanged)="handleInputValueChanged($event)"
+      [maxCount]="metaData.properties[constants.Metadata.MaxCount]"
+      [metadata]="metaData"
+    >
+    </app-form-item-input-multiselect>
+
+    <app-form-item-input-multiselect
+      *ngSwitchCase="'extendableList'"
+      #input
+      [name]="name"
+      [(ngModel)]="internalValue"
+      [attr.name]="name"
+      id="{{ name }}"
+      [readOnly]="readonly || formReadOnly"
+      [adminPrivilege]="adminPrivilege"
+      [multiselectSettings]="multiselectSettings"
+      (valueChanged)="handleInputValueChanged($event)"
+      [maxCount]="metaData.properties[constants.Metadata.MaxCount]"
+      [metadata]="metaData"
+    >
+    </app-form-item-input-multiselect>
+
+    <app-form-item-input-person
+      *ngSwitchCase="'person'"
+      #input
+      [name]="name"
+      [(ngModel)]="internalValue"
+      [attr.name]="name"
+      id="{{ name }}"
+      [readOnly]="readonly || formReadOnly"
+      [adminPrivilege]="adminPrivilege"
+      [multiselectSettings]="multiselectSettings"
+      (valueChanged)="handleInputValueChanged($event)"
+      [maxCount]="metaData.properties[constants.Metadata.MaxCount]"
+      [metadata]="metaData"
+    >
+    </app-form-item-input-person>
+
+    <app-form-item-input-taxonomy
+      *ngSwitchCase="'taxonomy'"
+      #input
+      [name]="name"
+      [(ngModel)]="internalValue"
+      [attr.name]="name"
+      id="{{ name }}"
+      [readOnly]="readonly || formReadOnly"
+      (valueChanged)="handleInputValueChanged($event)"
+      [metadata]="metaData"
+    ></app-form-item-input-taxonomy>
+
+    <app-form-item-input-checkbox
+      *ngSwitchCase="'boolean'"
+      #input
+      [name]="name"
+      [(ngModel)]="internalValue"
+      [readOnly]="readonly || formReadOnly"
+      [adminPrivilege]="adminPrivilege"
+      (valueChanged)="handleInputValueChanged($event)"
+      [attr.name]="name"
+    >
+    </app-form-item-input-checkbox>
+
+    <app-form-item-input-html
+      *ngSwitchCase="'html'"
+      #input
+      [name]="name"
+      [(ngModel)]="internalValue"
+      [readOnly]="readonly || formReadOnly"
+      [adminPrivilege]="adminPrivilege"
+      (valueChanged)="handleInputValueChanged($event)"
+    >
+    </app-form-item-input-html>
+
+    <app-form-item-input-number
+      *ngSwitchCase="'number'"
+      #input
+      [name]="name"
+      [(ngModel)]="internalValue"
+      [readOnly]="readonly || formReadOnly"
+      [adminPrivilege]="adminPrivilege"
+      (valueChanged)="handleInputValueChanged($event)"
+    >
+    </app-form-item-input-number>
+
+    <ng-container *ngSwitchCase="'nested'">
+      <app-form-item-input-nested
+        class="nestedInput"
+        #input
+        [name]="name"
+        [(ngModel)]="internalValue"
+        [indexerNested]="indexerNested"
+        [readOnly]="readonly || formReadOnly"
+        [newNestedEntities]="newNestedEntities"
+        [formReadOnly]="formReadOnly"
+        [adminPrivilege]="adminPrivilege"
+        (valueChanged)="handleInputValueChanged($event)"
+        [errors]="errors"
+        [label]="metaData.properties[constants.Metadata.Name]"
+        [metaData]="metaData.nestedMetadata"
+        (removeFormItem)="handleRemoveFormItem()"
+        [presets]="presets"
+        [fetched]="fetched"
+      >
+      </app-form-item-input-nested>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'attachment'">
+      <app-form-item-input-attachment
+        class="nestedInput"
+        #input
+        [name]="name"
+        [(ngModel)]="internalValue"
+        [indexerNested]="indexerNested"
+        [readOnly]="readonly || formReadOnly"
+        [newAttachmentEntities]="newNestedEntities"
+        [adminPrivilege]="adminPrivilege"
+        (attachmentUploaded)="handleAttachmentUploaded($event)"
+        [errors]="errors"
+        [formReadOnly]="formReadOnly"
+        [label]="metaData.properties[constants.Metadata.Name]"
+        [metaData]="metaData.nestedMetadata"
+        (removeFormItem)="handleRemoveFormItem()"
+        [presets]="presets"
+        [fetched]="fetched"
+      >
+      </app-form-item-input-attachment>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'distribution'">
+      <app-form-item-input-distribution
+        class="nestedInput"
+        #input
+        [name]="name"
+        [(ngModel)]="internalValue"
+        [indexerNested]="indexerNested"
+        [readOnly]="readonly || formReadOnly"
+        [newDistributionEntities]="newNestedEntities"
+        [adminPrivilege]="adminPrivilege"
+        (valueChanged)="handleInputValueChanged($event)"
+        [errors]="errors"
+        [label]="metaData.properties[constants.Metadata.Name]"
+        [metaData]="metaData.nestedMetadata"
+        (removeFormItem)="handleRemoveFormItem()"
+        [mainDistribution]="mainDistribution"
+        [formReadOnly]="formReadOnly"
+        (mainDistributionChanged)="handleMainDistributionChanged()"
+        [presets]="presets"
+        [fetched]="fetched"
+      >
+      </app-form-item-input-distribution>
+    </ng-container>
+
+    <app-form-item-input-pid-uri
+      *ngSwitchCase="'identifier'"
+      #input
+      [name]="name"
+      [(ngModel)]="internalValue"
+      [readOnly]="readonly || formReadOnly"
+      [externalUriAllowed]="
+        metaData.properties[constants.Metadata.HasPidUri] ===
+        constants.Metadata.HasBaseUri
+      "
+      [adminPrivilege]="adminPrivilege"
+      (valueChanged)="handleInputValueChanged($event)"
+      [debounceTime]="formItemSettings.debounceTime"
+      [presets]="presets"
+      [fetched]="fetched"
+    >
+    </app-form-item-input-pid-uri>
+
+    <!-- <app-form-item-input-linking *ngSwitchCase="'linking'" #input [name]="name" [metaData]="metaData"
+          [(ngModel)]="internalValue" [label]="metaData.properties[constants.Metadata.Name]" [readOnly]="readonly || formReadOnly"
+          (valueChanged)="handleInputValueChanged($event)"></app-form-item-input-linking>-->
+
+    <app-form-item-input-general-multi
+      *ngSwitchCase="'general-multi'"
+      #input
+      [name]="name"
+      [(ngModel)]="internalValue"
+      [readOnly]="readonly || formReadOnly"
+      [adminPrivilege]="adminPrivilege"
+      (valueChanged)="handleInputValueChanged($event)"
+      [debounceTime]="formItemSettings.debounceTime"
+    >
+    </app-form-item-input-general-multi>
+
+    <!-- The insertion of the errors is used to display the check of the duplicates separately. -->
+    <app-form-item-input-general
+      *ngSwitchDefault
+      #input
+      [name]="name"
+      [(ngModel)]="internalValue"
+      [readOnly]="readonly || formReadOnly"
+      [adminPrivilege]="adminPrivilege"
+      (valueChanged)="handleInputValueChanged($event)"
+      [debounceTime]="formItemSettings.debounceTime"
+    >
+    </app-form-item-input-general>
+  </ng-container>
+</div>
+<app-form-item-errors
+  *ngIf="fieldType !== 'nested'"
+  [name]="name"
+  [errors]="errors"
+></app-form-item-errors>

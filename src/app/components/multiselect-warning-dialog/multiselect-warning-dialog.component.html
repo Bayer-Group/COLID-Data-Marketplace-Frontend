@@ -1,14 +1,12 @@
 <div class="dialog-panel">
-    <h1 mat-dialog-title>{{data.dialogTitle}}</h1>
-    <mat-dialog-content class="mat-typography">
-        <p [innerHTML]="data.dialogContent">
-            
-        </p>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-        <button mat-raised-button mat-dialog-close>
-            <mat-icon fontSet="material-icons-outlined">close</mat-icon>
-            Close
-        </button>
-    </mat-dialog-actions>
+  <h1 mat-dialog-title>{{ data.dialogTitle }}</h1>
+  <mat-dialog-content class="mat-typography">
+    <p [innerHTML]="data.dialogContent"></p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-raised-button mat-dialog-close>
+      <mat-icon fontSet="material-icons-outlined">close</mat-icon>
+      Close
+    </button>
+  </mat-dialog-actions>
 </div>

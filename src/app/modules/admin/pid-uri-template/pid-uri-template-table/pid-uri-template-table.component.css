@@ -1,0 +1,13 @@
+.no-wrap {
+    white-space: nowrap;
+}
+
+.mat-standard-chip {
+    border-radius: 10px;
+    min-height: 20px;
+    padding: 0px 8px;
+}
+
+tr {
+    vertical-align: middle;
+}

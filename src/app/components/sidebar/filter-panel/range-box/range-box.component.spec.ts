@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { RangeBoxComponent } from './range-box.component';
+import { RangeBoxComponent } from "./range-box.component";
 
-describe('RangeBoxComponent', () => {
+describe("RangeBoxComponent", () => {
   let component: RangeBoxComponent;
   let fixture: ComponentFixture<RangeBoxComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ RangeBoxComponent ]
-    })
-    .compileComponents();
+      declarations: [RangeBoxComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('RangeBoxComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

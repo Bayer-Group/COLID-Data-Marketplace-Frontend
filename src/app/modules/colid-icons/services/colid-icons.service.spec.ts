@@ -1,11 +1,11 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { ColidIconsService } from './colid-icons.service';
+import { ColidIconsService } from "./colid-icons.service";
 
-describe('ColidIconsService', () => {
+describe("ColidIconsService", () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
+  it("should be created", () => {
     const service: ColidIconsService = TestBed.get(ColidIconsService);
     expect(service).toBeTruthy();
   });

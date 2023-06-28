@@ -25,7 +25,8 @@
               "src/styles.scss",
               "./node_modules/quill/dist/quill.core.css",
               "./node_modules/quill/dist/quill.bubble.css",
-              "./node_modules/quill/dist/quill.snow.css"
+              "./node_modules/quill/dist/quill.snow.css",
+              "./node_modules/bootstrap/dist/css/bootstrap.css"
             ],
             "scripts": [],
             "vendorChunk": true,
@@ -189,6 +190,15 @@
             "assets": [
               "src/favicon.ico",
               "src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
             ]
           }
         }

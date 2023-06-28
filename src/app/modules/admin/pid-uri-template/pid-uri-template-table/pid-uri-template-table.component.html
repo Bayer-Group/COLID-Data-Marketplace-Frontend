@@ -1,0 +1,142 @@
+<div class="row px-3" *ngIf="pidUriTemplateForm">
+  <form [formGroup]="pidUriTemplateForm" class="form-group w-100">
+    <table
+      class="table"
+      *ngIf="metaData && (pidUriTemplates$ | async); else loading"
+    >
+      <thead>
+        <tr>
+          <th></th>
+          <th scope="col" *ngFor="let m of metaData">
+            <div class="d-flex">
+              {{ m.properties[constants.Metadata.Name] }}
+              <mat-icon
+                class="ms-2"
+                fontSet="material-icons-outlined"
+                [inline]="true"
+                matTooltip="{{ m.properties[constants.Metadata.Comment] }}"
+                >info</mat-icon
+              >
+            </div>
+          </th>
+          <th class="no-wrap"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of pidUriTemplates$ | async; let i = index">
+          <th scope="row">{{ i + 1 }}</th>
+          <td *ngFor="let m of metaData">
+            <div *ngIf="p !== selectedForEdit">
+              <app-entity-display-item
+                [entityProperty]="p.properties[m.key]"
+                [metadataProperty]="m"
+              >
+              </app-entity-display-item>
+            </div>
+            <div *ngIf="p === selectedForEdit">
+              <app-form-item
+                name="{{ m.properties[pidUriConstant] }}"
+                [readOnly]="isReadOnly(m.properties[pidUriConstant])"
+                [formControl]="
+                  pidUriTemplateForm.controls[m.properties[pidUriConstant]]
+                "
+                [metaData]="m"
+                [errors]="f[m.properties[pidUriConstant]].errors"
+                [formItemSettings]="formItemSettings"
+              >
+              </app-form-item>
+            </div>
+          </td>
+          <td class="no-wrap" style="font-size: 1rem; cursor: pointer">
+            <div class="text-right d-flex" *ngIf="p !== selectedForEdit">
+              <action-button
+                type="mat-icon-button"
+                class="mr-2"
+                color="primary"
+                (click)="selectForEdit(p)"
+                *ngIf="!isTemplateDeprecated(p)"
+                matTooltip="Edit template"
+                [disabled]="isLoading"
+                [loading]="isCurrentEntity(p)"
+                icon="edit"
+              ></action-button>
+              <action-button
+                type="mat-icon-button"
+                color="primary"
+                (click)="confirmAndDelete(p)"
+                *ngIf="!isTemplateDeprecated(p)"
+                matTooltip="Delete template"
+                [disabled]="isLoading"
+                [loading]="isCurrentEntity(p, 'delete')"
+                icon="delete_forever"
+              ></action-button>
+              <action-button
+                type="mat-icon-button"
+                color="primary"
+                (click)="reactivate(p)"
+                *ngIf="isTemplateDeprecated(p)"
+                matTooltip="Reactivate template"
+                [disabled]="isLoading"
+                [loading]="isCurrentEntity(p, 'reactivate')"
+                icon="replay"
+              ></action-button>
+            </div>
+            <div *ngIf="p === selectedForEdit" class="d-flex">
+              <action-button
+                type="mat-icon-button"
+                class="mr-2"
+                color="primary"
+                (click)="cancelEditing()"
+                matTooltip="Cancel editing"
+                icon="cancel"
+                [disabled]="isLoading"
+              ></action-button>
+              <action-button
+                type="mat-icon-button"
+                color="primary"
+                (click)="editPidUriTemplate()"
+                matTooltip="Save template"
+                [disabled]="isLoading"
+                [loading]="isCurrentEntity(p, 'save')"
+                icon="save"
+              ></action-button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="!selectedForEdit">
+          <th scope="row">New</th>
+          <td *ngFor="let m of metaData">
+            <app-form-item
+              name="{{ m.properties[pidUriConstant] }}"
+              [readOnly]="isReadOnly(m.properties[pidUriConstant])"
+              [formControl]="
+                pidUriTemplateForm.controls[m.properties[pidUriConstant]]
+              "
+              [metaData]="m"
+              [errors]="f[m.properties[pidUriConstant]].errors"
+              [formItemSettings]="formItemSettings"
+            ></app-form-item>
+          </td>
+          <td class="no-wrap" style="font-size: 1.2rem; cursor: pointer">
+            <action-button
+              color="primary"
+              (click)="create()"
+              [disabled]="isLoading"
+              [loading]="isCurrentEntity(null, 'create')"
+              icon="create"
+            >
+              Create
+            </action-button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</div>
+<ng-template #loading>
+  <div class="row justify-content-center mt-4">
+    <div class="col-auto">
+      <app-colid-spinner></app-colid-spinner>
+    </div>
+  </div>
+</ng-template>

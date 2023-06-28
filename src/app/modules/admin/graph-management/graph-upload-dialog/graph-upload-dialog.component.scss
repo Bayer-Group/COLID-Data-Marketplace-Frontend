@@ -1,0 +1,5 @@
+.ng-touched.ng-invalid ::ng-deep{
+    .dropzone  {
+        border: dashed 2px #e8394b !important;
+    }
+}

@@ -1,0 +1,66 @@
+<ng-container>
+  <div
+    *ngIf="!readOnly"
+    class="input-group"
+    id="input-group-taxonomy"
+    (clickOutside)="taxonomyMenuOpened = false"
+    (click)="taxonomyMenuOpened = !taxonomyMenuOpened"
+  >
+    <div
+      class="form-control ng-value-container"
+      style="border-right: none !important"
+      [class.border-bottom-0]="taxonomyMenuOpened"
+    >
+      <div *ngFor="let taxonomy of _internalValue" class="ng-value">
+        <span
+          aria-hidden="true"
+          class="ng-value-icon left"
+          (click)="removeTaxonomy(taxonomy); taxonomyMenuOpened = false"
+          >×</span
+        >
+        <span class="ng-value-label">{{ taxonomy.name }}</span>
+      </div>
+    </div>
+    <div
+      class="input-group-append"
+      [class.border-bottom-0]="taxonomyMenuOpened"
+    >
+      <span
+        class="close"
+        (click)="removeItems()"
+        *ngIf="_internalValue?.length !== 0"
+        >×</span
+      >
+      <mat-icon>{{
+        taxonomyMenuOpened ? "arrow_drop_up" : "arrow_drop_down"
+      }}</mat-icon>
+    </div>
+  </div>
+  <div style="position: relative">
+    <div class="ng-dropdown-panel" [hidden]="!taxonomyMenuOpened">
+      <div #scroll class="ng-dropdown-panel-items scroll-host">
+        <div #padding [class.total-padding]="true"></div>
+        <div #content>
+          <colid-tree-view
+            *ngIf="getTaxonomyList"
+            (click)="$event.stopPropagation()"
+            (selectionChanged)="handleSelectionChanged($event)"
+            [selectedNodes]="internalValue"
+            [TREE_DATA]="getTaxonomyList"
+            [singleSelection]="singleSelection"
+            [name]="name"
+          ></colid-tree-view>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="form-control ng-value-container disabled"
+    id="input-group-taxonomy"
+    *ngIf="readOnly"
+  >
+    <div *ngFor="let taxonomy of _internalValue" class="ng-value">
+      <span class="ng-value-label">{{ taxonomy.name }}</span>
+    </div>
+  </div>
+</ng-container>

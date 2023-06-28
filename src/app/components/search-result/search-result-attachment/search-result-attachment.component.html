@@ -1,7 +1,9 @@
 <div class="my-2">
-  <img [src]="attachment['id']"
+  <img
+    [src]="attachment['id']"
     (click)="onOpenImageDialog(mappedAttachments)"
     [matTooltip]="comment"
     alt="comment"
-    class="image"> 
+    class="image"
+  />
 </div>

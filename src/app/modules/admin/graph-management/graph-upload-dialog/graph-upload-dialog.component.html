@@ -1,0 +1,52 @@
+<div class="d-flex flex-column" style="padding: 24px; min-height: 30vh">
+  <h2 mat-dialog-title>Upload Graph</h2>
+  <form [formGroup]="uploadForm">
+    <mat-dialog-content class="mat-typography" style="flex-grow: 1">
+      <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Graph Name</mat-label>
+        <input
+          type="url"
+          formControlName="graphName"
+          matInput
+          [placeholder]="placeholder"
+        />
+        <mat-icon matSuffix>graphic_eq</mat-icon>
+        <mat-hint>Specifies the name to upload the graph with.</mat-hint>
+      </mat-form-field>
+      <app-graph-file-upload formControlName="graphFile">
+      </app-graph-file-upload>
+      <mat-checkbox color="primary" formControlName="overwrite"
+        >Overwrite Graph if exists</mat-checkbox
+      >
+    </mat-dialog-content>
+    <div class="text-center my-3">
+      <mat-progress-bar
+        class="mb-2"
+        *ngIf="isLoading || isGraphUpload"
+        mode="indeterminate"
+      ></mat-progress-bar>
+      <span class="text-danger font-weight-bold" *ngIf="status === 'error'">
+        Error: {{ error }}
+      </span>
+      <span class="text-primary font-weight-bold" *ngIf="isGraphUpload">
+        Triplestore is uploading graph - Status:
+        {{ neptuneGraphStatus.loadStatus }}
+      </span>
+      <span class="text-success font-weight-bold" *ngIf="status === 'success'">
+        Success - Uploading graph completed
+      </span>
+    </div>
+    <div class="text-right">
+      <button mat-button mat-dialog-close>Cancel</button>
+      <button
+        type="submit"
+        (click)="submit()"
+        [disabled]="disabledForm"
+        mat-button
+        cdkFocusInitial
+      >
+        Upload
+      </button>
+    </div>
+  </form>
+</div>

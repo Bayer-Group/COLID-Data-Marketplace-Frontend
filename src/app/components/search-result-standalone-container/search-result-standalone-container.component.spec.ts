@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { SearchResultStandaloneContainerComponent } from './search-result-standalone-container.component';
+import { SearchResultStandaloneContainerComponent } from "./search-result-standalone-container.component";
 
-describe('SearchResultStandaloneContainerComponent', () => {
+describe("SearchResultStandaloneContainerComponent", () => {
   let component: SearchResultStandaloneContainerComponent;
   let fixture: ComponentFixture<SearchResultStandaloneContainerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SearchResultStandaloneContainerComponent ]
-    })
-    .compileComponents();
+      declarations: [SearchResultStandaloneContainerComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('SearchResultStandaloneContainerComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

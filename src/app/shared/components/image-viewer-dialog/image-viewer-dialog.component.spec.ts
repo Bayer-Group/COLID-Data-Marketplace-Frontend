@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { ImageViewerDialogComponent } from './image-viewer-dialog.component';
+import { ImageViewerDialogComponent } from "./image-viewer-dialog.component";
 
-describe('ImageViewerDialogComponent', () => {
+describe("ImageViewerDialogComponent", () => {
   let component: ImageViewerDialogComponent;
   let fixture: ComponentFixture<ImageViewerDialogComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ImageViewerDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [ImageViewerDialogComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('ImageViewerDialogComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

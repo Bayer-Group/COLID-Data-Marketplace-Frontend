@@ -1,0 +1,51 @@
+<div class="row p-2">
+  <div class="col">
+    <h1 class="admin-tab-title">Extended Uri Templates</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <div
+      *ngIf="
+        extendedUriTemplates$ | async as extendedUriTemplates;
+        else loading
+      "
+    >
+      <div class="list-group mb-1">
+        <a
+          href
+          routerLink="./edit"
+          [queryParams]="{ id: extendedUriTemplate.id }"
+          class="list-group-item list-group-item-action"
+          *ngFor="let extendedUriTemplate of extendedUriTemplates"
+          style="cursor: pointer"
+        >
+          <div class="row justify-content-between">
+            <div class="col">
+              {{ extendedUriTemplate.name }}
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col p-3 text-right">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="createExtendedUriTemplate()"
+    >
+      <mat-icon fontSet="material-icons-outlined">add</mat-icon>
+      Create
+    </button>
+  </div>
+</div>
+<ng-template #loading>
+  <div class="row justify-content-center mt-4">
+    <div class="col-auto">
+      <app-colid-spinner></app-colid-spinner>
+    </div>
+  </div>
+</ng-template>

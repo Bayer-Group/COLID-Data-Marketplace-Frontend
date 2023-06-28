@@ -1,0 +1,127 @@
+<div class="row p-2">
+  <div class="col">
+    <h1 class="admin-tab-title">Deletion Requests</h1>
+  </div>
+</div>
+<div class="row w-100">
+  <ng-container *ngIf="resources$ | async as resources">
+    <div
+      *ngIf="
+        resources != null && resources.items.length !== 0;
+        else emptyResults
+      "
+      class="col-12 d-flex align-items-center justify-content-between pl-16-px"
+    >
+      <mat-checkbox
+        color="primary"
+        (change)="handleCheckboxChanged($event)"
+        [checked]="someSelected"
+        [indeterminate]="someSelected && !allSelected"
+      >
+        <h3 class="m-0" *ngIf="!someSelected">Select all</h3>
+        <h3 class="m-0" *ngIf="someSelected">
+          {{ this.deletionRequests.selectedOptions.selected.length }} entries
+          selected
+        </h3>
+      </mat-checkbox>
+      <div>
+        <action-button
+          class="ms-2"
+          color="info"
+          (click)="reject()"
+          [disabled]="selectedDeletionRequests.length === 0 || isLoading"
+          [loading]="isLoading && action === 'reject'"
+        >
+          Reject
+        </action-button>
+
+        <action-button
+          class="ms-2"
+          color="warn"
+          (click)="delete()"
+          [disabled]="selectedDeletionRequests.length === 0 || isLoading"
+          [loading]="isLoading && action === 'deletion'"
+        >
+          Delete
+        </action-button>
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="col-12 p-0">
+    <mat-selection-list
+      [hidden]="isLoading$ | async"
+      #deletionRequests
+      (selectionChange)="handleSelectionChanged($event)"
+    >
+      <ng-container *ngIf="resources$ | async as resources">
+        <mat-list-option
+          color="primary"
+          checkboxPosition="before"
+          [value]="resource"
+          *ngFor="
+            let resource of resources.items | slice : lowValue : highValue
+          "
+          matTooltip="{{ resource.definition.substring(0, 1000) }}..."
+          matTooltipShowDelay="700"
+        >
+          <ds-icon
+            mat-list-icon
+            class="fa-2x"
+            iconType="S3"
+            [tooltipDisabled]="false"
+            [delay]="300"
+            [icon]="resource.resourceType"
+          ></ds-icon>
+          <a
+            mat-line
+            routerLink="/resource"
+            target="_blank"
+            [queryParams]="{ pidUri: resource.pidUri }"
+            style="width: fit-content"
+          >
+            <div class="d-flex align-items-center" style="width: fit-content">
+              <h4 class="mb-1">{{ resource.name }}</h4>
+              &nbsp;&nbsp;
+              <mat-icon style="font-size: large">open_in_new</mat-icon>
+            </div>
+          </a>
+          <div mat-line>
+            <a
+              class="wordbreak"
+              [href]="'mailto:' + resource.changeRequester"
+              >{{ resource.changeRequester }}</a
+            >
+            <span class="text-muted"> (Change Requester)</span>
+          </div>
+        </mat-list-option>
+
+        <mat-paginator
+          [length]="resources.items.length"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="[10, 20, 50, 100]"
+          (page)="getPaginatorData($event)"
+          showFirstLastButtons
+        >
+        </mat-paginator>
+      </ng-container>
+    </mat-selection-list>
+  </div>
+
+  <div *ngIf="isLoading$ | async" class="col-12 mt-3">
+    <app-colid-spinner
+      class="d-flex justify-content-center"
+    ></app-colid-spinner>
+  </div>
+
+  <ng-template #emptyResults>
+    <div>
+      <div class="mt-4 text-center">
+        <mat-icon style="font-size: 5rem; overflow: unset" [inline]="true"
+          >done</mat-icon
+        >
+        <h4>There are currently no requests to delete a resource.</h4>
+      </div>
+    </div>
+  </ng-template>
+</div>

@@ -1,56 +1,95 @@
 <div>
-  <div *ngIf="((!loadingstatus) || (dataSource && dataSource.length>0) ||(tables && tables.length>0)); else spinner">
-    <ng-container *ngIf="(dataSource && dataSource.length>0) ||(tables && tables.length>0); else noData">
+  <div
+    *ngIf="
+      !loadingstatus ||
+        (dataSource && dataSource.length > 0) ||
+        (tables && tables.length > 0);
+      else spinner
+    "
+  >
+    <ng-container
+      *ngIf="
+        (dataSource && dataSource.length > 0) || (tables && tables.length > 0);
+        else noData
+      "
+    >
       <br />
 
-      <ng-container *ngFor="let table of tables;let i = index;">
-
+      <ng-container *ngFor="let table of tables; let i = index">
         <div *ngIf="showCheckbox">
+          <b>{{ table.resourceDetail[nameColumn].outbound[0].value }}</b>
 
-          <b>{{table.resourceDetail[nameColumn].outbound[0].value}}</b>
-
-
-
-          <ng-container *ngFor="let linkedColumnDetail of table.linkedColumnResourceDetail; let j = index;">
-
+          <ng-container
+            *ngFor="
+              let linkedColumnDetail of table.linkedColumnResourceDetail;
+              let j = index
+            "
+          >
             <!--<code>
               L: {{linkedColumnDetail.length}}
               {{linkedColumnDetail | json}}
             </code> -->
 
             <ng-container *ngIf="linkedColumnDetail">
-              <mat-checkbox [value]="linkedColumnDetail[hasPIDURI].outbound[0].value"
-                (change)="checkboxChanged($event)" class="filter-mode">
-                {{linkedColumnDetail[nameColumn].outbound[0].value}}</mat-checkbox>
+              <mat-checkbox
+                [value]="linkedColumnDetail[hasPIDURI].outbound[0].value"
+                (change)="checkboxChanged($event)"
+                class="filter-mode"
+              >
+                {{
+                  linkedColumnDetail[nameColumn].outbound[0].value
+                }}</mat-checkbox
+              >
             </ng-container>
           </ng-container>
         </div>
         <mat-accordion *ngIf="!showCheckbox">
-          <mat-expansion-panel class="expanded" [expanded]="expanded" (afterCollapse)="onResultClicked(expanded)"
-            (afterExpand)="onResultClicked(expanded)">
+          <mat-expansion-panel
+            class="expanded"
+            [expanded]="expanded"
+            (afterCollapse)="onResultClicked(expanded)"
+            (afterExpand)="onResultClicked(expanded)"
+          >
             <mat-expansion-panel-header>
               <mat-title>
-
                 <div>
-                  <div class="result-header h4 align-items-center mr-0">
-                    <ds-icon class="icon-25" iconType="S3" [tooltipDisabled]="false" [delay]="300" [icon]="icon">
+                  <div class="result-header h4 align-items-center me-0">
+                    <ds-icon
+                      class="icon-25"
+                      iconType="S3"
+                      [tooltipDisabled]="false"
+                      [delay]="300"
+                      [icon]="icon"
+                    >
                     </ds-icon>
-                    {{table.resourceDetail[nameColumn].outbound[0].value}}
+                    {{ table.resourceDetail[nameColumn].outbound[0].value }}
                   </div>
                 </div>
               </mat-title>
             </mat-expansion-panel-header>
 
-
             <div class="ng-star-inserted">
               <div class="container m-0 ng-star-inserted">
                 <div class="row pb-1 ng-star-inserted">
-                  <div class="col-3 ng-star-inserted"><span _ngcontent-ctu-c16=""
-                      class="small text-muted text-uppercase lead">LABEL</span></div>
+                  <div class="col-3 ng-star-inserted">
+                    <span
+                      _ngcontent-ctu-c16=""
+                      class="small text-muted text-uppercase"
+                      >LABEL</span
+                    >
+                  </div>
                   <div class="col-9 ng-star-inserted">
                     <span _ngcontent-ctu-c16="">
-                      <a [href]="table.resourceDetail[hasPIDURI].outbound[0].value"
-                        (click)="clickTable($event, table.resourceDetail)">{{table.resourceDetail[nameColumn].outbound[0].value}}</a></span>
+                      <a
+                        [href]="
+                          table.resourceDetail[hasPIDURI].outbound[0].value
+                        "
+                        (click)="clickTable($event, table.resourceDetail)"
+                        >{{
+                          table.resourceDetail[nameColumn].outbound[0].value
+                        }}</a
+                      ></span
+                    >
                   </div>
                 </div>
               </div>
@@ -59,39 +98,21 @@
             <div class="ng-star-inserted">
               <div class="container m-0 ng-star-inserted">
                 <div class="row pb-1 ng-star-inserted">
-                  <div class="col-3 ng-star-inserted"><span _ngcontent-ctu-c16=""
-                      class="small text-muted text-uppercase lead">DEFINITION</span></div>
-                  <div class="col-9 ng-star-inserted">
-                    <span _ngcontent-ctu-c16=""
-                      [innerHTML]="table.resourceDetail[hasResourceDefinition].outbound[0].value"></span>
+                  <div class="col-3 ng-star-inserted">
+                    <span
+                      _ngcontent-ctu-c16=""
+                      class="small text-muted text-uppercase"
+                      >DEFINITION</span
+                    >
                   </div>
-                </div>
-              </div>
-            </div>
-
-
-            <div class="ng-star-inserted">
-              <div class="container m-0 ng-star-inserted">
-                <div class="row pb-1 ng-star-inserted">
-                  <div class="col-3 ng-star-inserted"><span _ngcontent-ctu-c16=""
-                      class="small text-muted text-uppercase lead">PID URI</span></div>
-                  <div class="col-9 ng-star-inserted">
-                    <a [href]="table.resourceDetail[hasPIDURI].outbound[0].value"
-                      class="ng-star-inserted"><span
-                        _ngcontent-ctu-c16="">{{table.resourceDetail[hasPIDURI].outbound[0].value}}</span></a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="ng-star-inserted">
-              <div class="container m-0 ng-star-inserted">
-                <div class="row pb-1 ng-star-inserted">
-                  <div class="col-3 ng-star-inserted"><span _ngcontent-ctu-c16=""
-                      class="small text-muted text-uppercase lead">AUTHOR</span></div>
                   <div class="col-9 ng-star-inserted">
                     <span
-                      _ngcontent-ctu-c16="">{{table.resourceDetail[author].outbound[0].value}}</span>
+                      _ngcontent-ctu-c16=""
+                      [innerHTML]="
+                        table.resourceDetail[hasResourceDefinition].outbound[0]
+                          .value
+                      "
+                    ></span>
                   </div>
                 </div>
               </div>
@@ -100,13 +121,60 @@
             <div class="ng-star-inserted">
               <div class="container m-0 ng-star-inserted">
                 <div class="row pb-1 ng-star-inserted">
-                  <div class="col-3 ng-star-inserted"><span _ngcontent-ctu-c16=""
-                      class="small text-muted text-uppercase lead">DATE CREATED</span></div>
-                  <div class="col-9 ng-star-inserted">
+                  <div class="col-3 ng-star-inserted">
                     <span
-                      _ngcontent-ctu-c16="">{{table.resourceDetail[dateCreated].outbound[0].value
-                      |
-                      date: 'yyyy-MM-dd hh:mm'}}</span>
+                      _ngcontent-ctu-c16=""
+                      class="small text-muted text-uppercase"
+                      >PID URI</span
+                    >
+                  </div>
+                  <div class="col-9 ng-star-inserted">
+                    <a
+                      [href]="table.resourceDetail[hasPIDURI].outbound[0].value"
+                      class="ng-star-inserted"
+                      ><span _ngcontent-ctu-c16="">{{
+                        table.resourceDetail[hasPIDURI].outbound[0].value
+                      }}</span></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ng-star-inserted">
+              <div class="container m-0 ng-star-inserted">
+                <div class="row pb-1 ng-star-inserted">
+                  <div class="col-3 ng-star-inserted">
+                    <span
+                      _ngcontent-ctu-c16=""
+                      class="small text-muted text-uppercase"
+                      >AUTHOR</span
+                    >
+                  </div>
+                  <div class="col-9 ng-star-inserted">
+                    <span _ngcontent-ctu-c16="">{{
+                      table.resourceDetail[author].outbound[0].value
+                    }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ng-star-inserted">
+              <div class="container m-0 ng-star-inserted">
+                <div class="row pb-1 ng-star-inserted">
+                  <div class="col-3 ng-star-inserted">
+                    <span
+                      _ngcontent-ctu-c16=""
+                      class="small text-muted text-uppercase"
+                      >DATE CREATED</span
+                    >
+                  </div>
+                  <div class="col-9 ng-star-inserted">
+                    <span _ngcontent-ctu-c16="">{{
+                      table.resourceDetail[dateCreated].outbound[0].value
+                        | date : "yyyy-MM-dd hh:mm"
+                    }}</span>
                   </div>
                 </div>
               </div>
@@ -114,47 +182,90 @@
 
             <ng-template matExpansionPanelContent>
               <ng-container *ngFor="let linkedColumndetail of linkedColumn[i]">
-                <ng-container *ngIf="linkedColumndetail && linkedColumndetail.length>0">
+                <ng-container
+                  *ngIf="linkedColumndetail && linkedColumndetail.length > 0"
+                >
                   <div class="column-container">
                     <div><b>Columns</b></div>
-                    <br>
-                    <table mat-table [dataSource]="linkedColumndetail" class="mat-elevation-z8 column-table">
-                      <ng-container *ngFor="let columnName of columnNames" [matColumnDef]="columnName">
-                        <th mat-header-cell class="header" *matHeaderCellDef>{{ columnName | columnsName :metadata }}
+                    <br />
+                    <table
+                      mat-table
+                      [dataSource]="linkedColumndetail"
+                      class="mat-elevation-z8 column-table"
+                    >
+                      <ng-container
+                        *ngFor="let columnName of columnNames"
+                        [matColumnDef]="columnName"
+                      >
+                        <th mat-header-cell class="header" *matHeaderCellDef>
+                          {{ columnName | columnsName : metadata }}
                         </th>
-                        <td mat-cell class="flex-stretch" *matCellDef="let element">
-                          <ng-container *ngIf="element[columnName] != undefined">
+                        <td
+                          mat-cell
+                          class="flex-stretch"
+                          *matCellDef="let element"
+                        >
+                          <ng-container
+                            *ngIf="element[columnName] != undefined"
+                          >
                             <ng-container
-                              *ngIf="(columnName == dateCreated || columnName == lastChnagedByDate) && columnName != nameColumn">
+                              *ngIf="
+                                (columnName === dateCreated ||
+                                  columnName === lastChnagedByDate) &&
+                                columnName !== nameColumn
+                              "
+                            >
                               <span
-                                [innerHTML]="element[columnName].outbound[0].value | date:'yyyy-MM-dd hh:mm'"></span>
+                                [innerHTML]="
+                                  element[columnName].outbound[0].value
+                                    | date : 'yyyy-MM-dd hh:mm'
+                                "
+                              ></span>
                             </ng-container>
 
-
-                            <ng-container *ngIf="columnName == nameColumn">
-
-                              <a [ngStyle]="{'padding-left.px': (element.subIndex * 10)}"
-                                href="{{element[hasPIDURI].outbound[0].value}}"
-                                (click)="clickColumn($event, element[hasPIDURI].outbound[0].value)"
-                                [innerHTML]="element[columnName].outbound[0].value">
+                            <ng-container *ngIf="columnName === nameColumn">
+                              <a
+                                [ngStyle]="{
+                                  'padding-left.px': element.subIndex * 10
+                                }"
+                                href="{{
+                                  element[hasPIDURI].outbound[0].value
+                                }}"
+                                (click)="
+                                  clickColumn(
+                                    $event,
+                                    element[hasPIDURI].outbound[0].value
+                                  )
+                                "
+                                [innerHTML]="
+                                  element[columnName].outbound[0].value
+                                "
+                              >
                               </a>
-
                             </ng-container>
 
                             <ng-container
-                              *ngIf="columnName != nameColumn && ((columnName != dateCreated && columnName != lastChnagedByDate))">
-                              <span [innerHTML]="element[columnName].outbound[0].value"></span>
+                              *ngIf="
+                                columnName !== nameColumn &&
+                                columnName !== dateCreated &&
+                                columnName !== lastChnagedByDate
+                              "
+                            >
+                              <span
+                                [innerHTML]="
+                                  element[columnName].outbound[0].value
+                                "
+                              ></span>
                             </ng-container>
-
                           </ng-container>
-
-
-
                         </td>
                       </ng-container>
                       <tr mat-header-row *matHeaderRowDef="columnNames"></tr>
 
-                      <tr mat-row *matRowDef="let row; columns: columnNames"></tr>
+                      <tr
+                        mat-row
+                        *matRowDef="let row; columns: columnNames"
+                      ></tr>
                     </table>
                   </div>
                 </ng-container>
@@ -162,119 +273,142 @@
             </ng-template>
           </mat-expansion-panel>
         </mat-accordion>
-
-
-
       </ng-container>
       <br />
       <br />
 
-      <ng-container *ngIf="dataSource && dataSource.length>0">
+      <ng-container *ngIf="dataSource && dataSource.length > 0">
         <div class="standalone-column-container">
           <div><b>Column</b></div>
-          <br>
+          <br />
 
           <ng-container *ngIf="showCheckbox">
             <ng-container *ngFor="let element of dataSource">
-              <mat-checkbox (change)="checkboxChanged($event)"
-                [value]="element[hasPIDURI].outbound[0].value" class="filter-mode">
-                {{element[nameColumn].outbound[0].value}}</mat-checkbox>
+              <mat-checkbox
+                (change)="checkboxChanged($event)"
+                [value]="element[hasPIDURI].outbound[0].value"
+                class="filter-mode"
+              >
+                {{ element[nameColumn].outbound[0].value }}</mat-checkbox
+              >
             </ng-container>
-
           </ng-container>
 
-
-          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 column-table" *ngIf="!showCheckbox">
-
-            <ng-container *ngFor="let columnName of columnNames" [matColumnDef]="columnName">
-              <th mat-header-cell class="header" *matHeaderCellDef>{{ columnName | columnsName :metadata }}</th>
+          <table
+            mat-table
+            [dataSource]="dataSource"
+            class="mat-elevation-z8 column-table"
+            *ngIf="!showCheckbox"
+          >
+            <ng-container
+              *ngFor="let columnName of columnNames"
+              [matColumnDef]="columnName"
+            >
+              <th mat-header-cell class="header" *matHeaderCellDef>
+                {{ columnName | columnsName : metadata }}
+              </th>
               <td mat-cell class="flex-stretch" *matCellDef="let element">
-
                 <ng-container *ngIf="element[columnName] != undefined">
-
                   <ng-container
-                    *ngIf="(columnName == dateCreated || columnName == lastChnagedByDate) && columnName != nameColumn">
-
-                    <span [innerHTML]="element[columnName].outbound[0].value | date:'yyyy-MM-dd hh:mm'"></span>
-
-
+                    *ngIf="
+                      (columnName === dateCreated ||
+                        columnName === lastChnagedByDate) &&
+                      columnName !== nameColumn
+                    "
+                  >
+                    <span
+                      [innerHTML]="
+                        element[columnName].outbound[0].value
+                          | date : 'yyyy-MM-dd hh:mm'
+                      "
+                    ></span>
                   </ng-container>
 
-
-                  <ng-container *ngIf="columnName == nameColumn">
-                    <a [ngStyle]="{'padding-left.px': (element.subIndex * 10)}"
-                      href="{{element[hasPIDURI].outbound[0].value}}"
-                      (click)="clickColumn($event, element[hasPIDURI].outbound[0].value)"
-                      [innerHTML]="element[columnName].outbound[0].value">
+                  <ng-container *ngIf="columnName === nameColumn">
+                    <a
+                      [ngStyle]="{ 'padding-left.px': element.subIndex * 10 }"
+                      href="{{ element[hasPIDURI].outbound[0].value }}"
+                      (click)="
+                        clickColumn(
+                          $event,
+                          element[hasPIDURI].outbound[0].value
+                        )
+                      "
+                      [innerHTML]="element[columnName].outbound[0].value"
+                    >
                     </a>
-
                   </ng-container>
 
                   <ng-container
-                    *ngIf="columnName != nameColumn && ((columnName != dateCreated && columnName != lastChnagedByDate))">
-                    <span [innerHTML]="element[columnName].outbound[0].value"></span>
+                    *ngIf="
+                      columnName !== nameColumn &&
+                      columnName !== dateCreated &&
+                      columnName !== lastChnagedByDate
+                    "
+                  >
+                    <span
+                      [innerHTML]="element[columnName].outbound[0].value"
+                    ></span>
                   </ng-container>
                 </ng-container>
               </td>
-
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="columnNames"></tr>
             <tr mat-row *matRowDef="let row; columns: columnNames"></tr>
-
           </table>
-
         </div>
-
       </ng-container>
     </ng-container>
   </div>
-
 </div>
 
 <ng-template #spinner>
   <div *ngIf="error">
     <div class="d-flex justify-content-center">
-      <mat-icon class="icon-error" fontSet="material-icons-outlined">error_outline</mat-icon>
+      <mat-icon class="icon-error" fontSet="material-icons-outlined"
+        >error_outline</mat-icon
+      >
     </div>
     <div class="d-flex text-error justify-content-center">
-      {{error}}
+      {{ error }}
     </div>
   </div>
 
-  <div *ngIf="(!error && !schemaStatusChecked)" class="row justify-content-center mt-4">
+  <div
+    *ngIf="!error && !schemaStatusChecked"
+    class="row justify-content-center mt-4"
+  >
     <div class="col-auto">
-
       <app-colid-spinner></app-colid-spinner>
     </div>
   </div>
 
-  <div *ngIf="(!error && schemaStatusChecked)" class="row justify-content-center mt-4">
-    <div class="col-auto">
-      No data available
-    </div>
+  <div
+    *ngIf="!error && schemaStatusChecked"
+    class="row justify-content-center mt-4"
+  >
+    <div class="col-auto">No data available</div>
   </div>
-
 </ng-template>
 <ng-template #noData>
   <div *ngIf="error">
     <div class="d-flex justify-content-center">
-      <mat-icon class="icon-error" fontSet="material-icons-outlined">error_outline</mat-icon>
+      <mat-icon class="icon-error" fontSet="material-icons-outlined"
+        >error_outline</mat-icon
+      >
     </div>
     <div class="d-flex text-error justify-content-center">
-      {{error}}
+      {{ error }}
     </div>
   </div>
 
-  <div *ngIf="(!error && schemaStatus)" class="row justify-content-center mt-4">
+  <div *ngIf="!error && schemaStatus" class="row justify-content-center mt-4">
     <div class="col-auto">
       <app-colid-spinner></app-colid-spinner>
-
     </div>
   </div>
-  <div *ngIf="(!error && !schemaStatus)" class="row justify-content-center mt-4">
-    <div class="col-auto">
-      No data available
-    </div>
+  <div *ngIf="!error && !schemaStatus" class="row justify-content-center mt-4">
+    <div class="col-auto">No data available</div>
   </div>
 </ng-template>

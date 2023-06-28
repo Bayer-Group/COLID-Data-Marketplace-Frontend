@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { UserPreferencesComponent } from './user-preferences.component';
+import { UserPreferencesComponent } from "./user-preferences.component";
 
-describe('UserPreferencesComponent', () => {
+describe("UserPreferencesComponent", () => {
   let component: UserPreferencesComponent;
   let fixture: ComponentFixture<UserPreferencesComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserPreferencesComponent ]
-    })
-    .compileComponents();
+      declarations: [UserPreferencesComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('UserPreferencesComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

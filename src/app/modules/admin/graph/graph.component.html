@@ -1,0 +1,47 @@
+<div class="row justify-content-between">
+  <div class="col-auto">
+    <h1 class="admin-tab-title">Metadata Graph Configuration</h1>
+  </div>
+  <div class="col-auto">
+    <action-button
+      color="primary"
+      (click)="reindex()"
+      [loading]="reindexingInProgress"
+      icon="refresh"
+    >
+      Start reindex
+    </action-button>
+  </div>
+</div>
+
+<nav
+  class="mb-1"
+  mat-tab-nav-bar
+  mat-stretch-tabs
+  animationDuration="0ms"
+  mat-align-tabs="center"
+  dynamicHeight="true"
+>
+  <a
+    mat-tab-link
+    routerLink="./"
+    routerLinkActive
+    #graph="routerLinkActive"
+    [routerLinkActiveOptions]="{ exact: true }"
+    [active]="graph.isActive"
+  >
+    Current
+  </a>
+  <a
+    mat-tab-link
+    routerLink="history"
+    routerLinkActive
+    #history="routerLinkActive"
+    [routerLinkActiveOptions]="{ exact: true }"
+    [active]="history.isActive"
+  >
+    History
+  </a>
+</nav>
+
+<router-outlet></router-outlet>

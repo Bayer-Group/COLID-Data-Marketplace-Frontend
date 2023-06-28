@@ -1,0 +1,17 @@
+<ng-select
+  class="custom"
+  [addTag]="multiselectSettings.addTag ? addTagNowRef : false"
+  [loading]="loading"
+  [items]="entityList"
+  [multiple]="multiselectSettings.multiple"
+  [disabled]="readOnly"
+  [maxSelectedItems]="multiselectSettings.maxSelectedItems"
+  [hideSelected]="multiselectSettings.hideSelected"
+  bindLabel="name"
+  bindValue="id"
+  [(ngModel)]="internalValue"
+  (change)="handleValueChanged(internalValue)"
+  [trackByFn]="trackByFn"
+  [typeahead]="multiInput$"
+>
+</ng-select>

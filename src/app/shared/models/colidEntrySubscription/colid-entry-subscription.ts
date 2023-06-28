@@ -6,9 +6,9 @@ export class ColidEntrySubscription {
   isSubscribed: boolean = true;
 
   public constructor(label, definition, resourceType, lifecycleStatus) {
-      this.label = label;
-      this.definition = definition;
-      this.resourceType = resourceType;
-      this.lifecycleStatus = lifecycleStatus;
+    this.label = label;
+    this.definition = definition;
+    this.resourceType = resourceType;
+    this.lifecycleStatus = lifecycleStatus;
   }
 }

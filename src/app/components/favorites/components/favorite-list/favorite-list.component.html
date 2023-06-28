@@ -1,8 +1,14 @@
 <mat-accordion>
   <hr class="mt-1" />
   <div class="justify-content-between">
-    <mat-expansion-panel #matPanel class="favorites-item mb-2" *ngFor="let favorite of favorites"
-      (opened)="fetchFavoriteListEntries(favorite.id)" (closed)="resetSelectedFavoriteListId(favorite.id)" [expanded]="selectedFavoriteListId == favorite.id">
+    <mat-expansion-panel
+      #matPanel
+      class="favorites-item mb-2"
+      *ngFor="let favorite of favorites"
+      (opened)="fetchFavoriteListEntries(favorite.id)"
+      (closed)="resetSelectedFavoriteListId(favorite.id)"
+      [expanded]="selectedFavoriteListId === favorite.id"
+    >
       <mat-expansion-panel-header (click)="refreshSelectedEntry()">
         <mat-panel-title>
           <div>
@@ -12,19 +18,40 @@
           </div>
         </mat-panel-title>
         <mat-panel-description class="d-flex justify-content-end">
-          <button mat-icon-button class="border-button mr-1" matTooltip="Rename"(click)="editFavoriteList($event, favorite.id, favorite.name)">
+          <button
+            mat-icon-button
+            class="border-button me-1"
+            matTooltip="Rename"
+            (click)="editFavoriteList($event, favorite.id, favorite.name)"
+          >
             <mat-icon>create</mat-icon>
           </button>
-          <button mat-icon-button class="border-button mr-1 close" matTooltip="Delete"
-            [hidden]="matPanel.expanded" (click)="deleteFavorite($event, favorite.id, favorite.name)">
+          <button
+            mat-icon-button
+            class="border-button me-1 close"
+            matTooltip="Delete"
+            [hidden]="matPanel.expanded"
+            (click)="deleteFavorite($event, favorite.id, favorite.name)"
+          >
             <mat-icon fontSet="material-icons-outlined">delete</mat-icon>
           </button>
-          <button mat-icon-button class="border-button mr-1" matTooltip="Delete selected resources" (click)="removeSelectedEntries($event, favorite.id)"
-            [hidden]="!matPanel.expanded" [disabled]="selectedEntriesToDelete.length === 0">
+          <button
+            mat-icon-button
+            class="border-button me-1"
+            matTooltip="Delete selected resources"
+            (click)="removeSelectedEntries($event)"
+            [hidden]="!matPanel.expanded"
+            [disabled]="selectedEntriesToDelete.length === 0"
+          >
             <mat-icon fontSet="material-icons-outlined">delete_sweep</mat-icon>
           </button>
-          <button mat-icon-button class="border-button mr-1" matTooltip="Excel Export" (click)="startExportFavoriteList($event, favorite.id)"
-            [disabled]="favorite.favoritesListEntries.length === 0">
+          <button
+            mat-icon-button
+            class="border-button me-1"
+            matTooltip="Excel Export"
+            (click)="startExportFavoriteList($event, favorite.id)"
+            [disabled]="favorite.favoritesListEntries.length === 0"
+          >
             <mat-icon fontSet="material-icons-outlined">upload</mat-icon>
           </button>
         </mat-panel-description>
@@ -32,31 +59,66 @@
       <mat-divider class="my-1"></mat-divider>
       <div>
         <ng-container *ngIf="favoriteListEntryList$ | async as favoriteEntries">
-          <ng-container *ngIf="currentlyLoadingListIds$ | async as currentlyLoadingListIds">
-            <ng-container *ngIf="currentlyLoadingListIds.indexOf(favorite.id) === -1; else isLoading">
-              <div *ngIf="entryListExists(favoriteEntries, favorite.id); else emptyEntries"
-                class="block" style="position: relative">
-                <div *ngFor="let item of favoriteEntries[favorite.id]" class="entry">
-                  <div class="result-header py-2 px-1" [class.selected]="itemSelected(item)" >
-                    <div class="mr-2" style="cursor: pointer;" (click)="openEntryInfo(favorite.id, item)">
-                      <ds-icon class="icon-25" iconType="S3" [tooltipDisabled]="false"
-                        [delay]="300" [icon]="item[entityType].outbound[0].uri">
+          <ng-container
+            *ngIf="currentlyLoadingListIds$ | async as currentlyLoadingListIds"
+          >
+            <ng-container
+              *ngIf="
+                currentlyLoadingListIds.indexOf(favorite.id) === -1;
+                else isLoading
+              "
+            >
+              <div
+                *ngIf="
+                  entryListExists(favoriteEntries, favorite.id);
+                  else emptyEntries
+                "
+                class="block"
+                style="position: relative"
+              >
+                <div
+                  *ngFor="let item of favoriteEntries[favorite.id]"
+                  class="entry"
+                >
+                  <div
+                    class="result-header py-2 px-1"
+                    [class.selected]="itemSelected(item)"
+                  >
+                    <div
+                      class="me-2"
+                      style="cursor: pointer"
+                      (click)="openEntryInfo(favorite.id, item)"
+                    >
+                      <ds-icon
+                        class="icon-25"
+                        iconType="S3"
+                        [tooltipDisabled]="false"
+                        [delay]="300"
+                        [icon]="item[entityType].outbound[0].uri"
+                      >
                       </ds-icon>
-                      <span class="ml-2 favorite-title">{{ itemLabel(item) }}</span>
+                      <span class="ms-2 favorite-title">{{
+                        itemLabel(item)
+                      }}</span>
                     </div>
-                    <mat-checkbox (change)="checkboxChanged($event, item)"></mat-checkbox>
+                    <mat-checkbox
+                      (change)="checkboxChanged($event, item)"
+                    ></mat-checkbox>
                   </div>
                 </div>
               </div>
               <ng-template #emptyEntries> This list is empty </ng-template>
             </ng-container>
           </ng-container>
-            <ng-template #isLoading>
-              <div class="d-flex justify-content-center mt-2">
-                <app-colid-spinner [diameter]="15" [strokeWidth]="2"></app-colid-spinner>
-              </div>
-            </ng-template>
-          </ng-container>
+          <ng-template #isLoading>
+            <div class="d-flex justify-content-center mt-2">
+              <app-colid-spinner
+                [diameter]="15"
+                [strokeWidth]="2"
+              ></app-colid-spinner>
+            </div>
+          </ng-template>
+        </ng-container>
       </div>
     </mat-expansion-panel>
   </div>

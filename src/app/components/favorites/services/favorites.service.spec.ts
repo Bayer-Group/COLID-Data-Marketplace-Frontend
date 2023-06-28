@@ -1,8 +1,8 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { FavoritesService} from './favorites.service';
+import { FavoritesService } from "./favorites.service";
 
-describe('FavoritesService', () => {
+describe("FavoritesService", () => {
   let service: FavoritesService;
 
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe('FavoritesService', () => {
     service = TestBed.inject(FavoritesService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

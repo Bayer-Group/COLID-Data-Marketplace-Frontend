@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { UnauthorizedComponent } from './unauthorized.component';
+import { UnauthorizedComponent } from "./unauthorized.component";
 
-describe('UnauthorizedComponent', () => {
+describe("UnauthorizedComponent", () => {
   let component: UnauthorizedComponent;
   let fixture: ComponentFixture<UnauthorizedComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ UnauthorizedComponent ]
-    })
-    .compileComponents();
+      declarations: [UnauthorizedComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('UnauthorizedComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

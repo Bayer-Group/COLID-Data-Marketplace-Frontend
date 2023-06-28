@@ -1,14 +1,24 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
-import {Observable} from 'rxjs';
-import { MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  Input,
+  ViewChild,
+} from "@angular/core";
+import { Observable } from "rxjs";
+import {
+  MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger,
+} from "@angular/material/autocomplete";
 
 @Component({
-  selector: 'app-search-bar',
-  templateUrl: './search-bar.component.html',
-  styleUrls: ['./search-bar.component.scss']
+  selector: "app-search-bar",
+  templateUrl: "./search-bar.component.html",
+  styleUrls: ["./search-bar.component.scss"],
 })
-export class SearchBarComponent implements OnInit {
-  @ViewChild(MatAutocompleteTrigger, { static: true}) autocomplete: MatAutocompleteTrigger;
+export class SearchBarComponent {
+  @ViewChild(MatAutocompleteTrigger, { static: true })
+  autocomplete: MatAutocompleteTrigger;
 
   @Input() initialSearchText: string;
   @Input() autocompleteResult: Observable<string[]>;
@@ -20,13 +30,9 @@ export class SearchBarComponent implements OnInit {
   // Otherwise InputChangeEvent is emitted on return/enter key and the typeahead auto-suggestions shows up.
   blockInputChange = false;
 
-
   autocompleteOpened = false;
 
-  constructor() { }
-
-  ngOnInit() {
-  }
+  constructor() {}
 
   onInputChange(text: string) {
     if (this.blockInputChange === false) {
@@ -38,15 +44,15 @@ export class SearchBarComponent implements OnInit {
 
   onEnter(text: string) {
     this.autocomplete.closePanel();
-    
+
     this.blockInputChange = true;
-    if (text === '' || text === '+') {
-      text = '*';
+    if (text === "" || text === "+") {
+      text = "*";
     }
     this.searchChange.emit(text);
   }
 
-  handleOptionSelected(event: MatAutocompleteSelectedEvent){
+  handleOptionSelected(event: MatAutocompleteSelectedEvent) {
     this.onEnter(event.option.value);
   }
 }

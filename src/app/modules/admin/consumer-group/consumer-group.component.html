@@ -1,0 +1,10 @@
+<router-outlet
+  *ngIf="consumerGroupMetadata$ | async; else loading"
+></router-outlet>
+<ng-template #loading>
+  <div class="row justify-content-center mt-4">
+    <div class="col-auto">
+      <app-colid-spinner></app-colid-spinner>
+    </div>
+  </div>
+</ng-template>

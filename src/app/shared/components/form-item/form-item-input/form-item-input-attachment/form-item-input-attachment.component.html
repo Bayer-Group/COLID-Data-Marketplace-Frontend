@@ -1,0 +1,101 @@
+<div class="row">
+  <div [class.col-md-12]="!isFileUploaded" [class.col-md-10]="isFileUploaded">
+    <div class="row">
+      <!-- Row label for non-nested fields -->
+      <label
+        class="col-form-label"
+        [class.col-md-3]="!isFileUploaded"
+        [class.file-select-label]="isFileUploaded"
+      >
+        <span class="font-weight-bold">
+          File
+          <span style="color: red">*</span>
+        </span>
+      </label>
+
+      <div
+        [class.col-md-9]="!isFileUploaded"
+        [class.file-select-input]="isFileUploaded"
+      >
+        <div class="custom-file">
+          <input
+            type="file"
+            class="custom-file-input"
+            id="file-attachment-{{ indexerNested }}"
+            [disabled]="isUploadInProgress || isFileUploaded || formReadOnly"
+            (change)="handleAttachmentFileSelected($event.target.files)"
+            accept="image/png, image/jpeg"
+          />
+          <label class="custom-file-label" for="file-attachment">{{
+            attachmentFileName
+          }}</label>
+        </div>
+        <small class="form-text text-muted"
+          >Image with type of *.png / *.jpg and size &lt; 5 MB.</small
+        >
+        <app-form-item-errors
+          [name]="name"
+          [errors]="errors"
+        ></app-form-item-errors>
+      </div>
+
+      <div class="col-md-12" [class.file-is-uploaded]="isFileUploaded">
+        <app-form
+          class="attachment-form"
+          [indexerNested]="indexerNested"
+          [nestedForm]="true"
+          [metaData]="attachmentMetadata"
+          [entity]="internalValue"
+          [formReadOnly]="formReadOnly"
+          [placeholder]="{}"
+          [adminPrivilege]="adminPrivilege"
+          [errors]="errors?.result"
+          [isNew]="isNewEntity"
+          [readOnly]="isUploadInProgress || isFileUploaded"
+          [pidUriTemplatesFetched]="fetched$"
+          [pidUriTemplateNames]="presets"
+          (handleFormChanged)="handleAttachmentFormChanged($event)"
+        >
+        </app-form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-2 pl-1 attachment-image-center" *ngIf="isFileUploaded">
+    <img class="attachment-image" [src]="internalValue.id" alt="" />
+  </div>
+</div>
+
+<div class="col-12 text-right">
+  <div class="d-flex justify-content-end">
+    <button
+      mat-raised-button
+      class="ms-2"
+      color="accent"
+      [disabled]="isUploadInProgress || formReadOnly"
+      (click)="confirmAndRemoveAttachment()"
+    >
+      Remove
+    </button>
+    <button
+      mat-raised-button
+      class="ms-2"
+      color="primary"
+      [disabled]="!isUploadable || isUploadInProgress || formReadOnly"
+      (click)="uploadAttachment()"
+    >
+      <ng-container *ngIf="!isUploadInProgress"> Upload </ng-container>
+      <div
+        class="d-flex justify-content-center align-items-center"
+        *ngIf="isUploadInProgress"
+      >
+        Uploading
+        <app-colid-spinner
+          class="inline-spinner"
+          [diameter]="20"
+          [strokeWidth]="2"
+        ></app-colid-spinner>
+      </div>
+    </button>
+  </div>
+</div>

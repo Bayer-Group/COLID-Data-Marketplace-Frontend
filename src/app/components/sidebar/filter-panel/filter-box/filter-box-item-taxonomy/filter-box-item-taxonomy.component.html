@@ -1,29 +1,62 @@
 <ng-container *ngIf="taxonomyTreeData && checklistSelection">
-    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-        <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding matTreeNodePaddingIndent="20">
-            <button mat-icon-button disabled></button>
-            <mat-checkbox class="checklist-leaf-node" color="active" [checked]="checklistSelection.isSelected(node)"
-                (change)="leafItemSelectionToggle(node)">
-                {{node.name}}
-            </mat-checkbox>
-            <div class="ml-2" style="margin-top: -0.15rem"><span class="badge badge-pill badge-light"
-                    style="font-weight: normal !important;">{{_buckets[node.name] ? _buckets[node.name] : 0}}</span>
-            </div>
-        </mat-tree-node>
+  <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+    <mat-tree-node
+      *matTreeNodeDef="let node"
+      matTreeNodeToggle
+      matTreeNodePadding
+      matTreeNodePaddingIndent="20"
+    >
+      <button mat-icon-button disabled></button>
+      <mat-checkbox
+        class="checklist-leaf-node"
+        color="active"
+        [checked]="checklistSelection.isSelected(node)"
+        (change)="leafItemSelectionToggle(node)"
+      >
+        {{ node.name }}
+      </mat-checkbox>
+      <div class="ms-2" style="margin-top: -0.15rem">
+        <span
+          class="badge badge-pill badge-light"
+          style="
+            font-weight: normal !important;
+            color: black;
+            border-radius: 10rem;
+          "
+          >{{ _buckets[node.name] ? _buckets[node.name] : 0 }}</span
+        >
+      </div>
+    </mat-tree-node>
 
-        <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="20">
-            <button mat-icon-button matTreeNodeToggle>
-                <mat-icon>
-                    {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-                </mat-icon>
-            </button>
-            <mat-checkbox color="active" [checked]="descendantsAllSelected(node)"
-                [indeterminate]="descendantsPartiallySelected(node)" (change)="itemSelectionToggle(node)">
-                {{node.name}}
-            </mat-checkbox>
-            <div class="ml-2" style="margin-top: -0.15rem;"><span class="badge badge-pill badge-light"
-                    style="font-weight: normal !important;">{{_buckets[node.name] ? _buckets[node.name] : 0}}</span>
-            </div>
-        </mat-tree-node>
-    </mat-tree>
+    <mat-tree-node
+      *matTreeNodeDef="let node; when: hasChild"
+      matTreeNodePadding
+      matTreeNodePaddingIndent="20"
+    >
+      <button mat-icon-button matTreeNodeToggle>
+        <mat-icon>
+          {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
+        </mat-icon>
+      </button>
+      <mat-checkbox
+        color="active"
+        [checked]="descendantsAllSelected(node)"
+        [indeterminate]="descendantsPartiallySelected(node)"
+        (change)="itemSelectionToggle(node)"
+      >
+        {{ node.name }}
+      </mat-checkbox>
+      <div class="ms-2" style="margin-top: -0.15rem">
+        <span
+          class="badge badge-pill badge-light"
+          style="
+            font-weight: normal !important;
+            color: black;
+            border-radius: 10rem;
+          "
+          >{{ _buckets[node.name] ? _buckets[node.name] : 0 }}</span
+        >
+      </div>
+    </mat-tree-node>
+  </mat-tree>
 </ng-container>

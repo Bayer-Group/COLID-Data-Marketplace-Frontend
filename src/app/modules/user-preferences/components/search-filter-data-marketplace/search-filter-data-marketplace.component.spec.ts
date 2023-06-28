@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { SearchFilterDataMarketplaceComponent } from './search-filter-data-marketplace.component';
+import { SearchFilterDataMarketplaceComponent } from "./search-filter-data-marketplace.component";
 
-describe('SearchFilterDataMarketplaceComponent', () => {
+describe("SearchFilterDataMarketplaceComponent", () => {
   let component: SearchFilterDataMarketplaceComponent;
   let fixture: ComponentFixture<SearchFilterDataMarketplaceComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SearchFilterDataMarketplaceComponent ]
-    })
-    .compileComponents();
+      declarations: [SearchFilterDataMarketplaceComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('SearchFilterDataMarketplaceComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

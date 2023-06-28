@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { DistributionEndpointComponent } from './distribution-endpoint.component';
+import { DistributionEndpointComponent } from "./distribution-endpoint.component";
 
-describe('DistributionEndpointComponent', () => {
+describe("DistributionEndpointComponent", () => {
   let component: DistributionEndpointComponent;
   let fixture: ComponentFixture<DistributionEndpointComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DistributionEndpointComponent ]
-    })
-    .compileComponents();
+      declarations: [DistributionEndpointComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('DistributionEndpointComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

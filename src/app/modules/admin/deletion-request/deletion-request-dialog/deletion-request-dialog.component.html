@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>{{ data.header }}</h2>
+<div mat-dialog-content>
+  <div class="d-flex justify-content-center">
+    <mat-list class="col-auto" *ngIf="data.requests">
+      <div mat-subheader>Entries</div>
+      <mat-list-item *ngFor="let request of data.requests; let i = index">
+        <div mat-line>{{ i + 1 }}. {{ request.name }}</div>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" class="me-2" mat-dialog-close>
+    Cancel
+  </button>
+  <button
+    mat-raised-button
+    color="accent"
+    class="ms-2"
+    [mat-dialog-close]="true"
+  >
+    Continue
+  </button>
+</div>

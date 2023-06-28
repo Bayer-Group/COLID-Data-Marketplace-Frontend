@@ -1,15 +1,27 @@
 <div class="h-100" [class.is-mobile]="(sidebarMode$ | async) === 'over'">
   <mat-sidenav-container autosize>
-    <mat-sidenav #sidenav [opened]="true" [mode]="sidebarMode$ | async"
-      [fixedInViewport]="(sidebarMode$ | async) === 'over'" fixedTopGap="54">
+    <mat-sidenav
+      #sidenav
+      [opened]="true"
+      [mode]="sidebarMode$ | async"
+      [fixedInViewport]="(sidebarMode$ | async) === 'over'"
+      fixedTopGap="54"
+    >
       <div class="favorites-area px-4 py-2">
         <div class="d-flex py-2 justify-content-between">
           <h2>Favorites</h2>
-          <button mat-stroked-button (click)="createFavoriteList()">Create new list</button>
+          <button mat-stroked-button (click)="createFavoriteList()">
+            Create new list
+          </button>
         </div>
         <ng-container *ngIf="favorites$ | async as favorites">
-          <div class="mt-2" *ngIf="favorites.length !== 0; else emptyFavorites">     
-            <app-favorite-list [favorites]="favorites" [favoritesListId]="favoritesListId" [userId]="userId" [selectedListEntryId]="favoritesListEntryId"></app-favorite-list>
+          <div class="mt-2" *ngIf="favorites.length !== 0; else emptyFavorites">
+            <app-favorite-list
+              [favorites]="favorites"
+              [favoritesListId]="favoritesListId"
+              [userId]="userId"
+              [selectedListEntryId]="favoritesListEntryId"
+            ></app-favorite-list>
           </div>
         </ng-container>
       </div>
@@ -24,24 +36,53 @@
         <ng-container *ngIf="pidUri && !loading && hit != null">
           <div class="sidebar-content-container">
             <div class="detail-container">
-              <app-search-result #res [result]="hit" [expandByDefault]="true" [collapsible]="false"
-                [metadata]="metadata">
+              <app-search-result
+                #res
+                [result]="hit"
+                [expandByDefault]="true"
+                [collapsible]="false"
+                [metadata]="metadata"
+              >
               </app-search-result>
             </div>
             <div class="sidebar-container">
               <h3>Personal Note</h3>
               <ng-container *ngIf="!editNote">
                 <div class="personal-note-container">
-                  {{personalNote ? personalNote : 'No personal note for this item saved.'}}
+                  {{
+                    personalNote
+                      ? personalNote
+                      : "No personal note for this item saved."
+                  }}
                 </div>
                 <button mat-stroked-button (click)="toggleEdit()">Edit</button>
               </ng-container>
               <ng-container *ngIf="editNote">
                 <div class="personal-note-container">
-                  <textarea style="width: 95%; border: 1px solid black;" rows="5" matInput [(ngModel)]="personalNote"></textarea>
+                  <textarea
+                    style="width: 95%; border: 1px solid black"
+                    rows="5"
+                    matInput
+                    [(ngModel)]="personalNote"
+                  ></textarea>
                 </div>
-                <button mat-stroked-button style="margin-right: 6px;" (click)="saveFavoriteListEntry(personalNote, selectedEntry.favoriteListId, selectedEntry.favoriteEntryId, selectedEntry.pidUri)">Save</button>
-                <button mat-stroked-button (click)="toggleEdit()">Cancel</button>
+                <button
+                  mat-stroked-button
+                  style="margin-right: 6px"
+                  (click)="
+                    saveFavoriteListEntry(
+                      personalNote,
+                      selectedEntry.favoriteListId,
+                      selectedEntry.favoriteEntryId,
+                      selectedEntry.pidUri
+                    )
+                  "
+                >
+                  Save
+                </button>
+                <button mat-stroked-button (click)="toggleEdit()">
+                  Cancel
+                </button>
               </ng-container>
             </div>
           </div>

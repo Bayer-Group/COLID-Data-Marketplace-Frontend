@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { MultiselectWarningDialogComponent } from './multiselect-warning-dialog.component';
+import { MultiselectWarningDialogComponent } from "./multiselect-warning-dialog.component";
 
-describe('MultiselectDialogComponent', () => {
+describe("MultiselectDialogComponent", () => {
   let component: MultiselectWarningDialogComponent;
   let fixture: ComponentFixture<MultiselectWarningDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MultiselectWarningDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [MultiselectWarningDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('MultiselectDialogComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

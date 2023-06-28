@@ -1,17 +1,27 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { AggregationBucket } from 'src/app/shared/models/aggregation-bucket';
-import { MetadataState } from 'src/app/states/metadata.state';
-import { Observable, Subscription } from 'rxjs';
-import { Select } from '@ngxs/store';
-import { TaxonomyDTO } from 'src/app/shared/models/taxonomy-dto';
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { SelectionModel } from '@angular/cdk/collections';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnDestroy,
+} from "@angular/core";
+import { AggregationBucket } from "src/app/shared/models/aggregation-bucket";
+import { MetadataState } from "src/app/states/metadata.state";
+import { Observable, Subscription } from "rxjs";
+import { Select } from "@ngxs/store";
+import { TaxonomyDTO } from "src/app/shared/models/taxonomy-dto";
+import { FlatTreeControl } from "@angular/cdk/tree";
+import { SelectionModel } from "@angular/cdk/collections";
+import {
+  MatTreeFlatDataSource,
+  MatTreeFlattener,
+} from "@angular/material/tree";
 
 @Component({
-  selector: 'app-filter-box-item-taxonomy',
-  templateUrl: './filter-box-item-taxonomy.component.html',
-  styleUrls: ['./filter-box-item-taxonomy.component.scss']
+  selector: "app-filter-box-item-taxonomy",
+  templateUrl: "./filter-box-item-taxonomy.component.html",
+  styleUrls: ["./filter-box-item-taxonomy.component.scss"],
 })
 export class FilterBoxItemTaxonomyComponent implements OnInit, OnDestroy {
   @Select(MetadataState.getMetadata) metadata$: Observable<any>;
@@ -25,10 +35,12 @@ export class FilterBoxItemTaxonomyComponent implements OnInit, OnDestroy {
 
   @Input() set buckets(values: AggregationBucket[]) {
     this.aggregationBuckets = values;
-    this.normalizeAggregationBuckets()
+    this.normalizeAggregationBuckets();
   }
 
-  @Output() changeFilterBuckets: EventEmitter<string[]> = new EventEmitter<string[]>();
+  @Output() changeFilterBuckets: EventEmitter<string[]> = new EventEmitter<
+    string[]
+  >();
 
   _activeAggregationBuckets: string[] = [];
 
@@ -37,9 +49,9 @@ export class FilterBoxItemTaxonomyComponent implements OnInit, OnDestroy {
       this._activeAggregationBuckets = values;
       setTimeout(() => {
         this.rewriteValues();
-      }, 0)
+      }, 0);
     }
-  };
+  }
 
   metadataSubscription: Subscription;
 
@@ -56,19 +68,22 @@ export class FilterBoxItemTaxonomyComponent implements OnInit, OnDestroy {
   dataSource: MatTreeFlatDataSource<TaxonomyDTO, TaxonomyDTO>;
 
   /** The selection for checklist */
-  checklistSelection: SelectionModel<TaxonomyDTO> = new SelectionModel<TaxonomyDTO>(true /* multiple */);;
+  checklistSelection: SelectionModel<TaxonomyDTO> =
+    new SelectionModel<TaxonomyDTO>(true /* multiple */);
 
-  get isTaxonomy(): boolean { return this.taxonomyTreeData.some(t => t.hasChild); }
+  get isTaxonomy(): boolean {
+    return this.taxonomyTreeData.some((t) => t.hasChild);
+  }
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
-    this.metadataSubscription = this.metadata$.subscribe(m => {
+    this.metadataSubscription = this.metadata$.subscribe((m) => {
       if (m != null && m[this.key] != null) {
         this.taxonomyTreeData = m[this.key].properties.taxonomy;
         this.initTree();
       }
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -76,19 +91,30 @@ export class FilterBoxItemTaxonomyComponent implements OnInit, OnDestroy {
   }
 
   initTree() {
-    this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
-    this.treeControl = new FlatTreeControl<TaxonomyDTO>(this.getLevel, this.isExpandable);
-    this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+    this.treeFlattener = new MatTreeFlattener(
+      this.transformer,
+      this.getLevel,
+      this.isExpandable,
+      this.getChildren
+    );
+    this.treeControl = new FlatTreeControl<TaxonomyDTO>(
+      this.getLevel,
+      this.isExpandable
+    );
+    this.dataSource = new MatTreeFlatDataSource(
+      this.treeControl,
+      this.treeFlattener
+    );
 
     this.dataSource.data = this.taxonomyTreeData;
     this.rewriteValues();
   }
 
   normalizeAggregationBuckets() {
-    const normalizedObject: any = {}
+    const normalizedObject: any = {};
     for (let i = 0; i < this.aggregationBuckets.length; i++) {
-      const key = this.aggregationBuckets[i].key
-      normalizedObject[key] = this.aggregationBuckets[i].doc_count
+      const key = this.aggregationBuckets[i].key;
+      normalizedObject[key] = this.aggregationBuckets[i].doc_count;
     }
     this._buckets = normalizedObject;
   }
@@ -110,7 +136,7 @@ export class FilterBoxItemTaxonomyComponent implements OnInit, OnDestroy {
   /** Whether all the descendants of the node are selected. */
   descendantsAllSelected(node: TaxonomyDTO): boolean {
     const descendants = this.treeControl.getDescendants(node);
-    const descAllSelected = descendants.every(child =>
+    const descAllSelected = descendants.every((child) =>
       this.checklistSelection.isSelected(child)
     );
     return descAllSelected;
@@ -119,7 +145,9 @@ export class FilterBoxItemTaxonomyComponent implements OnInit, OnDestroy {
   /** Whether part of the descendants are selected */
   descendantsPartiallySelected(node: TaxonomyDTO): boolean {
     const descendants = this.treeControl.getDescendants(node);
-    const result = descendants.some(child => this.checklistSelection.isSelected(child));
+    const result = descendants.some((child) =>
+      this.checklistSelection.isSelected(child)
+    );
     return result && !this.descendantsAllSelected(node);
   }
 
@@ -132,9 +160,7 @@ export class FilterBoxItemTaxonomyComponent implements OnInit, OnDestroy {
       : this.checklistSelection.deselect(...descendants);
 
     // Force update for the parent
-    descendants.every(child =>
-      this.checklistSelection.isSelected(child)
-    );
+    descendants.every((child) => this.checklistSelection.isSelected(child));
     this.checkAllParentsSelection(node);
     this.emitLastChange(initial);
   }
@@ -160,7 +186,7 @@ export class FilterBoxItemTaxonomyComponent implements OnInit, OnDestroy {
   checkRootNodeSelection(node: TaxonomyDTO): void {
     const nodeSelected = this.checklistSelection.isSelected(node);
     const descendants = this.treeControl.getDescendants(node);
-    const descAllSelected = descendants.every(child =>
+    const descAllSelected = descendants.every((child) =>
       this.checklistSelection.isSelected(child)
     );
     if (nodeSelected && !descAllSelected) {
@@ -190,22 +216,36 @@ export class FilterBoxItemTaxonomyComponent implements OnInit, OnDestroy {
   }
 
   rewriteValues() {
-    this.dataSource.data = this.filterIndexedTaxonomyItems(this.taxonomyTreeData, this.aggregationBuckets)
+    this.dataSource.data = this.filterIndexedTaxonomyItems(
+      this.taxonomyTreeData,
+      this.aggregationBuckets
+    );
 
     this.handleNodeList(this._activeAggregationBuckets, this.taxonomyTreeData);
 
-    this.treeControl.dataNodes.forEach(s => {
-      if (this.descendantsPartiallySelected(s) || this.checklistSelection.isSelected(s)){
+    this.treeControl.dataNodes.forEach((s) => {
+      if (
+        this.descendantsPartiallySelected(s) ||
+        this.checklistSelection.isSelected(s)
+      ) {
         this.treeControl.expand(s);
       }
-    })
+    });
   }
 
-  filterIndexedTaxonomyItems(treeData: TaxonomyDTO[], aggregationBuckets: AggregationBucket[]): TaxonomyDTO[] {
-    const indexedItems = treeData.filter(t => aggregationBuckets.some(a => a.key === t.name));
-    indexedItems.forEach(i => {
-      if (i.hasChild){
-        i.children = this.filterIndexedTaxonomyItems(i.children, aggregationBuckets);
+  filterIndexedTaxonomyItems(
+    treeData: TaxonomyDTO[],
+    aggregationBuckets: AggregationBucket[]
+  ): TaxonomyDTO[] {
+    const indexedItems = treeData.filter((t) =>
+      aggregationBuckets.some((a) => a.key === t.name)
+    );
+    indexedItems.forEach((i) => {
+      if (i.hasChild) {
+        i.children = this.filterIndexedTaxonomyItems(
+          i.children,
+          aggregationBuckets
+        );
       }
     });
     return indexedItems;
@@ -216,7 +256,7 @@ export class FilterBoxItemTaxonomyComponent implements OnInit, OnDestroy {
 
     if (this.treeControl == null || this.treeControl.dataNodes == null) return;
 
-    results.forEach(t => {
+    results.forEach((t) => {
       if (identifiers.includes(t.name)) {
         if (!this.checklistSelection.isSelected(t)) {
           if (t.hasChild) {
@@ -235,19 +275,31 @@ export class FilterBoxItemTaxonomyComponent implements OnInit, OnDestroy {
     if (initial) return;
 
     const activeBuckets = this.filterDuplicatesAndRemoveChildNodes();
-    if (this._activeAggregationBuckets != null && activeBuckets.length === this._activeAggregationBuckets.length && activeBuckets.every(t => this._activeAggregationBuckets.includes(t))) {
+    if (
+      this._activeAggregationBuckets != null &&
+      activeBuckets.length === this._activeAggregationBuckets.length &&
+      activeBuckets.every((t) => this._activeAggregationBuckets.includes(t))
+    ) {
       return;
     }
     this.changeFilterBuckets.emit(activeBuckets);
   }
 
   filterDuplicatesAndRemoveChildNodes(): string[] {
-    var resultList: TaxonomyDTO[] = Object.assign(this.checklistSelection.selected);
-    this.checklistSelection.selected.forEach(e => {
-      if (e.children.every(n => this.checklistSelection.selected.some(r => r.id === n.id))) {
-        resultList = resultList.filter(re => !e.children.some(n => n.id === re.id));
+    var resultList: TaxonomyDTO[] = Object.assign(
+      this.checklistSelection.selected
+    );
+    this.checklistSelection.selected.forEach((e) => {
+      if (
+        e.children.every((n) =>
+          this.checklistSelection.selected.some((r) => r.id === n.id)
+        )
+      ) {
+        resultList = resultList.filter(
+          (re) => !e.children.some((n) => n.id === re.id)
+        );
       }
     });
-    return resultList.map(s => s.name);
+    return resultList.map((s) => s.name);
   }
 }

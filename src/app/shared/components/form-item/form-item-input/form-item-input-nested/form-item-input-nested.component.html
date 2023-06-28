@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-12">
+    <app-form
+      [indexerNested]="indexerNested"
+      [nestedForm]="true"
+      [metaData]="nestedMetadata"
+      [entity]="internalValue"
+      [placeholder]="{}"
+      [adminPrivilege]="adminPrivilege"
+      [errors]="errors?.result"
+      [isNew]="isNewEntity"
+      [pidUriTemplatesFetched]="fetched$"
+      [pidUriTemplateNames]="presets"
+      [formReadOnly]="formReadOnly"
+      (handleFormChanged)="handleNestedFormChanged($event)"
+    >
+    </app-form>
+  </div>
+</div>
+<div class="col-12 text-right mt-2">
+  <div class="row justify-content-end">
+    <button mat-raised-button color="accent" (click)="confirmAndRemoveNested()">
+      Remove
+    </button>
+  </div>
+</div>

@@ -1,32 +1,44 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation} from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { UserInfoState, RemoveSearchFilterDataMarketplace, RemoveStoredQueryToSearchFiltersDataMarketplace, FetchSearchFilterDataMarketplace } from 'src/app/states/user-info.state';
-import { SearchFilterDataMarketplaceDto } from 'src/app/shared/models/user/search-filter-data-marketplace-dto';
-import { Select, Store } from '@ngxs/store';
-import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
-import { FetchFilter, FilterState, SetFilterItems  } from 'src/app/states/filter.state';
-import { Aggregation } from 'src/app/shared/models/aggregation';
-import { Constants } from 'src/app/shared/constants';
-import { MatDialog } from '@angular/material/dialog';
-import { StoredQueryDto } from 'src/app/shared/models/user/stored-query-dto';
-import { IntervalNotificationDiallogComponent } from '../../interval-notification-diallog/interval-notification-diallog.component';
-import { RangeFilter } from 'src/app/shared/models/range-filter';
-import { ChangePage, ChangeSearchText, OverwriteActiveAggregationBuckets, OverwriteActiveRangeFilters, RefreshRoute } from 'src/app/states/search.state';
-import { jsonToStringMap } from 'src/app/shared/converters/string-map-object.converter';
-import { mapToObject } from 'src/app/shared/converters/map-object.converter';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from "@angular/core";
+import { Observable, Subscription } from "rxjs";
+import {
+  UserInfoState,
+  RemoveSearchFilterDataMarketplace,
+  RemoveStoredQueryToSearchFiltersDataMarketplace,
+  FetchSearchFilterDataMarketplace,
+} from "src/app/states/user-info.state";
+import { SearchFilterDataMarketplaceDto } from "src/app/shared/models/user/search-filter-data-marketplace-dto";
+import { Select, Store } from "@ngxs/store";
+import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
+import { FetchFilter, FilterState } from "src/app/states/filter.state";
+import { Aggregation } from "src/app/shared/models/aggregation";
+import { Constants } from "src/app/shared/constants";
+import { MatDialog } from "@angular/material/dialog";
+import { IntervalNotificationDiallogComponent } from "../../interval-notification-diallog/interval-notification-diallog.component";
+import { RangeFilter } from "src/app/shared/models/range-filter";
+import {
+  ChangePage,
+  ChangeSearchText,
+  OverwriteActiveAggregationBuckets,
+  OverwriteActiveRangeFilters,
+  RefreshRoute,
+} from "src/app/states/search.state";
 
 @Component({
-  selector: 'app-search-filter-data-marketplace',
-  templateUrl: './search-filter-data-marketplace.component.html',
-  styleUrls: ['./search-filter-data-marketplace.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  selector: "app-search-filter-data-marketplace",
+  templateUrl: "./search-filter-data-marketplace.component.html",
+  styleUrls: ["./search-filter-data-marketplace.component.scss"],
+  encapsulation: ViewEncapsulation.None,
 })
 export class SearchFilterDataMarketplaceComponent implements OnInit, OnDestroy {
-  @Select(UserInfoState.getUserSearchFilters) userSearchFilters$: Observable<SearchFilterDataMarketplaceDto[]>;
-  @Select(FilterState.getAggregationFilters) aggregationFilters$: Observable<Aggregation[]>;
+  @Select(UserInfoState.getUserSearchFilters) userSearchFilters$: Observable<
+    SearchFilterDataMarketplaceDto[]
+  >;
+  @Select(FilterState.getAggregationFilters) aggregationFilters$: Observable<
+    Aggregation[]
+  >;
   @Select(FilterState.loading) loading$: Observable<boolean>;
   @Select(FilterState.getRangeFilters) rangeFilters$: Observable<RangeFilter[]>;
-  
+
   filterKey: string;
   filterKeyLabel: string;
   userSearchFiltersSubscription: Subscription;
@@ -36,93 +48,123 @@ export class SearchFilterDataMarketplaceComponent implements OnInit, OnDestroy {
   aggregationFilters: Aggregation[];
   rangeFilters: RangeFilter[];
   selectedSubscriptionValue: any;
-  loading:boolean = false;
-  constructor(private store: Store, private snackbar: ColidMatSnackBarService,private dialog: MatDialog) { }
+  loading: boolean = false;
+  constructor(
+    private store: Store,
+    private snackbar: ColidMatSnackBarService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.loadUserSearchFilters();
-    this.loading$.subscribe(loading => {
+    this.loading$.subscribe((loading) => {
       this.loading = loading;
     });
-    
-    this.aggregationFiltersSubscription = this.aggregationFilters$.subscribe(aggregationFilters => {
-      this.aggregationFilters = aggregationFilters;
-      this.store.dispatch(new FetchSearchFilterDataMarketplace()).subscribe(); 
-    });
 
-    this.rangeFiltersSubscription = this.rangeFilters$.subscribe(rangeFilters => {
-      this.rangeFilters = rangeFilters;
-    });
+    this.aggregationFiltersSubscription = this.aggregationFilters$.subscribe(
+      (aggregationFilters) => {
+        this.aggregationFilters = aggregationFilters;
+        this.store.dispatch(new FetchSearchFilterDataMarketplace()).subscribe();
+      }
+    );
 
+    this.rangeFiltersSubscription = this.rangeFilters$.subscribe(
+      (rangeFilters) => {
+        this.rangeFilters = rangeFilters;
+      }
+    );
   }
   ngOnDestroy() {
     this.userSearchFiltersSubscription.unsubscribe();
   }
   loadUserSearchFilters() {
-      this.userSearchFiltersSubscription = this.userSearchFilters$.subscribe(userSearchFilters => {
-      this.userSearchFilters = userSearchFilters;
-    });
-    this.store.dispatch(new FetchFilter()).subscribe();
-   
-  };
+    this.userSearchFiltersSubscription = this.userSearchFilters$.subscribe(
+      (userSearchFilters) => {
+        this.userSearchFilters = userSearchFilters;
+      }
+    );
+    this.store.dispatch(new FetchFilter());
+  }
 
   removeSearchFilters(removeFilter: SearchFilterDataMarketplaceDto) {
-    this.store.dispatch(new RemoveSearchFilterDataMarketplace(removeFilter)).subscribe(() => {
-      this.store.dispatch(new FetchSearchFilterDataMarketplace()).subscribe();
-      this.snackbar.success('Saved Search Deleted', 'The saved search has been deleted successfully.');
-    });
-  };
-  getKeyByValue(object, value) { 
-    return Object.keys(object).find(key =>  
-            object[key] === value); 
-  }; 
+    this.store
+      .dispatch(new RemoveSearchFilterDataMarketplace(removeFilter))
+      .subscribe(() => {
+        this.store.dispatch(new FetchSearchFilterDataMarketplace()).subscribe();
+        this.snackbar.success(
+          "Saved Search Deleted",
+          "The saved search has been deleted successfully."
+        );
+      });
+  }
+  getKeyByValue(object, value) {
+    return Object.keys(object).find((key) => object[key] === value);
+  }
 
   notificationSearchFilters(removeFilter: SearchFilterDataMarketplaceDto) {
-    this.store.dispatch(new RemoveSearchFilterDataMarketplace(removeFilter)).subscribe(() => {
-      this.store.dispatch(new FetchSearchFilterDataMarketplace()).subscribe()
-      this.snackbar.success('Saved Search Deleted', 'The saved search has been deleted successfully.');
-    });
-  };
+    this.store
+      .dispatch(new RemoveSearchFilterDataMarketplace(removeFilter))
+      .subscribe(() => {
+        this.store.dispatch(new FetchSearchFilterDataMarketplace()).subscribe();
+        this.snackbar.success(
+          "Saved Search Deleted",
+          "The saved search has been deleted successfully."
+        );
+      });
+  }
 
   onOpenIntervalNotificationDiallog(storedQuery: any) {
     this.dialog.open(IntervalNotificationDiallogComponent, {
-      data:storedQuery
+      data: storedQuery,
     });
 
-    this.dialog.afterAllClosed.subscribe(x=>{
-      this.store.dispatch(new FetchSearchFilterDataMarketplace()).subscribe(x=>{
-      });
-      this.userSearchFiltersSubscription = this.userSearchFilters$.subscribe(userSearchFilters => {
-        this.userSearchFilters = userSearchFilters;
-      });
-    })
+    this.dialog.afterAllClosed.subscribe((_) => {
+      this.store
+        .dispatch(new FetchSearchFilterDataMarketplace())
+        .subscribe((_) => {});
+      this.userSearchFiltersSubscription = this.userSearchFilters$.subscribe(
+        (userSearchFilters) => {
+          this.userSearchFilters = userSearchFilters;
+        }
+      );
+    });
   }
 
-  onUnsubscribeIntervalNotification(userSearchFilter: any)
-  {
-      this.store.dispatch(new RemoveStoredQueryToSearchFiltersDataMarketplace(userSearchFilter.id)).subscribe(()=>{
-      this.snackbar.success('Removed Subscription', 'The selected search has been unsubscribed successfully.');
-  });
-
+  onUnsubscribeIntervalNotification(userSearchFilter: any) {
+    this.store
+      .dispatch(
+        new RemoveStoredQueryToSearchFiltersDataMarketplace(userSearchFilter.id)
+      )
+      .subscribe(() => {
+        this.snackbar.success(
+          "Removed Subscription",
+          "The selected search has been unsubscribed successfully."
+        );
+      });
   }
 
-  getAggregationLabel(filterKey: string){
+  getAggregationLabel(filterKey: string) {
     this.filterKey == null;
     try {
-      this.filterKeyLabel = this.getKeyByValue(Constants.Metadata, filterKey); 
-      this.filterKeyLabel = !this.filterKeyLabel ? this.aggregationFilters.filter(element=>element.key===filterKey)[0].label : this.filterKeyLabel;
+      this.filterKeyLabel = this.getKeyByValue(Constants.Metadata, filterKey);
+      this.filterKeyLabel = !this.filterKeyLabel
+        ? this.aggregationFilters.filter(
+            (element) => element.key === filterKey
+          )[0].label
+        : this.filterKeyLabel;
       return this.filterKeyLabel;
-   }
-   catch(e) {
-    return this.filterKey;
-   }
+    } catch (e) {
+      return this.filterKey;
+    }
   }
 
-  getStateInitializationActionsFromQueryParams(userSearchFilter:any): any {
+  getStateInitializationActionsFromQueryParams(userSearchFilter: any): any {
     const page = "";
     const query = userSearchFilter.searchTerm || "*";
-    const filter = new Map<string,string[]>(Object.entries(userSearchFilter.filterJson.aggregations));//""//params['f'];
-    const rangeFilter =userSearchFilter.filterJson.ranges
+    const filter = new Map<string, string[]>(
+      Object.entries(userSearchFilter.filterJson.aggregations)
+    ); //""//params['f'];
+    const rangeFilter = userSearchFilter.filterJson.ranges;
 
     const initActions = [];
 
@@ -137,11 +179,9 @@ export class SearchFilterDataMarketplaceComponent implements OnInit, OnDestroy {
     }
     if (rangeFilter) {
       try {
-        const parsedRangeFilter = JSON.parse(rangeFilter);
         initActions.push(new OverwriteActiveRangeFilters(rangeFilter, true));
-      } catch (error) {
-      }
+      } catch (error) {}
     }
-    this.store.dispatch([ ...initActions, new RefreshRoute()]).subscribe();
+    this.store.dispatch([...initActions, new RefreshRoute()]).subscribe();
   }
 }

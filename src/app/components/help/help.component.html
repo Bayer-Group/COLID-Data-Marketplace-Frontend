@@ -1,41 +1,38 @@
 <div class="col-10 offset-1 h-90">
-    <div class="row justify-content-between">
-        <div class="col-8">
-            <h1 class="pt-5">Help</h1>
-            <h3 class="mat-subheading-3">For further support, please always refer to the version identifiers listed
-                below.</h3>
-        </div>
-        <div class="col-4">
-            <div class="pt-5">
-                <img [src]="logo" alt="Bayer AG" width="120em" height="120em">
-            </div>
-        </div>
+  <div class="row justify-content-between">
+    <div class="col-8">
+      <h1 class="pt-5">Help</h1>
+      <h3 class="mat-subheading-3">
+        For further support, please always refer to the version identifiers
+        listed below.
+      </h3>
     </div>
-    <div class="row">
-        <div class="col-12">
-            <app-support-feedback-bar></app-support-feedback-bar>
-        </div>
-    </div>
-    <div class="row mt-4">
-      <div class="col-12">
-        <p>
-          To view the release notes, please click <a href="{{releaseNotesUrl}}">here</a>.
-        </p>
+    <div class="col-4">
+      <div class="pt-5">
+        <img [src]="logo" alt="Bayer AG" width="120em" height="120em" />
       </div>
     </div>
-    <div class="row mt-4">
-        <div class="col-12">
-            <p>
-                Version Identifiers
-            </p>
-            <ul>
-                <li>
-                    UI Pipeline ID: {{frontendBuildInformation.pipelineId}}
-                </li>
-                <li *ngIf="(buildInformation$ | async) as buildInformation">
-                    WebApi Pipeline ID: {{buildInformation.pipelineId}}
-                </li>
-            </ul>
-        </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <app-support-feedback-bar></app-support-feedback-bar>
     </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col-12">
+      <p>
+        To view the release notes, please click
+        <a href="{{ releaseNotesUrl }}">here</a>.
+      </p>
+    </div>
+  </div>
+  <div class="row mt-4" *ngIf="buildInformation$ | async as buildInformation">
+    <div class="col-12">
+      <p>
+        Published at:
+        {{ buildInformation.latestReleaseDate | date : "dd/MM/yyyy HH:mm" }}
+      </p>
+      <p>Image Tags: {{ buildInformation.imageTags | join }}</p>
+    </div>
+  </div>
 </div>

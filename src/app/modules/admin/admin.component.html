@@ -1,0 +1,22 @@
+<div [class.is-mobile]="(sidebarMode$ | async) === 'over'">
+  <mat-sidenav-container class="sidenav-container" autosize>
+    <mat-sidenav
+      class="admin-sidebar"
+      #sidenav
+      [opened]="sidebarOpened$ | async"
+      (closed)="setSidebarOpened(false)"
+      [mode]="sidebarMode$ | async"
+      [fixedInViewport]="(sidebarMode$ | async) === 'over'"
+      fixedTopGap="64"
+    >
+      <app-admin-tasks></app-admin-tasks>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="m-4 justify-content-center">
+        <div class="admin-content">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

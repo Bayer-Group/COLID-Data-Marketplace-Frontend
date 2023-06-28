@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { FilterBoxItemDaterangeComponent } from './filter-box-item-daterange.component';
+import { FilterBoxItemDaterangeComponent } from "./filter-box-item-daterange.component";
 
-describe('FilterBoxItemDaterangeComponent', () => {
+describe("FilterBoxItemDaterangeComponent", () => {
   let component: FilterBoxItemDaterangeComponent;
   let fixture: ComponentFixture<FilterBoxItemDaterangeComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ FilterBoxItemDaterangeComponent ]
-    })
-    .compileComponents();
+      declarations: [FilterBoxItemDaterangeComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('FilterBoxItemDaterangeComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

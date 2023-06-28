@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { ResourceSubscriptionsComponent } from './resource-subscriptions.component';
+import { ResourceSubscriptionsComponent } from "./resource-subscriptions.component";
 
-describe('ResourceSubscriptionsComponent', () => {
+describe("ResourceSubscriptionsComponent", () => {
   let component: ResourceSubscriptionsComponent;
   let fixture: ComponentFixture<ResourceSubscriptionsComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ResourceSubscriptionsComponent ]
-    })
-    .compileComponents();
+      declarations: [ResourceSubscriptionsComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('ResourceSubscriptionsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

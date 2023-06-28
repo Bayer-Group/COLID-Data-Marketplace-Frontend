@@ -1,9 +1,9 @@
 export class DmpException {
-    errorCode: ErrorCode;
-    message: string;
+  errorCode: ErrorCode;
+  message: string;
 }
 
 export enum ErrorCode {
-    INVALID_SEARCH_TERM = 'INVALID_SEARCH_TERM',
-    UNKONWN = 'UNKNOWN'
+  INVALID_SEARCH_TERM = "INVALID_SEARCH_TERM",
+  UNKONWN = "UNKNOWN",
 }

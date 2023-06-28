@@ -1,0 +1,27 @@
+.active {
+  border: 2px solid white;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+mat-selection-list {
+  overflow-x:hidden;
+}
+
+mat-checkbox ::ng-deep label {
+  margin: unset;
+}
+
+.pl-16-px {
+  padding-left: 16px;
+}
+
+.ml-16-px {
+  margin-left: 16px;
+}

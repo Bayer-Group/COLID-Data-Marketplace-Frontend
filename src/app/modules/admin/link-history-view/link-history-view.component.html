@@ -1,0 +1,53 @@
+<div class="filter-panel">
+  <mat-form-field appearance="fill">
+    <mat-label>Enter a date range</mat-label>
+    <mat-date-range-input [formGroup]="filters" [rangePicker]="picker">
+      <input matStartDate formControlName="start" placeholder="Start date" />
+      <input matEndDate formControlName="end" placeholder="End date" />
+    </mat-date-range-input>
+    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>
+  </mat-form-field>
+  <mat-form-field appearance="fill" style="width: 300px">
+    <mat-label>E-Mail Address</mat-label>
+    <mat-select [formControl]="email">
+      <mat-form-field class="searchbox">
+        <mat-label>Search E-Mail-Address</mat-label>
+        <input
+          matInput
+          [ngModel]="emailSearchString"
+          (ngModelChange)="onEmailSearch($event)"
+          (keydown)="$event.stopPropagation()"
+        />
+        <button
+          *ngIf="emailSearchString"
+          matSuffix
+          mat-icon-button
+          (click)="resetEmailSearch()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-option>None</mat-option>
+      <mat-option *ngFor="let e of emailFilterData" [value]="e">{{
+        e
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill" style="width: 300px">
+    <mat-label>LinkType</mat-label>
+    <mat-select [formControl]="linkType">
+      <mat-option>None</mat-option>
+      <mat-option *ngFor="let lt of linkTypeFilterSource" [value]="lt.key">{{
+        lt.value
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<colid-link-history
+  [historyItemsSource]="historyItemsSource"
+  [isLoading]="isLoading"
+  (currentHistoryItemsCount)="loadNextBatch($event)"
+  (sortingColumn)="sortResults($event)"
+></colid-link-history>

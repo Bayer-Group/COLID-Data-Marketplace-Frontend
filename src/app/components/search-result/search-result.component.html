@@ -5,102 +5,132 @@
     [disabled]="!collapsible"
     (afterCollapse)="onResultClicked(expanded)"
     (afterExpand)="onResultClicked(expanded)"
-    style="box-shadow: none;"
+    style="box-shadow: none"
   >
-    <mat-expansion-panel-header >
+    <mat-expansion-panel-header>
       <mat-panel-title>
-        <div class="ql-editor-parent w-100 ql-snow p-2">
-   
-          <div class="result-header h4 mr-0">
-            <ds-icon class="icon-25" iconType="S3" [tooltipDisabled]="false" [delay]="300" [icon]="resourceType[0]">
-            </ds-icon>
-            {{ label }}
+        <div class="w-100 py-2">
+          <div class="mb-2 result-header-wrapper">
+            <div class="result-header">
+              <ds-icon
+                class="icon-25"
+                iconType="S3"
+                [tooltipDisabled]="false"
+                [delay]="300"
+                [icon]="resourceType[0]"
+              >
+              </ds-icon>
+              <span class="h4 mb-0">{{ label }}</span>
+            </div>
+            <div class="buttons">
+              <img
+                *ngIf="brokenDistributionEndpoints.length > 0"
+                src="assets/broken-link.svg"
+                style="height: 25px"
+                matTooltip="{{
+                  'Resource has following invalid endpoint(s): ' +
+                    (brokenDistributionEndpoints | join | removeHtml)
+                }}"
+              />
+              <img
+                *ngIf="brokenContacts.length > 0"
+                src="assets/invalid-user.svg"
+                class="broken-icon"
+                matTooltip="{{
+                  'Resource has following invalid contact(s): ' +
+                    (brokenContacts | join)
+                }}"
+              />
+              <img
+                *ngIf="nextReviewIsDue != null && nextReviewIsDue === true"
+                src="assets/review_cycle_due.svg"
+                class="broken-icon"
+                matTooltip="Deadline for the resource review has expired"
+              />
+              <img
+                *ngIf="nextReviewIsDue != null && nextReviewIsDue === false"
+                src="assets/review_cycle_success.svg"
+                class="broken-icon"
+                matTooltip="Resource is in a valid review cycle"
+              />
+              <span class="spacer"></span>
+              <button
+                mat-icon-button
+                class="border-button"
+                matTooltip="Edit the resource"
+                (click)="openInColidEditor($event)"
+                editorAccessControl
+                [resourceDetails]="details"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                class="border-button"
+                matTooltip="Subscribe to resource"
+                *ngIf="colidEntrySubscriptions && !isSubscribed"
+                (click)="subscribeToResource($event)"
+              >
+                <mat-icon>notifications_none</mat-icon>
+              </button>
 
-                <span class="buttons">
+              <button
+                mat-icon-button
+                class="border-button"
+                matTooltip="Unsubscribe from resource"
+                *ngIf="colidEntrySubscriptions && isSubscribed"
+                (click)="unsubscribeFromResource($event)"
+              >
+                <mat-icon>notifications_active</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                class="border-button"
+                matTooltip="Add to favorites"
+                *ngIf="!isFavorited"
+                (click)="openFavoritesDialog($event)"
+              >
+                <mat-icon>bookmark_border_none</mat-icon>
+              </button>
 
-                  <div class="parent">
-
-                    <div class="child">
-                      <div *ngIf="nextReviewDate">
-                        <div *ngIf="NextReviewDateIsDue();else other_content">
-      
-                          <span>
-                            <img class="icons" src="assets/reviewCycleRed.svg" title="The deadline for the resource review has expired" alt="" width="20" height="20"/>
-                          </span>
-                        </div>
-                        <ng-template #other_content>
-                          <span>
-                            <img class="icons" src="assets/reviewCycleGreen.svg" title="The resource is in a valid review cycle" alt="" width="20" height="20"/>
-                          </span>
-                        </ng-template>
-                      </div>
-                    </div>
-                    <div class="child">
-                      
-                      <button mat-icon-button class="border-button mr-2" matTooltip="Edit the resource"
-                        (click)="openInColidEditor($event)" editorAccessControl [resourceDetails]="details">
-                        <mat-icon>edit</mat-icon>
-                      </button>
-    
-                      <!-- colidEntrySubscriptions && !isSubscribed -->
-    
-                      <button mat-icon-button class="border-button mr-2" matTooltip="Subscribe to resource"
-                        *ngIf="colidEntrySubscriptions && !isSubscribed" (click)="subscribeToResource($event)">
-                        <mat-icon>notifications_none</mat-icon>
-                      </button>
-    
-                      <button mat-icon-button class="border-button mr-2" matTooltip="Unsubscribe from resource"
-                        *ngIf="colidEntrySubscriptions && isSubscribed" (click)="unsubscribeFromResource($event)">
-                        <mat-icon>notifications_active</mat-icon>
-                      </button>
-    
-                      <button mat-icon-button class="border-button mr-2" matTooltip="Add to favorites" *ngIf="!isFavorited"
-                        (click)="openFavoritesDialog($event)">
-                        <mat-icon>bookmark_border_none</mat-icon>
-                      </button>
-    
-                      <button mat-icon-button class="border-button mr-2" matTooltip="Manage favorites" *ngIf="isFavorited"
-                        (click)="openFavoritesDialog($event)">
-                        <mat-icon>bookmark_active</mat-icon>
-                      </button>
-    
-                      <!-- <button mat-icon-button class="border-button mr-2" matTooltip="Find similar resources (experimental)"
-                  *ngIf="true" (click)="findSimilarResources($event)">
-                  <mat-icon>compare</mat-icon>
-                  </button> -->
-    
-                      <!-- <button mat-icon-button class="border-button" matTooltip="View in Knowledge Graph Explorer (BETA)"
-                    (click)="openInKnowledgeGraphExplorer($event)">
-                    <ds-icon iconType="S3" [tooltipDisabled]="true" [delay]="300"
-                      [icon]="'http://pid.bayer.com/kos/19014/Ontology'"></ds-icon>
-                  </button> -->
-                      <button mat-icon-button class="border-button"
-                        matTooltip="View in Resource Relationship Manager (BETA)"
-                        (click)="openInResourceRelationshipManager($event)">
-                        <img src="assets/dmp-rrm.svg" width="24" height="24" />
-                      </button>
-
-                    </div> 
-                  </div>
-
-                </span>
-
+              <button
+                mat-icon-button
+                class="border-button"
+                matTooltip="Manage favorites"
+                *ngIf="isFavorited"
+                (click)="openFavoritesDialog($event)"
+              >
+                <mat-icon>bookmark_active</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                class="border-button"
+                matTooltip="View in Resource Relationship Manager (BETA)"
+                (click)="openInResourceRelationshipManager($event)"
+              >
+                <img src="assets/dmp-rrm.svg" width="24" height="24" />
+              </button>
+            </div>
           </div>
-          <br />
+
           <ng-container *ngIf="developmentMode">
             <span>Score: {{ score }}</span>
             <br />
           </ng-container>
           <span *ngIf="resourceSubNumbers.length > 0">
             {{ getNumSubscribers() }} subscriber{{
-            getNumSubscribers() > 1 ? "s" : ""
-            }}</span>
+              getNumSubscribers() > 1 ? "s" : ""
+            }}</span
+          >
           <br />
 
-          <span class="result-description ql-editor" [class.line-clamp]="!expanded"
-            [innerHTML]="definitionHighlight | bypassSanitizer" style="word-break: break-word;"></span>
+          <span
+            class="result-description"
+            [class.line-clamp]="!expanded"
+            [innerHTML]="definitionHighlight | bypassSanitizer"
+            style="word-break: break-word"
+          ></span>
         </div>
-
       </mat-panel-title>
       <!-- <mat-panel-description class="mt-2">
       <button *ngIf="!(PoliciesLoadingState$ | async)" mat-icon-button class="border-button mr-2" matTooltip="Find retention rules related to this resource"
@@ -108,83 +138,116 @@
            <mat-icon>policy</mat-icon>
         </button>-->
 
-  
       <!-- </mat-panel-description> -->
     </mat-expansion-panel-header>
-    <mat-tab-group mat-align-tabs="bottom" [id]="index" [selectedIndex]="selectedIndex"
-      (selectedTabChange)="GetSchemeUI($event, details)">
+    <mat-tab-group
+      mat-align-tabs="bottom"
+      [id]="index"
+      [selectedIndex]="selectedIndex"
+      (selectedTabChange)="GetSchemeUI($event, details)"
+    >
       <mat-tab label="Resource Detail" [active]="true">
         <ng-template matTabContent>
           <div class="details-container">
             <!-- <mat-divider class="my-1"></mat-divider>  -->
 
-            <div class="container m-0" *ngIf="details && details.length; else empty">
+            <div
+              class="container m-0"
+              *ngIf="details && details.length; else empty"
+            >
               <div class="row pb-1" *ngFor="let detail of details">
-                <div class="col-12" *ngIf="
+                <div
+                  class="col-12"
+                  *ngIf="
                     (detail.nested &&
                       detail.nested.length &&
-                      detail.key != distributionKey) ||
+                      detail.key !== distributionKey) ||
                     (detail.nestedInbound &&
                       detail.nestedInbound.length &&
-                      detail.key != distributionKey)
-                  ">
+                      detail.key !== distributionKey)
+                  "
+                >
                   <mat-accordion>
-                    <mat-expansion-panel id="{{ label + detail.hasPID }}" (opened)="toggleShowingNested(detail.key)"
-                      (closed)="toggleShowingNested(detail.key)">
+                    <mat-expansion-panel
+                      id="{{ label + detail.hasPID }}"
+                      (opened)="toggleShowingNested(detail.key)"
+                      (closed)="toggleShowingNested(detail.key)"
+                    >
                       <mat-expansion-panel-header>
                         <mat-panel-title>
-                          <span class="font-weight-bold text-muted">
+                          <p class="font-weight-bold text-muted mb-0">
                             {{ detail.label }}
-                            <span class="badge badge-pill badge-light" style="font-size: 95%; font-weight: normal">
+                            <span
+                              class="badge badge-pill badge-light"
+                              style="font-size: 95%; font-weight: normal"
+                            >
                               {{
-                              detail.nested.length +
-                              detail.nestedInbound.length
+                                detail.nested.length +
+                                  detail.nestedInbound.length
                               }}
                             </span>
-                          </span>
+                          </p>
                         </mat-panel-title>
                         <mat-panel-description class="text-muted">
                           {{
-                          expandedNested[detail.key]
-                          ? "Show less"
-                          : "Show more"
+                            expandedNested[detail.key]
+                              ? "Show less"
+                              : "Show more"
                           }}
                         </mat-panel-description>
                       </mat-expansion-panel-header>
                       <div class="row">
                         <div class="col-12">
                           <ng-container [ngSwitch]="detail.key">
-                            <ng-container *ngSwitchCase="
-                                attachment
-                              ">
+                            <ng-container *ngSwitchCase="attachment">
                               <div class="d-flex justify-content-start">
-                                <ng-container *ngFor="
+                                <ng-container
+                                  *ngFor="
                                     let attachment of detail.nested;
                                     let i = index
-                                  ">
-                                  <app-search-result-attachment [index]="i" [resource]="details"
-                                    [attachment]="attachment" [allAttachments]="detail.nested">
+                                  "
+                                >
+                                  <app-search-result-attachment
+                                    [index]="i"
+                                    [resource]="details"
+                                    [attachment]="attachment"
+                                    [allAttachments]="detail.nested"
+                                  >
                                   </app-search-result-attachment>
                                 </ng-container>
                               </div>
                             </ng-container>
 
                             <ng-container *ngSwitchDefault>
-                              <table class="result-table" *ngFor="let nestedEntity of detail.nested">
+                              <table
+                                class="result-table"
+                                *ngFor="let nestedEntity of detail.nested"
+                              >
                                 <tr *ngFor="let nestedDetail of nestedEntity">
                                   <td>
-                                    <span class="small text-muted text-uppercase lead">{{ nestedDetail.label }}</span>
+                                    <span
+                                      class="small text-muted text-uppercase"
+                                      >{{ nestedDetail.label }}</span
+                                    >
                                   </td>
                                   <td>
-                                    <ng-container [ngSwitch]="nestedDetail.inputType">
+                                    <ng-container
+                                      [ngSwitch]="nestedDetail.inputType"
+                                    >
                                       <span *ngSwitchCase="InputType.Date">
-                                        <ng-container *ngIf="nestedDetail.value != null">
+                                        <ng-container
+                                          *ngIf="nestedDetail.value != null"
+                                        >
                                           {{
-                                          nestedDetail.value
-                                          | date: "yyyy-MM-dd hh:mm"
-                                          }}</ng-container>
+                                            nestedDetail.value
+                                              | date : "yyyy-MM-dd hh:mm"
+                                          }}</ng-container
+                                        >
                                       </span>
-                                      <span *ngSwitchDefault [innerHTML]="nestedDetail.value"></span>
+                                      <span
+                                        *ngSwitchDefault
+                                        [innerHTML]="nestedDetail.value"
+                                      ></span>
                                     </ng-container>
                                   </td>
                                 </tr>
@@ -196,18 +259,34 @@
                     </mat-expansion-panel>
                   </mat-accordion>
                 </div>
-                <div class="col-3 cursor-pointer" *ngIf="
+                <div
+                  class="col-3 cursor-pointer"
+                  *ngIf="
                     (!detail.nested || detail.nested.length === 0) &&
                     (!detail.nestedInbound || detail.nestedInbound.length === 0)
-                  " (click)="openDescriptionDialog(detail.comment, detail.label, detail.description)">
-                  <span class="small text-muted text-uppercase lead">{{
+                  "
+                  (click)="
+                    openDescriptionDialog(
+                      detail.comment,
+                      detail.label,
+                      detail.description
+                    )
+                  "
+                >
+                  <span class="small text-muted text-uppercase">{{
                     detail.label
-                    }}</span>
+                  }}</span>
                 </div>
-                <div class="col-9" *ngIf="!detail.nested || detail.nested.length === 0">
+                <div
+                  class="col-9"
+                  *ngIf="!detail.nested || detail.nested.length === 0"
+                >
                   <ng-container [ngSwitch]="detail.inputType">
-                    <a *ngSwitchCase="InputType.Link" [href]="detail.valueForHref[0]"
-                      (click)="onLinkClicked(detail, $event)">
+                    <a
+                      *ngSwitchCase="InputType.Link"
+                      [href]="detail.valueForHref[0]"
+                      (click)="onLinkClicked(detail, $event)"
+                    >
                       <span [innerHTML]="detail.value"></span>
                     </a>
 
@@ -216,34 +295,37 @@
                     </ng-container>
 
                     <span *ngSwitchCase="InputType.Date">
-                      <ng-container *ngIf="detail.value != ''">{{ detail.value | date: "yyyy-MM-dd hh:mm" }}
+                      <ng-container *ngIf="detail.value !== ''"
+                        >{{ detail.value | date : "yyyy-MM-dd hh:mm" }}
                       </ng-container>
                     </span>
                     <ng-container *ngSwitchCase="InputType.Version">
                       <ng-container *ngFor="let previous of versions?.inbound">
-                        <a [href]="
+                        <a
+                          [href]="
                             previous.value[constants.Metadata.HasPidUri].value
-                          " (click)="
+                          "
+                          (click)="
                             onVersionLinkClicked(detail, previous, $event)
-                          " class="badge badge-light">{{
-                          previous.value[
-                          version
-                          ].value
-                          }}</a>
+                          "
+                          class="badge badge-light"
+                          >{{ previous.value[version].value }}</a
+                        >
                         <span class="mx-1">-</span>
                       </ng-container>
                       <span class="badge badge-primary">{{
                         detail?.value
-                        }}</span>
+                      }}</span>
                       <ng-container *ngFor="let next of versions?.outbound">
                         <span class="mx-1">-</span>
-                        <a [href]="
+                        <a
+                          [href]="
                             next.value[constants.Metadata.HasPidUri].value
-                          " (click)="onVersionLinkClicked(detail, next, $event)" class="badge badge-light">{{
-                          next.value[
-                          version
-                          ].value
-                          }}</a>
+                          "
+                          (click)="onVersionLinkClicked(detail, next, $event)"
+                          class="badge badge-light"
+                          >{{ next.value[version].value }}</a
+                        >
                       </ng-container>
                     </ng-container>
                   </ng-container>
@@ -257,8 +339,16 @@
       <mat-tab class="schemeTab" label="Schema" *ngIf="showSchema">
         <div class="container">
           <ng-template matTabContent>
-            <div class="container m-0" [id]="index" *ngIf="details && details.length; else empty">
-              <app-scheme-ui [schemeUiDetail]="schemeUiDetail" [metadata]="metadata" [loading]="loading$">
+            <div
+              class="container m-0"
+              [id]="index"
+              *ngIf="details && details.length; else empty"
+            >
+              <app-scheme-ui
+                [schemeUiDetail]="schemeUiDetail"
+                [metadata]="metadata"
+                [loading]="loading$"
+              >
               </app-scheme-ui>
             </div>
 
@@ -266,24 +356,43 @@
           </ng-template>
         </div>
       </mat-tab>
-      <mat-tab class="schemeTab" label="Linked Resources" *ngIf="showLinkedResources">
+      <mat-tab
+        class="schemeTab"
+        label="Linked Resources"
+        *ngIf="showLinkedResources"
+      >
         <div class="container">
           <ng-template matTabContent>
             <div class="container m-0" [id]="index">
-              <ng-container *ngFor="
+              <ng-container
+                *ngFor="
                   let linkType of linkedResourceData.nested;
                   let i = index
-                ">
-                <app-search-result-link-type [resource]="details" [linkType]="linkType.value" [edge]="linkType.edge"
-                  [lastElement]="linkedResourceData.nested.length === i + 1" [metadata]="metadata">
+                "
+              >
+                <app-search-result-link-type
+                  [resource]="details"
+                  [linkType]="linkType.value"
+                  [edge]="linkType.edge"
+                  [lastElement]="linkedResourceData.nested.length === i + 1"
+                  [metadata]="metadata"
+                >
                 </app-search-result-link-type>
               </ng-container>
-              <ng-container *ngFor="
+              <ng-container
+                *ngFor="
                   let linkType of linkedResourceData.nestedInbound;
                   let i = index
-                ">
-                <app-search-result-link-type [resource]="details" [linkType]="linkType.value" [edge]="linkType.edge"
-                  [inbound]="true" [lastElement]="linkedResourceData.nested.length === i + 1" [metadata]="metadata">
+                "
+              >
+                <app-search-result-link-type
+                  [resource]="details"
+                  [linkType]="linkType.value"
+                  [edge]="linkType.edge"
+                  [inbound]="true"
+                  [lastElement]="linkedResourceData.nested.length === i + 1"
+                  [metadata]="metadata"
+                >
                 </app-search-result-link-type>
               </ng-container>
             </div>
@@ -292,21 +401,31 @@
           </ng-template>
         </div>
       </mat-tab>
-      <mat-tab class="schemeTab" label="Distribution Endpoint" *ngIf="showDistribution">
+      <mat-tab
+        class="schemeTab"
+        label="Distribution Endpoint"
+        *ngIf="showDistribution"
+      >
         <div class="container">
           <ng-template matTabContent>
             <div class="container m-0" [id]="index">
-              <ng-container *ngFor="
+              <ng-container
+                *ngFor="
                   let distributionEndpoint of distributionData.nested;
                   let i = index
-                ">
-                <app-distribution-endpoint [resource]="details" [endpoint]="distributionEndpoint.value"
+                "
+              >
+                <app-distribution-endpoint
+                  [resource]="details"
+                  [endpoint]="distributionEndpoint.value"
                   [baseUriPointsAt]="subjectPidUriMap.get(baseUriPointsAt)"
-                  [lastElement]="distributionData.nested.length === i + 1" [metadata]="
+                  [lastElement]="distributionData.nested.length === i + 1"
+                  [metadata]="
                     GetMetadataOfDistributionEndpoint(
                       distributionEndpoint.value
                     )
-                  ">
+                  "
+                >
                 </app-distribution-endpoint>
               </ng-container>
             </div>
@@ -317,11 +436,12 @@
       </mat-tab>
       <mat-tab label="History">
         <ng-template matTabContent>
-          <app-resource-historic [pidUri]="pidUri" [entityType]="entityType"></app-resource-historic>
+          <app-resource-historic
+            [pidUri]="pidUri"
+            [entityType]="entityType"
+          ></app-resource-historic>
         </ng-template>
       </mat-tab>
     </mat-tab-group>
   </mat-expansion-panel>
 </mat-accordion>
-
-<div class="result" [ngClass]="{ selected: expanded }"></div>

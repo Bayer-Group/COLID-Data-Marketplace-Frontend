@@ -1,5 +1,5 @@
-import { ColidAccount } from '../models/colid-account.model';
-import { Observable } from 'rxjs';
+import { ColidAccount } from "../models/colid-account.model";
+import { Observable } from "rxjs";
 
 export interface IdentityProvider {
   getAccount(): Observable<ColidAccount>;
@@ -8,4 +8,3 @@ export interface IdentityProvider {
   login(): void;
   logout(): void;
 }
-

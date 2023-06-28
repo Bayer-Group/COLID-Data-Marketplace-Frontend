@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { SchemeUIComponent } from './scheme-ui.component';
+import { SchemeUIComponent } from "./scheme-ui.component";
 
-describe('SchemeUIComponent', () => {
+describe("SchemeUIComponent", () => {
   let component: SchemeUIComponent;
   let fixture: ComponentFixture<SchemeUIComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SchemeUIComponent ]
-    })
-    .compileComponents();
+      declarations: [SchemeUIComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('SchemeUIComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

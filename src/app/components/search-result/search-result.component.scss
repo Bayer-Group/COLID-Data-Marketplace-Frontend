@@ -1,8 +1,6 @@
 .border-button {
   border: 1px solid currentColor !important;
   border-color: rgba(0, 0, 0, 0.12) !important;
-  margin-left: 4px !important;
-
 }
 
 .beta-feature-tag {
@@ -20,17 +18,35 @@
   border-radius: 0.3rem;
 }
 
-::ng-deep .result-header {
+.buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  .spacer {
+    width: 2rem;
+  }
+
+  .broken-icon {
+    height: 30px;
+  }
+}
+
+.result-header-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.result-header {
   flex-direction: row;
   align-items: center;
 }
-
-
-::ng-deep .result-header > .buttons {
-  float: right;
-  display: flex;
-}
-
 
 .result-description {
   font-size: 0.94rem;
@@ -41,14 +57,11 @@
   width: auto;
 }
 
-::ng-deep .mat-expansion-panel-header {
-  padding-left: 2 !important;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+.mat-expansion-panel-header {
   height: auto !important;
 }
 
-::ng-deep .mat-expansion-panel-body {
+.mat-expansion-panel-body {
   padding-left: 2 !important;
   //display: inline-block;
   max-width: 100%!important;

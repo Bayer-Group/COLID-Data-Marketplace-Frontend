@@ -1,21 +1,19 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AggregationBucket} from 'src/app/shared/models/aggregation-bucket';
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { AggregationBucket } from "src/app/shared/models/aggregation-bucket";
 
 @Component({
-  selector: 'app-filter-box-item-switch',
-  templateUrl: './filter-box-item-switch.component.html',
-  styleUrls: ['./filter-box-item-switch.component.scss']
+  selector: "app-filter-box-item-switch",
+  templateUrl: "./filter-box-item-switch.component.html",
+  styleUrls: ["./filter-box-item-switch.component.scss"],
 })
-export class FilterBoxItemSwitchComponent implements OnInit {
+export class FilterBoxItemSwitchComponent {
   @Input() aggregation: AggregationBucket;
 
-  @Output() changeFilterBucket: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() changeFilterBucket: EventEmitter<boolean> =
+    new EventEmitter<boolean>();
 
   @Input() active = false;
-  constructor() { }
-
-  ngOnInit() {
-  }
+  constructor() {}
 
   changeFilterItem() {
     this.active = !this.active;

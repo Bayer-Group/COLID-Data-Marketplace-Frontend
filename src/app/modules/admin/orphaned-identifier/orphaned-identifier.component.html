@@ -1,0 +1,107 @@
+<div class="row mt-2 justify-content-between">
+  <div class="col-auto">
+    <h1 class="admin-tab-title">Orphaned Identifiers</h1>
+  </div>
+  <div class="col-auto">
+    <action-button
+      color="primary"
+      (click)="loadData()"
+      matTooltip="Reload identifier"
+      [disabled]="isLoading"
+      [loading]="status === entityFormStatus.RELOADING"
+      icon="refresh"
+    >
+      Refresh
+    </action-button>
+  </div>
+</div>
+<div
+  class="row mt-2"
+  *ngIf="(loading$ | async) === false && dataSourceLength !== 0"
+>
+  <div class="col-12">
+    <input
+      class="form-control my-1"
+      type="text"
+      (keyup)="applyFilter($event.target.value)"
+      placeholder="Search for identifier..."
+    />
+  </div>
+</div>
+<div class="row mt-2" *ngIf="loading$ | async">
+  <div class="col-12">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+</div>
+<div
+  class="row"
+  [hidden]="(loading$ | async) === false && dataSourceLength === 0"
+>
+  <div class="col-12">
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      class="w-100"
+      matSort
+      matSortActive="created"
+      matSortDisableClear
+      matSortDirection="asc"
+    >
+      <ng-container matColumnDef="identifierUri">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+          Identifier URI
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <span>
+            {{ element.identifierUri }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell class="text-center" *matHeaderCellDef>Delete</th>
+        <td mat-cell *matCellDef="let element">
+          <span class="w-100 d-flex justify-content-center">
+            <action-button
+              type="mat-icon-button"
+              color="primary"
+              (click)="deleteOrphanedIdentifier(element.identifierUri)"
+              matTooltip="Delete identifier"
+              [disabled]="isLoading"
+              [loading]="
+                isLoading && selectedIdentifier === element.identifierUri
+              "
+              icon="delete_forever"
+            ></action-button>
+          </span>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [length]="dataSourceLength"
+      [pageSizeOptions]="[10, 20, 50, 100]"
+      showFirstLastButtons
+    >
+    </mat-paginator>
+  </div>
+</div>
+<div class="row" *ngIf="(loading$ | async) === false && dataSourceLength === 0">
+  <div class="col">
+    <div class="mt-4 text-center">
+      <mat-icon style="font-size: 5rem" [inline]="true">done</mat-icon>
+      <h4>There are currently no orphaned identifiers.</h4>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="row justify-content-center mt-4">
+    <div class="col-auto">
+      <app-colid-spinner></app-colid-spinner>
+    </div>
+  </div>
+</ng-template>

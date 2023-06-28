@@ -1,17 +1,17 @@
-import { LogType } from './log-type';
+import { LogType } from "./log-type";
 
 export interface EdmLogEntry {
-    timestamp: Date;
-    message: string;
-    logType: LogType;
+  timestamp: Date;
+  message: string;
+  logType: LogType;
 
-    location: string;
-    layer: string;
-    product: string;
-    hostname: string;
+  location: string;
+  layer: string;
+  product: string;
+  hostname: string;
 
-    userId: string;
+  userId: string;
 
-    elapsedMilliseconds: number;
-    additionalInfo: object;
+  elapsedMilliseconds: number;
+  additionalInfo: object;
 }

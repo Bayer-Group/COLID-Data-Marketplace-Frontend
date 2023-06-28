@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { ExportDialogComponent } from './export-dialog.component';
+import { ExportDialogComponent } from "./export-dialog.component";
 
-describe('ExportDialogComponent', () => {
+describe("ExportDialogComponent", () => {
   let component: ExportDialogComponent;
   let fixture: ComponentFixture<ExportDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExportDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [ExportDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('ExportDialogComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

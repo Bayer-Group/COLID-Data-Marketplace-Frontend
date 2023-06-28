@@ -1,59 +1,71 @@
 <div class="dialog-panel">
-    <div mat-dialog-content *ngIf="searchFilterDataMarketplaceDto; else noData">
-        <mat-panel-title>
-            <div>
-                <div class="result-header h4 align-items-center mr-0">
-                  Save and subscribe to search
-                </div>
-            </div>
-        </mat-panel-title>
-        <br>
-        <div class="w-100">
-          <span class="mr-0">
-            If you select a search interval, this search will be performed automatically and you will receive a notification when
-            results change.
-          </span>
+  <div mat-dialog-content *ngIf="searchFilterDataMarketplaceDto; else noData">
+    <mat-panel-title>
+      <div>
+        <div class="result-header h4 align-items-center mr-0">
+          Save and subscribe to search
         </div>
-        <br>
-        
-        <div class="w-100">
-          <span class="mr-0">
-            Your saved searches can be maintained in your user settings.
-          </span>
-        </div>
-        <br>
-        <br>
-        <div>
-          <mat-form-field class="w-100" appearance="outline" class="form-field-search-filter-name" *ngIf="selectedSubscriptionValue != null">
-            <mat-label>Search Interval</mat-label>
-            <mat-select [(ngModel)]='selectedSubscriptionValue' id="selectedSendInterval"name="sendInterval">
-                <mat-option *ngFor="let sendInterval of sendIntervals" [value]="sendInterval" >
-                    <span style>{{sendInterval}}</span>
-                </mat-option>
-            </mat-select>
-          </mat-form-field>
       </div>
-      </div>
-  
-      <div mat-dialog-actions>
+    </mat-panel-title>
+    <br />
+    <div class="w-100">
+      <span class="me-0">
+        If you select a search interval, this search will be performed
+        automatically and you will receive a notification when results change.
+      </span>
+    </div>
+    <br />
+
+    <div class="w-100">
+      <span class="me-0">
+        Your saved searches can be maintained in your user settings.
+      </span>
+    </div>
+    <br />
+    <br />
+    <div>
+      <mat-form-field
+        class="w-100"
+        appearance="outline"
+        class="form-field-search-filter-name"
+        *ngIf="selectedSubscriptionValue != null"
+      >
+        <mat-label>Search Interval</mat-label>
+        <mat-select
+          [(ngModel)]="selectedSubscriptionValue"
+          id="selectedSendInterval"
+          name="sendInterval"
+        >
+          <mat-option
+            *ngFor="let sendInterval of sendIntervals"
+            [value]="sendInterval"
+          >
+            <span style>{{ sendInterval }}</span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-raised-button (click)="closeDialog()">
+      <mat-icon fontSet="material-icons-outlined">close</mat-icon>
+      Close
+    </button>
+    <button mat-raised-button color="primary" (click)="addStoreQuery()">
+      <mat-icon fontSet="material-icons-outlined">save</mat-icon>
+      Save
+    </button>
+  </div>
+  <ng-template #noData>
+    <div class="col-12">
+      <div class="mt-4 text-center">
+        <h4>An Error Occured, Please contact administrator</h4>
         <button mat-raised-button (click)="closeDialog()">
           <mat-icon fontSet="material-icons-outlined">close</mat-icon>
           Close
         </button>
-        <button mat-raised-button color="primary" (click)="addStoreQuery()">
-          <mat-icon fontSet="material-icons-outlined">save</mat-icon>
-          Save
-        </button>
       </div>
-      <ng-template #noData>
-        <div class="col-12">
-            <div class="mt-4 text-center">
-                <h4>An Error Occured, Please contact administrator</h4>
-                <button mat-raised-button (click)="closeDialog()">
-                    <mat-icon fontSet="material-icons-outlined">close</mat-icon>
-                    Close
-                  </button>
-            </div>
-        </div>
-    </ng-template>
+    </div>
+  </ng-template>
 </div>

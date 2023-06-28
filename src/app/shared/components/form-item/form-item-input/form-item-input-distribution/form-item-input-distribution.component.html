@@ -1,0 +1,49 @@
+<div class="row">
+  <div class="col-12">
+    <app-form
+      [indexerNested]="indexerNested"
+      [nestedForm]="true"
+      [metaData]="distributionMetadata"
+      [entity]="internalValue"
+      [placeholder]="{}"
+      [adminPrivilege]="adminPrivilege"
+      [errors]="errors?.result"
+      [isNew]="isNewEntity"
+      [pidUriTemplatesFetched]="fetched$"
+      [pidUriTemplateNames]="presets"
+      [formReadOnly]="formReadOnly"
+      (handleFormChanged)="handleDistributionFormChanged($event)"
+    >
+    </app-form>
+  </div>
+</div>
+<div
+  class="row justify-content-between"
+  *ngIf="hasMainDistributionProperty$ | async"
+>
+  <div class="col-auto">
+    <mat-checkbox
+      [color]="'primary'"
+      [labelPosition]="'before'"
+      (change)="changeMainDistribution()"
+      [disabled]="formReadOnly"
+      [(ngModel)]="_isMainDistribution"
+    >
+      <span class="font-weight-bold">
+        The base URI resolves to this endpoint.
+      </span>
+    </mat-checkbox>
+  </div>
+</div>
+<div class="col-12 text-right mt-2">
+  <div class="d-flex justify-content-end">
+    <button
+      mat-raised-button
+      color="accent"
+      (click)="confirmAndRemoveDistribution()"
+      [disabled]="formReadOnly"
+    >
+      Remove
+    </button>
+  </div>
+</div>

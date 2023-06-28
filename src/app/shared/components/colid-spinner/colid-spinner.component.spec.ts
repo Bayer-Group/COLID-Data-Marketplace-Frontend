@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { ColidSpinnerComponent } from './colid-spinner.component';
+import { ColidSpinnerComponent } from "./colid-spinner.component";
 
-describe('ColidSpinnerComponent', () => {
+describe("ColidSpinnerComponent", () => {
   let component: ColidSpinnerComponent;
   let fixture: ComponentFixture<ColidSpinnerComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ColidSpinnerComponent ]
-    })
-    .compileComponents();
+      declarations: [ColidSpinnerComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('ColidSpinnerComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

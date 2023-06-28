@@ -1,20 +1,19 @@
-import { Component, Inject, HostListener } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Constants } from '../../constants';
-import { HttpClient } from '@angular/common/http';
+import { Component, Inject, HostListener } from "@angular/core";
+import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { Constants } from "../../constants";
+import { HttpClient } from "@angular/common/http";
 
 export enum KEY_CODE {
-  RIGHT_ARROW = 'ArrowRight',
-  LEFT_ARROW = 'ArrowLeft'
+  RIGHT_ARROW = "ArrowRight",
+  LEFT_ARROW = "ArrowLeft",
 }
 
 @Component({
-  selector: 'app-image-viewer-dialog',
-  templateUrl: './image-viewer-dialog.component.html',
-  styleUrls: ['./image-viewer-dialog.component.scss']
+  selector: "app-image-viewer-dialog",
+  templateUrl: "./image-viewer-dialog.component.html",
+  styleUrls: ["./image-viewer-dialog.component.scss"],
 })
 export class ImageViewerDialogComponent {
-
   currentIndex: number;
   images: Array<any>;
 
@@ -22,7 +21,7 @@ export class ImageViewerDialogComponent {
   imageThumbnailUrl: string;
   comment: string;
 
-  @HostListener('window:keyup', ['$event'])
+  @HostListener("window:keyup", ["$event"])
   keyEvent(event: KeyboardEvent) {
     if (event.key === KEY_CODE.LEFT_ARROW) {
       this.onClickButtonLeft();
@@ -34,12 +33,13 @@ export class ImageViewerDialogComponent {
   }
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any, private httpClient: HttpClient) {
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private httpClient: HttpClient
+  ) {
     this.currentIndex = data.index;
     this.images = data.images;
     this.setImage(this.currentIndex);
-   }​​​​​​
-
+  }
   onClickButtonLeft() {
     if (this.currentIndex > 0) {
       this.currentIndex -= 1;
@@ -59,8 +59,9 @@ export class ImageViewerDialogComponent {
   }
 
   setImage(index: number) {
-    this.imageUrl = this.images[index]['id'];
-    this.imageThumbnailUrl = this.images[index]['id'];
-    this.comment = this.images[index]['properties'][Constants.Metadata.Comment][0];
+    this.imageUrl = this.images[index]["id"];
+    this.imageThumbnailUrl = this.images[index]["id"];
+    this.comment =
+      this.images[index]["properties"][Constants.Metadata.Comment][0];
   }
 }

@@ -1,0 +1,24 @@
+<div *ngIf="errors?.result">
+  <div
+    class="mat-small text-danger"
+    *ngIf="isViolation"
+    triggers="mouseenter:mouseleave"
+    matTooltip="Please resolve this validation issue in order to save or publish this resource"
+  >
+    <span class="badge badge-danger">Critical</span>&nbsp;
+    {{ errors.result.message }}
+  </div>
+  <div
+    class="mat-small text-warning"
+    *ngIf="isWarning"
+    triggers="mouseenter:mouseleave"
+    matTooltip="Please resolve this validation issue in order to publish this resource"
+  >
+    <span class="badge badge-warning">Warning</span>&nbsp;
+    {{ errors.result.message }}
+  </div>
+  <div class="mat-small text-primary" *ngIf="isInfo">
+    <span class="badge badge-primary">Info</span>&nbsp;
+    <span>{{ errors.result.message }}</span>
+  </div>
+</div>

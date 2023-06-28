@@ -1,0 +1,11 @@
+<app-entity-historic
+  *ngIf="history$ | async as history"
+  [entities]="history"
+  [historicEntities]="historicGraphs$ | async"
+  [metadata]="metadata$ | async"
+  (selectionChange)="handleSelectionChanged($event)"
+  header="startDateTime"
+  subHeader="editorialNote"
+  [selectedEntity]="selectedHistoricGraph$"
+>
+</app-entity-historic>

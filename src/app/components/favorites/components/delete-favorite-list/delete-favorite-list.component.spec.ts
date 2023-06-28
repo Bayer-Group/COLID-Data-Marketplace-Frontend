@@ -1,17 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DeleteFavoriteListComponent } from './delete-favorite-list.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { DeleteFavoriteListComponent } from "./delete-favorite-list.component";
 
-
-
-describe('DeleteFavoriteListComponent', () => {
+describe("DeleteFavoriteListComponent", () => {
   let component: DeleteFavoriteListComponent;
   let fixture: ComponentFixture<DeleteFavoriteListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DeleteFavoriteListComponent ]
-    })
-    .compileComponents();
+      declarations: [DeleteFavoriteListComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -20,7 +17,7 @@ describe('DeleteFavoriteListComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

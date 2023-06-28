@@ -1,0 +1,84 @@
+.table-content {
+  max-height: calc(100vh - 200px);
+  min-height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.header-row {
+  th {
+    padding: 0px 8px;
+  }
+}
+
+.data-row {
+  td {
+    padding: 0px 8px;
+  }
+}
+
+.mat-column-outbound,
+.mat-column-resourceType,
+.mat-column-status {
+  width: 80px;
+}
+
+.mat-column-dateCreated,
+.mat-column-dateDeleted {
+  width: 120px;
+}
+
+.mat-column-resourceName {
+  width: 250px;
+}
+
+.mat-column-restoreAction {
+  width: 60px;
+}
+
+.mat-header-cell,
+.mat-cell {
+  color: #465053;
+  font-size: 14px;
+  letter-spacing: 0;
+}
+
+.items-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.filter-container {
+  border: none;
+  border-bottom: 2px solid black;
+}
+
+.filter-container:focus-visible {
+  outline: none;
+}
+
+::-webkit-scrollbar {
+  width: 16px;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 7.5px;
+  border-radius: 7.5px;
+  background: #babfc1;
+  border-width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-border-radius: 7.5px;
+  border-radius: 7.5px;
+  margin-top: 55px;
+}
+
+.clickable-item {
+  cursor: pointer;
+}

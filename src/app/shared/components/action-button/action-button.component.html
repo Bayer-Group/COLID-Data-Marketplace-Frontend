@@ -1,0 +1,36 @@
+<ng-container
+  *ngTemplateOutlet="type === 'mat-raised-button' ? raisedButton : iconButton"
+>
+</ng-container>
+
+<ng-template #raisedButton>
+  <button
+    action
+    mat-raised-button
+    [color]="color"
+    [disabled]="loading || disabled"
+  >
+    <div>
+      <mat-icon
+        class="me-1"
+        [fontSet]="fontSet"
+        *ngIf="!loading && icon != null"
+      >
+        {{ icon }}
+      </mat-icon>
+      <ng-content></ng-content>
+      <app-colid-spinner *ngIf="loading" [diameter]="20" [strokeWidth]="2">
+      </app-colid-spinner>
+    </div>
+  </button>
+</ng-template>
+
+<ng-template #iconButton>
+  <button mat-icon-button [color]="color" [disabled]="loading || disabled">
+    <mat-icon [fontSet]="fontSet" *ngIf="!loading && icon != null">
+      {{ icon }}
+    </mat-icon>
+    <app-colid-spinner *ngIf="loading" [diameter]="20" [strokeWidth]="2">
+    </app-colid-spinner>
+  </button>
+</ng-template>

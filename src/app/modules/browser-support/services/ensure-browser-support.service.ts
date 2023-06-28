@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class EnsureBrowserSupportService {
-
   public isSupported(): boolean {
-    const isIEOrEdge = /msie\s|trident\/|edge\//i.test(window.navigator.userAgent);
+    const isIEOrEdge = /msie\s|trident\/|edge\//i.test(
+      window.navigator.userAgent
+    );
     return !isIEOrEdge;
   }
-
 }

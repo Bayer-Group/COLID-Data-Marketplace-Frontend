@@ -1,19 +1,21 @@
-import { Directive, Input, OnInit, ElementRef, OnDestroy } from '@angular/core';
-import { Select } from '@ngxs/store';
-import { combineLatest, Observable, Subscription } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { DetailsViewModel } from 'src/app/components/search-result/search-result.component';
-import { AuthService } from 'src/app/modules/authentication/services/auth.service';
-import { UserInfoState } from 'src/app/states/user-info.state';
-import { Constants } from '../constants';
-import { ConsumerGroupResultDTO } from '../models/consumerGroups/ConsumerGroupResultDTO';
+import { Directive, Input, OnInit, ElementRef, OnDestroy } from "@angular/core";
+import { Select } from "@ngxs/store";
+import { combineLatest, Observable, Subscription } from "rxjs";
+import { tap } from "rxjs/operators";
+import { DetailsViewModel } from "src/app/components/search-result/search-result.component";
+import { AuthService } from "src/app/modules/authentication/services/auth.service";
+import { UserInfoState } from "src/app/states/user-info.state";
+import { Constants } from "../constants";
+import { ConsumerGroupResultDTO } from "../models/consumerGroups/ConsumerGroupResultDTO";
 
 @Directive({
   selector: "[editorAccessControl]",
 })
 export class EditorAccessControlDirective implements OnInit, OnDestroy {
-  @Input("resourceDetails") resourceDetails: DetailsViewModel[];
-  @Select(UserInfoState.getConsumerGroups) userConsumerGroups$: Observable<ConsumerGroupResultDTO[]>;
+  @Input() resourceDetails: DetailsViewModel[];
+  @Select(UserInfoState.getConsumerGroups) userConsumerGroups$: Observable<
+    ConsumerGroupResultDTO[]
+  >;
   sub: Subscription;
 
   constructor(
@@ -47,8 +49,14 @@ export class EditorAccessControlDirective implements OnInit, OnDestroy {
           );
         }
 
-        const lifeCycleStatusProperty = this.resourceDetails.find((detail) => detail.key == Constants.Metadata.LifeCycleStatus);
-        if (lifeCycleStatusProperty && lifeCycleStatusProperty.valueEdge[0] == Constants.Resource.LifeCycleStatus.MarkedDeletion) {
+        const lifeCycleStatusProperty = this.resourceDetails.find(
+          (detail) => detail.key == Constants.Metadata.LifeCycleStatus
+        );
+        if (
+          lifeCycleStatusProperty &&
+          lifeCycleStatusProperty.valueEdge[0] ==
+            Constants.Resource.LifeCycleStatus.MarkedDeletion
+        ) {
           authorized = false;
         }
 

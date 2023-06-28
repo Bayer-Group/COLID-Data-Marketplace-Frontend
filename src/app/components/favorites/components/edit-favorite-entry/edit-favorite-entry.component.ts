@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from "@angular/core";
+import { Component, Inject, Input } from "@angular/core";
 import {
   MatDialog,
   MatDialogRef,
@@ -6,16 +6,14 @@ import {
 } from "@angular/material/dialog";
 import { Select, Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { AuthService } from "src/app/modules/authentication/services/auth.service";
 import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
 import { FavoriteListEntry, Favorites } from "src/app/shared/models/favorites";
 import {
   FavoritesState,
-  FetchFavoriteListEntries,
   FetchFavorites,
   SaveFavoriteListEntry,
 } from "../../favorites.state";
-import { FavoritesService } from "../../services/favorites.service";
+import { AuthService } from "src/app/modules/authentication/services/auth.service";
 
 @Component({
   selector: "colid-edit-favorite-entry",
@@ -24,7 +22,7 @@ import { FavoritesService } from "../../services/favorites.service";
 })
 
 //TODO: To be removed since it is unused
-export class EditFavoriteEntryComponent implements OnInit {
+export class EditFavoriteEntryComponent {
   @Select(FavoritesState.getFavorites) favorites$: Observable<Favorites[]>;
   @Select(FavoritesState.getFavoriteListEntries)
   favoriteListEntries$: Observable<{
@@ -45,22 +43,19 @@ export class EditFavoriteEntryComponent implements OnInit {
   personalNote: string;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) 
+    @Inject(MAT_DIALOG_DATA)
     public data: any,
     public dialog: MatDialog,
     private dialogRef: MatDialogRef<EditFavoriteEntryComponent>,
-    private AuthService: AuthService,
+    private authService: AuthService,
     private snackBar: ColidMatSnackBarService,
     private store: Store
   ) {
-    this.AuthService.currentUserId$.subscribe((uid) => (this.userId = uid));
+    this.authService.currentUserId$.subscribe((uid) => (this.userId = uid));
     this.favoritesListEntryId = data.id;
     this.personalNote = data.personalNote;
     this.pidUri = data.pidUri;
     this.favoritesListId = data.favListId;
-  }
-
-  ngOnInit(): void {
   }
 
   fetchFavorites() {
@@ -68,9 +63,16 @@ export class EditFavoriteEntryComponent implements OnInit {
   }
 
   editFavoriteEntry() {
-   this.store.dispatch(new SaveFavoriteListEntry(this.userId, this.favoritesListId, this.favoritesListEntryId, this.pidUri, this.personalNote))
-   this.snackBar.success("Note updated", "This resource updated.");
-   this.dialogRef.close();
-  
+    this.store.dispatch(
+      new SaveFavoriteListEntry(
+        this.userId,
+        this.favoritesListId,
+        this.favoritesListEntryId,
+        this.pidUri,
+        this.personalNote
+      )
+    );
+    this.snackBar.success("Note updated", "This resource updated.");
+    this.dialogRef.close();
   }
 }

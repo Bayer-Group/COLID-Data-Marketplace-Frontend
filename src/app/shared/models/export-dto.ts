@@ -1,4 +1,4 @@
-export interface ExportDto{
+export interface ExportDto {
   includeHeader: boolean;
   exportContent: string;
   readableValues: string;

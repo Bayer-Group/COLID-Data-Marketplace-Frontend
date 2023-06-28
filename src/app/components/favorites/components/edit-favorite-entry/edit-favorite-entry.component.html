@@ -1,19 +1,22 @@
 <div class="dialog">
-    <h1 mat-dialog-title>Edit Note</h1>
+  <h1 mat-dialog-title>Edit Note</h1>
 
-    <p>
-      <mat-form-field appearance="outline">
-        <textarea matInput [(ngModel)]="personalNote"></textarea>
-      </mat-form-field>
-    </p>
+  <p>
+    <mat-form-field appearance="outline">
+      <textarea matInput [(ngModel)]="personalNote"></textarea>
+    </mat-form-field>
+  </p>
 
-    <div mat-dialog-action align="end">
-      <button mat-button mat-dialog-close>
-        Cancel
-      </button>
-      <button style="margin-left: 8px;" mat-button mat-dialog-close cdkFocusInitial (click)="editFavoriteEntry()">
-        Save
-      </button>
-
-    </div>
+  <div mat-dialog-action align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button
+      style="margin-left: 8px"
+      mat-button
+      mat-dialog-close
+      cdkFocusInitial
+      (click)="editFavoriteEntry()"
+    >
+      Save
+    </button>
   </div>
+</div>

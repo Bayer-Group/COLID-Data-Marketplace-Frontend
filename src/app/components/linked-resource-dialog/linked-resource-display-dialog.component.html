@@ -1,7 +1,12 @@
 <div class="dialog-panel">
   <div *ngIf="document && metadata; else noData">
     <div mat-dialog-content>
-      <app-search-result [source]="document" [result]="hit" [metadata]="metadata" [collapsible]="false"></app-search-result>
+      <app-search-result
+        [source]="document"
+        [result]="hit"
+        [metadata]="metadata"
+        [collapsible]="false"
+      ></app-search-result>
     </div>
 
     <div mat-dialog-actions>
@@ -9,11 +14,21 @@
         <mat-icon fontSet="material-icons-outlined">close</mat-icon>
         Close
       </button>
-      <button mat-raised-button color="primary" (click)="openInEditor()" *ngIf="!documentData.confirmReview">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="openInEditor()"
+        *ngIf="!documentData.confirmReview"
+      >
         <mat-icon fontSet="material-icons-outlined">open_in_new</mat-icon>
         Open in COLID Editor
       </button>
-      <button mat-raised-button color="primary" (click)="confirmReview()" *ngIf="documentData.confirmReview">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="confirmReview()"
+        *ngIf="documentData.confirmReview"
+      >
         <mat-icon fontSet="material-icons-outlined">check</mat-icon>
         Confirm Resource
       </button>
@@ -24,10 +39,12 @@
     <div mat-dialog-content>
       <div *ngIf="error">
         <div class="d-flex justify-content-center">
-          <mat-icon class="icon-error" fontSet="material-icons-outlined">error_outline</mat-icon>
+          <mat-icon class="icon-error" fontSet="material-icons-outlined"
+            >error_outline</mat-icon
+          >
         </div>
         <div class="d-flex text-error justify-content-center">
-          {{error}}
+          {{ error }}
         </div>
       </div>
       <div *ngIf="!error" class="row justify-content-center mt-4">

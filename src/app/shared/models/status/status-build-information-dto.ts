@@ -1,6 +1,5 @@
-export class StatusBuildInformationDto {
-    versionNumber: string;
-    jobId: string;
-    pipelineId: string;
-    ciCommitSha: string;
+export interface StatusBuildInformationDto {
+  versionNumber: string;
+  imageTags: string[];
+  latestReleaseDate: Date;
 }

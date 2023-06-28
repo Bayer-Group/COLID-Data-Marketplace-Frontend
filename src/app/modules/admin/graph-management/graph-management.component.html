@@ -1,0 +1,129 @@
+<div class="row justify-content-between">
+  <div class="col-auto">
+    <h1 class="admin-tab-title">Triplestore Graph Management</h1>
+  </div>
+  <div class="col-auto d-flex justify-content-end">
+    <action-button color="draft" (click)="uploadGraph()" icon="cloud_upload">
+      Upload Graph
+    </action-button>
+
+    <action-button
+      class="ms-2"
+      color="info"
+      (click)="loadGraphs()"
+      [disabled]="isLoading"
+      [loading]="isLoadingAction('loading')"
+      icon="refresh"
+    >
+      Reload
+    </action-button>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+  <div
+    class="col-12 d-flex justify-content-center"
+    *ngIf="isLoadingAction('loading')"
+  >
+    <mat-spinner [diameter]="100" [strokeWidth]="5"></mat-spinner>
+  </div>
+  <div
+    class="col-12"
+    [hidden]="isLoadingAction('loading') || !dataSource.data.length"
+  >
+    <mat-form-field class="w-100">
+      <input
+        matInput
+        (keyup)="applyFilter($event.target.value)"
+        placeholder="Filter"
+      />
+    </mat-form-field>
+
+    <table mat-table matSort [dataSource]="dataSource" class="w-100">
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef>Graph Name</th>
+        <td mat-cell *matCellDef="let graph">{{ graph.name }}</td>
+      </ng-container>
+
+      <!-- Status Description Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let graph">{{ graph.status }}</td>
+      </ng-container>
+
+      <!--  Created Column -->
+      <ng-container matColumnDef="startTime">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef>Start Time</th>
+        <td mat-cell *matCellDef="let graph">
+          {{ graph.startTime | date : "yyyy-MM-dd HH:mm" }}
+        </td>
+      </ng-container>
+
+      <!--  Action Column -->
+      <ng-container matColumnDef="action" stickyEnd>
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td class="text-right" mat-cell *matCellDef="let graph">
+          <span class="action-cell">
+            <button
+              mat-icon-button
+              (click)="deleteGraph(graph)"
+              matTooltipShowDelay="300"
+              matTooltip="Delete graph"
+              *ngIf="graph.status === 'Unreferenced'"
+            >
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+            <span #copyButton>
+              <button
+                mat-icon-button
+                matTooltipShowDelay="300"
+                matTooltip="Copy graph name"
+                [cdkCopyToClipboard]="graph.name"
+              >
+                <mat-icon>content_copy</mat-icon>
+              </button>
+            </span>
+            <span #downloadButton>
+              <action-button
+                type="mat-icon-button"
+                matTooltipShowDelay="300"
+                matTooltip="Download graph in .ttl"
+                (click)="downloadGraph(graph.name)"
+                [loading]="
+                  downloadingGraphs.includes(graph.name) &&
+                  isLoadingAction('download')
+                "
+                icon="get_app"
+              >
+              </action-button>
+            </span>
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- The table will render two header rows, one data row per data object, and two footer rows. -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <mat-paginator
+      [pageSize]="10"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+    ></mat-paginator>
+  </div>
+  <div
+    class="col"
+    *ngIf="dataSource.data.length === 0 && !isLoadingAction('loading')"
+  >
+    <div class="mt-4 text-center">
+      <mat-icon style="font-size: 5rem" [inline]="true">done</mat-icon>
+      <h4>Currently there are no graphs in the database.</h4>
+    </div>
+  </div>
+  <div class="col" *ngIf="loadingStatus === 'error'">
+    <div class="mt-4 text-center">
+      <mat-icon style="font-size: 5rem" [inline]="true">error_outline</mat-icon>
+      <h4>An error occurred while loading the graphs. Try it again soon.</h4>
+    </div>
+  </div>
+</div>

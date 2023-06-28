@@ -1,20 +1,26 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy, AfterViewInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Select, Store } from '@ngxs/store';
-import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
-import { Constants } from 'src/app/shared/constants';
-import { Favorites } from 'src/app/shared/models/favorites';
-import { FavoritesState, FetchFavoriteListEntries, FetchFavorites, ResetEntryDetailsMetadata, SetEntryDetailsMetadata } from '../../favorites.state';
-import { DeleteFavoriteListComponent } from '../delete-favorite-list/delete-favorite-list.component';
-import { EditFavoriteListComponent } from '../edit-favorite-list/edit-favorite-list.component';
-import { RemoveFavoriteEntryComponent } from '../remove-favorite-entry/remove-favorite-entry.component';
-import { FavoritesService } from 'src/app/components/favorites/services/favorites.service';
-import { switchMap, tap } from 'rxjs/operators';
-import { ExportDialogComponent } from 'src/app/components/export-dialog/export-dialog.component';
-import { ExportSettings } from 'src/app/shared/models/export/export-settings';
-import { ExportService } from 'src/app/core/http/export.service';
-import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
-import { MultiselectWarningDialogComponent } from 'src/app/components/multiselect-warning-dialog/multiselect-warning-dialog.component';
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { Select, Store } from "@ngxs/store";
+import { EMPTY, Observable } from "rxjs";
+import { Constants } from "src/app/shared/constants";
+import { Favorites } from "src/app/shared/models/favorites";
+import {
+  FavoritesState,
+  FetchFavoriteListEntries,
+  FetchFavorites,
+  ResetEntryDetailsMetadata,
+  SetEntryDetailsMetadata,
+} from "../../favorites.state";
+import { DeleteFavoriteListComponent } from "../delete-favorite-list/delete-favorite-list.component";
+import { EditFavoriteListComponent } from "../edit-favorite-list/edit-favorite-list.component";
+import { RemoveFavoriteEntryComponent } from "../remove-favorite-entry/remove-favorite-entry.component";
+import { FavoritesService } from "src/app/components/favorites/services/favorites.service";
+import { switchMap, tap } from "rxjs/operators";
+import { ExportDialogComponent } from "src/app/components/export-dialog/export-dialog.component";
+import { ExportSettings } from "src/app/shared/models/export/export-settings";
+import { ExportService } from "src/app/core/http/export.service";
+import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
+import { MultiselectWarningDialogComponent } from "src/app/components/multiselect-warning-dialog/multiselect-warning-dialog.component";
 
 @Component({
   selector: "app-favorite-list",
@@ -22,7 +28,7 @@ import { MultiselectWarningDialogComponent } from 'src/app/components/multiselec
   styleUrls: ["./favorite-list.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FavoriteListComponent implements OnInit {
+export class FavoriteListComponent {
   @Input() favorites: Favorites[];
   @Input() userId: string;
   @Input() selectedListEntryId: string;
@@ -46,8 +52,6 @@ export class FavoriteListComponent implements OnInit {
     private exportService: ExportService,
     private snackbar: ColidMatSnackBarService
   ) {}
-
-  ngOnInit(): void {}
 
   get entityType() {
     return Constants.Metadata.EntityType;
@@ -103,7 +107,7 @@ export class FavoriteListComponent implements OnInit {
         },
       })
       .afterClosed()
-      .subscribe(deleted =>  {
+      .subscribe((deleted) => {
         if (deleted) {
           this.store.dispatch(new FetchFavorites(this.userId));
         }
@@ -133,7 +137,7 @@ export class FavoriteListComponent implements OnInit {
     return proof;
   }
 
-  removeSelectedEntries(event, favoriteId) {
+  removeSelectedEntries(event) {
     this.dialog
       .open(RemoveFavoriteEntryComponent, {
         width: "400px",
@@ -214,8 +218,8 @@ export class FavoriteListComponent implements OnInit {
           dialogContent: `
             This favorite list cannot be exported because it contains more than 500 results.
             <br />
-            Please refine your list to less than 500 elements.`
-        }
+            Please refine your list to less than 500 elements.`,
+        },
       });
     }
     event.stopPropagation();

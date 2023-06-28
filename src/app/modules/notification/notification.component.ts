@@ -1,18 +1,34 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { MessageDto } from 'src/app/shared/models/user/message-dto';
-import { MatDialog } from '@angular/material/dialog';
-import { NotificationDialogComponent } from './components/notification-dialog/notification-dialog.component';
-import { Observable } from 'rxjs';
-import { Select, Store } from '@ngxs/store';
-import { NotificationState, FetchNotifications, DeleteNotification, ReadNotification, ReadNotifications } from './notification.state';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  Input,
+  ViewEncapsulation,
+} from "@angular/core";
+import { MessageDto } from "src/app/shared/models/user/message-dto";
+import { MatDialog } from "@angular/material/dialog";
+import { NotificationDialogComponent } from "./components/notification-dialog/notification-dialog.component";
+import { Observable } from "rxjs";
+import { Select, Store } from "@ngxs/store";
+import {
+  NotificationState,
+  FetchNotifications,
+  DeleteNotification,
+  ReadNotification,
+  ReadNotifications,
+} from "./notification.state";
 
 @Component({
-  selector: 'colid-notification',
-  templateUrl: './notification.component.html',
-  styleUrls: ['./notification.component.scss']
+  selector: "colid-notification",
+  templateUrl: "./notification.component.html",
+  styleUrls: ["./notification.component.scss"],
+  encapsulation: ViewEncapsulation.None,
 })
 export class NotificationComponent implements OnInit {
-  @Select(NotificationState.getNotifications) notifications$: Observable<MessageDto[]>;
+  @Select(NotificationState.getNotifications) notifications$: Observable<
+    MessageDto[]
+  >;
 
   @Input() set user(id: string) {
     if (id != null) {
@@ -30,7 +46,7 @@ export class NotificationComponent implements OnInit {
 
   userId: string;
 
-  constructor(private store: Store, public dialog: MatDialog) { }
+  constructor(private store: Store, public dialog: MatDialog) {}
 
   ngOnInit(): void {
     if (this.userId) {
@@ -39,27 +55,35 @@ export class NotificationComponent implements OnInit {
   }
 
   openNotification(notification: MessageDto) {
-    const dialogRef = this.dialog.open(NotificationDialogComponent, { data: notification });
+    const dialogRef = this.dialog.open(NotificationDialogComponent, {
+      data: notification,
+    });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((_) => {
       this.readNotification(notification);
     });
   }
 
   readNotification(notification: MessageDto) {
     if (notification.readOn == null) {
-      this.store.dispatch(new ReadNotification(this.userId, notification.id)).subscribe();
+      this.store
+        .dispatch(new ReadNotification(this.userId, notification.id))
+        .subscribe();
     }
   }
 
   readNotifications(notifications: MessageDto[]) {
-    if (notifications.some(n => n.readOn != null)) {
-      this.store.dispatch(new ReadNotifications(this.userId, notifications)).subscribe();
+    if (notifications.some((n) => n.readOn != null)) {
+      this.store
+        .dispatch(new ReadNotifications(this.userId, notifications))
+        .subscribe();
     }
   }
 
   deleteNotification(notification: MessageDto) {
-    this.store.dispatch(new DeleteNotification(this.userId, notification.id)).subscribe();
+    this.store
+      .dispatch(new DeleteNotification(this.userId, notification.id))
+      .subscribe();
   }
 
   reloadNofications() {

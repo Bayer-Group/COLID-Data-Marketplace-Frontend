@@ -1,63 +1,101 @@
 <div class="row p-2">
   <div class="col">
-      <h2>General</h2>
+    <h2>General</h2>
   </div>
 </div>
 <div class="row">
   <div class="col-12">
-      <mat-card>
-          <mat-card-title>Notifications</mat-card-title>
-          <mat-card-subtitle>Notifications inform users about current changes to subscribed COLID entries, as well as invalid users within entries. These notifications are sent by e-mail and are sent until the specified delete interval.</mat-card-subtitle>
-          <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()">
-              <div class="row">
-                  <div class="col-4 d-flex align-items-center">
-                      <b>Send Interval</b>
-                  </div>
-                  <div class="col-8 d-flex flex-column align-items-left">
-                      <mat-form-field appearance="fill" *ngIf="selectedSendIntervalValue != null">
-                          <mat-label>Send Interval</mat-label>
-                          <mat-select [(ngModel)]='selectedSendIntervalValue' id="selectedSendInterval"
-                              name="sendInterval" formControlName="sendInterval">
-                              <mat-option *ngFor="let sendInterval of sendIntervals" [value]="sendInterval">
-                                  {{sendInterval}}
-                              </mat-option>
-                          </mat-select>
-                      </mat-form-field>
-                      <app-colid-spinner [diameter]="20" [strokeWidth]="2" *ngIf="selectedSendIntervalValue == null">
-                      </app-colid-spinner>
-                  </div>
-              </div>
-              <div class="row mt-3">
-                  <div class="col-4 d-flex align-items-center">
-                      <b>Delete Interval</b>
-                  </div>
-                  <div class="col-8 d-flex flex-column align-items-left">
-                      <mat-form-field appearance="fill" *ngIf="selectedDeleteIntervalValue != null">
-                          <mat-label>Delete Interval</mat-label>
-                          <mat-select [(ngModel)]='selectedDeleteIntervalValue' id="selectedDeleteInterval"
-                              name="deleteInterval" formControlName="deleteInterval">
-                              <mat-option *ngFor="let deleteInterval of deleteIntervals" [value]="deleteInterval">
-                                  {{deleteInterval}}
-                              </mat-option>
-                          </mat-select>
-                      </mat-form-field>
-                      <app-colid-spinner [diameter]="20" [strokeWidth]="2" *ngIf="selectedDeleteIntervalValue == null">
-                      </app-colid-spinner>
-                  </div>
-              </div>
-              <div class="row mt-4 justify-content-end">
-                  <div class="col-auto">
-                      <button mat-raised-button type="button" (click)="onReset()" class="mr-3">
-                          <mat-icon fontSet="material-icons-outlined">cancel</mat-icon>
-                          Reset
-                      </button>
-                      <button mat-raised-button type="submit" color="primary">
-                          <mat-icon fontSet="material-icons-outlined">save</mat-icon>
-                          Save
-                      </button>
-                  </div>
-              </div>
-          </form>
-      </mat-card>
+    <mat-card>
+      <mat-card-title>Notifications</mat-card-title>
+      <mat-card-subtitle
+        >Notifications inform users about current changes to subscribed COLID
+        entries, as well as invalid users within entries. These notifications
+        are sent by e-mail and are sent until the specified delete
+        interval.</mat-card-subtitle
+      >
+      <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-4 d-flex align-items-center">
+            <b>Send Interval</b>
+          </div>
+          <div class="col-8 d-flex flex-column align-items-left">
+            <mat-form-field
+              appearance="fill"
+              *ngIf="selectedSendIntervalValue != null"
+            >
+              <mat-label>Send Interval</mat-label>
+              <mat-select
+                [(ngModel)]="selectedSendIntervalValue"
+                id="selectedSendInterval"
+                name="sendInterval"
+                formControlName="sendInterval"
+              >
+                <mat-option
+                  *ngFor="let sendInterval of sendIntervals"
+                  [value]="sendInterval"
+                >
+                  {{ sendInterval }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <app-colid-spinner
+              [diameter]="20"
+              [strokeWidth]="2"
+              *ngIf="selectedSendIntervalValue == null"
+            >
+            </app-colid-spinner>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-4 d-flex align-items-center">
+            <b>Delete Interval</b>
+          </div>
+          <div class="col-8 d-flex flex-column align-items-left">
+            <mat-form-field
+              appearance="fill"
+              *ngIf="selectedDeleteIntervalValue != null"
+            >
+              <mat-label>Delete Interval</mat-label>
+              <mat-select
+                [(ngModel)]="selectedDeleteIntervalValue"
+                id="selectedDeleteInterval"
+                name="deleteInterval"
+                formControlName="deleteInterval"
+              >
+                <mat-option
+                  *ngFor="let deleteInterval of deleteIntervals"
+                  [value]="deleteInterval"
+                >
+                  {{ deleteInterval }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <app-colid-spinner
+              [diameter]="20"
+              [strokeWidth]="2"
+              *ngIf="selectedDeleteIntervalValue == null"
+            >
+            </app-colid-spinner>
+          </div>
+        </div>
+        <div class="row mt-4 justify-content-end">
+          <div class="col-auto">
+            <button
+              mat-raised-button
+              type="button"
+              (click)="onReset()"
+              class="me-3"
+            >
+              <mat-icon fontSet="material-icons-outlined">cancel</mat-icon>
+              Reset
+            </button>
+            <button mat-raised-button type="submit" color="primary">
+              <mat-icon fontSet="material-icons-outlined">save</mat-icon>
+              Save
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-card>
   </div>
 </div>

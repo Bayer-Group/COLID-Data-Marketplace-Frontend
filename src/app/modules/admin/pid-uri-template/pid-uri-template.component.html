@@ -1,0 +1,21 @@
+<div class="row justify-content-between p-2">
+  <div class="col-auto">
+    <h1 class="admin-tab-title">PID URI Templates</h1>
+  </div>
+  <div class="col-auto">
+    <action-button
+      color="primary"
+      (click)="reload()"
+      [disabled]="(pidUriTemplates$ | async) === null"
+      [loading]="(pidUriTemplates$ | async) === null"
+      icon="refresh"
+    >
+      Reload
+    </action-button>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <app-pid-uri-template-table></app-pid-uri-template-table>
+  </div>
+</div>

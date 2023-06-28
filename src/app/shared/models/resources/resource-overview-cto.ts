@@ -1,6 +1,6 @@
-import { ResourceOverviewDTO } from './resource-overview-dto';
+import { ResourceOverviewDTO } from "./resource-overview-dto";
 
 export class ResourceOverviewCTO {
-    total: number;
-    items: Array<ResourceOverviewDTO>;
+  total: number;
+  items: Array<ResourceOverviewDTO>;
 }

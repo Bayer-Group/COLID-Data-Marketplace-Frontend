@@ -1,0 +1,72 @@
+<div *ngIf="readOnly">
+  <input type="text" class="form-control" [ngModel]="publicValue" readonly />
+</div>
+<div *ngIf="!readOnly" class="input-group">
+  <div
+    class="input-group-prepend"
+    *ngIf="prefix && !isPresetSelected && !externalSelected"
+  >
+    <span class="input-group-text">
+      {{ prefix }}
+    </span>
+  </div>
+  <input
+    *ngIf="isPresetSelected && !externalSelected && presets | async as pre"
+    type="text"
+    class="form-control"
+    [ngModel]="getSelectedPresetName(pre)"
+    readonly
+  />
+  <input
+    *ngIf="!isPresetSelected"
+    type="text"
+    class="form-control"
+    id="txtTemplate_{{ name | lastIndexString }}"
+    #input
+    [name]="name"
+    [(ngModel)]="internalValue"
+    [debounce]="debounceTime"
+    (debounceHandler)="handleInputValueChanged(true)"
+    [attr.name]="name"
+  />
+
+  <div class="input-group-append">
+    <button mat-stroked-button *ngIf="!fetched">
+      <fa-icon icon="spinner" [spin]="true"></fa-icon> Loading...
+    </button>
+    <ng-container *ngIf="fetched && presets !== null">
+      <button
+        mat-stroked-button
+        class="dropdown-toggle"
+        type="button"
+        data-toggle="-"
+        [matMenuTriggerFor]="templateMenu"
+        aria-haspopup="true"
+        id="{{ name }}"
+        aria-expanded="false"
+      >
+        <span id="drpdwnTemplate_{{ name | lastIndexString }}">Templates</span>
+        <mat-icon>expand_more</mat-icon>
+      </button>
+
+      <mat-menu class="pid-uri-template-menu" #templateMenu="matMenu">
+        <button mat-menu-item (click)="setCustom()">Custom</button>
+        <button
+          mat-menu-item
+          *ngIf="externalUriAllowed"
+          (click)="setExternal()"
+        >
+          External
+        </button>
+        <button
+          mat-menu-item
+          name="{{ name | lastIndexString }}_{{ preset.name }}"
+          *ngFor="let preset of presets | async"
+          (click)="setPreset(preset)"
+        >
+          {{ preset.name }}
+        </button>
+      </mat-menu>
+    </ng-container>
+  </div>
+</div>

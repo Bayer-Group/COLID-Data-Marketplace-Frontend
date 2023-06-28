@@ -1,0 +1,22 @@
+<ng-select
+  class="custom"
+  [loading]="personLoading"
+  [items]="persons$ | async"
+  [multiple]="multiselectSettings.multiple"
+  [disabled]="readOnly"
+  [maxSelectedItems]="multiselectSettings.maxSelectedItems"
+  [hideSelected]="multiselectSettings.hideSelected"
+  bindLabel="mail"
+  bindValue="mail"
+  [(ngModel)]="internalValue"
+  (change)="handleValueChanged(internalValue)"
+  [trackByFn]="trackByFn"
+  [groupBy]="groupByFn"
+  [minTermLength]="2"
+  typeToSearchText="Please enter 2 or more characters"
+  [typeahead]="personInput$"
+>
+  <ng-template ng-option-tmp let-item="item">
+    {{ item.displayName }} <small>({{ item.mail }})</small>
+  </ng-template>
+</ng-select>

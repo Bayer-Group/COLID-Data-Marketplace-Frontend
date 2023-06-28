@@ -1,0 +1,12 @@
+.input-group-text.text-danger,
+.input-group-text.text-warning {
+  border: 1px solid red;
+  border-left: none;
+}
+
+select[disabled] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 0.01px;
+  text-overflow: '';
+}

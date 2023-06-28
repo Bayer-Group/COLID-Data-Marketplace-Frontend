@@ -1,0 +1,13 @@
+.mat-standard-chip {
+  border-radius: 10px;
+  min-height: 20px;
+  padding: 0px 8px;
+}
+
+mat-panel-description {
+  justify-content: flex-end;
+}
+
+[mat-raised-button] ~ [mat-raised-button] {
+    margin-left: 1rem;
+}

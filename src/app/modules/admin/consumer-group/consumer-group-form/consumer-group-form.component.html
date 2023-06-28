@@ -1,0 +1,28 @@
+<ng-container
+  *ngIf="
+    (consumerGrouppMetadata$ | async) && ((consumerGroup$ | async) || isNew);
+    else loading
+  "
+>
+  <app-entity-form
+    [isNew]="isNew"
+    [label]="label"
+    [deletionText]="deletionText"
+    [metaData]="consumerGrouppMetadata$ | async"
+    [entity]="consumerGroup$ | async"
+    [isDeletable]="isActive"
+    [entityType]="entityType"
+    [validationResult]="validationResult"
+    [placeholder]="placeholder"
+    (createEntityEmitter)="handleCreateEntityEmitter($event)"
+    (deleteEntityEmitter)="handleDeleteEntityEmitter($event)"
+    (editEntityEmitter)="handleEditEntityEmitter($event)"
+    [status]="formStatus"
+    (cancelEditEntityEmitter)="handleCancelEditEntityEmitter()"
+  >
+  </app-entity-form>
+</ng-container>
+
+<ng-template #loading>
+  <app-colid-spinner></app-colid-spinner>
+</ng-template>

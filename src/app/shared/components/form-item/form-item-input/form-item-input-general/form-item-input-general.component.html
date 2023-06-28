@@ -1,0 +1,12 @@
+<input
+  type="text"
+  class="form-control"
+  [attr.name]="name"
+  id="{{ name }}"
+  #input
+  [name]="name"
+  [(ngModel)]="internalValue"
+  [readonly]="readOnly"
+  [debounce]="debounceTime"
+  (debounceHandler)="handleValueChanged(internalValue)"
+/>

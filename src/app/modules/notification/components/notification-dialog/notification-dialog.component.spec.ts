@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { NotificationDialogComponent } from './notification-dialog.component';
+import { NotificationDialogComponent } from "./notification-dialog.component";
 
-describe('NotificationDialogComponent', () => {
+describe("NotificationDialogComponent", () => {
   let component: NotificationDialogComponent;
   let fixture: ComponentFixture<NotificationDialogComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ NotificationDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [NotificationDialogComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('NotificationDialogComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

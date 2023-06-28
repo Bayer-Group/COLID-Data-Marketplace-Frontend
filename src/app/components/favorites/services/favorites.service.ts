@@ -1,17 +1,19 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable, Subject } from "rxjs";
+import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { MessageDto } from "src/app/shared/models/user/message-dto";
-import { FavoriteListEntry, FavoriteListMetadata, Favorites } from "src/app/shared/models/favorites";
-import { tap } from "rxjs/operators";
+import {
+  FavoriteListEntry,
+  FavoriteListMetadata,
+  Favorites,
+} from "src/app/shared/models/favorites";
 
 @Injectable({
   providedIn: "root",
 })
 export class FavoritesService {
   constructor(private httpClient: HttpClient) {}
-
 
   //This endpoint fetches all the favorite lists
   getFavorites(userId: string): Observable<FavoriteListMetadata[]> {
@@ -36,12 +38,9 @@ export class FavoritesService {
   }
 
   //This endpoint adds multiple entries inside favorite list
-  addFavoriteEntries(
-    userId: string,
-    payload: any
-  ): Observable<Favorites>{
-    const url =  `${environment.appDataApiUrl}/Users/favoritesListEntries/${userId}`;
-    return this.httpClient.put<Favorites>(url,payload);
+  addFavoriteEntries(userId: string, payload: any): Observable<Favorites> {
+    const url = `${environment.appDataApiUrl}/Users/favoritesListEntries/${userId}`;
+    return this.httpClient.put<Favorites>(url, payload);
   }
 
   //This endpoint adds the entry inside a favorite list
@@ -106,14 +105,12 @@ export class FavoritesService {
     return this.httpClient.delete<MessageDto>(url);
   }
 
-  
   //This endpoint removes multiple entries from a favorite list
   removeFavoriteListEntries(
     userId: string,
     payload: any
-  ): Observable<MessageDto>{
-    const url =  `${environment.appDataApiUrl}/Users/removeFavoritesListEntries/${userId}`;
+  ): Observable<MessageDto> {
+    const url = `${environment.appDataApiUrl}/Users/removeFavoritesListEntries/${userId}`;
     return this.httpClient.post<MessageDto>(url, payload);
   }
 }
-

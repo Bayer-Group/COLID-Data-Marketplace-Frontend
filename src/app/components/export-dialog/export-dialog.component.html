@@ -2,46 +2,63 @@
   <h1 mat-dialog-title>Export current list of COLID entries</h1>
   <div mat-dialog-content>
     <p>
-      The software will create an excel file as specified below. You will get a notification when the file is available
-      for download. The file will be deleted when the notification is removed.
+      The software will create an excel file as specified below. You will get a
+      notification when the file is available for download. The file will be
+      deleted when the notification is removed.
     </p>
     <p>
-      <b>
-        Select Excel output formatting
-      </b>
+      <b> Select Excel output formatting </b>
     </p>
 
     <p>
-      <mat-radio-group aria-label="Select an option" [(ngModel)]="exportOptions.exportFormat">
-        <mat-radio-button value="excelTemplate">Data Import Template compatible</mat-radio-button><br />
-        <mat-radio-button value="readableExcel">Individually configurable file (metadata in columns and resources in rows)</mat-radio-button>
+      <mat-radio-group
+        aria-label="Select an option"
+        [(ngModel)]="exportOptions.exportFormat"
+      >
+        <mat-radio-button value="excelTemplate"
+          >Data Import Template compatible</mat-radio-button
+        ><br />
+        <mat-radio-button value="readableExcel"
+          >Individually configurable file (metadata in columns and resources in
+          rows)</mat-radio-button
+        >
       </mat-radio-group>
     </p>
     <p>
       <b>Individual configuration:</b>
     </p>
     <p>
-      <mat-checkbox [(ngModel)]="exportOptions.includeHeader"
-        [disabled]="exportOptions.exportFormat == 'excelTemplate'">
+      <mat-checkbox
+        [(ngModel)]="exportOptions.includeHeader"
+        [disabled]="exportOptions.exportFormat === 'excelTemplate'"
+      >
         Include header with search information
       </mat-checkbox>
     </p>
     <p>
-      <label id="property-header-radio-group-label">Data is exported as...</label><br />
-      <mat-radio-group aria-labelledby="property-header-radio-group-label" [(ngModel)]="exportOptions.readableValues" [disabled]="exportOptions.exportFormat == 'excelTemplate'">
-        <mat-radio-button value="clearText">...human readable text as in the hitlist</mat-radio-button><br />
+      <label id="property-header-radio-group-label"
+        >Data is exported as...</label
+      ><br />
+      <mat-radio-group
+        aria-labelledby="property-header-radio-group-label"
+        [(ngModel)]="exportOptions.readableValues"
+        [disabled]="exportOptions.exportFormat === 'excelTemplate'"
+      >
+        <mat-radio-button value="clearText"
+          >...human readable text as in the hitlist</mat-radio-button
+        ><br />
         <mat-radio-button value="uris">...URIs</mat-radio-button>
       </mat-radio-group>
     </p>
   </div>
   <mat-dialog-actions align="center">
-      <button mat-raised-button (click)="startExport()">
-        <mat-icon fontSet="material-icons-outlined">get_app</mat-icon>
-        Start Export
-      </button>
-      <button mat-raised-button mat-dialog-close>
-        <mat-icon fontSet="material-icons-outlined">close</mat-icon>
-        Close
-      </button>
-    </mat-dialog-actions>
+    <button mat-raised-button (click)="startExport()">
+      <mat-icon fontSet="material-icons-outlined">get_app</mat-icon>
+      Start Export
+    </button>
+    <button mat-raised-button mat-dialog-close>
+      <mat-icon fontSet="material-icons-outlined">close</mat-icon>
+      Close
+    </button>
+  </mat-dialog-actions>
 </div>

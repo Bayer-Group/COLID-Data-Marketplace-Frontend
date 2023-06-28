@@ -1,66 +1,115 @@
 <div class="h-100" [class.is-mobile]="(sidebarMode$ | async) === 'over'">
   <mat-sidenav-container autosize>
-    <mat-sidenav #sidenav [opened]="sidebarOpened$ | async" (closed)="closeSidebar()" [mode]="sidebarMode$ | async"
-      [fixedInViewport]="(sidebarMode$ | async) === 'over'" fixedTopGap="54">
+    <mat-sidenav
+      #sidenav
+      [opened]="sidebarOpened$ | async"
+      (closed)="closeSidebar()"
+      [mode]="sidebarMode$ | async"
+      [fixedInViewport]="(sidebarMode$ | async) === 'over'"
+      fixedTopGap="54"
+    >
       <app-sidebar [initialFilterPanel]="false"></app-sidebar>
     </mat-sidenav>
     <mat-sidenav-content>
       <div class="h-content m-0 justify-content-center">
-      <div class="d-flex flex-column">
-        <div class="flex-fill m-0">
-          <div class="d-flex mb-2">
-            <div class="p-2 flex-grow-1">
-              <app-search-bar-autocomplete [initialSearchText]="searchText$ | async"
-              (searchChange)="handleSearchChange($event)">
-            </app-search-bar-autocomplete>
-            </div>
-            <ng-container *ngIf="!button">
-
-            <div class="p-3">
-              <button mat-stroked-button matTooltip="Save search and subscribe for automated execution"
-                color="primary" (click)="addSearchFilterLinkClicked($event)" [disabled]="(checkSearchText() && checkNullActiveAggregations() && checkNullActiveRangeFilters())">
-                <mat-icon fontSet="material-icons-outlined">save</mat-icon>
-                Save Search
-              </button>
-            </div>
-            <div class="p-3">  
-              <ng-container *ngIf="selectedPIDURIs$ | async as selectedPIDURIs">
-              <button mat-stroked-button color="primary" [matMenuTriggerFor]="menu" >
-                <mat-icon fontSet="material-icons-outlined">more_vert</mat-icon>
-                Actions
-              </button>
-              <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="startExportResults()">
-                  <mat-icon fontSet="material-icons-outlined">upload</mat-icon>
-                  Export results
-                </button>
-                <button mat-menu-item (click)="startExportSelectedResults()" [disabled]="selectedPIDURIs.length === 0">
-                  <mat-icon fontSet="material-icons-outlined">upload_file</mat-icon>
-                  Export selected results
-                </button>
-                <button mat-menu-item (click)="openFavoritesDialog()" [disabled]="selectedPIDURIs.length === 0">
-                  <mat-icon fontSet="material-icons-outlined">bookmark_added</mat-icon>
-                  Add selected to favorites
-                </button>
-                <button mat-menu-item (click)="openInRRM()" [disabled]="selectedPIDURIs.length === 0"
-                  class="d-flex align-items-center">
-                  <img src="assets/dmp-rrm.svg" width="24" height="24" style="margin-right: 16px" />
-                  <div>
-                  <span style="white-space: pre-wrap;">
-                    View in Relationship Manager
-                    (max first 40 elements)
-                  </span>
-                  </div>
-                </button>
-              </mat-menu>
+        <div class="d-flex flex-column">
+          <div class="flex-fill m-0">
+            <div class="d-flex mb-2">
+              <div class="p-2 flex-grow-1">
+                <app-search-bar-autocomplete
+                  [initialSearchText]="searchText$ | async"
+                  (searchChange)="handleSearchChange($event)"
+                >
+                </app-search-bar-autocomplete>
+              </div>
+              <ng-container>
+                <div class="p-3">
+                  <button
+                    mat-stroked-button
+                    matTooltip="Save search and subscribe for automated execution"
+                    color="primary"
+                    (click)="addSearchFilterLinkClicked($event)"
+                    [disabled]="
+                      checkSearchText() &&
+                      checkNullActiveAggregations() &&
+                      checkNullActiveRangeFilters()
+                    "
+                  >
+                    <mat-icon fontSet="material-icons-outlined">save</mat-icon>
+                    Save Search
+                  </button>
+                </div>
+                <div class="p-3">
+                  <ng-container
+                    *ngIf="selectedPIDURIs$ | async as selectedPIDURIs"
+                  >
+                    <button
+                      mat-stroked-button
+                      color="primary"
+                      [matMenuTriggerFor]="menu"
+                    >
+                      <mat-icon fontSet="material-icons-outlined"
+                        >more_vert</mat-icon
+                      >
+                      Actions
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="startExportResults()">
+                        <mat-icon fontSet="material-icons-outlined"
+                          >upload</mat-icon
+                        >
+                        Export results
+                      </button>
+                      <button
+                        mat-menu-item
+                        (click)="startExportSelectedResults()"
+                        [disabled]="selectedPIDURIs.length === 0"
+                      >
+                        <mat-icon fontSet="material-icons-outlined"
+                          >upload_file</mat-icon
+                        >
+                        Export selected results
+                      </button>
+                      <button
+                        mat-menu-item
+                        (click)="openFavoritesDialog()"
+                        [disabled]="selectedPIDURIs.length === 0"
+                      >
+                        <mat-icon fontSet="material-icons-outlined"
+                          >bookmark_added</mat-icon
+                        >
+                        Add selected to favorites
+                      </button>
+                      <button
+                        mat-menu-item
+                        (click)="openInRRM()"
+                        [disabled]="selectedPIDURIs.length === 0"
+                        class="d-flex align-items-center"
+                      >
+                        <img
+                          src="assets/dmp-rrm.svg"
+                          width="24"
+                          height="24"
+                          style="margin-right: 16px"
+                        />
+                        <div>
+                          <span style="white-space: pre-wrap">
+                            View in Relationship Manager (max first 40 elements)
+                          </span>
+                        </div>
+                      </button>
+                    </mat-menu>
+                  </ng-container>
+                </div>
               </ng-container>
             </div>
-            </ng-container>
           </div>
-        </div>
 
           <div class="flex-fill">
-            <app-search-results (changePage)="pageChanged($event)" [pidUrisSearchResult]="pidUrisSearchResult"></app-search-results>
+            <app-search-results
+              (changePage)="pageChanged($event)"
+              [pidUrisSearchResult]="pidUrisSearchResult"
+            ></app-search-results>
           </div>
         </div>
       </div>

@@ -1,8 +1,8 @@
-import { ExportSettings } from './export-settings';
-import { SearchRequest } from './search-request';
+import { ExportSettings } from "./export-settings";
+import { SearchRequest } from "./search-request";
 
 export interface ExcelExportPayload {
-    exportSettings: ExportSettings;
-    searchRequest?: SearchRequest;
-    pidUris?: string[]
+  exportSettings: ExportSettings;
+  searchRequest?: SearchRequest;
+  pidUris?: string[];
 }

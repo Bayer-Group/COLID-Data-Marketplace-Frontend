@@ -1,4 +1,4 @@
 export class WelcomeMessage {
-    type: string;
-    content: string;
+  type: string;
+  content: string;
 }

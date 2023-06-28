@@ -1,5 +1,3 @@
-import { GeneralException } from './general-exception';
+import { GeneralException } from "./general-exception";
 
-export class BusinessException extends GeneralException {
-
-}
+export class BusinessException extends GeneralException {}

@@ -7,22 +7,23 @@ import {
   OnDestroy,
 } from "@angular/core";
 import { BehaviorSubject, Observable, Subscription } from "rxjs";
-import { map, tap } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { ResourceApiService } from "src/app/core/http/resource.api.service";
 import { Constants } from "src/app/shared/constants";
 import { ResourceOverviewDTO } from "src/app/shared/models/resources/resource-overview-dto";
 import { ResourceReview } from "src/app/shared/models/resources/resource-review";
 import { MatTableDataSource } from "@angular/material/table";
-import { MatSort, Sort } from "@angular/material/sort";
+import { MatSort } from "@angular/material/sort";
 import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
 import { MatPaginator } from "@angular/material/paginator";
 import { environment } from "src/environments/environment";
 import { MatDialog } from "@angular/material/dialog";
-import { LinkedResourceDisplayDialog } from "../linked-resource-dialog/linked-resource-display-dialog.component";
+import { LinkedResourceDisplayDialogComponent } from "../linked-resource-dialog/linked-resource-display-dialog.component";
 import { Select, Store } from "@ngxs/store";
 import { UserInfoState } from "src/app/states/user-info.state";
 import { ConsumerGroupResultDTO } from "src/app/shared/models/consumerGroups/ConsumerGroupResultDTO";
 import { AddReviewedResource, ReviewState } from "src/app/states/review.state";
+import moment from "moment";
 
 @Component({
   selector: "app-resource-reviews",
@@ -33,13 +34,17 @@ import { AddReviewedResource, ReviewState } from "src/app/states/review.state";
 export class ResourceReviewsComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
-  @Select(UserInfoState.getConsumerGroups) consumerGroups$: Observable<ConsumerGroupResultDTO[]>;
-  @Select(ReviewState.getReviewedResourceIds) reviewedResourceIds$: Observable<string[]>;
+  @Select(UserInfoState.getConsumerGroups) consumerGroups$: Observable<
+    ConsumerGroupResultDTO[]
+  >;
+  @Select(ReviewState.getReviewedResourceIds) reviewedResourceIds$: Observable<
+    string[]
+  >;
 
   dataSource: MatTableDataSource<ResourceReview>;
   selectedConsumerGroupId: string;
   defaultConsumerGroup: string;
-  selectedUTCDate: Date;
+  selectedUTCDate: moment.Moment;
   currentUTCDate: number;
 
   reviewedResourceIds: string[] = [];
@@ -49,6 +54,8 @@ export class ResourceReviewsComponent
 
   columnsToDisplay = [
     "resourceName",
+    "brokenDistributionEndpointsCount",
+    "brokenContactsCount",
     "reviewDueDate",
     "dataSteward",
     "reviewCycle",
@@ -67,10 +74,7 @@ export class ResourceReviewsComponent
   ) {
     this.dataSource = new MatTableDataSource([]);
     const today = new Date();
-    this.selectedUTCDate = new Date(
-      Date.UTC(today.getFullYear(), today.getMonth(), today.getDate())
-    );
-    this.selectedUTCDate.setMonth((this.selectedUTCDate.getMonth() + 1) % 12);
+    this.selectedUTCDate = moment().utcOffset(0).startOf("day").add(1, "M");
     this.currentUTCDate = Date.UTC(
       today.getFullYear(),
       today.getMonth(),
@@ -91,8 +95,9 @@ export class ResourceReviewsComponent
       )
     );
     this.sub.add(
-      this.reviewedResourceIds$
-        .subscribe((ids) => (this.reviewedResourceIds = ids))
+      this.reviewedResourceIds$.subscribe(
+        (ids) => (this.reviewedResourceIds = ids)
+      )
     );
   }
 
@@ -124,9 +129,15 @@ export class ResourceReviewsComponent
               ),
               dataSteward:
                 review.properties[Constants.Metadata.DataSteward] ?? [],
-              reviewCycle: parseInt(
-                review.properties[Constants.Metadata.HasReviewCyclePolicy][0]
-              ),
+              reviewCycle: review.properties[
+                Constants.Metadata.HasReviewCyclePolicy
+              ]
+                ? parseInt(
+                    review.properties[
+                      Constants.Metadata.HasReviewCyclePolicy
+                    ][0]
+                  )
+                : -1,
               lastReviewer: review.properties[
                 Constants.Metadata.HasLastReviewer
               ]
@@ -135,6 +146,9 @@ export class ResourceReviewsComponent
               resourceReviewed: this.reviewedResourceIds.some(
                 (id) => id === review.pidUri
               ),
+              brokenDistributionEndpointsCount:
+                this.getBrokenDistributionEndpointsCount(review),
+              brokenContactsCount: this.getBrokenContactsCount(review),
               currentlyLoading: this.getCurrentLoadingStatus(review.pidUri),
             };
           })
@@ -146,6 +160,57 @@ export class ResourceReviewsComponent
       });
   }
 
+  private getBrokenDistributionEndpointsCount(review: ResourceOverviewDTO) {
+    if (!review.properties[Constants.Metadata.Distribution]) {
+      return 0;
+    }
+    const distributionEndpoints = review.properties[
+      Constants.Metadata.Distribution
+    ].map((d) => d.properties);
+    const brokenDistributionEndpointsCount = distributionEndpoints.filter(
+      (p) => p[Constants.Metadata.HasBrokenDistributionEndpointLink]
+    ).length;
+    return brokenDistributionEndpointsCount;
+  }
+
+  private getBrokenContactsCount(review: ResourceOverviewDTO) {
+    if (
+      review.properties[Constants.Metadata.HasBrokenDataSteward] ===
+        undefined &&
+      review.properties[Constants.Metadata.Distribution] === undefined
+    ) {
+      return 0;
+    } else if (
+      review.properties[Constants.Metadata.Distribution] === undefined
+    ) {
+      return review.properties[Constants.Metadata.HasBrokenDataSteward].length;
+    } else if (
+      review.properties[Constants.Metadata.HasBrokenDataSteward] === undefined
+    ) {
+      const distributionEndpoints = review.properties[
+        Constants.Metadata.Distribution
+      ].map((d) => d.properties);
+      const invalidDistributionEndpointContactsCount =
+        distributionEndpoints.filter(
+          (p) => p[Constants.Metadata.HasBrokenEndpointContact]
+        ).length;
+      return invalidDistributionEndpointContactsCount;
+    } else {
+      const invalidDataStewardsCount =
+        review.properties[Constants.Metadata.HasBrokenDataSteward].length;
+      const distributionEndpoints = review.properties[
+        Constants.Metadata.Distribution
+      ].map((d) => d.properties);
+      const invalidDistributionEndpointContactsCount =
+        distributionEndpoints.filter(
+          (p) => p[Constants.Metadata.HasBrokenEndpointContact]
+        ).length;
+      return (
+        invalidDataStewardsCount + invalidDistributionEndpointContactsCount
+      );
+    }
+  }
+
   selectConsumerGroup(selectedConsumerGroupId: string) {
     this.selectedConsumerGroupId = selectedConsumerGroupId;
     this.loadDueReviews();
@@ -153,13 +218,7 @@ export class ResourceReviewsComponent
 
   selectDate(event) {
     const selectedDate = event.value;
-    this.selectedUTCDate = new Date(
-      Date.UTC(
-        selectedDate.getFullYear(),
-        selectedDate.getMonth(),
-        selectedDate.getDate()
-      )
-    );
+    this.selectedUTCDate = selectedDate;
     this.loadDueReviews();
   }
 
@@ -173,7 +232,7 @@ export class ResourceReviewsComponent
   }
 
   showResourceDetails(pidUri: string) {
-    this.dialog.open(LinkedResourceDisplayDialog, {
+    this.dialog.open(LinkedResourceDisplayDialogComponent, {
       data: {
         id: pidUri,
         confirmReview: false,
@@ -189,7 +248,7 @@ export class ResourceReviewsComponent
   }
 
   confirmReview(pidUri: string) {
-    const dialogRef = this.dialog.open(LinkedResourceDisplayDialog, {
+    const dialogRef = this.dialog.open(LinkedResourceDisplayDialogComponent, {
       data: {
         id: pidUri,
         confirmReview: true,

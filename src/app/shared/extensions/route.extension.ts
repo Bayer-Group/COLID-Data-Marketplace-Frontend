@@ -1,4 +1,4 @@
-import { ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot } from "@angular/router";
 
 export class RouteExtension {
   public static SetRouteInStorage(route: ActivatedRouteSnapshot) {
@@ -6,11 +6,14 @@ export class RouteExtension {
     this.getUrlSegment(urlSegments, route);
 
     if (urlSegments.length !== 0) {
-      window.sessionStorage.setItem('url', JSON.stringify(urlSegments));
+      window.sessionStorage.setItem("url", JSON.stringify(urlSegments));
     }
 
     if (route.queryParams) {
-      window.sessionStorage.setItem('queryParams', JSON.stringify(route.queryParams));
+      window.sessionStorage.setItem(
+        "queryParams",
+        JSON.stringify(route.queryParams)
+      );
     }
   }
 
@@ -23,5 +26,4 @@ export class RouteExtension {
       this.getUrlSegment(array, route.children[0]);
     }
   }
-
 }
