@@ -1,0 +1,40 @@
+<div class="expansion-tile h-100">
+  <mat-expansion-panel expanded="true" class="h-100">
+    <mat-expansion-panel-header class="blue-bold-text"
+      >Your saved searches</mat-expansion-panel-header
+    >
+    <div *ngIf="searchFilters$ | async as searchFilters; else loading">
+      <ng-container
+        *ngIf="searchFilters.length > 0; else noSearchFilters"
+      ></ng-container>
+      <ng-container *ngFor="let searchFilter of searchFilters">
+        <a [href]="searchFilter.pidUri" target="_blank">{{
+          searchFilter.name
+        }}</a>
+        <mat-divider class="my-1"></mat-divider>
+      </ng-container>
+    </div>
+    <ng-template #noSearchFilters>
+      <div
+        style="cursor: pointer"
+        (click)="
+          openInstructionsDialog(
+            'How to create a saved search',
+            'assets/colid_save_searches.gif'
+          )
+        "
+        class="d-flex align-items-center"
+        matTooltip="Show how to create a saved search"
+      >
+        <p class="mb-0 me-2">You have not created any saved searches yet</p>
+        <mat-icon>help</mat-icon>
+      </div>
+    </ng-template>
+  </mat-expansion-panel>
+</div>
+
+<ng-template #loading>
+  <div class="d-flex justify-content-center">
+    <mat-spinner [diameter]="100" [strokeWidth]="5"></mat-spinner>
+  </div>
+</ng-template>

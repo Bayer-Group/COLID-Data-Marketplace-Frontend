@@ -14,7 +14,10 @@
       <div class="h-content m-0 justify-content-center">
         <div class="d-flex flex-column">
           <div class="flex-fill m-0">
-            <div class="d-flex mb-2">
+            <div
+              class="d-flex mb-2 align-items-center"
+              *ngIf="selectedSearchIndex$ | async as searchIndex"
+            >
               <div class="p-2 flex-grow-1">
                 <app-search-bar-autocomplete
                   [initialSearchText]="searchText$ | async"
@@ -22,9 +25,55 @@
                 >
                 </app-search-bar-autocomplete>
               </div>
+              <div *ngIf="hasCreatePrivilege$ | async">
+                <mat-radio-group
+                  color="primary"
+                  [value]="searchIndex"
+                  (change)="setSearchIndex($event)"
+                >
+                  <mat-radio-button value="published" class="me-2"
+                    >Published</mat-radio-button
+                  >
+                  <mat-radio-button value="draft">Draft</mat-radio-button>
+                  <br />
+                  <mat-radio-button value="all"
+                    >Draft + Published</mat-radio-button
+                  >
+                </mat-radio-group>
+              </div>
+
               <ng-container>
                 <div class="p-3">
                   <button
+                    mat-stroked-button
+                    *ngIf="(showResultsClustered$ | async) === false"
+                    color="primary"
+                    matTooltip="Clustering of results is only available for 50 to 1000 results which are in the published state"
+                    (click)="showClusteredResults()"
+                    [disabled]="
+                      searchResult?.hits?.total < 1 ||
+                      searchResult?.hits?.total > 1000 ||
+                      searchIndex === 'draft' ||
+                      searchIndex === 'all'
+                    "
+                    class="cluster-buttons"
+                  >
+                    <mat-icon fontSet="material-icons-outlined" class="me-1"
+                      >workspaces</mat-icon
+                    >Cluster Results
+                  </button>
+                  <button
+                    mat-stroked-button
+                    color="primary"
+                    *ngIf="showResultsClustered$ | async"
+                    matTooltip="Get back to all results"
+                    (click)="showAllResultsList()"
+                    class="cluster-buttons"
+                  >
+                    <mat-icon class="me-1">list</mat-icon>All Results
+                  </button>
+                  <button
+                    class="ms-2"
                     mat-stroked-button
                     matTooltip="Save search and subscribe for automated execution"
                     color="primary"
@@ -80,24 +129,31 @@
                         >
                         Add selected to favorites
                       </button>
-                      <button
-                        mat-menu-item
-                        (click)="openInRRM()"
-                        [disabled]="selectedPIDURIs.length === 0"
-                        class="d-flex align-items-center"
+                      <ng-container
+                        *ngIf="selectedSearchIndex$ | async as searchIndex"
+                        ><button
+                          mat-menu-item
+                          (click)="openInRRM()"
+                          [disabled]="
+                            selectedPIDURIs.length === 0 ||
+                            searchIndex !== 'published'
+                          "
+                          class="d-flex align-items-center"
+                        >
+                          <img
+                            src="assets/dmp-rrm.svg"
+                            width="24"
+                            height="24"
+                            style="margin-right: 16px"
+                          />
+                          <div>
+                            <span style="white-space: pre-wrap">
+                              View in Relationship Manager (max first 40
+                              elements)
+                            </span>
+                          </div>
+                        </button></ng-container
                       >
-                        <img
-                          src="assets/dmp-rrm.svg"
-                          width="24"
-                          height="24"
-                          style="margin-right: 16px"
-                        />
-                        <div>
-                          <span style="white-space: pre-wrap">
-                            View in Relationship Manager (max first 40 elements)
-                          </span>
-                        </div>
-                      </button>
                     </mat-menu>
                   </ng-container>
                 </div>
@@ -106,7 +162,12 @@
           </div>
 
           <div class="flex-fill">
+            <app-clustering-wrapper
+              *ngIf="showResultsClustered$ | async"
+              (selectedClusterPidUris)="setSelectedClusterPidUris($event)"
+            ></app-clustering-wrapper>
             <app-search-results
+              *ngIf="(showResultsClustered$ | async) === false"
               (changePage)="pageChanged($event)"
               [pidUrisSearchResult]="pidUrisSearchResult"
             ></app-search-results>

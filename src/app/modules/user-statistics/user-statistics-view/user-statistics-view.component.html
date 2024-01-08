@@ -1,0 +1,24 @@
+<div style="width: 100%; height: 4500px" #chartContainer>
+  <ng-container *ngIf="!loading; else loadingTemplate">
+    <ng-container *ngIf="!requestError; else errorTemplate">
+      <div id="tooltip" class="tooltip-container"></div>
+      <sankey-diagram
+        [data]="chartData"
+        [width]="chartWidth"
+        [height]="4500"
+      ></sankey-diagram>
+    </ng-container>
+  </ng-container>
+</div>
+
+<ng-template #loadingTemplate>
+  <div class="py-4 d-flex justify-content-center">
+    <app-colid-spinner></app-colid-spinner>
+  </div>
+</ng-template>
+
+<ng-template #errorTemplate>
+  There was an error loading the user stastics.
+  <br />
+  Please try later again.
+</ng-template>

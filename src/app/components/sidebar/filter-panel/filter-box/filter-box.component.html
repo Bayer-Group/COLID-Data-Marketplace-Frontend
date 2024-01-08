@@ -1,4 +1,4 @@
-<div class="px-3" *ngIf="aggregation.buckets">
+<div *ngIf="aggregation.buckets" class="px-2">
   <!-- Filter as dropdown -->
   <div *ngIf="filterType === 'select'">
     <ng-select
@@ -97,8 +97,8 @@
   <!-- Filter as checkBoxHierarchy -->
 
   <div *ngIf="filterType === 'checkBoxHierarchy'">
-    <div class="text-muted" style="cursor: pointer">
-      <span style="font-weight: 550">
+    <div class="blue-bold-text px-2" style="cursor: pointer; font-size: 15px">
+      <span>
         {{ aggregation.label }}
       </span>
     </div>

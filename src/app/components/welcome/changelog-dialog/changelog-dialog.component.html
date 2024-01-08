@@ -1,0 +1,17 @@
+<h3 mat-dialog-title>User Information</h3>
+<div mat-dialog-content>
+  <quill-view-html
+    [content]="data.welcomeMessage.content"
+    theme="snow"
+  ></quill-view-html>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close>
+    <mat-icon fontSet="material-icons-outlined">close</mat-icon>
+    Skip now
+  </button>
+  <button mat-raised-button color="primary" (click)="setUserInformationFlag()">
+    <mat-icon fontSet="material-icons-outlined">check_box</mat-icon>
+    Don't show again
+  </button>
+</div>

@@ -12,6 +12,7 @@ import { Injectable } from "@angular/core";
 import { Favorites } from "../shared/models/favorites";
 import { ConsumerGroupApiService } from "../core/http/consumer-group.api.service";
 import { ConsumerGroupResultDTO } from "../shared/models/consumerGroups/ConsumerGroupResultDTO";
+import { ColidEntrySubscriptionDetailsDto } from "../shared/models/user/colid-entry-subscription-details-dto";
 
 export class FetchUser {
   static readonly type = "[User] Fetch User";
@@ -26,6 +27,11 @@ export class ReloadUser {
 export class SetLastLoginDataMarketplace {
   static readonly type = "[User] Select Last Login DataMarketplace";
   constructor() {}
+}
+
+export class SetUserInformationFlag {
+  static readonly type = "[User] Set user information flag for latest changes";
+  constructor(public setFlag: boolean) {}
 }
 
 export class SetMessageConfig {
@@ -99,9 +105,21 @@ export class FetchConsumerGroupsByUser {
   constructor() {}
 }
 
+export class FetchLatestSubscriptions {
+  static readonly type = "[User] Fetch latest subscriptions of an user";
+  constructor(public userId: string) {}
+}
+
+export class FetchMostSubscribedResources {
+  static readonly type = "[User] Fetch most subscribed resources";
+  constructor() {}
+}
+
 export class UserInfoStateModel {
   user: UserDto;
   consumerGroups: ConsumerGroupResultDTO[];
+  latestSubscriptions: ColidEntrySubscriptionDetailsDto[];
+  mostSubscribedResources: ColidEntrySubscriptionDetailsDto[];
 }
 
 @State<UserInfoStateModel>({
@@ -109,6 +127,8 @@ export class UserInfoStateModel {
   defaults: {
     user: null,
     consumerGroups: null,
+    latestSubscriptions: null,
+    mostSubscribedResources: null,
   },
 })
 @Injectable()
@@ -159,6 +179,21 @@ export class UserInfoState {
   @Selector()
   public static getConsumerGroups(state: UserInfoStateModel) {
     return state.consumerGroups;
+  }
+
+  @Selector()
+  public static getUserDepartment(state: UserInfoStateModel) {
+    return state.user.department;
+  }
+
+  @Selector()
+  public static getLatestSubscriptions(state: UserInfoStateModel) {
+    return state.latestSubscriptions;
+  }
+
+  @Selector()
+  public static getMostSubscribedResources(state: UserInfoStateModel) {
+    return state.mostSubscribedResources;
   }
 
   @Action(FetchUser)
@@ -213,6 +248,23 @@ export class UserInfoState {
           })
         );
     }
+  }
+
+  @Action(SetUserInformationFlag)
+  SetUserInformationFlag(
+    { getState, patchState }: StateContext<UserInfoStateModel>,
+    { setFlag }: SetUserInformationFlag
+  ) {
+    const user = getState().user;
+    return this.userInfoApiService
+      .setUserInformationFlag(user.id, setFlag)
+      .pipe(
+        tap((res) => {
+          patchState({
+            user: res,
+          });
+        })
+      );
   }
 
   @Action(SetMessageConfig)
@@ -435,6 +487,33 @@ export class UserInfoState {
       tap((consumerGroups: ConsumerGroupResultDTO[]) => {
         patchState({
           consumerGroups,
+        });
+      })
+    );
+  }
+
+  @Action(FetchLatestSubscriptions)
+  fetchLatestSubscriptions(
+    { patchState }: StateContext<UserInfoStateModel>,
+    { userId }: FetchLatestSubscriptions
+  ) {
+    return this.userInfoApiService.getLatestSubscriptions(userId).pipe(
+      tap((res: ColidEntrySubscriptionDetailsDto[]) => {
+        patchState({
+          latestSubscriptions: res,
+        });
+      })
+    );
+  }
+
+  @Action(FetchMostSubscribedResources)
+  fetchMostSubscribedResources({
+    patchState,
+  }: StateContext<UserInfoStateModel>) {
+    return this.userInfoApiService.getMostSubscribedResources().pipe(
+      tap((res: ColidEntrySubscriptionDetailsDto[]) => {
+        patchState({
+          mostSubscribedResources: res,
         });
       })
     );

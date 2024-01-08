@@ -776,7 +776,23 @@ mat-panel-description {
     overflow: inherit;
   }
 
+  .mat-expansion-panel-header {
+    padding-left: 8px;
+  }
+
   .mat-expansion-panel-content .mat-expansion-panel-body {
     padding: 0 0 1rem !important;
   }
+}
+
+.expansion-tile {
+  .mat-expansion-panel > .mat-expansion-panel-content {
+    height: calc(100% - 64px);
+    overflow: auto;
+  }
+}
+
+.blue-bold-text {
+  color: var(--bayer-blue-text);
+  font-weight: bold;
 }

@@ -1,5 +1,10 @@
 import { Injectable } from "@angular/core";
-import { CanActivate, Router, ActivatedRouteSnapshot } from "@angular/router";
+import {
+  CanActivate,
+  Router,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+} from "@angular/router";
 import { map } from "rxjs/operators";
 import { AuthService } from "../services/auth.service";
 import { combineLatest } from "rxjs";
@@ -16,13 +21,13 @@ export class AuthGuardSuperAdminService
     super(authService, router);
   }
 
-  canActivate(route: ActivatedRouteSnapshot) {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return combineLatest([
       this.authService.isLoggedIn$,
       this.authService.hasSuperAdminPrivilege$,
     ]).pipe(
       map(([isLoggedIn, hasSuperAdminPrivilege]) => {
-        const isAuthorized = this.processLoggedIn(isLoggedIn, route);
+        const isAuthorized = this.processLoggedIn(isLoggedIn, route, state);
 
         if (isAuthorized && !hasSuperAdminPrivilege) {
           this.router.navigate(["/unauthorized"]);

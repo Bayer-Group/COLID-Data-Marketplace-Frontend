@@ -47,6 +47,7 @@ import { Favorites } from "src/app/shared/models/favorites";
 import { FavoritesState } from "../favorites/favorites.state";
 import { AddFavoriteDialogComponent } from "../favorites/components/add-favorite-dialog/add-favorite-dialog.component";
 import { ViewDescriptionDialogComponent } from "../search-result/view-description-dialog/view-description-dialog.component";
+import { AuthService } from "src/app/modules/authentication/services/auth.service";
 
 @Component({
   selector: "app-search-result",
@@ -91,11 +92,14 @@ export class SearchResultComponent implements OnInit, OnDestroy, OnChanges {
   }
   attachment = Constants.Metadata.HasAttachment;
   version = Constants.Metadata.HasVersion;
+  publishedVersionIcon = Constants.Resource.LifeCycleStatus.Published;
 
   @Input() metadata: any;
   @Input() collapsible: boolean = true;
   @Input() expandByDefault: boolean = false;
   @Input() index: number = 0;
+  @Input() showResourceDetailsButton: boolean = false;
+  @Input() resourceLinkedLifecycleStatus: string | null;
   @Output() schemeUiChange: EventEmitter<object> = new EventEmitter<object>();
 
   get pidUri() {
@@ -144,6 +148,7 @@ export class SearchResultComponent implements OnInit, OnDestroy, OnChanges {
   definitionHighlight: string[] = new Array<string>();
   resourceType: string[] = new Array<string>();
   details: DetailsViewModel[];
+  entryLifeCycleStatus: string = "";
   schemeUiDetail: SchemeUi;
   showSchema: boolean = false;
   distributionData: any[] = [];
@@ -164,11 +169,16 @@ export class SearchResultComponent implements OnInit, OnDestroy, OnChanges {
   brokenContacts: string[] = [];
   brokenDistributionEndpoints: string[] = [];
 
+  get hasCreatePrivilege$(): Observable<boolean> {
+    return this.authService.hasCreatePrivilege$;
+  }
+
   constructor(
     private store: Store,
     private logger: LogService,
     private snackBar: ColidMatSnackBarService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService: AuthService
   ) {}
 
   ngOnChanges(_): void {
@@ -480,6 +490,12 @@ export class SearchResultComponent implements OnInit, OnDestroy, OnChanges {
     //We are remove table and colum from linked resouece,we will show in schema Ui
     this.removeTableandColumn(orderable);
     this.details = orderable;
+    const lifeCycleStatus = this.details.find(
+      (item) => item.key === Constants.Metadata.LifeCycleStatus
+    );
+    if (lifeCycleStatus) {
+      this.entryLifeCycleStatus = lifeCycleStatus.valueEdge[0];
+    }
   }
 
   onSourceChange(value: DocumentMap) {
@@ -633,6 +649,7 @@ export class SearchResultComponent implements OnInit, OnDestroy, OnChanges {
         id: version.value[Constants.Metadata.HasPidUri].value,
         confirmReview: false,
       },
+      width: "80vw",
     });
   }
 
@@ -684,6 +701,35 @@ export class SearchResultComponent implements OnInit, OnDestroy, OnChanges {
       }
     }
     return orderable;
+  }
+
+  get hasDraftVersion() {
+    return (
+      this.entryLifeCycleStatus === Constants.Resource.LifeCycleStatus.Draft
+    );
+  }
+
+  get hasPublishedVersion() {
+    return (
+      this.entryLifeCycleStatus === Constants.Resource.LifeCycleStatus.Published
+    );
+  }
+
+  get hasDraftAndPublishedVersion() {
+    return (
+      this.resourceLinkedLifecycleStatus != null &&
+      (this.resourceLinkedLifecycleStatus ===
+        Constants.Resource.LifeCycleStatus.Published ||
+        this.resourceLinkedLifecycleStatus ===
+          Constants.Resource.LifeCycleStatus.Draft)
+    );
+  }
+
+  get hasMarkedDeletionVersion() {
+    return (
+      this.entryLifeCycleStatus ===
+      Constants.Resource.LifeCycleStatus.MarkedDeletion
+    );
   }
 
   parseItemToDetailsViewModel(
@@ -911,6 +957,20 @@ export class SearchResultComponent implements OnInit, OnDestroy, OnChanges {
       var schemeStatus = { isAdd: false, activetabList: pidUri };
       this.schemeUiChange.emit(schemeStatus);
     }
+  }
+
+  showResourceDetails(event: MouseEvent) {
+    event.stopPropagation();
+    const pidUri = decodeURIComponent(this._result.id);
+
+    this.dialog.open(LinkedResourceDisplayDialogComponent, {
+      data: {
+        id: pidUri,
+        confirmReview: false,
+      },
+      width: "80vw",
+      autoFocus: false,
+    });
   }
 
   private isPermanentIdentifier(metaProps: any): boolean {

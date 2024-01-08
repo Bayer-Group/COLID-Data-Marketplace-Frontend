@@ -229,6 +229,7 @@ export class SchemeUIComponent implements OnInit, OnChanges, OnDestroy {
     var pidUri = table[this.hasPIDURI].outbound[0].value;
     this.dialog.open(LinkedResourceDisplayDialogComponent, {
       data: { id: pidUri, confirmReview: false },
+      width: "80vw",
     });
   }
 
@@ -236,6 +237,7 @@ export class SchemeUIComponent implements OnInit, OnChanges, OnDestroy {
     event.preventDefault();
     this.dialog.open(LinkedResourceDisplayDialogComponent, {
       data: { id: pidUri, confirmReview: false },
+      width: "80vw",
     });
   }
 

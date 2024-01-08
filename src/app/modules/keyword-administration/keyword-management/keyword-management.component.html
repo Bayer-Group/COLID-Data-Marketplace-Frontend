@@ -1,0 +1,142 @@
+<div
+  class="d-flex flex-column h-100"
+  *ngIf="keywordGraphPidUris$ | async as keywordGraphPidUris"
+>
+  <span>Select an instance graph to show the keyword usage</span>
+  <ng-select
+    id="instance-graphs"
+    [items]="keywordGraphPidUris"
+    [searchFn]="dropdownSearchFilter"
+    [(ngModel)]="selectedKeywordGraphPidUri"
+    (ngModelChange)="loadSelectedKeywordGraph($event)"
+  >
+  </ng-select>
+  <div class="mt-2">
+    Instance Type(s) of selected Instance Graph:
+    {{ graphTypeSelectedInstanceGraph$ | async | join }}
+    <div
+      *ngIf="(graphTypeSelectedInstanceGraph$ | async).length > 1"
+      class="font-weight-bold"
+    >
+      The graph has multiple different instance types. If you create a new graph
+      based on this graph, all the instances will be overwritten with one
+      instance type.
+    </div>
+  </div>
+  <div class="mt-2">
+    <mat-form-field class="me-4" style="width: 400px">
+      <mat-label>New Keyword</mat-label>
+      <input matInput type="text" [(ngModel)]="newKeyword" />
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="addNewRow()"
+      [disabled]="newKeyword === '' || !selectedKeywordGraphPidUri"
+    >
+      <mat-icon>add</mat-icon>
+      Add new keyword
+    </button>
+  </div>
+  <mat-form-field appearance="standard" class="w-100">
+    <mat-label>Filter Labels</mat-label>
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput #input (keyup)="applyFilter($event)" />
+  </mat-form-field>
+  <div class="flex-fill" style="overflow-y: auto">
+    <table mat-table [dataSource]="dataSource" matSort class="w-100">
+      <ng-container matColumnDef="label">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Label</th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container *ngIf="element.keyId !== rowToEditId">{{
+            element.label
+          }}</ng-container>
+          <mat-form-field
+            *ngIf="element.keyId === rowToEditId"
+            class="w-100 pe-2"
+          >
+            <input matInput type="text" [(ngModel)]="editedRowLabel" />
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="usage">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Usage</th>
+        <td mat-cell *matCellDef="let element">{{ element.usage }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <button
+            mat-icon-button
+            *ngIf="element.keyId !== rowToEditId"
+            (click)="
+              rowToEditId = element.keyId; editedRowLabel = element.label
+            "
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            *ngIf="element.keyId !== rowToEditId"
+            [disabled]="element.usage !== 0"
+            (click)="removeRow(element)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            *ngIf="element.keyId === rowToEditId"
+            (click)="saveRowChanges(element.keyId)"
+          >
+            <mat-icon>save</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            *ngIf="element.keyId === rowToEditId"
+            (click)="rowToEditId = null"
+          >
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td
+          class="mat-cell"
+          colspan="3"
+          *ngIf="selectedKeywordGraphPidUri == null; else noFilterResults"
+        >
+          Please select an instance graph to show the keywords
+        </td>
+        <ng-template #noFilterResults>
+          <td class="mat-cell" colspan="3">No data matching the filter</td>
+        </ng-template>
+      </tr>
+    </table>
+    <div *ngIf="isLoading$ | async" class="loading">
+      <mat-progress-spinner
+        color="primary"
+        mode="indeterminate"
+      ></mat-progress-spinner>
+    </div>
+  </div>
+  <mat-paginator [pageSize]="25"></mat-paginator>
+  <div class="text-end mt-4">
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="
+        rowsToAdd.length === 0 &&
+        rowsToEdit.length === 0 &&
+        rowsToDelete.length === 0
+      "
+      (click)="confirmChanges()"
+    >
+      Save changes to new graph version
+    </button>
+  </div>
+</div>

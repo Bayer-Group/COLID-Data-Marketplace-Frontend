@@ -12,13 +12,7 @@ $mat-toolbar-height: 54px;
   height: 100%;
   display: flex;
   flex-direction: column;
-  max-width: 30vw;
-  width: 30vw;
-}
-
-.panel-header {
-  font-weight: 500;
-  color: #9E9E9E;
+  width: 460px;
 }
 
 .filter-panel-main {
@@ -47,6 +41,10 @@ $mat-toolbar-height: 54px;
 
 .loading {
   width: 30vw;
+
+  @media (min-width: 1540px) {
+    width: 20vw;
+  }
 }
 
 .filter-panel-no-filters-icon {

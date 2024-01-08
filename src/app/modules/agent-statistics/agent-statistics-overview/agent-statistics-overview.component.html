@@ -1,0 +1,56 @@
+<div class="h-100 w-100">
+  <ng-container
+    *ngIf="
+      overallStatisticsList$ | async as overallStatisticsList;
+      else loading
+    "
+  >
+    <table
+      *ngIf="overallStatisticsList.length > 0"
+      mat-table
+      [dataSource]="overallStatisticsList"
+      [fixedLayout]="true"
+      class="w-100"
+    >
+      <ng-container matColumnDef="crawlerName">
+        <th mat-header-cell *matHeaderCellDef>Crawler Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.crawlerName }}</td>
+      </ng-container>
+      <ng-container matColumnDef="lastRunDate">
+        <th mat-header-cell *matHeaderCellDef>Last Run Date</th>
+        <td mat-cell *matCellDef="let element">{{ element.lastRunDate }}</td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let element">{{ element.status }}</td>
+      </ng-container>
+      <ng-container matColumnDef="schedule">
+        <th mat-header-cell *matHeaderCellDef>Schedule</th>
+        <td mat-cell *matCellDef="let element">{{ element.schedule }}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <button
+            mat-icon-button
+            matTooltip="Show details for crawler"
+            (click)="navigateToCrawlerDetails(element.crawlerName)"
+          >
+            <mat-icon fontSet="material-icons-outlined">pageview</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <div *ngIf="overallStatisticsList.length === 0">
+      There was an error fetching the statistics
+    </div>
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="d-flex justify-content-center mt-5">
+      <app-colid-spinner></app-colid-spinner>
+    </div>
+  </ng-template>
+</div>

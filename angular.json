@@ -28,7 +28,9 @@
               "./node_modules/quill/dist/quill.snow.css",
               "./node_modules/bootstrap/dist/css/bootstrap.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "./node_modules/marked/marked.min.js"
+            ],
             "vendorChunk": true,
             "extractLicenses": false,
             "buildOptimizer": false,

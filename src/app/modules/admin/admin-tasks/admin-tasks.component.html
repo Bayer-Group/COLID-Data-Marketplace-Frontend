@@ -60,6 +60,12 @@
       >
       <a>Triplestore Graph Management</a>
     </mat-list-item>
+    <mat-list-item routerLink="keyword-management" routerLinkActive="active">
+      <mat-icon class="me-1" fontSet="material-icons-outlined"
+        >format_indent_increase</mat-icon
+      >
+      <a>Keyword Management</a>
+    </mat-list-item>
   </ng-container>
 
   <h1 matSubheader>Entity Management</h1>
@@ -116,4 +122,22 @@
     >
     <a>Orphaned Identifiers</a>
   </mat-list-item>
+  <ng-container *ngIf="hasSuperAdminPrivilege$ | async">
+    <h1 matSubheader>Agent Statistics</h1>
+    <mat-list-item routerLink="agent-statistics" routerLinkActive="active">
+      <mat-icon class="me-1" fontSet="material-icons-outlined"
+        >monitor_heart</mat-icon
+      >
+      <a>Agent Statistics</a>
+    </mat-list-item>
+  </ng-container>
+  <ng-container *ngIf="hasSuperAdminPrivilege$ | async">
+    <h1 matSubheader>User Statistics</h1>
+    <mat-list-item routerLink="user-statistics" routerLinkActive="active">
+      <mat-icon class="me-1" fontSet="material-icons-outlined"
+        >recent_actors</mat-icon
+      >
+      <a>User Statistics</a>
+    </mat-list-item>
+  </ng-container>
 </mat-nav-list>

@@ -3,7 +3,7 @@ import { IdentityProvider } from "./identity-provider.service";
 import { ColidAccount } from "../models/colid-account.model";
 import { MsalService, MsalBroadcastService } from "@azure/msal-angular";
 import { Observable, BehaviorSubject, Subject } from "rxjs";
-import { map, filter, takeUntil } from "rxjs/operators";
+import { map, filter, takeUntil, switchMap } from "rxjs/operators";
 import {
   EventMessage,
   EventType,
@@ -14,17 +14,13 @@ import {
   providedIn: "root",
 })
 export class AzureIdentityProvider implements IdentityProvider {
-  isLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  isLoggedIn$: BehaviorSubject<boolean | null> = new BehaviorSubject(null);
   private readonly _destroying$ = new Subject<void>();
   loggingIn: boolean = false;
-  loginDisplay: boolean = false;
-  currentStatus: InteractionStatus = InteractionStatus.None;
   constructor(
     @Inject(MsalService) private msalService: MsalService,
     private broadcastService: MsalBroadcastService
   ) {
-    this.isLoggedIn$.next(this.checkLoggedIn());
-
     //set local variable when login started
     this.broadcastService.inProgress$
       .pipe(
@@ -43,18 +39,13 @@ export class AzureIdentityProvider implements IdentityProvider {
         ),
         takeUntil(this._destroying$)
       )
-      .subscribe((_) => (this.loggingIn = false));
+      .subscribe((_) => {
+        this.checkLoggedIn();
+      });
 
-    this.broadcastService.inProgress$.subscribe(
-      (r) => (this.currentStatus = r)
+    this.broadcastService.inProgress$.subscribe((r) =>
+      console.log("interaction status", r)
     );
-
-    this.broadcastService.msalSubject$
-      .pipe(
-        filter((ev: EventMessage) => ev.eventType === EventType.LOGIN_SUCCESS),
-        takeUntil(this._destroying$)
-      )
-      .subscribe((_) => this.isLoggedIn$.next(this.checkLoggedIn()));
 
     this.broadcastService.msalSubject$
       .pipe(
@@ -65,52 +56,58 @@ export class AzureIdentityProvider implements IdentityProvider {
       )
       .subscribe((r) => {
         console.error("Failed getting token", r.error);
-        const loggedIn = this.checkLoggedIn();
+        this.checkLoggedIn();
 
-        this.isLoggedIn$.next(loggedIn);
-
-        if (!loggedIn && !this.loginInProgress) {
+        if (this.isLoggedIn$.value === false && !this.loginInProgress) {
           this.login();
         }
       });
   }
 
-  checkLoggedIn(): boolean {
+  checkLoggedIn() {
     const loggedIn = this.msalService.instance.getAllAccounts().length > 0;
     if (loggedIn) {
       const tokenValid =
         this.msalService.instance.getAllAccounts()[0].idTokenClaims["exp"] >
         new Date().getSeconds();
-      return tokenValid;
+      this.isLoggedIn$.next(tokenValid);
     } else {
-      return false;
+      this.isLoggedIn$.next(false);
     }
   }
 
-  getAccount(): Observable<ColidAccount> {
+  getAccount(): Observable<ColidAccount | null> {
     let azureAccount: any;
     return this.isLoggedIn$.pipe(
       map((isLoggedIn) => {
-        if (
-          !azureAccount &&
-          this.msalService.instance.getAllAccounts().length > 0
-        ) {
-          let accounts = this.msalService.instance.getAllAccounts();
-          this.msalService.instance.setActiveAccount(accounts[0]);
-          azureAccount = accounts[0];
-        } else {
-          azureAccount = this.msalService.instance.getActiveAccount();
-        }
-        if (!isLoggedIn) {
-          return null;
-        } else {
-          const accountRoles: any = azureAccount.idTokenClaims["roles"];
+        if (isLoggedIn) {
+          let activeAccount = this.msalService.instance.getActiveAccount();
+
+          if (
+            !activeAccount &&
+            this.msalService.instance.getAllAccounts().length > 0
+          ) {
+            let accounts = this.msalService.instance.getAllAccounts();
+            this.msalService.instance.setActiveAccount(accounts[0]);
+            azureAccount = accounts[0];
+            const accountRoles: any = azureAccount.idTokenClaims["roles"];
+            return new ColidAccount(
+              azureAccount.name,
+              azureAccount.username,
+              azureAccount.localAccountId,
+              accountRoles
+            );
+          }
+
+          const accountRoles: any = activeAccount.idTokenClaims["roles"];
           return new ColidAccount(
-            azureAccount.name,
-            azureAccount.username,
-            azureAccount.localAccountId,
+            activeAccount.name,
+            activeAccount.username,
+            activeAccount.localAccountId,
             accountRoles
           );
+        } else {
+          return null;
         }
       })
     );
@@ -120,29 +117,26 @@ export class AzureIdentityProvider implements IdentityProvider {
     return this.loggingIn;
   }
 
-  async login(): Promise<void> {
-    const destroySub$ = new Subject<void>();
+  login(): void {
     // If the login is happening in a Iframe we need to delay it so it does not create a infinte loop
     this.broadcastService.inProgress$
       .pipe(
         filter(
           (status: InteractionStatus) => status === InteractionStatus.None
         ),
-        takeUntil(destroySub$)
+        switchMap(() => this.msalService.loginRedirect()),
+        takeUntil(this._destroying$)
       )
-      .subscribe(async () => {
-        destroySub$.next();
-        if (window.self !== window.top) {
-          setTimeout(async () => {
-            await this.msalService.instance.loginRedirect();
-          }, 5000);
-        } else {
-          await this.msalService.instance.loginRedirect();
-        }
-      });
+      .subscribe();
   }
 
   logout(): void {
     this.msalService.logout();
+  }
+
+  // cleanup subscriptions
+  cleanup(): void {
+    this._destroying$.next();
+    this._destroying$.complete();
   }
 }

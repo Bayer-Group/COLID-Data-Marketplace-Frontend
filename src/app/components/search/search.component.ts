@@ -12,6 +12,9 @@ import {
   OverwriteActiveRangeFilters,
   ResetActiveAggregationBuckets,
   ClearSelectedPIDURIs,
+  ToggleClusterView,
+  FetchClusterResults,
+  SetSearchIndex,
 } from "src/app/states/search.state";
 import { SidebarState, SetSidebarOpened } from "src/app/states/sidebar.state";
 import { jsonToStringMap } from "src/app/shared/converters/string-map-object.converter";
@@ -31,6 +34,8 @@ import { ExportService } from "src/app/core/http/export.service";
 import { ExportSettings } from "src/app/shared/models/export/export-settings";
 import { CookieService } from "ngx-cookie";
 import { ClearResourceTypeItem } from "src/app/states/metadata.state";
+import { AuthService } from "src/app/modules/authentication/services/auth.service";
+import { MatRadioChange } from "@angular/material/radio";
 
 @Component({
   selector: "app-search",
@@ -38,12 +43,15 @@ import { ClearResourceTypeItem } from "src/app/states/metadata.state";
   styleUrls: ["./search.component.scss"],
 })
 export class SearchComponent implements OnInit, OnDestroy {
+  @Select(SearchState.getShowResultsClustered)
+  showResultsClustered$: Observable<boolean>;
   @Select(SearchState.getActiveAggregations) activeAggregations$: Observable<
     Map<string, string[]>
   >;
   @Select(SearchState.getActiveRangeFilters)
   activeRangeFilters$: Observable<ActiveRangeFilters>;
   @Select(SearchState.getSearchText) searchText$: Observable<string>;
+  @Select(SearchState.getSearchIndex) selectedSearchIndex$: Observable<string>;
   @Select(SidebarState.sidebarOpened) sidebarOpened$: Observable<any>;
   @Select(SidebarState.sidebarMode) sidebarMode$: Observable<any>;
   @Select(SearchState.getSearchResult) searchResult$: Observable<SearchResult>;
@@ -65,10 +73,15 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   activeAggregations: Map<string, string[]>;
   activeRangeFilters: ActiveRangeFilters;
-  searchText: string;
+  searchText: string = "";
   searchResult: SearchResult;
   pidUrisSearchResult: string[];
+  selectedClusterPidUris: string[] = [];
   exportLimit: number = 500;
+
+  get hasCreatePrivilege$(): Observable<boolean> {
+    return this.authService.hasCreatePrivilege$;
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -78,7 +91,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     private logger: LogService,
     private dialog: MatDialog,
     private snackBar: ColidMatSnackBarService,
-    private exportService: ExportService
+    private exportService: ExportService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -256,6 +270,10 @@ export class SearchComponent implements OnInit, OnDestroy {
     );
   }
 
+  setSelectedClusterPidUris(selectedClusterPidUris: string[]) {
+    this.selectedClusterPidUris = selectedClusterPidUris;
+  }
+
   addSearchFilterLinkClicked(event: Event): void {
     event.preventDefault();
     const activeAggregationFilters = mapToObject(this.activeAggregations);
@@ -272,11 +290,18 @@ export class SearchComponent implements OnInit, OnDestroy {
         activeRangeFilters: activeRangeFilters,
         activeAggregationFilters: activeAggregationFilters,
       },
+      disableClose: true,
     });
   }
 
   startExportResults(): void {
-    if (this.searchResult.hits.total <= this.exportLimit) {
+    const showResultsClustered = this.store.selectSnapshot(
+      SearchState.getShowResultsClustered
+    );
+    if (
+      !showResultsClustered &&
+      this.searchResult.hits.total <= this.exportLimit
+    ) {
       const dialogRef = this.dialog.open(ExportDialogComponent, {
         width: "50vw",
       });
@@ -289,6 +314,40 @@ export class SearchComponent implements OnInit, OnDestroy {
                 exportSettings,
                 this.route
               );
+              return this.exportService.startExcelExport(payload).pipe(
+                tap((_) => {
+                  this.snackBar.successCustomDuration(
+                    "Export started",
+                    "Your export has been started. It could take some minutes, until the download link will appear in your notifications",
+                    null,
+                    5000
+                  );
+                })
+              );
+            } else {
+              return EMPTY;
+            }
+          })
+        )
+        .subscribe();
+    } else if (
+      showResultsClustered &&
+      this.selectedClusterPidUris.length > 0 &&
+      this.selectedClusterPidUris.length < this.exportLimit
+    ) {
+      const dialogRef = this.dialog.open(ExportDialogComponent, {
+        width: "50vw",
+      });
+      dialogRef
+        .afterClosed()
+        .pipe(
+          switchMap((exportSettings: ExportSettings) => {
+            if (exportSettings) {
+              const payload =
+                this.exportService.getExportSelectedResultsPayload(
+                  exportSettings,
+                  this.selectedClusterPidUris
+                );
               return this.exportService.startExcelExport(payload).pipe(
                 tap((_) => {
                   this.snackBar.successCustomDuration(
@@ -368,5 +427,23 @@ export class SearchComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+  }
+
+  showClusteredResults() {
+    this.store.dispatch([
+      new ToggleClusterView(true),
+      new FetchClusterResults(this.searchText),
+    ]);
+  }
+
+  showAllResultsList() {
+    this.store.dispatch(new ToggleClusterView(false));
+  }
+
+  setSearchIndex(ev: MatRadioChange) {
+    this.store.dispatch([
+      new SetSearchIndex(ev.value),
+      new FetchSearchResult(this.route),
+    ]);
   }
 }

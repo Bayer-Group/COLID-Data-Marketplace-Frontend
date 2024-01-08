@@ -11,11 +11,74 @@
       <app-sidebar [initialFilterPanel]="true"></app-sidebar>
     </mat-sidenav>
     <mat-sidenav-content>
-      <div class="h-content m-0 justify-content-center">
-        <app-welcome-content
-          (searchChange)="handleSearchChange($event)"
-        ></app-welcome-content>
+      <div class="h-100 m-0 d-flex flex-column">
+        <div class="d-flex align-items-center p-2 mb-4">
+          <app-search-bar-autocomplete
+            class="w-100 me-4"
+            (searchChange)="handleSearchChange($event)"
+            (inputChange)="handleInputChange($event)"
+            [focusSearchbar]="true"
+          ></app-search-bar-autocomplete>
+          <div
+            class="me-4"
+            style="flex: none"
+            *ngIf="hasCreatePrivilege$ | async"
+          >
+            <mat-radio-group
+              color="primary"
+              value="published"
+              (change)="setSearchIndex($event)"
+            >
+              <mat-radio-button value="published" class="me-2"
+                >Published</mat-radio-button
+              >
+              <mat-radio-button value="draft">Draft</mat-radio-button>
+              <br />
+              <mat-radio-button value="all">Draft + Published</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div>
+            <button
+              mat-raised-button
+              class="text-large center-button"
+              id="button-welcome-search"
+              (click)="search()"
+            >
+              Start Search
+            </button>
+          </div>
+        </div>
+        <div class="px-2" *ngIf="reindexProgress$ | async as reindexProgress">
+          <ng-container *ngIf="reindexProgress && reindexProgress.inProgress">
+            Reindexing going on
+            <div class="d-flex align-items-center">
+              <mat-progress-bar
+                [value]="
+                  reindexProgress.currentDocCount /
+                  reindexProgress.totalDocCount
+                "
+                style="max-width: 800px"
+                class="me-2"
+              ></mat-progress-bar>
+              <span style="white-space: nowrap"
+                >{{ reindexProgress.currentDocCount }} of
+                {{ reindexProgress.totalDocCount }} items reindexed</span
+              >
+            </div>
+          </ng-container>
+        </div>
+        <div
+          class="flex-fill overflow-hidden mb-2 mx-2"
+          *ngIf="user$ | async as user; else loading"
+        >
+          <app-welcome-content [user]="user"></app-welcome-content>
+        </div>
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
+<ng-template #loading>
+  <div class="d-flex h-100 align-items-center justify-content-center">
+    <mat-spinner [diameter]="100" [strokeWidth]="5"></mat-spinner>
+  </div>
+</ng-template>

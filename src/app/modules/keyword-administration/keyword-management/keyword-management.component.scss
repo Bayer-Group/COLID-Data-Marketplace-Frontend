@@ -1,0 +1,19 @@
+.mat-column-label {
+  width: calc(100% - 320px);
+}
+
+.mat-column-usage {
+  width: 200px;
+}
+
+.mat-column-actions {
+  width: 120px;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  padding: 4rem;
+}

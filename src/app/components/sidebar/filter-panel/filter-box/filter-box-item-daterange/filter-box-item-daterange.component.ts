@@ -22,6 +22,7 @@ import { Select } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { ActiveRangeFilters } from "src/app/shared/models/active-range-filters";
 import { SearchState } from "src/app/states/search.state";
+import { DatePickerCustomHeaderWithTodayButtonComponent } from "./datepicker-custom-header-with-today-button.component";
 
 export enum RangeDirection {
   From = "from",
@@ -59,6 +60,8 @@ export class FilterBoxItemDaterangeComponent implements OnInit {
   @Input() rangeFilter: RangeFilter;
   @Select(SearchState.getActiveRangeFilters)
   activeRangeFilters$: Observable<ActiveRangeFilters>;
+
+  datePickerCustomHeader = DatePickerCustomHeaderWithTodayButtonComponent;
 
   _selection: RangeFilterSelection;
   @Input() set selection(rangeFilter: RangeFilterSelection) {

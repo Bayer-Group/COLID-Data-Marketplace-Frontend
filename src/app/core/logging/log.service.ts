@@ -69,6 +69,7 @@ export class LogService {
       location: window.location.toString(),
       hostname: "",
       userId: "",
+      department: "",
       elapsedMilliseconds: null,
       additionalInfo: {},
     };
@@ -79,6 +80,9 @@ export class LogService {
         let value = additionalInfo[key];
         if (!(value instanceof Function)) {
           logEntry.additionalInfo[key] = value;
+        }
+        if (key == "department") {
+          logEntry.department = value;
         }
       }
     }

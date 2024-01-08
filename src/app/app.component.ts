@@ -1,8 +1,14 @@
-import { Component, OnInit, HostListener, ViewChild } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  HostListener,
+  ViewChild,
+  OnDestroy,
+} from "@angular/core";
 import { Store, Select } from "@ngxs/store";
 import { FetchBuildInformation } from "./states/status.state";
 import { MetadataState, FetchMetadata } from "./states/metadata.state";
-import { Observable, of, Subject } from "rxjs";
+import { Observable, of, Subscription } from "rxjs";
 import {
   SetSidebarMode,
   ToggleSidebar,
@@ -15,6 +21,8 @@ import {
   SetLastLoginDataMarketplace,
   FetchUser,
   FetchConsumerGroupsByUser,
+  FetchLatestSubscriptions,
+  FetchMostSubscribedResources,
 } from "./states/user-info.state";
 import { AuthService } from "./modules/authentication/services/auth.service";
 import { FetchNotifications } from "./modules/notification/notification.state";
@@ -28,7 +36,7 @@ import { Event, NavigationEnd, Router } from "@angular/router";
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   @ViewChild("notificationSidenav") sidenav: MatSidenav;
   @Select(MetadataState.getMetadataTypes) metadataTypes$: Observable<any>;
 
@@ -36,7 +44,8 @@ export class AppComponent implements OnInit {
   openedSidenav: boolean = false;
   currentRoute: string = "";
 
-  private readonly _destroying$ = new Subject<void>();
+  masterSub: Subscription = new Subscription();
+
   constructor(
     private browserSupport: EnsureBrowserSupportService,
     private store: Store,
@@ -73,79 +82,61 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.isLoggedIn$.subscribe((isAuth) => {
-      if (isAuth) {
-        if (this.browserSupport.isSupported()) {
-          this.store
-            .dispatch([new FetchBuildInformation(), new FetchMetadata()])
-            .subscribe((res) => console.log(res));
-        }
-      }
-    });
-
-    /*
-    this.msalBroadcastService.inProgress$
-      .pipe(
-        filter((status: InteractionStatus) => status===InteractionStatus.None),
-        takeUntil(this._destroying$)
-      )
-      .subscribe(() => ){
-        this.azuraIdentityProvider.setLoginDisplay();
-        this.azuraIdentityProvider.checkAndSetAkivAccount();
-      }
-
-    /* //in the guid this was the snippet but belonges in Azure-identity-provider instead
-    this.msalBroadcastService.inProgress$
-      .pipe(
-        filter((status: InteractionStatus)=> status ===InteractionStatus.None),
-        takeUntil(this._destroying$)
-      )
-        .subscribe(()=> {
-          this.setLoginDisplay();
-          this.checkAndSetActiveAccount();
-        })
-      */
-
-    this.authService.isLoggedIn$
-      .pipe(
-        switchMap((isAuth) => {
-          return isAuth ? this.authService.currentIdentity$ : of(null);
-        })
-      )
-      .pipe(
-        switchMap((identity) => {
-          if (identity) {
-            console.log("Account identifier is", identity.accountIdentifier);
-            return this.store.dispatch([
-              new FetchUser(identity.accountIdentifier, identity.email),
-              new FetchNotifications(identity.accountIdentifier),
-              new FetchFavorites(identity.accountIdentifier),
-              new FetchConsumerGroupsByUser(),
-            ]);
-            //return this.store.dispatch([new FetchUser(identity.accountIdentifier, identity.email), new FetchFavorites(identity.accountIdentifier)])
+    this.masterSub.add(
+      this.authService.isLoggedIn$.subscribe((isAuth) => {
+        if (isAuth) {
+          if (this.browserSupport.isSupported()) {
+            this.store
+              .dispatch([new FetchBuildInformation(), new FetchMetadata()])
+              .subscribe((res) => console.log(res));
           }
-        })
-      )
-      .pipe(
-        switchMap(() => {
-          return this.store.dispatch(new SetLastLoginDataMarketplace());
-        })
-      )
-      .subscribe();
+        }
+      })
+    );
 
-    this.metadataTypes$.subscribe((metadataTypes) => {
-      if (metadataTypes) {
-        var icons = metadataTypes.map((metadataType) => {
-          const key = metadataType.id;
-          const url = metadataType.id;
-          const toolTip = metadataType.name;
+    this.masterSub.add(
+      this.authService.isLoggedIn$
+        .pipe(
+          switchMap((isAuth) => {
+            return isAuth ? this.authService.currentIdentity$ : of(null);
+          })
+        )
+        .pipe(
+          switchMap((identity) => {
+            if (identity) {
+              console.log("Account identifier is", identity.accountIdentifier);
+              return this.store.dispatch([
+                new FetchUser(identity.accountIdentifier, identity.email),
+                new FetchNotifications(identity.accountIdentifier),
+                new FetchLatestSubscriptions(identity.accountIdentifier),
+                new FetchMostSubscribedResources(),
+                new FetchFavorites(identity.accountIdentifier),
+                new FetchConsumerGroupsByUser(),
+                new SetLastLoginDataMarketplace(),
+              ]);
+            } else {
+              return of(null);
+            }
+          })
+        )
+        .subscribe()
+    );
 
-          return new CustomMaterialIcon(key, url, toolTip);
-        });
+    this.masterSub.add(
+      this.metadataTypes$.subscribe((metadataTypes) => {
+        if (metadataTypes) {
+          var icons = metadataTypes.map((metadataType) => {
+            const key = metadataType.id;
+            const url = metadataType.id;
+            const toolTip = metadataType.name;
 
-        this.iconService.registerColidIcons(icons);
-      }
-    });
+            return new CustomMaterialIcon(key, url, toolTip);
+          });
+
+          this.iconService.registerColidIcons(icons);
+        }
+      })
+    );
   }
 
   @HostListener("window:resize", ["$event"])
@@ -171,5 +162,10 @@ export class AppComponent implements OnInit {
 
   toggleNavbar() {
     this.store.dispatch(new ToggleSidebar()).subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.masterSub.unsubscribe();
+    this.authService.cleanup();
   }
 }

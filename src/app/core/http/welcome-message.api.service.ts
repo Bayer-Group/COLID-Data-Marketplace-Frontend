@@ -21,9 +21,9 @@ export class WelcomeMessageApiService {
     return this.httpClient.put<WelcomeMessage>(url, jsonContent);
   }
 
-  getWelcomeMessageDataMarketplace(): Observable<WelcomeMessage> {
+  getWelcomeMessageDataMarketplace(): Observable<any> {
     const url = environment.appDataApiUrl + "/WelcomeMessages/dataMarketplace";
-    return this.httpClient.get<WelcomeMessage>(url);
+    return this.httpClient.get<any>(url);
   }
 
   updateWelcomeMessageDataMarketplace(

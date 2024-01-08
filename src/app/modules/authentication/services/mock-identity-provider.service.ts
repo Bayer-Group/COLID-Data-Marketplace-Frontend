@@ -2,13 +2,16 @@ import { Injectable } from "@angular/core";
 import { IdentityProvider } from "./identity-provider.service";
 import { Constants } from "src/app/shared/constants";
 import { ColidAccount } from "../models/colid-account.model";
-import { Observable, of } from "rxjs";
+import { BehaviorSubject, Observable, of } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class MockIdentityProvider implements IdentityProvider {
-  constructor() {}
+  isLoggedIn$: BehaviorSubject<boolean | null> = new BehaviorSubject(null);
+  constructor() {
+    setTimeout(() => this.isLoggedIn$.next(true), 200);
+  }
 
   getAccount(): Observable<ColidAccount> {
     const idTokenClaimes = [
@@ -18,12 +21,15 @@ export class MockIdentityProvider implements IdentityProvider {
       "PID.Group10Data.ReadWrite",
       "PID.Group11Data.ReadWrite",
     ];
+    const nonAdminIdTokenClaims = [];
     return of(
       new ColidAccount(
         "SuperAdmin",
         "superadmin@bayer.com",
         "87654321-4321-4321-4321-210987654321",
-        idTokenClaimes
+        // "87654321-4321-4321-4321-210987654325",
+        idTokenClaimes,
+        // nonAdminIdTokenClaims
       )
     );
   }
@@ -32,11 +38,9 @@ export class MockIdentityProvider implements IdentityProvider {
     return false;
   }
 
-  get isLoggedIn$(): Observable<boolean> {
-    return of(true);
-  }
-
   login(): void {}
 
   logout(): void {}
+
+  cleanup(): void {}
 }

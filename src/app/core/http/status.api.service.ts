@@ -11,6 +11,12 @@ import { RawDeploymentInformationDto } from "src/app/shared/models/status/raw-de
 export class StatusApiService {
   constructor(private httpClient: HttpClient) {}
 
+  getReleaseNotes(): Observable<string> {
+    const url = environment.releaseNotesUrl;
+
+    return this.httpClient.get(url, { responseType: "text" });
+  }
+
   getBuildInformation(): Observable<StatusBuildInformationDto> {
     const url = environment.deploymentInfoUrl;
 

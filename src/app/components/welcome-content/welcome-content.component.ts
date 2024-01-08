@@ -1,39 +1,37 @@
-import { Component, EventEmitter, Output } from "@angular/core";
-import { environment } from "src/environments/environment";
-import { Select } from "@ngxs/store";
+import { Component, Input, OnInit } from "@angular/core";
+import { Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { DomSanitizer } from "@angular/platform-browser";
-import { WelcomeMessageState } from "src/app/states/welcome-message.state";
-import { WelcomeMessage } from "src/app/shared/models/welcome-message";
+import { FetchSearchFilterDataMarketplace } from "src/app/states/user-info.state";
+import { UserDto } from "src/app/shared/models/user/user-dto";
+import { AuthService } from "src/app/modules/authentication/services/auth.service";
 
 @Component({
   selector: "app-welcome-content",
   templateUrl: "./welcome-content.component.html",
   styleUrls: ["./welcome-content.component.scss"],
 })
-export class WelcomeContentComponent {
-  @Output() searchChange = new EventEmitter();
-  @Select(WelcomeMessageState.getWelcomeMessageDataMarketplace)
-  welcomeMessage$: Observable<WelcomeMessage>;
+export class WelcomeContentComponent implements OnInit {
+  @Input() user: UserDto;
+  lastChangedResourceTilesExpanded: boolean = true;
 
   searchText: string = "*";
-  constructor(private sanitizer: DomSanitizer) {}
+  constructor(
+    private sanitizer: DomSanitizer,
+    private store: Store,
+    private authService: AuthService
+  ) {}
 
-  handleSearchChange(searchText: string) {
-    this.searchChange.emit(searchText);
+  ngOnInit(): void {
+    this.store.dispatch(new FetchSearchFilterDataMarketplace());
   }
 
-  handleInputChange(searchText: string) {
-    this.searchText = searchText;
+  get hasCreatePrivilege$(): Observable<boolean> {
+    return this.authService.hasCreatePrivilege$;
   }
 
-  search() {
-    this.searchChange.emit(this.searchText);
-  }
-
-  goToEditor() {
-    const url = environment.pidUrl;
-    window.open(url, "_blank");
+  setExpansionStatus(expanded: boolean) {
+    this.lastChangedResourceTilesExpanded = expanded;
   }
 
   transformYourHtml(htmlTextWithStyle) {

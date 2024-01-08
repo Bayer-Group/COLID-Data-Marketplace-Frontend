@@ -24,6 +24,8 @@ import { NotificationState } from "src/app/modules/notification/notification.sta
 import { MessageDto } from "src/app/shared/models/user/message-dto";
 import { Favorites } from "src/app/shared/models/favorites";
 import { FavoritesState } from "../favorites/favorites.state";
+import { ReleasenotesDialogComponent } from "../releasenotes-dialog/releasenotes-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: "app-navbar",
@@ -61,7 +63,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private titleService: Title,
     private store: Store,
-    private snackBar: ColidMatSnackBarService
+    private snackBar: ColidMatSnackBarService,
+    private dialog: MatDialog
   ) {
     this.titleService.setTitle(
       "COLID Data Marketplace " + this.environmentLabel
@@ -135,6 +138,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   toggleNavbar() {
     this.store.dispatch(new ToggleSidebar());
+  }
+
+  showReleaseNotes() {
+    this.dialog.open(ReleasenotesDialogComponent, {
+      width: "60vw",
+      autoFocus: false,
+    });
   }
 
   saveActiveAggregationAsDefault() {

@@ -6,7 +6,7 @@ export class StoredQueryDto {
   latestExecutionDate: string;
   public constructor(
     executionInterval: ExecutionInterval,
-    searchFilterDataMarketplaceId: number
+    searchFilterDataMarketplaceId: number = 0
   ) {
     this.executionInterval = executionInterval;
     this.searchFilterDataMarketplaceId = searchFilterDataMarketplaceId;

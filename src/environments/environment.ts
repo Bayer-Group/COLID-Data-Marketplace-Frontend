@@ -5,12 +5,12 @@ export const environment = {
   allowAnonymous: true,
   interceptors: [],
   pageSize: 10,
-  dmpCoreApiUrl: "http://localhost:51800/api/",
-  appDataApiUrl: "http://localhost:51810/api",
+  dmpCoreApiUrl: "http://localhost:51801/api/",
+  appDataApiUrl: "http://localhost:51811/api",
   colidApiUrl: "http://localhost:51770/api/v3",
   loggingUrl: "http://localhost:51800/api/log",
   dmpUrl: "http://localhost:4300/",
-  releaseNotesUrl: "https://placeholder.org/",
+  releaseNotesUrl: "https://info.colid.int.bayer.com/current_release_notes.md",
   adalConfig: {
     authority: "yourdomain.onmicrosoft.com",
     clientId: "<data marketplace client id>",
@@ -24,6 +24,9 @@ export const environment = {
       ],
       "http://localhost:51770": [
         "<registration service client id>/Resource.Read.All",
+      ],
+      "https://placeholder.org/": [
+        "<agent squirrel client id>/Read.All",
       ],
     },
     postLogoutRedirectUri: "http://localhost:4301/",
@@ -48,4 +51,5 @@ export const environment = {
   baseUrl: "bayer.com",
   deploymentInfoUrl:
     "https://info.dev.colid.int.bayer.com/current_deployment.json",
+  agentStatisticsApi: "https://placeholder.org/",
 };

@@ -1,0 +1,10 @@
+.last-changed-results {
+    height: 300px;
+    overflow-y: scroll;
+}
+
+@media (min-height: 1024px) {
+    .last-changed-results {
+        height: 500px;
+    }
+}

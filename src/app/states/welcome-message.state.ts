@@ -69,8 +69,12 @@ export class WelcomeMessageState {
 
   @Action(FetchWelcomeMessageDataMarketplace)
   fetchWelcomeMessageDataMarketplace({
+    getState,
     patchState,
   }: StateContext<WelcomeMessageStateModel>) {
+    if (getState().welcomeMessageDataMarketplace) {
+      return;
+    }
     return this.welcomeMessageApiService
       .getWelcomeMessageDataMarketplace()
       .pipe(

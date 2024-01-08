@@ -1,87 +1,89 @@
-<div class="dialog-panel">
-  <div mat-dialog-content *ngIf="filterData; else noData">
-    <mat-panel-title>
-      <div>
-        <div class="result-header h4 align-items-center me-0">
-          Save and subscribe to search
-        </div>
-      </div>
-    </mat-panel-title>
-    <div>
-      <div class="w-100">
-        <span class="me-0">
-          If you select a search interval, this search will be performed
-          automatically and you will receive a notification when results change.
-        </span>
-      </div>
-      <br />
-
-      <div class="w-100">
-        <span class="me-0">
-          Your saved searches can be maintained in your user settings.
-        </span>
-      </div>
-      <br />
-
-      <mat-form-field
-        class="w-100"
-        appearance="outline"
-        class="form-field-search-filter-name"
-        style="width: 30vw"
+<h3 mat-dialog-title>Save and subscribe to search</h3>
+<div mat-dialog-content *ngIf="filterData; else noData">
+  <div class="w-100 mb-2">
+    <span>
+      If you select a search interval, this search will be performed
+      automatically and you will receive a notification when results change.
+    </span>
+  </div>
+  <div class="w-100 mb-2">
+    <span>Your saved searches can be maintained in your user settings. </span>
+  </div>
+  <div>
+    <mat-form-field
+      class="w-100"
+      appearance="outline"
+      class="form-field-search-filter-name"
+      style="width: 30vw"
+    >
+      <mat-label>Search Name</mat-label>
+      <input
+        matInput
+        [(ngModel)]="searchFilterName"
+        maxlength="250"
+        style="width: 250px"
+      />
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field
+      class="w-100"
+      appearance="outline"
+      class="form-field-search-filter-name"
+      *ngIf="selectedSubscriptionValue != null"
+    >
+      <mat-label>Search Interval</mat-label>
+      <mat-select
+        [(ngModel)]="selectedSubscriptionValue"
+        id="selectedSendInterval"
+        name="sendInterval"
       >
-        <mat-label>Search Name</mat-label>
-        <input
-          matInput
-          [(ngModel)]="searchFilterName"
-          maxlength="250"
-          style="width: 250px"
-        />
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field
-        class="w-100"
-        appearance="outline"
-        class="form-field-search-filter-name"
-        *ngIf="selectedSubscriptionValue != null"
-      >
-        <mat-label>Search Interval</mat-label>
-        <mat-select
-          [(ngModel)]="selectedSubscriptionValue"
-          id="selectedSendInterval"
-          name="sendInterval"
+        <mat-option
+          *ngFor="let sendInterval of sendIntervals"
+          [value]="sendInterval"
         >
-          <mat-option
-            *ngFor="let sendInterval of sendIntervals"
-            [value]="sendInterval"
-          >
-            <span style>{{ sendInterval }}</span>
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+          <span style>{{ sendInterval }}</span>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
-
-  <div mat-dialog-actions>
-    <button mat-raised-button (click)="closeDialog()">
-      <mat-icon fontSet="material-icons-outlined">close</mat-icon>
-      Close
-    </button>
-    <button mat-raised-button color="primary" (click)="addSearchFilter()">
-      <mat-icon fontSet="material-icons-outlined">save</mat-icon>
-      Save
-    </button>
-  </div>
-
-  <ng-template #noData>
-    <div class="col-12">
-      <div class="mt-4 text-center">
-        <h4>An Error Occured, Please contact administrator</h4>
-        <button mat-raised-button (click)="closeDialog()">
-          <mat-icon fontSet="material-icons-outlined">close</mat-icon>
-          Close
-        </button>
-      </div>
-    </div>
-  </ng-template>
+  <p class="text-muted">
+    After saving a search a browsable URI is created. You can use this URI to
+    share this search with other people. If you delete the saved search, the URI
+    will stop working
+  </p>
+  <label class="me-2">Browsable URI:</label>
+  <a
+    target="_blank"
+    *ngIf="lastCreatedSavedSearchPidUri.length > 0"
+    href="{{ lastCreatedSavedSearchPidUri }}"
+    >{{ lastCreatedSavedSearchPidUri }}</a
+  >
 </div>
+
+<div mat-dialog-actions align="end">
+  <button mat-raised-button (click)="closeDialog()" class="me-2">
+    <mat-icon fontSet="material-icons-outlined">close</mat-icon>
+    Close
+  </button>
+  <action-button
+    type="mat-raised-button"
+    icon="save"
+    (click)="addSearchFilter()"
+    [disabled]="lastCreatedSavedSearchPidUri.length > 0"
+    [loading]="loading"
+    >Save</action-button
+  >
+</div>
+
+<ng-template #noData>
+  <div class="col-12">
+    <div class="mt-4 text-center">
+      <h4>An Error Occured, Please contact administrator</h4>
+      <button mat-raised-button (click)="closeDialog()">
+        <mat-icon fontSet="material-icons-outlined">close</mat-icon>
+        Close
+      </button>
+    </div>
+  </div>
+</ng-template>

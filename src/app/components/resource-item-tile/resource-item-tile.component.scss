@@ -1,0 +1,28 @@
+.mat-list-base .mat-list-item.mat-list-item-with-avatar, .mat-list-base .mat-list-option.mat-list-item-with-avatar {
+    height: auto;
+}
+
+.resource-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.resource-description {
+    font-size: 0.70rem;
+}
+
+.clamped-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: initial;
+  font-size: 0.85rem;
+}
+
+.mat-standard-chip {
+    border-radius: 10px;
+    min-height: 20px;
+    padding: 0px 8px;
+}
+

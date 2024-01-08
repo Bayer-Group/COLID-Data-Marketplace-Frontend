@@ -16,7 +16,11 @@
         matSuffix
         [for]="pickerFrom"
       ></mat-datepicker-toggle>
-      <mat-datepicker #pickerFrom></mat-datepicker>
+      <mat-datepicker
+        #pickerFrom
+        [calendarHeaderComponent]="datePickerCustomHeader"
+      >
+      </mat-datepicker>
     </mat-form-field>
   </div>
   <div class="me-2">
@@ -33,7 +37,10 @@
         (click)="pickerTo.open()"
       />
       <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
-      <mat-datepicker #pickerTo></mat-datepicker>
+      <mat-datepicker
+        #pickerTo
+        [calendarHeaderComponent]="datePickerCustomHeader"
+      ></mat-datepicker>
     </mat-form-field>
   </div>
   <div *ngIf="(activeRangeFilters$ | async)[rangeFilter.key]">
