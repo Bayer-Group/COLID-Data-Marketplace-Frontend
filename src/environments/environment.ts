@@ -10,7 +10,7 @@ export const environment = {
   colidApiUrl: "http://localhost:51770/api/v3",
   loggingUrl: "http://localhost:51800/api/log",
   dmpUrl: "http://localhost:4300/",
-  releaseNotesUrl: "https://info.colid.int.bayer.com/current_release_notes.md",
+  releaseNotesUrl: "https://info.dev.colid.int.bayer.com/current_release_notes.md",
   adalConfig: {
     authority: "yourdomain.onmicrosoft.com",
     clientId: "<data marketplace client id>",
