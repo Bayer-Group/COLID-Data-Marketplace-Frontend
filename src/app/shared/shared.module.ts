@@ -55,6 +55,7 @@ import { EntityHistoricComponent } from "./components/entity-historic/entity-his
 import { AppMaterialModule } from "../app-material.module";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { CheckboxSelectedPipe } from "./pipes/checkbox-selected.pipe";
 
 // Global quill config for form items
 const globalQuillConfig: QuillConfig = {
@@ -117,6 +118,7 @@ const globalQuillConfig: QuillConfig = {
     FormItemInputPersonComponent,
     FormItemInputPidUriComponent,
     FormItemInputTaxonomyComponent,
+    CheckboxSelectedPipe,
   ],
   imports: [
     CommonModule,
@@ -138,6 +140,7 @@ const globalQuillConfig: QuillConfig = {
     ReviewCyclePipe,
     LoadingIndicatorPipe,
     ColumnsNamePipe,
+    CheckboxSelectedPipe,
     QuillModule,
     NgSelectModule,
     ColidSpinnerComponent,

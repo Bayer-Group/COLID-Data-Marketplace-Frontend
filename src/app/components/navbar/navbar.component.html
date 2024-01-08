@@ -111,6 +111,13 @@
     >
       <mat-icon>build</mat-icon>
     </button>
+    <button
+      mat-icon-button
+      matTooltip="Help and info"
+      [matMenuTriggerFor]="helpMenu"
+    >
+      <mat-icon>help_outline</mat-icon>
+    </button>
 
     <mat-menu #editorMenu="matMenu">
       <button mat-menu-item [routerLink]="'resource-reviews'">
@@ -119,8 +126,19 @@
       </button>
     </mat-menu>
 
-    <button mat-icon-button matTooltip="Help" [routerLink]="'/help'">
-      <mat-icon>help_outline</mat-icon>
-    </button>
+    <mat-menu #helpMenu="matMenu">
+      <button mat-menu-item matTooltip="Help" [routerLink]="'/help'">
+        <mat-icon>help_outline</mat-icon>
+        <span>About / Help</span>
+      </button>
+      <button
+        mat-menu-item
+        matTooltip="Release Notes"
+        (click)="showReleaseNotes()"
+      >
+        <mat-icon>history_toggle_off</mat-icon>
+        <span>Release Notes</span>
+      </button>
+    </mat-menu>
   </mat-toolbar-row>
 </mat-toolbar>

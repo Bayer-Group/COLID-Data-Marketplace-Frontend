@@ -1,0 +1,94 @@
+<div style="display: flex; flex-direction: column; height: 100%">
+  <div class="d-flex align-items-start justify-content-between">
+    <div>
+      <mat-form-field class="me-5">
+        <mat-label>Choose a start date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="startPicker"
+          [value]="startDate"
+          (dateInput)="filterDateSelected($event, true)"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="startPicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Choose an end date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="endPicker"
+          [value]="endDate"
+          [matDatepickerFilter]="endDateFilter"
+          (dateInput)="filterDateSelected($event, false)"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="endPicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div>
+      <a mat-raised-button routerLink="/admin/agent-statistics">Back</a>
+    </div>
+  </div>
+  <div style="flex: 1" #chartContainer>
+    <div
+      *ngIf="errorFetchingStatistics"
+      class="d-flex p-2 align-items-center alert alert-primary"
+    >
+      <mat-icon fontSet="material-icons-outlined" class="me-2">info</mat-icon>
+      There was an error fetching the statistics
+    </div>
+    <ng-container *ngIf="!errorFetchingStatistics">
+      <div style="display: flex; height: 50%">
+        <app-agent-statistics-line-chart
+          *ngIf="!loading"
+          [chartWidth]="chartWidth"
+          [chartHeight]="chartHeight"
+          [data]="dataItemsCrawled"
+          [xAxisLabel]="'Date'"
+          [yAxisLabel]="'Items crawled'"
+          [xAxisTicks]="xAxisTicks"
+        ></app-agent-statistics-line-chart>
+        <app-agent-statistics-line-chart
+          *ngIf="!loading"
+          [chartWidth]="chartWidth"
+          [chartHeight]="chartHeight"
+          [data]="dataItemsUpdate"
+          [xAxisLabel]="'Date'"
+          [yAxisLabel]="'Items to update/updated'"
+        ></app-agent-statistics-line-chart>
+        <div class="loading-container" *ngIf="loading">
+          <app-colid-spinner></app-colid-spinner>
+          <app-colid-spinner></app-colid-spinner>
+        </div>
+      </div>
+      <div style="display: flex; height: 50%">
+        <app-agent-statistics-line-chart
+          *ngIf="!loading"
+          [chartWidth]="chartWidth"
+          [chartHeight]="chartHeight"
+          [data]="dataCrawlerDurationSum"
+          [xAxisLabel]="'Date'"
+          [yAxisLabel]="'Crawler duration sum (seconds)'"
+        ></app-agent-statistics-line-chart>
+        <app-agent-statistics-line-chart
+          *ngIf="!loading"
+          [chartWidth]="chartWidth"
+          [chartHeight]="chartHeight"
+          [data]="dataCrawlerDurationAverage"
+          [xAxisLabel]="'Date'"
+          [yAxisLabel]="'Crawler duration average (seconds)'"
+        ></app-agent-statistics-line-chart>
+        <div class="loading-container" *ngIf="loading">
+          <app-colid-spinner></app-colid-spinner>
+          <app-colid-spinner></app-colid-spinner>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

@@ -9,6 +9,7 @@ import { ActiveRangeFilters } from "../../shared/models/active-range-filters";
 import { AggregationsResultDto } from "../../shared/models/aggregations-result-dto";
 import { ExcelExportPayload } from "../../shared/models/export/excel-export-payload";
 import { Constants } from "src/app/shared/constants";
+import { SearchClusterResults } from "src/app/shared/models/search-cluster-result";
 
 @Injectable({
   providedIn: "root",
@@ -45,6 +46,30 @@ export class SearchService {
     //return this.getMockData("./assets/mockdata/api_search_mock.json");
     return this.httpClient.post<SearchResult>(
       this.baseUrl + "search",
+      searchRequestObject
+    );
+  }
+
+  clusterSearchResult(
+    searchTerm: string,
+    aggregationFilters: Map<string, string[]>,
+    rangeFilters: ActiveRangeFilters
+  ): Observable<SearchClusterResults> {
+    // internal JS Map object cant be serialized, so you have to convert it to an object
+    const aggJson = {};
+    aggregationFilters.forEach((value, key) => (aggJson[key] = value));
+    const searchRequestObject = {
+      from: 0,
+      size: 1000,
+      searchTerm: searchTerm,
+      enableSuggest: false,
+      aggregationFilters: aggJson,
+      rangeFilters: rangeFilters,
+      enableHighlighting: false,
+      apiCallTime: new Date().toUTCString(),
+    };
+    return this.httpClient.post<SearchClusterResults>(
+      this.baseUrl + `search/clusterSearchResult`,
       searchRequestObject
     );
   }

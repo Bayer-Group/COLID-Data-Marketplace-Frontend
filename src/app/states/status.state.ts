@@ -9,14 +9,21 @@ export class FetchBuildInformation {
   constructor() {}
 }
 
+export class FetchReleaseNotes {
+  static readonly type = "[ReleaseNotes] Fetching release notes";
+  constructor() {}
+}
+
 export class StatusStateModel {
   buildInformation: StatusBuildInformationDto;
+  releaseNotes: string;
 }
 
 @State<StatusStateModel>({
   name: "status",
   defaults: {
     buildInformation: null,
+    releaseNotes: null,
   },
 })
 @Injectable()
@@ -28,6 +35,11 @@ export class StatusState {
     return state.buildInformation;
   }
 
+  @Selector()
+  public static getReleaseNotes(state: StatusStateModel) {
+    return state.releaseNotes;
+  }
+
   @Action(FetchBuildInformation)
   FetchBuildInformation(
     { patchState }: StateContext<StatusStateModel>,
@@ -37,6 +49,20 @@ export class StatusState {
       tap((res: StatusBuildInformationDto) => {
         patchState({
           buildInformation: res,
+        });
+      })
+    );
+  }
+
+  @Action(FetchReleaseNotes)
+  FetchReleaseNotes(
+    { patchState }: StateContext<StatusStateModel>,
+    {}: FetchReleaseNotes
+  ) {
+    return this.statusApiService.getReleaseNotes().pipe(
+      tap((res: string) => {
+        patchState({
+          releaseNotes: res,
         });
       })
     );

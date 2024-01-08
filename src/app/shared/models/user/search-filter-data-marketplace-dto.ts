@@ -7,6 +7,7 @@ export class SearchFilterDataMarketplaceDto {
   searchTerm: string;
   filterJson: SearchFilterCollectionDto;
   storedQuery: StoredQueryDto;
+  pidUri: string;
 
   public constructor(name: string, searchTerm: string, filterJson: any) {
     this.name = name;

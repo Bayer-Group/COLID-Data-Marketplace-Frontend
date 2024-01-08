@@ -106,6 +106,14 @@ const adminRoutes: Routes = [
         component: OrphanedIdentifierComponent,
         canActivate: [AuthGuardSuperAdminService],
       },
+      {
+        path: "agent-statistics",
+        loadChildren: () =>
+          import("../agent-statistics/agent-statistics.module").then(
+            (m) => m.AgentStatisticsModule
+          ),
+        canActivate: [AuthGuardSuperAdminService],
+      },
       { path: "", pathMatch: "full", redirectTo: "consumerGroups" },
     ],
   },

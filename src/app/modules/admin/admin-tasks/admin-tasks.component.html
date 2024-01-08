@@ -116,4 +116,13 @@
     >
     <a>Orphaned Identifiers</a>
   </mat-list-item>
+  <ng-container *ngIf="hasSuperAdminPrivilege$ | async">
+    <h1 matSubheader>Agent Statistics</h1>
+    <mat-list-item routerLink="agent-statistics" routerLinkActive="active">
+      <mat-icon class="me-1" fontSet="material-icons-outlined"
+        >monitor_heart</mat-icon
+      >
+      <a>Agent Statistics</a>
+    </mat-list-item>
+  </ng-container>
 </mat-nav-list>

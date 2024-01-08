@@ -23,6 +23,9 @@ import { MatTableModule } from "@angular/material/table";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { IntervalNotificationDiallogComponent } from "./interval-notification-diallog/interval-notification-diallog.component";
 import { MatDialogModule } from "@angular/material/dialog";
+import { ClipboardModule } from "@angular/cdk/clipboard";
+import { CreateBrowsableUriDialogComponent } from "./components/search-filter-data-marketplace/create-browsable-uri-dialog/create-browsable-uri-dialog.component";
+
 @NgModule({
   declarations: [
     ResourceSubscriptionsComponent,
@@ -32,6 +35,7 @@ import { MatDialogModule } from "@angular/material/dialog";
     UserPreferencesGeneralComponent,
     UserPreferencesSidebarComponent,
     IntervalNotificationDiallogComponent,
+    CreateBrowsableUriDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -53,6 +57,7 @@ import { MatDialogModule } from "@angular/material/dialog";
     MatTableModule,
     MatExpansionModule,
     MatDialogModule,
+    ClipboardModule,
   ],
 })
 export class UserPreferencesModule {}

@@ -1,6 +1,10 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule, ErrorHandler, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
-import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import {
+  HttpClientModule,
+  HTTP_INTERCEPTORS,
+  HttpClient,
+} from "@angular/common/http";
 import { TypeaheadModule } from "ngx-bootstrap/typeahead";
 
 import { environment } from "../environments/environment";
@@ -156,6 +160,7 @@ import { ExportDialogComponent } from "./components/export-dialog/export-dialog.
 import { SearchResultStandaloneContainerComponent } from "./components/search-result-standalone-container/search-result-standalone-container.component";
 import { SchemeUIComponent } from "./components/search-result/scheme-ui/scheme-ui.component";
 import { MultiselectWarningDialogComponent } from "./components/multiselect-warning-dialog/multiselect-warning-dialog.component";
+import { ReleasenotesDialogComponent } from "./components/releasenotes-dialog/releasenotes-dialog.component";
 import {
   MsalBroadcastService,
   MsalGuard,
@@ -193,6 +198,8 @@ import { CookieModule } from "ngx-cookie";
 import { AdminModule } from "./modules/admin/admin.module";
 import { STEPPER_GLOBAL_OPTIONS } from "@angular/cdk/stepper";
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from "@angular/material-moment-adapter";
+import { MarkdownModule } from "ngx-markdown";
+import { ClusteringWrapperComponent } from "./components/clustering-wrapper/clustering-wrapper.component";
 
 const states = [
   FilterState,
@@ -255,6 +262,7 @@ declare module "@angular/core" {
     SearchResultLinkTypeComponent,
     SupportFeedbackBarComponent,
     LinkedResourceDisplayDialogComponent,
+    ReleasenotesDialogComponent,
     ExportDialogComponent,
     FilterBoxItemTaxonomyComponent,
     FilterBoxItemCheckboxHierarchyComponent,
@@ -276,6 +284,7 @@ declare module "@angular/core" {
     ResourceReviewsComponent,
     ResourceHistoricComponent,
     FavoriteListComponent,
+    ClusteringWrapperComponent,
   ],
   imports: [
     MsalModule.forRoot(
@@ -341,6 +350,7 @@ declare module "@angular/core" {
     AdminModule,
     NgxImageZoomModule,
     CookieModule.withOptions(),
+    MarkdownModule.forRoot({ loader: HttpClient }),
   ],
   providers: [
     DatePipe,

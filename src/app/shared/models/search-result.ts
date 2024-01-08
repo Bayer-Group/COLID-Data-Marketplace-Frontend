@@ -29,6 +29,10 @@ export class SearchHit {
   highlight: StringArrayMap;
 }
 
+export interface DocumentMaps {
+  [key: string]: DocumentMap[];
+}
+
 export interface DocumentMap {
   [key: string]: DocumentMapDirection;
 }

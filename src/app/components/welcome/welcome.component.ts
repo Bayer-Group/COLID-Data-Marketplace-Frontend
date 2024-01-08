@@ -7,6 +7,7 @@ import { LogService } from "src/app/core/logging/log.service";
 import { SidebarState, SetSidebarOpened } from "src/app/states/sidebar.state";
 import { FetchWelcomeMessageDataMarketplace } from "src/app/states/welcome-message.state";
 import { ActivatedRoute } from "@angular/router";
+import { UserInfoState } from "src/app/states/user-info.state";
 
 @Component({
   selector: "app-welcome",
@@ -18,7 +19,9 @@ export class WelcomeComponent implements OnInit {
   autocompleteResultObservable$: Observable<string[]>;
   @Select(SidebarState.sidebarOpened) sidebarOpened$: Observable<any>;
   @Select(SidebarState.sidebarMode) sidebarMode$: Observable<any>;
-
+  @Select(UserInfoState.getUserDepartment)
+  userDepartment$: Observable<string>;
+  userDepartment: string;
   constructor(
     private store: Store,
     private route: ActivatedRoute,
@@ -28,8 +31,13 @@ export class WelcomeComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(new FetchFilter());
     this.store.dispatch(new FetchWelcomeMessageDataMarketplace());
-
-    this.logger.info("DMP_WELCOME_PAGE_OPENED");
+    this.userDepartment$.subscribe((dept) => {
+      if (dept != null) {
+        this.logger.info("DMP_WELCOME_PAGE_OPENED", {
+          department: dept.split("-").slice(0, 5).join("-"),
+        });
+      }
+    });
   }
 
   handleSearchChange(searchText: string) {

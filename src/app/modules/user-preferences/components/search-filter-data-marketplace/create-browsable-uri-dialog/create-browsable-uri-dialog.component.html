@@ -1,0 +1,68 @@
+<h3 mat-dialog-title>Create browsable URI</h3>
+<div mat-dialog-content>
+  <div class="row pb-1 ng-star-inserted">
+    <div class="col-3 ng-star-inserted">
+      <span class="small text-muted text-uppercase">Search Term</span>
+    </div>
+    <div class="col-9 ng-star-inserted">
+      <span class="ng-star-inserted">{{ data.search.searchTerm }}</span>
+    </div>
+  </div>
+
+  <div
+    class="row pb-1 ng-star-inserted"
+    *ngFor="let details of data.search.filterJson.aggregations | keyvalue"
+  >
+    <div class="col-3 ng-star-inserted">
+      <span class="small text-muted text-uppercase">{{
+        getAggregationLabel(details.key)
+      }}</span>
+    </div>
+    <div class="col-9 ng-star-inserted">
+      <span class="ng-star-inserted">{{ details.value }}</span>
+    </div>
+  </div>
+
+  <div
+    class="row pb-1 ng-star-inserted"
+    *ngFor="let details of data.search.filterJson.ranges | keyvalue"
+  >
+    <div class="col-3 ng-star-inserted">
+      <span class="small text-muted text-uppercase">{{
+        getAggregationLabel(details.key)
+      }}</span>
+    </div>
+    <div class="col-9 ng-star-inserted">
+      <span class="ng-star-inserted"
+        >{{ details.value.from }} to {{ details.value.to }}</span
+      >
+    </div>
+  </div>
+  <mat-divider class="my-2"></mat-divider>
+  <p class="text-muted">
+    After saving a browsable URI is created. You can use this URI to share this
+    search with other people. If you delete the saved search, the URI will stop
+    working
+  </p>
+  <label class="me-2">Browsable URI:</label>
+  <a
+    target="_blank"
+    *ngIf="createdPidUri.length > 0"
+    href="{{ createdPidUri }}"
+    >{{ createdPidUri }}</a
+  >
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close class="me-2">
+    <mat-icon fontSet="material-icons-outlined">close</mat-icon>
+    Close
+  </button>
+  <action-button
+    type="mat-raised-button"
+    icon="save"
+    (click)="createBrowsableUri()"
+    [disabled]="createdPidUri.length > 0"
+    [loading]="loading"
+    >Save</action-button
+  >
+</div>

@@ -1,0 +1,27 @@
+.cluster-container {
+    display: flex;
+}
+
+.cluster-list-wrapper {
+    overflow-y: auto;
+    height: calc(100vh - 130px) !important;
+}
+
+.cluster-cell {
+    flex: 0 0 400px;
+}
+
+.select-all-container {
+    font-size: medium;
+
+    hr {
+        margin: 0.5rem 0;
+    }
+}
+
+.search-results {
+    width: 100%;
+    height: calc(100vh - 130px) !important;
+    overflow-y:scroll;
+    overflow-x:hidden;
+}

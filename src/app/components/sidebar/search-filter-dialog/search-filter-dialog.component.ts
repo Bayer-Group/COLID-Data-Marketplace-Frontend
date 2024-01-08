@@ -1,13 +1,10 @@
 import { Component, OnInit, Inject } from "@angular/core";
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from "@angular/material/dialog";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Store } from "@ngxs/store";
 import {
   AddSearchFilterDataMarketplace,
   AddStoredQueryToSearchFiltersDataMarketplace,
+  UserInfoState,
 } from "src/app/states/user-info.state";
 import { ActiveRangeFilters } from "src/app/shared/models/active-range-filters";
 import { SearchFilterDataMarketplaceDto } from "src/app/shared/models/user/search-filter-data-marketplace-dto";
@@ -31,11 +28,12 @@ export class SearchFilterDialogComponent implements OnInit {
   searchFilterName: string;
   selectedSubscriptionValue: any;
   sendIntervals: string[] = ["Daily", "Weekly", "Monthly", "- -"];
+  loading: boolean = false;
+  lastCreatedSavedSearchPidUri: string = "";
 
   constructor(
     public dialogRef: MatDialogRef<SearchFilterDialogComponent>,
     private snackBar: ColidMatSnackBarService,
-    private dialog: MatDialog,
     private store: Store,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
@@ -43,13 +41,14 @@ export class SearchFilterDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.filterData;
     this.selectedSubscriptionValue = "- -";
     this.searchFilterName = `Search saved at ${
       new Date().toISOString().slice(0, -5) + "Z"
     }`;
   }
+
   addSearchFilter() {
+    this.loading = true;
     const newSearchFilter = new SearchFilterDataMarketplaceDto(
       this.searchFilterName,
       this.filterData.searchText,
@@ -59,39 +58,31 @@ export class SearchFilterDialogComponent implements OnInit {
       )
     );
 
-    if (this.selectedSubscriptionValue == "- -") {
-      this.dialogRef.close(
-        this.store
-          .dispatch(new AddSearchFilterDataMarketplace(newSearchFilter))
-          .subscribe(() => {
-            this.snackBar.success(
-              "Search Saved",
-              "The selected search has been saved."
-            );
-          })
-      );
-    } else {
-      this.dialogRef.close(
-        this.store
-          .dispatch(new AddSearchFilterDataMarketplace(newSearchFilter))
-          .subscribe((_) => {
-            const storedQuery = new StoredQueryDto(
-              this.selectedSubscriptionValue,
-              0
-            );
-            this.store
-              .dispatch(
-                new AddStoredQueryToSearchFiltersDataMarketplace(storedQuery)
-              )
-              .subscribe(() => {
-                this.snackBar.success(
-                  "Search Saved",
-                  "The selected search has been saved."
-                );
-              });
-          })
-      );
-    }
+    this.store
+      .dispatch(new AddSearchFilterDataMarketplace(newSearchFilter))
+      .subscribe((_) => {
+        const userSearchFilters = this.store.selectSnapshot(
+          UserInfoState.getUserSearchFilters
+        );
+        this.lastCreatedSavedSearchPidUri =
+          userSearchFilters.slice(-1)[0].pidUri;
+
+        this.snackBar.success(
+          "Search Saved",
+          "The selected search has been saved."
+        );
+        if (this.selectedSubscriptionValue != "- -") {
+          const storedQuery = new StoredQueryDto(
+            this.selectedSubscriptionValue,
+            0
+          );
+
+          this.store.dispatch(
+            new AddStoredQueryToSearchFiltersDataMarketplace(storedQuery)
+          );
+        }
+        this.loading = false;
+      });
   }
   closeDialog(): void {
     this.dialogRef.close();

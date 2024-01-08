@@ -11,6 +11,7 @@ export interface EdmLogEntry {
   hostname: string;
 
   userId: string;
+  department: string;
 
   elapsedMilliseconds: number;
   additionalInfo: object;

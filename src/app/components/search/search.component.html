@@ -26,6 +26,22 @@
                 <div class="p-3">
                   <button
                     mat-stroked-button
+                    color="primary"
+                    matTooltip="Clustering of results is only available for 50 to 1000 results"
+                    (click)="showClusteredResults()"
+                    [disabled]="
+                      searchResult?.hits?.total < 50 ||
+                      searchResult?.hits?.total > 1000 ||
+                      (showResultsClustered$ | async)
+                    "
+                  >
+                    <mat-icon fontSet="material-icons-outlined" class="me-1"
+                      >workspaces</mat-icon
+                    >Cluster Results
+                  </button>
+                  <button
+                    class="ms-2"
+                    mat-stroked-button
                     matTooltip="Save search and subscribe for automated execution"
                     color="primary"
                     (click)="addSearchFilterLinkClicked($event)"
@@ -106,7 +122,12 @@
           </div>
 
           <div class="flex-fill">
+            <app-clustering-wrapper
+              *ngIf="showResultsClustered$ | async"
+              (selectedClusterPidUris)="setSelectedClusterPidUris($event)"
+            ></app-clustering-wrapper>
             <app-search-results
+              *ngIf="(showResultsClustered$ | async) === false"
               (changePage)="pageChanged($event)"
               [pidUrisSearchResult]="pidUrisSearchResult"
             ></app-search-results>

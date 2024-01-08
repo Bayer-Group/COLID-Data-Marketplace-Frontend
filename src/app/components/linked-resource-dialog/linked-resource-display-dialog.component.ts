@@ -5,6 +5,7 @@ import { Observable, Subscription } from "rxjs";
 import { MetadataState } from "src/app/states/metadata.state";
 import { DocumentMap, SearchHit } from "src/app/shared/models/search-result";
 import { DocumentService } from "src/app/core/http/document.service";
+import { environment } from "src/environments/environment";
 
 export interface DialogData {
   id: string;
@@ -80,7 +81,8 @@ export class LinkedResourceDisplayDialogComponent implements OnInit, OnDestroy {
   }
 
   openInEditor(): void {
-    window.open(this.documentData.id, "_blank");
+    const url = `${environment.pidUrl}resource?pidUri=${this.documentData.id}`;
+    window.open(url, "_blank");
   }
 
   confirmReview(): void {

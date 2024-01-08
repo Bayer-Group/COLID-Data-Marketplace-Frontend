@@ -12,6 +12,8 @@ import {
   OverwriteActiveRangeFilters,
   ResetActiveAggregationBuckets,
   ClearSelectedPIDURIs,
+  ToggleClusterView,
+  FetchClusterResults,
 } from "src/app/states/search.state";
 import { SidebarState, SetSidebarOpened } from "src/app/states/sidebar.state";
 import { jsonToStringMap } from "src/app/shared/converters/string-map-object.converter";
@@ -38,6 +40,8 @@ import { ClearResourceTypeItem } from "src/app/states/metadata.state";
   styleUrls: ["./search.component.scss"],
 })
 export class SearchComponent implements OnInit, OnDestroy {
+  @Select(SearchState.getShowResultsClustered)
+  showResultsClustered$: Observable<boolean>;
   @Select(SearchState.getActiveAggregations) activeAggregations$: Observable<
     Map<string, string[]>
   >;
@@ -65,9 +69,10 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   activeAggregations: Map<string, string[]>;
   activeRangeFilters: ActiveRangeFilters;
-  searchText: string;
+  searchText: string = "";
   searchResult: SearchResult;
   pidUrisSearchResult: string[];
+  selectedClusterPidUris: string[] = [];
   exportLimit: number = 500;
 
   constructor(
@@ -256,6 +261,10 @@ export class SearchComponent implements OnInit, OnDestroy {
     );
   }
 
+  setSelectedClusterPidUris(selectedClusterPidUris: string[]) {
+    this.selectedClusterPidUris = selectedClusterPidUris;
+  }
+
   addSearchFilterLinkClicked(event: Event): void {
     event.preventDefault();
     const activeAggregationFilters = mapToObject(this.activeAggregations);
@@ -272,11 +281,18 @@ export class SearchComponent implements OnInit, OnDestroy {
         activeRangeFilters: activeRangeFilters,
         activeAggregationFilters: activeAggregationFilters,
       },
+      disableClose: true,
     });
   }
 
   startExportResults(): void {
-    if (this.searchResult.hits.total <= this.exportLimit) {
+    const showResultsClustered = this.store.selectSnapshot(
+      SearchState.getShowResultsClustered
+    );
+    if (
+      !showResultsClustered &&
+      this.searchResult.hits.total <= this.exportLimit
+    ) {
       const dialogRef = this.dialog.open(ExportDialogComponent, {
         width: "50vw",
       });
@@ -289,6 +305,40 @@ export class SearchComponent implements OnInit, OnDestroy {
                 exportSettings,
                 this.route
               );
+              return this.exportService.startExcelExport(payload).pipe(
+                tap((_) => {
+                  this.snackBar.successCustomDuration(
+                    "Export started",
+                    "Your export has been started. It could take some minutes, until the download link will appear in your notifications",
+                    null,
+                    5000
+                  );
+                })
+              );
+            } else {
+              return EMPTY;
+            }
+          })
+        )
+        .subscribe();
+    } else if (
+      showResultsClustered &&
+      this.selectedClusterPidUris.length > 0 &&
+      this.selectedClusterPidUris.length < this.exportLimit
+    ) {
+      const dialogRef = this.dialog.open(ExportDialogComponent, {
+        width: "50vw",
+      });
+      dialogRef
+        .afterClosed()
+        .pipe(
+          switchMap((exportSettings: ExportSettings) => {
+            if (exportSettings) {
+              const payload =
+                this.exportService.getExportSelectedResultsPayload(
+                  exportSettings,
+                  this.selectedClusterPidUris
+                );
               return this.exportService.startExcelExport(payload).pipe(
                 tap((_) => {
                   this.snackBar.successCustomDuration(
@@ -368,5 +418,12 @@ export class SearchComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+  }
+
+  showClusteredResults() {
+    this.store.dispatch([
+      new ToggleClusterView(true),
+      new FetchClusterResults(this.searchText),
+    ]);
   }
 }

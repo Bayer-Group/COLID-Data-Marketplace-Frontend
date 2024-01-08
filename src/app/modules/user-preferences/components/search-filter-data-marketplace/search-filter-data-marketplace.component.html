@@ -12,7 +12,7 @@
 <br />
 
 <div class="row justify-content-center">
-  <div class="col-11 ng-star-inserted" *ngIf="!loading; else spinner">
+  <div class="col-11 ng-star-inserted">
     <div class="w-100">
       <span class="me-0">
         If you select a search interval, this search will be performed
@@ -39,6 +39,16 @@
             </mat-panel-title>
             <mat-panel-description style="flex-grow: 0; justify-content: right">
               <button
+                *ngIf="userSearchFilter.pidUri"
+                matTooltip="Copy browsable URI to clipboard"
+                [cdkCopyToClipboard]="userSearchFilter.pidUri"
+                (click)="$event.stopPropagation()"
+                mat-icon-button
+                class="border-button me-2"
+              >
+                <mat-icon>content_copy</mat-icon>
+              </button>
+              <button
                 mat-icon-button
                 class="border-button me-2"
                 matTooltip="Execute search"
@@ -59,7 +69,9 @@
                 class="border-button me-2"
                 matTooltip="Subscribe to saved search"
                 *ngIf="!userSearchFilter.storedQuery"
-                (click)="onOpenIntervalNotificationDiallog(userSearchFilter)"
+                (click)="
+                  onOpenIntervalNotificationDiallog($event, userSearchFilter)
+                "
               >
                 <mat-icon>notifications_none</mat-icon>
               </button>
@@ -69,7 +81,9 @@
                 class="border-button me-2"
                 matTooltip="Unsubscribe from saved search"
                 *ngIf="userSearchFilter.storedQuery"
-                (click)="onUnsubscribeIntervalNotification(userSearchFilter)"
+                (click)="
+                  onUnsubscribeIntervalNotification($event, userSearchFilter)
+                "
               >
                 <mat-icon>notifications_active</mat-icon>
               </button>
@@ -78,7 +92,7 @@
                 mat-icon-button
                 class="border-button"
                 matTooltip="Delete saved search"
-                (click)="removeSearchFilters(userSearchFilter)"
+                (click)="removeSearchFilters($event, userSearchFilter)"
               >
                 <mat-icon fontSet="material-icons-outlined">delete</mat-icon>
               </button>
@@ -87,6 +101,29 @@
           <!-- <ng-template matExpansionPanelContent> -->
           <mat-divider class="my-1"></mat-divider>
           <div>
+            <div class="row pb-1 ng-star-inserted">
+              <div class="col-3 ng-star-inserted">
+                <span class="small text-muted text-uppercase"
+                  >Browsable URI</span
+                >
+              </div>
+              <div class="col-9">
+                <a
+                  *ngIf="userSearchFilter.pidUri; else browsableUri"
+                  href="{{ userSearchFilter.pidUri }}"
+                  target="_blank"
+                  >{{ userSearchFilter.pidUri }}</a
+                >
+                <ng-template #browsableUri>
+                  <span>There is no browsable URI. </span>
+                  <span
+                    (click)="createBrowsableUri(userSearchFilter)"
+                    class="create-browsable-uri"
+                    >Click here to create one</span
+                  >
+                </ng-template>
+              </div>
+            </div>
             <div class="row pb-1 ng-star-inserted">
               <div class="col-3 ng-star-inserted">
                 <span class="small text-muted text-uppercase">Search Term</span>

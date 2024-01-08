@@ -51,6 +51,7 @@
           <ng-container *ngIf="selectedPIDURIs$ | async as selectedPIDURIs">
             <div class="select-all-container">
               <mat-checkbox
+                color="primary"
                 (change)="selectAllCheckboxChanged($event)"
                 [checked]="
                   pidUrisSearchResult.length !== 0 &&
@@ -78,10 +79,11 @@
                 <div class="d-flex align-items-center col-12">
                   <mat-checkbox
                     class="me-2"
+                    color="primary"
                     mat-list-icon
                     [id]="hit.id"
                     (change)="checkboxChanged($event)"
-                    [checked]="getResourceSelected(selectedPIDURIs, hit.id)"
+                    [checked]="hit.id | checkboxSelected : selectedPIDURIs"
                   >
                   </mat-checkbox>
                   <app-search-result

@@ -1,0 +1,18 @@
+<div class="chart-container">
+  <ngx-charts-line-chart
+    [view]="[chartWidth, chartHeight]"
+    [results]="data"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legend]="false"
+    [autoScale]="true"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="yAxisLabel"
+  >
+  </ngx-charts-line-chart>
+  <div *ngIf="data.length === 0" class="no-data-container">
+    There is no data available for the selected date range
+  </div>
+</div>
