@@ -19,6 +19,7 @@ export class SearchBarAutocompleteComponent {
   @Output() inputChange = new EventEmitter();
 
   @Input() initialSearchText;
+  @Input() focusSearchbar: boolean = true;
 
   constructor(private store: Store) {}
 

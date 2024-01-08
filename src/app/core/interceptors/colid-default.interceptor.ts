@@ -39,12 +39,8 @@ export class ColidDefaultInterceptor implements HttpInterceptor {
         (_) => {},
         (error) => {
           if (error instanceof HttpErrorResponse) {
-            // Needed to ignore first user not found exception so that i can be created by the client first
-            if (
-              error.status === 404 &&
-              request.url.startsWith(`${environment.appDataApiUrl}/Users/`)
-            ) {
-              return;
+            if (this.isToBeIgnoredResponse(error.status, request.url)) {
+              return of(error);
             }
 
             if (error.error as GeneralException) {
@@ -55,6 +51,15 @@ export class ColidDefaultInterceptor implements HttpInterceptor {
           return of(error);
         }
       )
+    );
+  }
+
+  private isToBeIgnoredResponse(errorStatus: number, url: string) {
+    return (
+      (errorStatus == 404 &&
+        url.startsWith(`${environment.colidApiUrl}/graph/graphType`)) ||
+      (errorStatus === 404 &&
+        url.startsWith(`${environment.appDataApiUrl}/Users/`))
     );
   }
 

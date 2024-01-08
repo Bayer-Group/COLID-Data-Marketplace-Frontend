@@ -23,6 +23,57 @@
               <span class="mb-0 font-weight-bold">{{ label }}</span>
             </div>
             <div class="buttons">
+              <mat-chip-list *ngIf="hasCreatePrivilege$ | async">
+                <mat-chip
+                  selected
+                  color="deleted"
+                  *ngIf="hasMarkedDeletionVersion"
+                >
+                  <ds-icon
+                    iconType="Mapping"
+                    tooltipDisabled="false"
+                    [delay]="300"
+                    [icon]="entryLifeCycleStatus"
+                  ></ds-icon>
+                </mat-chip>
+                <mat-chip selected color="draft" *ngIf="hasDraftVersion">
+                  <ds-icon
+                    iconType="Mapping"
+                    [tooltipDisabled]="false"
+                    [delay]="300"
+                    [icon]="entryLifeCycleStatus"
+                  >
+                  </ds-icon>
+                </mat-chip>
+                <mat-chip
+                  selected
+                  color="published"
+                  *ngIf="hasPublishedVersion"
+                >
+                  <ds-icon
+                    iconType="Mapping"
+                    [tooltipDisabled]="false"
+                    [delay]="300"
+                    [icon]="entryLifeCycleStatus"
+                  ></ds-icon>
+                </mat-chip>
+                <mat-chip
+                  selected
+                  [color]="
+                    resourceLinkedLifecycleStatus === publishedVersionIcon
+                      ? 'published'
+                      : 'draft'
+                  "
+                  *ngIf="hasDraftAndPublishedVersion"
+                >
+                  <ds-icon
+                    iconType="Mapping"
+                    [tooltipDisabled]="false"
+                    [delay]="300"
+                    [icon]="resourceLinkedLifecycleStatus"
+                  ></ds-icon>
+                </mat-chip>
+              </mat-chip-list>
               <img
                 *ngIf="brokenDistributionEndpoints.length > 0"
                 src="assets/broken-link.svg"
@@ -65,6 +116,7 @@
                 <mat-icon>edit</mat-icon>
               </button>
               <button
+                [disabled]="hasDraftVersion"
                 mat-icon-button
                 class="border-button"
                 matTooltip="Subscribe to resource"
@@ -75,6 +127,7 @@
               </button>
 
               <button
+                [disabled]="hasDraftVersion"
                 mat-icon-button
                 class="border-button"
                 matTooltip="Unsubscribe from resource"
@@ -103,9 +156,10 @@
                 <mat-icon>bookmark_active</mat-icon>
               </button>
               <button
+                [disabled]="hasDraftVersion"
                 mat-icon-button
                 class="border-button"
-                matTooltip="View in Resource Relationship Manager (BETA)"
+                matTooltip="View in Resource Relationship Manager"
                 (click)="openInResourceRelationshipManager($event)"
               >
                 <img src="assets/dmp-rrm.svg" width="24" height="24" />
@@ -117,12 +171,23 @@
             <span>Score: {{ score }}</span>
             <br />
           </ng-container>
-          <span *ngIf="resourceSubNumbers.length > 0">
-            {{ getNumSubscribers() }} subscriber{{
-              getNumSubscribers() > 1 ? "s" : ""
-            }}</span
-          >
-          <br />
+          <div>
+            <button
+              *ngIf="showResourceDetailsButton"
+              mat-icon-button
+              class="resource-details-dialog-button"
+              matTooltip="Open resource details dialog"
+              (click)="showResourceDetails($event)"
+            >
+              <mat-icon>open_in_full</mat-icon>
+            </button>
+            <span *ngIf="resourceSubNumbers.length > 0">
+              {{ getNumSubscribers() }} subscriber{{
+                getNumSubscribers() > 1 ? "s" : ""
+              }}</span
+            >
+            <br />
+          </div>
 
           <span
             class="result-description"

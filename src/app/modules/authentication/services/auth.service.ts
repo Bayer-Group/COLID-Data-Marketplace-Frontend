@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { distinctUntilChanged, map } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { IdentityProvider } from "./identity-provider.service";
 import { ColidAccount } from "../models/colid-account.model";
@@ -41,7 +41,7 @@ export class AuthService {
     );
   }
 
-  get isLoggedIn$(): Observable<boolean> {
+  get isLoggedIn$(): Observable<boolean | null> {
     return this.identityProvider.isLoggedIn$;
   }
 
@@ -112,10 +112,14 @@ export class AuthService {
   }
 
   subscribeCheckAccount() {
-    return this.isLoggedIn$.subscribe((val) => {
-      if (!val && !this.loginInProgress) {
+    return this.isLoggedIn$.pipe(distinctUntilChanged()).subscribe((val) => {
+      // val is on startup of the application null, in this case we do nothing
+      console.log("current value", val);
+      if (val === false) {
+        console.log("Logging in");
         this.login();
-      } else {
+      } else if (val === true) {
+        console.log("Redirecting");
         this.redirect();
       }
     });
@@ -136,17 +140,14 @@ export class AuthService {
   }
 
   login() {
-    // If the login is happening in a Iframe we need to delay it so it does not create a infinte loop
-    if (window.self !== window.top) {
-      setTimeout(() => {
-        this.identityProvider.login();
-      }, 5000);
-    } else {
-      this.identityProvider.login();
-    }
+    this.identityProvider.login();
   }
 
   logout() {
     this.identityProvider.logout();
+  }
+
+  cleanup() {
+    this.identityProvider.cleanup();
   }
 }

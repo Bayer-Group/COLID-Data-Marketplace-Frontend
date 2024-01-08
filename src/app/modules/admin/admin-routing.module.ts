@@ -114,6 +114,22 @@ const adminRoutes: Routes = [
           ),
         canActivate: [AuthGuardSuperAdminService],
       },
+      {
+        path: "user-statistics",
+        loadChildren: () =>
+          import("../user-statistics/user-statistics.module").then(
+            (m) => m.UserStatisticsModule
+          ),
+        canActivate: [AuthGuardSuperAdminService],
+      },
+      {
+        path: "keyword-management",
+        loadChildren: () =>
+          import(
+            "../keyword-administration/keyword-administration.module"
+          ).then((m) => m.KeywordAdministrationModule),
+        canActivate: [AuthGuardSuperAdminService],
+      },
       { path: "", pathMatch: "full", redirectTo: "consumerGroups" },
     ],
   },

@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
 import { AuthService } from "src/app/modules/authentication/services/auth.service";
-import { EnsureBrowserSupportService } from "src/app/modules/browser-support/services/ensure-browser-support.service";
 
 @Component({
   selector: "app-logged-in",
@@ -10,22 +9,15 @@ import { EnsureBrowserSupportService } from "src/app/modules/browser-support/ser
 })
 export class LoggedInComponent implements OnInit, OnDestroy {
   isBrowserSupported = false;
-  constructor(
-    private authService: AuthService,
-    private browserSupport: EnsureBrowserSupportService
-  ) {
-    this.isBrowserSupported = browserSupport.isSupported();
-  }
-  checkAccountSubscribtion: Subscription;
+  checkAccSub: Subscription;
+  constructor(private authService: AuthService) {}
 
-  ngOnInit() {
-    if (this.isBrowserSupported) {
-      this.checkAccountSubscribtion = this.authService.subscribeCheckAccount();
-    }
+  ngOnInit(): void {
+    this.checkAccSub = this.authService.subscribeCheckAccount();
   }
 
-  ngOnDestroy() {
-    this.checkAccountSubscribtion.unsubscribe();
+  ngOnDestroy(): void {
+    this.checkAccSub.unsubscribe();
   }
 
   redirect() {

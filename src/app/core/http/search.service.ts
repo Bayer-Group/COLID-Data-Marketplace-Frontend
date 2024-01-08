@@ -10,6 +10,10 @@ import { AggregationsResultDto } from "../../shared/models/aggregations-result-d
 import { ExcelExportPayload } from "../../shared/models/export/excel-export-payload";
 import { Constants } from "src/app/shared/constants";
 import { SearchClusterResults } from "src/app/shared/models/search-cluster-result";
+import {
+  UserLastChangedResource,
+  UserLastChangedResources,
+} from "src/app/shared/models/user/last-changed-resource-dto";
 
 @Injectable({
   providedIn: "root",
@@ -24,7 +28,8 @@ export class SearchService {
     searchTerm: string,
     page: number,
     activeAggergationBuckets: Map<string, string[]>,
-    activeRangeFilters: ActiveRangeFilters
+    activeRangeFilters: ActiveRangeFilters,
+    searchIndex: string
   ): Observable<SearchResult> {
     if (page < 1) {
       page = 1;
@@ -42,6 +47,7 @@ export class SearchService {
       rangeFilters: activeRangeFilters,
       enableHighlighting: true,
       apiCallTime: new Date().toUTCString(),
+      searchIndex: searchIndex,
     };
     //return this.getMockData("./assets/mockdata/api_search_mock.json");
     return this.httpClient.post<SearchResult>(
@@ -50,8 +56,72 @@ export class SearchService {
     );
   }
 
+  fetchLastChangedResourcesOfAnUser(
+    userEmailAddress: string,
+    offset: number
+  ): Observable<UserLastChangedResources> {
+    const searchRequestObject = {
+      from: offset,
+      size: this.pageSize,
+      aggregationFilters: {
+        [Constants.Metadata.HasLastChangeUser]: [userEmailAddress],
+      },
+      enableHighlighting: false,
+      enableAggregation: false,
+      enableSuggest: false,
+      order: "desc",
+      orderField: Constants.Metadata.LastChangeDateTime,
+      searchIndex: "all",
+      searchTerm: "",
+      apiCallTime: new Date().toUTCString(),
+    };
+
+    return this.httpClient
+      .post<SearchResult>(this.baseUrl + "search", searchRequestObject)
+      .pipe(
+        map((searchResult: SearchResult) => {
+          const changedResources = searchResult.hits.hits.map((item) => {
+            return {
+              resourcePidUri:
+                item.source[Constants.Metadata.HasPidUri]["outbound"][0][
+                  "value"
+                ],
+              resourceDefinition:
+                item.source[Constants.Metadata.HasResourceDefinition][
+                  "outbound"
+                ][0]["value"],
+              resourceLabel:
+                item.source[Constants.Metadata.HasLabel]["outbound"][0][
+                  "value"
+                ],
+              resourceType:
+                item.source[Constants.Metadata.EntityType]["outbound"][0][
+                  "uri"
+                ],
+              lifeCycleStatus:
+                item.source[Constants.Metadata.LifeCycleStatus]["outbound"][0][
+                  "uri"
+                ],
+              resourceLinkedLifeCycleStatus: item.source[
+                "resourceLinkedLifecycleStatus"
+              ]
+                ? item.source["resourceLinkedLifecycleStatus"]["outbound"][0][
+                    "uri"
+                  ]
+                : null,
+            } as UserLastChangedResource;
+          });
+          return {
+            changedResources,
+            total: searchResult.hits.total,
+          };
+        })
+      );
+  }
+
   clusterSearchResult(
     searchTerm: string,
+    searchIndex: string,
     aggregationFilters: Map<string, string[]>,
     rangeFilters: ActiveRangeFilters
   ): Observable<SearchClusterResults> {
@@ -61,6 +131,7 @@ export class SearchService {
     const searchRequestObject = {
       from: 0,
       size: 1000,
+      searchIndex: searchIndex,
       searchTerm: searchTerm,
       enableSuggest: false,
       aggregationFilters: aggJson,
@@ -77,7 +148,8 @@ export class SearchService {
   getAllPidUrisOfSearchResult(
     searchTerm: string,
     activeAggergationBuckets: Map<string, string[]>,
-    activeRangeFilters: ActiveRangeFilters
+    activeRangeFilters: ActiveRangeFilters,
+    searchIndex: string
   ): Observable<string[]> {
     const aggJson = activeAggergationBuckets;
 
@@ -86,6 +158,7 @@ export class SearchService {
       searchTerm: searchTerm,
       aggregationFilters: aggJson,
       rangeFilters: activeRangeFilters,
+      searchIndex,
       enableHighlighting: false,
       apiCallTime: new Date().toUTCString(),
       enableAggregation: false,

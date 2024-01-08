@@ -104,6 +104,7 @@ export class SearchResultLinkTypeComponent implements OnInit {
 
     this.dialog.open(LinkedResourceDisplayDialogComponent, {
       data: { id: this.pidUrlForHref, confirmReview: false },
+      width: "80vw",
     });
   }
 

@@ -7,6 +7,8 @@ import { ColidEntrySubscriptionDto } from "src/app/shared/models/user/colid-entr
 import { SearchFilterDataMarketplaceDto } from "src/app/shared/models/user/search-filter-data-marketplace-dto";
 import { MessageConfigDto } from "src/app/shared/models/user/message-config-dto";
 import { StoredQueryDto } from "src/app/shared/models/user/stored-query-dto";
+import { HierarchicalData } from "src/app/shared/models/user/hierarchical-dto";
+import { ColidEntrySubscriptionDetailsDto } from "src/app/shared/models/user/colid-entry-subscription-details-dto";
 
 @Injectable({
   providedIn: "root",
@@ -32,6 +34,11 @@ export class UserInfoApiService {
   setLastLoginDataMarketplace(id: string, date: Date) {
     const url = `${environment.appDataApiUrl}/Users/${id}/lastLoginDataMarketplace`;
     return this.httpClient.put<UserDto>(url, date);
+  }
+
+  setUserInformationFlag(id: string, setFlag: boolean) {
+    const url = `${environment.appDataApiUrl}/Users/${id}/userInformationFlag`;
+    return this.httpClient.put<UserDto>(url, setFlag);
   }
 
   addColidEntrySubscription(
@@ -107,6 +114,18 @@ export class UserInfoApiService {
     return this.httpClient.get<SearchFilterDataMarketplaceDto[]>(url);
   }
 
+  getLatestSubscriptions(
+    id: string
+  ): Observable<ColidEntrySubscriptionDetailsDto[]> {
+    const url = `${environment.appDataApiUrl}/Users/${id}/latestSubscriptionsWithDetails`;
+    return this.httpClient.get<ColidEntrySubscriptionDetailsDto[]>(url);
+  }
+
+  getMostSubscribedResources(): Observable<ColidEntrySubscriptionDetailsDto[]> {
+    const url = `${environment.appDataApiUrl}/Users/mostSubscribedResourceDetails`;
+    return this.httpClient.get<ColidEntrySubscriptionDetailsDto[]>(url);
+  }
+
   addStoredQueryDataMarketplace(
     id: string,
     storedQueryDto: StoredQueryDto
@@ -125,5 +144,10 @@ export class UserInfoApiService {
       body: null,
     };
     return this.httpClient.delete(url, httpOptions);
+  }
+
+  getUserDepartmentsFlowView(): Observable<HierarchicalData> {
+    const url = `${environment.dmpCoreApiUrl}User/userDepartmentsFlowView`;
+    return this.httpClient.get<HierarchicalData>(url);
   }
 }

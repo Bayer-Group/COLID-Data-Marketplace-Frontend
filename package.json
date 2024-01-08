@@ -39,6 +39,7 @@
     "@swimlane/ngx-charts": "^20.4.1",
     "bootstrap": "5.2.3",
     "cronstrue": "^2.27.0",
+    "d3-sankey": "^0.12.3",
     "file-saver-es": "^2.0.5",
     "guid-typescript": "^1.0.9",
     "lodash-es": "^4.17.21",

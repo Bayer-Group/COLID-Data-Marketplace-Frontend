@@ -237,6 +237,7 @@ export class ResourceReviewsComponent
         id: pidUri,
         confirmReview: false,
       },
+      width: "80vw",
     });
   }
 

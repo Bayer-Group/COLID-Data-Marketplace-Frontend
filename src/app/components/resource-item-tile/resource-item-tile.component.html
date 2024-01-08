@@ -1,0 +1,62 @@
+<mat-list-item
+  class="mb-2"
+  (click)="openResourceDetailsDialog()"
+  style="cursor: pointer"
+>
+  <ds-icon
+    mat-list-icon
+    iconType="S3"
+    [tooltipDisabled]="false"
+    [delay]="300"
+    [icon]="resourceType"
+  ></ds-icon>
+  <div mat-line>
+    <div class="truncate resource-name d-flex justify-content-between">
+      <span>{{ label }}</span>
+      <mat-chip-list *ngIf="showLifeCycleStatus">
+        <mat-chip selected color="deleted" *ngIf="hasMarkedDeletionVersion">
+          <ds-icon
+            iconType="Mapping"
+            tooltipDisabled="false"
+            [delay]="300"
+            [icon]="lifeCycleStatus"
+          ></ds-icon>
+        </mat-chip>
+        <mat-chip selected color="draft" *ngIf="hasDraftVersion">
+          <ds-icon
+            iconType="Mapping"
+            [tooltipDisabled]="false"
+            [delay]="300"
+            [icon]="lifeCycleStatus"
+          >
+          </ds-icon>
+        </mat-chip>
+        <mat-chip selected color="published" *ngIf="hasPublishedVersion">
+          <ds-icon
+            iconType="Mapping"
+            [tooltipDisabled]="false"
+            [delay]="300"
+            [icon]="lifeCycleStatus"
+          ></ds-icon>
+        </mat-chip>
+        <mat-chip
+          selected
+          color="published"
+          *ngIf="hasResourceLinkedLifecycleStatus"
+        >
+          <ds-icon
+            iconType="Mapping"
+            [tooltipDisabled]="false"
+            [delay]="300"
+            [icon]="publishedResourceIcon"
+          ></ds-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+    <span
+      class="clamped-desc resource-description"
+      [innerHTML]="strippedDefinition"
+    ></span>
+  </div>
+</mat-list-item>
+<mat-divider class="my-1"></mat-divider>

@@ -1,0 +1,47 @@
+<h3 mat-dialog-title>Confirm keyword adjustments</h3>
+<form [formGroup]="newGraphFormGroup" (ngSubmit)="saveNewGraphVersion()">
+  <div mat-dialog-content>
+    <mat-form-field appearance="standard" class="w-100">
+      <mat-label>New Graph Name</mat-label>
+      <input matInput #input [formControl]="graphNameFormControl" />
+    </mat-form-field>
+    <mat-form-field appearance="standard" class="w-100">
+      <mat-label>Instance Type</mat-label>
+      <input matInput #input [formControl]="graphTypeFormControl" />
+    </mat-form-field>
+    <p *ngIf="data.graphType.length > 1">
+      The graph has multiple different types. For the newly created graph all
+      instances will be overwritten with the provided value.
+    </p>
+    <div *ngIf="data.itemsAdded.length > 0">
+      <p>Following keywords will be added:</p>
+      <li *ngFor="let addedItem of data.itemsAdded">{{ addedItem.label }}</li>
+      <hr />
+    </div>
+    <div *ngIf="data.itemsEdited.length > 0">
+      <p>Following keywords will be edited:</p>
+      <li *ngFor="let editedItem of data.itemsEdited">
+        {{ editedItem.label }}
+      </li>
+      <hr />
+    </div>
+    <div *ngIf="data.itemsDeleted.length > 0">
+      <p>Following keywords will be deleted:</p>
+      <li *ngFor="let deletedItem of data.itemsDeleted">
+        {{ deletedItem.label }}
+      </li>
+      <hr />
+    </div>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button mat-raised-button mat-dialog-close>Cancel</button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="!newGraphFormGroup.valid"
+    >
+      Save
+    </button>
+  </div>
+</form>

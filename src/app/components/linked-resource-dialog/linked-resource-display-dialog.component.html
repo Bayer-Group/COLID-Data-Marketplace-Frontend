@@ -5,6 +5,9 @@
         [source]="document"
         [result]="hit"
         [metadata]="metadata"
+        [resourceLinkedLifecycleStatus]="
+          hit.source['resourceLinkedLifecycleStatus']?.outbound[0]['uri']
+        "
         [collapsible]="false"
       ></app-search-result>
     </div>

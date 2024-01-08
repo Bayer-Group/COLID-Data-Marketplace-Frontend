@@ -3,13 +3,17 @@
   border-color: rgba(0, 0, 0, 0.12) !important;
 }
 
+.border-button[disabled] {
+  background-color: lightgray;
+  cursor: not-allowed
+}
+
 .beta-feature-tag {
   font-size: 0.8rem;
   vertical-align: top;
 }
 
-
-.mat-expansion-panel-header[aria-disabled=true] {
+.mat-expansion-panel-header[aria-disabled="true"] {
   color: rgba(0, 0, 0, 0.87) !important;
 }
 
@@ -64,7 +68,7 @@
 .mat-expansion-panel-body {
   padding-left: 2 !important;
   //display: inline-block;
-  max-width: 100%!important;
+  max-width: 100% !important;
   overflow: auto;
 }
 
@@ -78,9 +82,9 @@
 }
 
 mat-panel-description {
-  display: flex!important;
+  display: flex !important;
   justify-content: flex-end;
-  align-items:flex-start;
+  align-items: flex-start;
   color: black;
   height: -webkit-fit-content;
 }
@@ -90,14 +94,13 @@ mat-panel-description {
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
- }
- .justify-content-start{
+}
+.justify-content-start {
   flex-wrap: wrap;
   justify-content: flex-start !important;
- }
+}
 
-
- ::ng-deep mat-tab-body-wrapper {
+::ng-deep mat-tab-body-wrapper {
   width: max-content;
 }
 
@@ -107,25 +110,24 @@ mat-panel-description {
   overflow: visible;
   width: 100%;
 }
-.searchresultlist{
+.searchresultlist {
   margin-left: 20px;
-  max-width:none;
-  flex:none;
+  max-width: none;
+  flex: none;
 }
 
 .mat-tab-labels {
   margin-top: 15px;
 }
 
-::ng-deep .mat-tab-label{
-  color:black;
+::ng-deep .mat-tab-label {
+  color: black;
   height: 40px !important;
-  max-width:30px !important
-
+  max-width: 30px !important;
 }
 
-::ng-deep.mat-tab-label-active{
-  opacity: 1.0!important;
+::ng-deep.mat-tab-label-active {
+  opacity: 1 !important;
 }
 
 ::ng-deep .mat-row {
@@ -149,17 +151,24 @@ mat-panel-description {
   cursor: pointer;
 }
 
-.parent{
+.parent {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   gap: 40px;
 }
 
-.child{
-  margin:auto
+.child {
+  margin: auto;
 }
 
 span {
-  align-self: end
+  align-self: end;
+}
+
+.resource-details-dialog-button {
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  margin-right: 1rem;
 }

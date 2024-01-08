@@ -14,6 +14,7 @@ import {
   ClearSelectedPIDURIs,
   ToggleClusterView,
   FetchClusterResults,
+  SetSearchIndex,
 } from "src/app/states/search.state";
 import { SidebarState, SetSidebarOpened } from "src/app/states/sidebar.state";
 import { jsonToStringMap } from "src/app/shared/converters/string-map-object.converter";
@@ -33,6 +34,8 @@ import { ExportService } from "src/app/core/http/export.service";
 import { ExportSettings } from "src/app/shared/models/export/export-settings";
 import { CookieService } from "ngx-cookie";
 import { ClearResourceTypeItem } from "src/app/states/metadata.state";
+import { AuthService } from "src/app/modules/authentication/services/auth.service";
+import { MatRadioChange } from "@angular/material/radio";
 
 @Component({
   selector: "app-search",
@@ -48,6 +51,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   @Select(SearchState.getActiveRangeFilters)
   activeRangeFilters$: Observable<ActiveRangeFilters>;
   @Select(SearchState.getSearchText) searchText$: Observable<string>;
+  @Select(SearchState.getSearchIndex) selectedSearchIndex$: Observable<string>;
   @Select(SidebarState.sidebarOpened) sidebarOpened$: Observable<any>;
   @Select(SidebarState.sidebarMode) sidebarMode$: Observable<any>;
   @Select(SearchState.getSearchResult) searchResult$: Observable<SearchResult>;
@@ -75,6 +79,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   selectedClusterPidUris: string[] = [];
   exportLimit: number = 500;
 
+  get hasCreatePrivilege$(): Observable<boolean> {
+    return this.authService.hasCreatePrivilege$;
+  }
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -83,7 +91,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     private logger: LogService,
     private dialog: MatDialog,
     private snackBar: ColidMatSnackBarService,
-    private exportService: ExportService
+    private exportService: ExportService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -424,6 +433,17 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.store.dispatch([
       new ToggleClusterView(true),
       new FetchClusterResults(this.searchText),
+    ]);
+  }
+
+  showAllResultsList() {
+    this.store.dispatch(new ToggleClusterView(false));
+  }
+
+  setSearchIndex(ev: MatRadioChange) {
+    this.store.dispatch([
+      new SetSearchIndex(ev.value),
+      new FetchSearchResult(this.route),
     ]);
   }
 }

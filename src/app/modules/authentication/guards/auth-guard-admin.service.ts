@@ -1,5 +1,10 @@
 import { Injectable } from "@angular/core";
-import { CanActivate, Router, ActivatedRouteSnapshot } from "@angular/router";
+import {
+  CanActivate,
+  Router,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+} from "@angular/router";
 import { combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
 import { AuthService } from "../services/auth.service";
@@ -16,14 +21,14 @@ export class AuthGuardAdminService
     super(authService, router);
   }
 
-  canActivate(route: ActivatedRouteSnapshot) {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return combineLatest([
       this.authService.isLoggedIn$,
       this.authService.hasAdminPrivilege$,
       this.authService.hasSuperAdminPrivilege$,
     ]).pipe(
       map(([isLoggedIn, hasAdminPrivilege, hasSuperAdminPrivilege]) => {
-        const isAuthorized = this.processLoggedIn(isLoggedIn, route);
+        const isAuthorized = this.processLoggedIn(isLoggedIn, route, state);
         const hasAnyAdminPrivilege =
           hasAdminPrivilege || hasSuperAdminPrivilege;
 

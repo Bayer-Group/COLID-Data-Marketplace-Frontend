@@ -51,7 +51,7 @@ export function MSALInstanceFactory(): IPublicClientApplication {
         logLevel: LogLevel.Info,
         piiLoggingEnabled: false,
       },
-      allowRedirectInIframe: true,
+      // allowRedirectInIframe: true,
     },
   });
 }

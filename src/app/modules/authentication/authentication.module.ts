@@ -5,8 +5,17 @@ import { AuthService } from "./services/auth.service";
 import { AuthGuardService } from "./guards/auth-guard.service";
 import { MockAuthenticationModule } from "./mock-authentication.module";
 import { AzureAuthenticationModule } from "./azure-authentication.module";
+import { AuthGuardAdminService } from "./guards/auth-guard-admin.service";
+import { AuthGuardSuperAdminService } from "./guards/auth-guard-super-admin.service";
+import { EditorPrivilegeGuard } from "./guards/editor-privilege.guard";
 
-export const providers: Provider[] = [AuthGuardService, AuthService];
+export const providers: Provider[] = [
+  AuthGuardService,
+  AuthService,
+  AuthGuardAdminService,
+  AuthGuardSuperAdminService,
+  EditorPrivilegeGuard,
+];
 
 @NgModule({
   declarations: [],

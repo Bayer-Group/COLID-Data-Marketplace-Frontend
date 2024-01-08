@@ -1,0 +1,60 @@
+<ng-container
+  *ngIf="latestSubscriptions$ | async as latestSubscriptions; else loading"
+>
+  <div
+    *ngIf="mostSubscribedResources$ | async as mostSubscribedResources"
+    class="expansion-tile h-100"
+  >
+    <mat-expansion-panel class="h-100" expanded="true">
+      <mat-expansion-panel-header class="blue-bold-text">{{
+        latestSubscriptions.length > 0
+          ? "Your latest subscriptions"
+          : "Most subscribed resources"
+      }}</mat-expansion-panel-header>
+      <ng-container
+        *ngIf="latestSubscriptions.length === 0; else showSubscribedResources"
+      >
+        <div
+          class="d-flex align-items-center"
+          (click)="
+            openInstructionsDialog(
+              'How to subscribe to a resource',
+              'assets/colid_subscribe_resource.gif'
+            )
+          "
+          style="cursor: pointer"
+          matTooltip="Show how to subscribe to a resource"
+        >
+          <p class="mb-0 me-2">You have not subscribed to a resource yet</p>
+          <mat-icon>help</mat-icon>
+        </div>
+        <p>Here is a list of resources other people subscribed to</p>
+        <mat-list>
+          <app-resource-item-tile
+            *ngFor="let resourceTile of mostSubscribedResources"
+            [pidUri]="resourceTile.colidPidUri"
+            [label]="resourceTile.resourceLabel"
+            [resourceDefinition]="resourceTile.resourceDefinition"
+            [resourceType]="resourceTile.resourceType"
+          ></app-resource-item-tile>
+        </mat-list>
+      </ng-container>
+    </mat-expansion-panel>
+    <ng-template #showSubscribedResources>
+      <mat-list>
+        <app-resource-item-tile
+          *ngFor="let resourceTile of latestSubscriptions"
+          [pidUri]="resourceTile.colidPidUri"
+          [label]="resourceTile.resourceLabel"
+          [resourceDefinition]="resourceTile.resourceDefinition"
+          [resourceType]="resourceTile.resourceType"
+        ></app-resource-item-tile>
+      </mat-list>
+    </ng-template>
+  </div>
+</ng-container>
+<ng-template #loading>
+  <div class="d-flex justify-content-center">
+    <mat-spinner [diameter]="100" [strokeWidth]="5"></mat-spinner>
+  </div>
+</ng-template>

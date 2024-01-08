@@ -38,12 +38,11 @@
           (closed)="closeFilterGroupPanel(filterGroup.groupName)"
         >
           <mat-expansion-panel-header
+            class="blue-bold-text"
             collapsedHeight="40px"
             expandedHeight="40px"
           >
-            <mat-panel-title class="panel-header">{{
-              filterGroup.groupName
-            }}</mat-panel-title>
+            {{ filterGroup.groupName }}
           </mat-expansion-panel-header>
           <div>
             <app-filter-box
@@ -61,15 +60,17 @@
       </mat-accordion>
     </div>
 
-    <div *ngIf="rangeFilters$ | async as rangeFilters" class="px-2 mb-2">
+    <div
+      *ngIf="rangeFilters$ | async as rangeFilters"
+      class="px-2 mb-2 panel-with-adjusted-overflow-and-padding"
+    >
       <mat-accordion>
         <mat-expansion-panel>
           <mat-expansion-panel-header
             collapsedHeight="40px"
             expandedHeight="40px"
-            ><mat-panel-title class="panel-header"
-              >Dates</mat-panel-title
-            ></mat-expansion-panel-header
+            class="blue-bold-text"
+            >Dates</mat-expansion-panel-header
           >
           <app-range-box
             *ngFor="let rangeFilter of rangeFilters; let last = last"

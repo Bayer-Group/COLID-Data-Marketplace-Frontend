@@ -1,11 +1,17 @@
 .admin-sidebar {
-    position: fixed;
-    margin-top: var(--mat-toolbar-height);
+  position: fixed;
+  margin-top: var(--mat-toolbar-height);
 }
 
 .admin-content {
-    max-width: 60vw;
-    margin-left: auto;
-    margin-right: auto;
-    height: 100%;
+  max-width: 60vw;
+  margin-left: auto;
+  margin-right: auto;
+  height: 100%;
+}
+
+@media (max-width: 1920px) {
+  .admin-content {
+    max-width: 75vw;
+  }
 }

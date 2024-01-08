@@ -5,6 +5,13 @@
   <ng-container *ngIf="clusteredResults$ | async as clusteredResults">
     <ng-container *ngIf="clusteredResults.clusters.length > 0; else noClusters">
       <div class="mx-2 cluster-cell">
+        <div
+          class="d-flex align-items-center cluster-descriptor"
+          matTooltip="Select an item in the list to show the results of a cluster"
+        >
+          <mat-icon class="me-1">workspaces</mat-icon>
+          <span class="cluster-list-wrapper-title">Clusters</span>
+        </div>
         <mat-selection-list
           class="cluster-list-wrapper"
           [multiple]="false"
@@ -14,13 +21,20 @@
           "
         >
           <mat-list-option
+            style="height: 40px"
             *ngFor="let cluster of clusteredResults.clusters"
             [value]="cluster.labels[0]"
             [selected]="cluster.labels[0] === currentlySelectedCluster"
-            >{{ cluster.labels }} ({{
-              cluster.docDetails.length
-            }}
-            results)</mat-list-option
+            ><div class="clamping-container">
+              <li>
+                <span class="cluster-list-item">
+                  {{ cluster.labels }}
+                  <span class="text-secondary"
+                    >({{ cluster.docDetails.length }} results)</span
+                  >
+                </span>
+              </li>
+            </div></mat-list-option
           >
         </mat-selection-list>
       </div>
@@ -49,25 +63,27 @@
             >
               <span class="ms-4">Select all</span>
             </mat-checkbox>
-            <hr />
+            <mat-divider class="mt-2"></mat-divider>
           </div>
-          <div
-            class="d-flex align-items-center ms-2"
-            *ngFor="let hit of searchResults; let index = index"
-          >
-            <mat-checkbox
-              class="me-2"
-              color="primary"
-              mat-list-icon
-              (change)="checkboxChanged($event, hit.id)"
-              [checked]="hit.id | checkboxSelected : selectedPidUris"
-            >
-            </mat-checkbox>
-            <app-search-result
-              [metadata]="metadata"
-              [result]="hit"
-            ></app-search-result>
-          </div>
+          <ng-container *ngFor="let hit of searchResults; let index = index">
+            <div class="d-flex align-items-center ms-2">
+              <mat-checkbox
+                class="me-2"
+                color="primary"
+                mat-list-icon
+                (change)="checkboxChanged($event, hit.id)"
+                [checked]="hit.id | checkboxSelected : selectedPidUris"
+              >
+              </mat-checkbox>
+              <app-search-result
+                class="flex-fill"
+                [metadata]="metadata"
+                [result]="hit"
+                [showResourceDetailsButton]="true"
+              ></app-search-result>
+            </div>
+            <mat-divider></mat-divider>
+          </ng-container>
           <div [hidden]="!loadingSearchResults">
             <div class="py-4 d-flex justify-content-center">
               <app-colid-spinner></app-colid-spinner>

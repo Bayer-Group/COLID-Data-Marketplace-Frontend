@@ -15,6 +15,7 @@ export class UserDto {
   defaultSearchFilterDataMarketplace: number;
   searchFiltersDataMarketplace: SearchFilterDataMarketplaceDto[];
   department: string;
+  showUserInformationFlagDataMarketplace: boolean;
 
   public constructor(id: string, emailAddress: string) {
     this.id = id;

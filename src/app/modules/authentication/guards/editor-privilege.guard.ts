@@ -1,5 +1,10 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, CanActivate, Router } from "@angular/router";
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  Router,
+  RouterStateSnapshot,
+} from "@angular/router";
 import { Observable, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
 import { AuthService } from "../services/auth.service";
@@ -16,13 +21,16 @@ export class EditorPrivilegeGuard
     super(authService, router);
   }
 
-  canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean> {
     return combineLatest([
       this.authService.isLoggedIn$,
       this.authService.hasEditorFunctionalitiesPrivilege$,
     ]).pipe(
       map(([isLoggedIn, hasEditorFunctionalitiesPrivilege]) => {
-        const isAuthorized = this.processLoggedIn(isLoggedIn, route);
+        const isAuthorized = this.processLoggedIn(isLoggedIn, route, state);
 
         if (isAuthorized && !hasEditorFunctionalitiesPrivilege) {
           this.router.navigate(["/unauthorized"]);

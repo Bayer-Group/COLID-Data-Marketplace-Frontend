@@ -32,7 +32,7 @@ import { NotificationService } from "./services/notification.service";
     NgxsModule.forFeature([NotificationState]),
   ],
   providers: [NotificationService],
-  exports: [NotificationComponent],
+  exports: [NotificationComponent, TimeAgoPipe, UTCToLocalTimePipe],
 })
 export class NotificationModule {
   static forRoot(): ModuleWithProviders<NotificationModule> {

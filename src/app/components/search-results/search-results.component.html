@@ -7,8 +7,8 @@
     >
       <div class="row">
         <div class="col">
-          <div class="search-hints d-flex align-items-center">
-            <small class="text-muted me-2">
+          <div class="search-hints d-flex align-items-center blue-bold-text">
+            <span class="me-2">
               {{ searchResult.hits.total }} results for
               <span *ngIf="correctedSearchText$ | async as corrected">{{
                 corrected
@@ -17,7 +17,7 @@
                 searchTextObservable$ | async
               }}</span>
               <i> (took {{ searchResult.took / 1000 }} seconds)</i>
-            </small>
+            </span>
 
             <div
               *ngIf="correctedSearchText$ | async as corrected"
@@ -73,7 +73,7 @@
               #searchResults
             >
               <div
-                class="row my-1 mx-0"
+                class="row ms-1"
                 *ngFor="let hit of searchResult.hits.hits; let index = index"
               >
                 <div class="d-flex align-items-center col-12">
@@ -82,19 +82,27 @@
                     color="primary"
                     mat-list-icon
                     [id]="hit.id"
+                    [disabled]=""
                     (change)="checkboxChanged($event)"
                     [checked]="hit.id | checkboxSelected : selectedPIDURIs"
                   >
                   </mat-checkbox>
                   <app-search-result
                     [result]="hit"
+                    [resourceLinkedLifecycleStatus]="
+                      hit.source['resourceLinkedLifecycleStatus']?.outbound[0][
+                        'uri'
+                      ]
+                    "
                     [index]="index"
                     [metadata]="metadata"
+                    [showResourceDetailsButton]="true"
                     (schemeUiChange)="schemeUi($event)"
                     class="w-100"
                   >
                   </app-search-result>
                 </div>
+                <mat-divider></mat-divider>
               </div>
               <div [hidden]="!loadingBatch">
                 <div class="py-4 d-flex justify-content-center">

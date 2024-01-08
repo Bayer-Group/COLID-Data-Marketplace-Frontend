@@ -30,6 +30,7 @@ import { FetchColidEntrySubscriptionNumbers } from "./colid-entry-subcriber-coun
 import { SchemeUi } from "../shared/models/schemeUI";
 import { Injectable } from "@angular/core";
 import { SearchClusterResults } from "../shared/models/search-cluster-result";
+import { LogService } from "../core/logging/log.service";
 //import { SchemeUi } from '../shared/models/schemeUI';
 
 export class PerformInitialSearch {
@@ -184,6 +185,12 @@ export class FetchClusterResults {
   constructor(public searchTerm: string) {}
 }
 
+export class SetSearchIndex {
+  static readonly type = "[Search] Set Search Index";
+
+  constructor(public searchIndex: string) {}
+}
+
 export interface SearchStateModel {
   searching: boolean;
   autoCompleteResults: string[];
@@ -196,6 +203,7 @@ export interface SearchStateModel {
   aggregations: Aggregation[];
   activeAggregationBuckets: Map<string, string[]>;
   activeRangeFilters: ActiveRangeFilters;
+  searchIndex: string;
   page: number;
   errorCode: ErrorCode;
   linkedTableAndcolumnResource: any;
@@ -222,6 +230,7 @@ export interface SearchStateModel {
     aggregations: null,
     activeAggregationBuckets: new Map<string, string[]>(),
     activeRangeFilters: {},
+    searchIndex: "published",
     page: 1,
     errorCode: null,
     linkedTableAndcolumnResource: null,
@@ -239,7 +248,8 @@ export class SearchState {
   constructor(
     private store: Store,
     private searchService: SearchService,
-    private actions$: Actions
+    private actions$: Actions,
+    private logger: LogService
   ) {}
 
   @Selector()
@@ -335,6 +345,11 @@ export class SearchState {
   @Selector()
   public static getClusteredResults(state: SearchStateModel) {
     return state.clusterResults;
+  }
+
+  @Selector()
+  public static getSearchIndex(state: SearchStateModel) {
+    return state.searchIndex;
   }
 
   @Action(RefreshRoute)
@@ -602,13 +617,14 @@ export class SearchState {
 
   @Action(FetchSearchResult, { cancelUncompleted: true })
   fetchSearchResult(
-    { patchState, dispatch }: StateContext<SearchStateModel>,
+    { patchState, getState, dispatch }: StateContext<SearchStateModel>,
     action: FetchSearchResult
   ) {
     patchState({
       searchResult: null,
       searching: true,
       didYouMean: null,
+      clusterResults: null,
       showResultsClustered: false,
     });
 
@@ -629,12 +645,14 @@ export class SearchState {
         searchTerm,
         page,
         activeAggergationBuckets,
-        activeRangeFilters
+        activeRangeFilters,
+        getState().searchIndex
       ),
       this.searchService.getAllPidUrisOfSearchResult(
         searchTerm,
         activeAggergationBuckets,
-        activeRangeFilters
+        activeRangeFilters,
+        getState().searchIndex
       ),
     ]).pipe(
       tap(([searchResult, allPidUrisSearchResult]) => {
@@ -699,7 +717,13 @@ export class SearchState {
         : JSON.parse(queryParams["r"]);
 
     return this.searchService
-      .search(searchTerm, newPage, activeAggergationBuckets, activeRangeFilters)
+      .search(
+        searchTerm,
+        newPage,
+        activeAggergationBuckets,
+        activeRangeFilters,
+        getState().searchIndex
+      )
       .pipe(
         tap((s) => {
           let didYouMean = null;
@@ -882,16 +906,25 @@ export class SearchState {
     { searchTerm }: FetchClusterResults
   ) {
     this.store.dispatch(new ClearSelectedPIDURIs());
-    patchState({
-      loadingClusters: true,
-    });
     const ctx = getState();
     const aggregationFilters = ctx.activeAggregationBuckets;
     const rangeFilters = ctx.activeRangeFilters;
+    if (ctx.clusterResults != null) {
+      return;
+    }
+    patchState({
+      loadingClusters: true,
+    });
     return this.searchService
-      .clusterSearchResult(searchTerm, aggregationFilters, rangeFilters)
+      .clusterSearchResult(
+        searchTerm,
+        ctx.searchIndex,
+        aggregationFilters,
+        rangeFilters
+      )
       .pipe(
         tap((result) => {
+          this.logger.info("DMP_CLUSTER_PAGE_OPENED");
           patchState({
             clusterResults: result,
             loadingClusters: false,
@@ -903,5 +936,16 @@ export class SearchState {
           return of(err);
         })
       );
+  }
+
+  @Action(SetSearchIndex)
+  setSearchIndex(
+    { patchState }: StateContext<SearchStateModel>,
+    { searchIndex }: SetSearchIndex
+  ) {
+    patchState({
+      searchIndex,
+      page: 1,
+    });
   }
 }

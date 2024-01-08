@@ -4,6 +4,8 @@ import {
   EventEmitter,
   Input,
   ViewChild,
+  ElementRef,
+  AfterViewInit,
 } from "@angular/core";
 import { Observable } from "rxjs";
 import {
@@ -16,12 +18,14 @@ import {
   templateUrl: "./search-bar.component.html",
   styleUrls: ["./search-bar.component.scss"],
 })
-export class SearchBarComponent {
+export class SearchBarComponent implements AfterViewInit {
   @ViewChild(MatAutocompleteTrigger, { static: true })
   autocomplete: MatAutocompleteTrigger;
+  @ViewChild("search") searchbar: ElementRef;
 
   @Input() initialSearchText: string;
   @Input() autocompleteResult: Observable<string[]>;
+  @Input() focusSearchbar: boolean = true;
 
   @Output() searchChange = new EventEmitter();
   @Output() inputChange = new EventEmitter();
@@ -33,6 +37,12 @@ export class SearchBarComponent {
   autocompleteOpened = false;
 
   constructor() {}
+
+  ngAfterViewInit(): void {
+    if (this.focusSearchbar) {
+      this.searchbar.nativeElement.focus();
+    }
+  }
 
   onInputChange(text: string) {
     if (this.blockInputChange === false) {

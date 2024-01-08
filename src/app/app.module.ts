@@ -111,6 +111,7 @@ import { ResourceState } from "./states/resource.state";
 import { ExtendedUriTemplateState } from "./states/extended-uri-template.state";
 import { ReviewState } from "./states/review.state";
 import { IdentifierState } from "./states/identifier.state";
+import { KeywordManagementState } from "./states/keyword-management.state";
 
 // Provider
 import { DatePipe } from "@angular/common";
@@ -200,6 +201,13 @@ import { STEPPER_GLOBAL_OPTIONS } from "@angular/cdk/stepper";
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from "@angular/material-moment-adapter";
 import { MarkdownModule } from "ngx-markdown";
 import { ClusteringWrapperComponent } from "./components/clustering-wrapper/clustering-wrapper.component";
+import { ChangelogDialogComponent } from "./components/welcome/changelog-dialog/changelog-dialog.component";
+import { InstructionsDialogComponent } from "./components/instructions-dialog/instructions-dialog.component";
+import { ResourceItemTileComponent } from "./components/resource-item-tile/resource-item-tile.component";
+import { NotificationsTileComponent } from "./components/welcome-content/notifications-tile/notifications-tile.component";
+import { SavedSearchesTileComponent } from "./components/welcome-content/saved-searches-tile/saved-searches-tile.component";
+import { SubscriptionsTileComponent } from "./components/welcome-content/subscriptions-tile/subscriptions-tile.component";
+import { LatestResourceChangesTileComponent } from "./components/welcome-content/latest-resource-changes-tile/latest-resource-changes-tile.component";
 
 const states = [
   FilterState,
@@ -223,6 +231,7 @@ const states = [
   ResourceState,
   ExtendedUriTemplateState,
   IdentifierState,
+  KeywordManagementState,
 ];
 const protectedResourceMap = new Map(
   Object.entries(environment.adalConfig.protectedResourceMap)
@@ -285,6 +294,13 @@ declare module "@angular/core" {
     ResourceHistoricComponent,
     FavoriteListComponent,
     ClusteringWrapperComponent,
+    ChangelogDialogComponent,
+    InstructionsDialogComponent,
+    ResourceItemTileComponent,
+    NotificationsTileComponent,
+    SavedSearchesTileComponent,
+    SubscriptionsTileComponent,
+    LatestResourceChangesTileComponent,
   ],
   imports: [
     MsalModule.forRoot(
@@ -298,7 +314,7 @@ declare module "@angular/core" {
           navigateToLoginRequestUrl: false,
         },
         cache: {
-          cacheLocation: BrowserCacheLocation.SessionStorage,
+          cacheLocation: BrowserCacheLocation.LocalStorage,
           storeAuthStateInCookie: isIE, // set to true for IE 11
         },
         system: {
@@ -334,7 +350,7 @@ declare module "@angular/core" {
     NgxsModule.forRoot(states),
     NgxsRouterPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot({
-      disabled: true,
+      disabled: false,
     }),
     TooltipModule.forRoot(),
     BrowserAnimationsModule,

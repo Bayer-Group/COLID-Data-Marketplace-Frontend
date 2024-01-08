@@ -53,7 +53,6 @@ export class ClusteringWrapperComponent implements OnInit {
     this.masterSub.add(
       this.metadata$.subscribe((metadata) => {
         this.metadata = metadata;
-        console.log(metadata);
       })
     );
     this.masterSub.add(
@@ -120,7 +119,6 @@ export class ClusteringWrapperComponent implements OnInit {
     ) {
       return;
     }
-    console.log("loading next batch");
     this.loadNextBulkOfSearchResultsOfACluster(this.currentlySelectedCluster);
   }
 

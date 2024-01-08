@@ -1,0 +1,30 @@
+<mat-expansion-panel
+  expanded="true"
+  (opened)="expansionPanelToggled.emit(true)"
+  (closed)="expansionPanelToggled.emit(false)"
+>
+  <mat-expansion-panel-header class="blue-bold-text"
+    >My last changed resources</mat-expansion-panel-header
+  >
+  <mat-list
+    infiniteScroll
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="200"
+    [scrollWindow]="false"
+    (scrolled)="nextBatch()"
+    class="last-changed-results"
+  >
+    <app-resource-item-tile
+      *ngFor="let resource of lastChangedResources"
+      [pidUri]="resource.resourcePidUri"
+      [label]="resource.resourceLabel"
+      [resourceDefinition]="resource.resourceDefinition"
+      [resourceType]="resource.resourceType"
+      [lifeCycleStatus]="resource.lifeCycleStatus"
+      [resourceLinkedLifecycleStatus]="resource.resourceLinkedLifeCycleStatus"
+      [showLifeCycleStatus]="true"
+    ></app-resource-item-tile>
+    <div class="d-flex justify-content-center" *ngIf="loadingBatch">
+      <mat-spinner [diameter]="100" [strokeWidth]="5"></mat-spinner></div
+  ></mat-list>
+</mat-expansion-panel>
