@@ -2,7 +2,10 @@
   *ngIf="latestSubscriptions$ | async as latestSubscriptions; else loading"
 >
   <div
-    *ngIf="mostSubscribedResources$ | async as mostSubscribedResources"
+    *ngIf="
+      mostSubscribedResources$ | async as mostSubscribedResources;
+      else loading
+    "
     class="expansion-tile h-100"
   >
     <mat-expansion-panel class="h-100" expanded="true">
@@ -14,19 +17,23 @@
       <ng-container
         *ngIf="latestSubscriptions.length === 0; else showSubscribedResources"
       >
-        <div
-          class="d-flex align-items-center"
-          (click)="
-            openInstructionsDialog(
-              'How to subscribe to a resource',
-              'assets/colid_subscribe_resource.gif'
-            )
-          "
-          style="cursor: pointer"
-          matTooltip="Show how to subscribe to a resource"
-        >
-          <p class="mb-0 me-2">You have not subscribed to a resource yet</p>
-          <mat-icon>help</mat-icon>
+        <div class="d-flex align-items-center">
+          <span class="mb-0 me-2"
+            >You have not subscribed to a resource yet</span
+          >
+          <div
+            style="cursor: pointer"
+            (click)="
+              openInstructionsDialog(
+                'How to subscribe to a resource',
+                'assets/colid_subscribe_resource.gif'
+              )
+            "
+            class="d-flex align-items-center text-primary"
+          >
+            <span>How to create one</span>
+            <mat-icon>read_more</mat-icon>
+          </div>
         </div>
         <p>Here is a list of resources other people subscribed to</p>
         <mat-list>
@@ -54,7 +61,7 @@
   </div>
 </ng-container>
 <ng-template #loading>
-  <div class="d-flex justify-content-center">
+  <div class="d-flex justify-content-center p-4 bg-light">
     <mat-spinner [diameter]="100" [strokeWidth]="5"></mat-spinner>
   </div>
 </ng-template>

@@ -15,26 +15,30 @@
       </ng-container>
     </div>
     <ng-template #noSearchFilters>
-      <div
-        style="cursor: pointer"
-        (click)="
-          openInstructionsDialog(
-            'How to create a saved search',
-            'assets/colid_save_searches.gif'
-          )
-        "
-        class="d-flex align-items-center"
-        matTooltip="Show how to create a saved search"
-      >
-        <p class="mb-0 me-2">You have not created any saved searches yet</p>
-        <mat-icon>help</mat-icon>
+      <div class="d-flex align-items-center">
+        <span class="mb-0 me-2"
+          >You have not created any saved searches yet</span
+        >
+        <div
+          style="cursor: pointer"
+          (click)="
+            openInstructionsDialog(
+              'How to create a saved search',
+              'assets/colid_save_searches.gif'
+            )
+          "
+          class="d-flex align-items-center text-primary"
+        >
+          <span>How to create one</span>
+          <mat-icon>read_more</mat-icon>
+        </div>
       </div>
     </ng-template>
   </mat-expansion-panel>
 </div>
 
 <ng-template #loading>
-  <div class="d-flex justify-content-center">
+  <div class="d-flex justify-content-center p-4 bg-light">
     <mat-spinner [diameter]="100" [strokeWidth]="5"></mat-spinner>
   </div>
 </ng-template>

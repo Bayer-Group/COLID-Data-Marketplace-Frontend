@@ -25,6 +25,10 @@
       [showLifeCycleStatus]="true"
     ></app-resource-item-tile>
     <div class="d-flex justify-content-center" *ngIf="loadingBatch">
-      <mat-spinner [diameter]="100" [strokeWidth]="5"></mat-spinner></div
-  ></mat-list>
+      <mat-spinner [diameter]="100" [strokeWidth]="5"></mat-spinner>
+    </div>
+    <div *ngIf="lastChangedResources.length === 0">
+      You have not created or edited resources yet
+    </div></mat-list
+  >
 </mat-expansion-panel>

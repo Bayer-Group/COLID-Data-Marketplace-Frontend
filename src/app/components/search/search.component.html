@@ -51,7 +51,7 @@
                     matTooltip="Clustering of results is only available for 50 to 1000 results which are in the published state"
                     (click)="showClusteredResults()"
                     [disabled]="
-                      searchResult?.hits?.total < 1 ||
+                      searchResult?.hits?.total < 50 ||
                       searchResult?.hits?.total > 1000 ||
                       searchIndex === 'draft' ||
                       searchIndex === 'all'
