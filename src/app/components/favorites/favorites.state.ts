@@ -308,9 +308,8 @@ export class FavoritesState {
         tap((_) => {
           ctx.setState(
             patch({
-              favorites: patch(
-                removeItem<FavoriteListMetadata>((f) => f.id == action.id)
-              ),
+              favorites: 
+                removeItem<FavoriteListMetadata>((f) => f.id == action.id)              
             })
           );
         })
