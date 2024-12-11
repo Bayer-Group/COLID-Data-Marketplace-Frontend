@@ -8,3 +8,8 @@
   line-height: unset;
 }
 
+.mat-mdc-icon-button.mat-mdc-button-base {
+  padding: 4px;
+  --mdc-icon-button-state-layer-size: 32px;
+}
+

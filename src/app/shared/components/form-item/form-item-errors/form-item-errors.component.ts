@@ -1,18 +1,16 @@
-import { Component, Input } from "@angular/core";
-import { Constants } from "src/app/shared/constants";
+import { Component, Input } from '@angular/core';
+import { Constants } from 'src/app/shared/constants';
 
 @Component({
-  selector: "app-form-item-errors",
-  templateUrl: "./form-item-errors.component.html",
-  styleUrls: ["./form-item-errors.component.css"],
+  selector: 'app-form-item-errors',
+  templateUrl: './form-item-errors.component.html',
+  styleUrls: ['./form-item-errors.component.css']
 })
 export class FormItemErrorsComponent {
   hasPidUri = Constants.Metadata.HasPidUri;
 
   @Input() name: string;
   @Input() errors: any;
-
-  constructor() {}
 
   get isViolation() {
     return (

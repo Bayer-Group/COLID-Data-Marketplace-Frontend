@@ -1,9 +1,9 @@
-import { Injectable } from "@angular/core";
-import { Action, Selector, State, StateContext } from "@ngxs/store";
-import { KeywordManagementApiService } from "../core/http/keyword-management.api.service";
-import { catchError, tap } from "rxjs/operators";
-import { EMPTY } from "rxjs";
-import { GraphKeywordUsage } from "../shared/models/key-management/graph-keyword-usage-dto";
+import { Injectable } from '@angular/core';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { KeywordManagementApiService } from '../core/http/keyword-management.api.service';
+import { catchError, tap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
+import { GraphKeywordUsage } from '../shared/models/key-management/graph-keyword-usage-dto';
 
 export class KeywordManagementStateModel {
   keywordGraphsPidUris: string[];
@@ -13,34 +13,34 @@ export class KeywordManagementStateModel {
 }
 
 export class FetchKeywordGraphs {
-  static readonly type = "[KeywordManagement] Fetch keyword graphs";
+  static readonly type = '[KeywordManagement] Fetch keyword graphs';
   constructor() {}
 }
 
 export class FetchGraphTypeInstanceGraph {
   static readonly type =
-    "[KeywordManagement] Fetch graph type of selected instance graph";
+    '[KeywordManagement] Fetch graph type of selected instance graph';
   constructor(public selectedInstanceGraph: string) {}
 }
 
 export class FetchGraphKeywordUsage {
-  static readonly type = "[KeywordManagement] Fetch graph keyword usage";
+  static readonly type = '[KeywordManagement] Fetch graph keyword usage';
   constructor(public keywordGraphUri: string) {}
 }
 
 export class ResetGraphKeywordUsageData {
-  static readonly type = "[KeywordManagement] Reset graph keyword usage data";
+  static readonly type = '[KeywordManagement] Reset graph keyword usage data';
   constructor() {}
 }
 
 @State<KeywordManagementStateModel>({
-  name: "KeywordManagement",
+  name: 'KeywordManagement',
   defaults: {
     keywordGraphsPidUris: null,
     selectedKeywordGraphUsage: null,
     loadingKeywordGraph: false,
-    graphTypeSelectedInstanceGraph: [],
-  },
+    graphTypeSelectedInstanceGraph: []
+  }
 })
 @Injectable()
 export class KeywordManagementState {
@@ -74,12 +74,12 @@ export class KeywordManagementState {
 
   @Action(FetchKeywordGraphs)
   FetchKeywordGraphs({
-    patchState,
+    patchState
   }: StateContext<KeywordManagementStateModel>) {
     return this.keywordManagmentApiService.getKeywordGraphs().pipe(
       tap((res: string[]) => {
         patchState({
-          keywordGraphsPidUris: res,
+          keywordGraphsPidUris: res
         });
       })
     );
@@ -95,12 +95,12 @@ export class KeywordManagementState {
       .pipe(
         tap((res: string[]) => {
           patchState({
-            graphTypeSelectedInstanceGraph: res,
+            graphTypeSelectedInstanceGraph: res
           });
         }),
         catchError((err) => {
           patchState({
-            graphTypeSelectedInstanceGraph: [],
+            graphTypeSelectedInstanceGraph: []
           });
           console.log(err);
           return EMPTY;
@@ -120,7 +120,7 @@ export class KeywordManagementState {
         tap((res: GraphKeywordUsage[]) => {
           patchState({
             selectedKeywordGraphUsage: res,
-            loadingKeywordGraph: false,
+            loadingKeywordGraph: false
           });
         })
       );
@@ -128,11 +128,11 @@ export class KeywordManagementState {
 
   @Action(ResetGraphKeywordUsageData)
   ResetGraphKeywordUsageData({
-    patchState,
+    patchState
   }: StateContext<KeywordManagementStateModel>) {
     patchState({
       selectedKeywordGraphUsage: null,
-      graphTypeSelectedInstanceGraph: [],
+      graphTypeSelectedInstanceGraph: []
     });
   }
 }

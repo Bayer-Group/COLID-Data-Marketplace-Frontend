@@ -1,5 +1,5 @@
-import { MetaDataProperty } from "../models/metadata/meta-data-property";
-import { Constants } from "src/app/shared/constants";
+import { MetaDataProperty } from '../models/metadata/meta-data-property';
+import { Constants } from 'src/app/shared/constants';
 
 export class FormExtension {
   public static createEntityPropertyList(

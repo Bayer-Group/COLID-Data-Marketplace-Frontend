@@ -1,6 +1,6 @@
-import { Resource } from "../models/resources/resource";
-import { Constants } from "src/app/shared/constants";
-import { HistoricResourceOverviewDTO } from "../models/resources/historic-resource-overview-dto";
+import { Resource } from '../models/resources/resource';
+import { Constants } from 'src/app/shared/constants';
+import { HistoricResourceOverviewDTO } from '../models/resources/historic-resource-overview-dto';
 
 export class ResourceExtension {
   public static hasPublishedVersion(resource: Resource) {
@@ -87,7 +87,7 @@ export class ResourceExtension {
       lastChangeUser:
         resource.properties[Constants.Metadata.HasLastChangeUser][0],
       lifeCycleStatus:
-        resource.properties[Constants.Metadata.LifeCycleStatus][0],
+        resource.properties[Constants.Metadata.LifeCycleStatus][0]
     };
   }
 }

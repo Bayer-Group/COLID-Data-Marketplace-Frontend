@@ -4,19 +4,19 @@ import {
   ElementRef,
   ChangeDetectorRef,
   OnInit,
-  AfterViewInit,
-} from "@angular/core";
-import { EMPTY, catchError, tap } from "rxjs";
-import { UserInfoApiService } from "src/app/core/http/user-info.api.service";
-import { HierarchicalData } from "src/app/shared/models/user/hierarchical-dto";
+  AfterViewInit
+} from '@angular/core';
+import { EMPTY, catchError, tap } from 'rxjs';
+import { UserInfoApiService } from 'src/app/core/http/user-info.api.service';
+import { HierarchicalData } from 'src/app/shared/models/user/hierarchical-dto';
 
 @Component({
-  selector: "app-user-statistics-view",
-  templateUrl: "./user-statistics-view.component.html",
-  styleUrls: ["./user-statistics-view.component.scss"],
+  selector: 'app-user-statistics-view',
+  templateUrl: './user-statistics-view.component.html',
+  styleUrls: ['./user-statistics-view.component.scss']
 })
 export class UserStatisticsViewComponent implements OnInit, AfterViewInit {
-  @ViewChild("chartContainer") chartContainer: ElementRef;
+  @ViewChild('chartContainer') chartContainer: ElementRef;
 
   chartData: HierarchicalData | null = null;
   loading = false;

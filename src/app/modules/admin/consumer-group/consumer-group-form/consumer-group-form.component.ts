@@ -1,30 +1,30 @@
-import { Component, OnInit, Input, OnDestroy } from "@angular/core";
-import { Observable, Subscription } from "rxjs";
-import { Select, Store } from "@ngxs/store";
-import { ActivatedRoute, Router } from "@angular/router";
-import { ConsumerGroupResultDTO } from "src/app/shared/models/consumerGroups/consumer-group-result-dto";
-import { ValidationResult } from "src/app/shared/models/validation/validation-result";
-import { EntityBase } from "src/app/shared/models/entities/entity-base";
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
+import { Select, Store } from '@ngxs/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ConsumerGroupResultDTO } from 'src/app/shared/models/consumerGroups/consumer-group-result-dto';
+import { ValidationResult } from 'src/app/shared/models/validation/validation-result';
+import { EntityBase } from 'src/app/shared/models/entities/entity-base';
 import {
   ConsumerGroupState,
   FetchConsumerGroupMetadata,
   FetchConsumerGroupDetails,
   DeleteConsumerGroup,
-  SetConsumerGroup,
-} from "src/app/states/consumer-group.state";
-import { MetaDataProperty } from "src/app/shared/models/metadata/meta-data-property";
-import { HttpErrorResponse } from "@angular/common/http";
-import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
-import { Constants } from "src/app/shared/constants";
-import { FetchConsumerGroupsByUser } from "src/app/states/user-info.state";
-import { ConsumerGroupApiService } from "src/app/core/http/consumer-group.api.service";
-import { ConsumerGroupWriteResultCTO } from "src/app/shared/models/consumerGroups/consumer-group-write-result-cto";
-import { EntityFormStatus } from "src/app/shared/components/entity-form/entity-form-status";
+  SetConsumerGroup
+} from 'src/app/states/consumer-group.state';
+import { MetaDataProperty } from 'src/app/shared/models/metadata/meta-data-property';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
+import { Constants } from 'src/app/shared/constants';
+import { FetchConsumerGroupsByUser } from 'src/app/states/user-info.state';
+import { ConsumerGroupApiService } from 'src/app/core/http/consumer-group.api.service';
+import { ConsumerGroupWriteResultCTO } from 'src/app/shared/models/consumerGroups/consumer-group-write-result-cto';
+import { EntityFormStatus } from 'src/app/shared/components/entity-form/entity-form-status';
 
 @Component({
-  selector: "app-consumer-group-form",
-  templateUrl: "./consumer-group-form.component.html",
-  styleUrls: ["./consumer-group-form.component.css"],
+  selector: 'app-consumer-group-form',
+  templateUrl: './consumer-group-form.component.html',
+  styleUrls: ['./consumer-group-form.component.css']
 })
 export class ConsumerGroupFormComponent implements OnInit, OnDestroy {
   @Select(ConsumerGroupState.getConsumerGroup)
@@ -36,12 +36,12 @@ export class ConsumerGroupFormComponent implements OnInit, OnDestroy {
 
   entityId: string;
 
-  label = "consumer group";
+  label = 'consumer group';
 
   deletionText =
-    "You are about to delete a consumer group. <br>" +
-    "If the consumer group is not used, it will be completely deleted by this procedure. <br>" +
-    "Otherwise, the group is set to status deprecated and can be reactivated later";
+    'You are about to delete a consumer group. <br>' +
+    'If the consumer group is not used, it will be completely deleted by this procedure. <br>' +
+    'Otherwise, the group is set to status deprecated and can be reactivated later';
 
   validationResult: ValidationResult;
 
@@ -82,7 +82,7 @@ export class ConsumerGroupFormComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setPlaceholder();
-    this.entityId = this.route.snapshot.queryParamMap.get("id");
+    this.entityId = this.route.snapshot.queryParamMap.get('id');
     this.fetchingMetadata();
 
     if (this.entityId != null) {
@@ -118,7 +118,7 @@ export class ConsumerGroupFormComponent implements OnInit, OnDestroy {
     this.consumerGroupService.createEntity(entity).subscribe(
       (res: ConsumerGroupWriteResultCTO) => {
         this.handleSuccessProcess(res);
-        this.snackBar.success("Consumer Group", "Created successfully");
+        this.snackBar.success('Consumer Group', 'Created successfully');
       },
       (error) => {
         this.handleResponseError(error);
@@ -131,7 +131,7 @@ export class ConsumerGroupFormComponent implements OnInit, OnDestroy {
     this.consumerGroupService.editEntity(event.id, event.entity).subscribe(
       (res: ConsumerGroupWriteResultCTO) => {
         this.handleSuccessProcess(res);
-        this.snackBar.success("Consumer Group", "Edited successfully");
+        this.snackBar.success('Consumer Group', 'Edited successfully');
       },
       (error) => {
         this.handleResponseError(error);
@@ -143,8 +143,8 @@ export class ConsumerGroupFormComponent implements OnInit, OnDestroy {
     this.formStatus = EntityFormStatus.LOADING;
     this.store.dispatch(new DeleteConsumerGroup(id)).subscribe(
       () => {
-        this.snackBar.success("Consumer Group", "Deleted successfully");
-        this.router.navigate(["admin", "consumerGroups"]);
+        this.snackBar.success('Consumer Group', 'Deleted successfully');
+        this.router.navigate(['admin', 'consumerGroups']);
       },
       (error) => {
         this.handleResponseError(error);
@@ -159,13 +159,13 @@ export class ConsumerGroupFormComponent implements OnInit, OnDestroy {
     this.store
       .dispatch([
         new FetchConsumerGroupsByUser(),
-        new SetConsumerGroup(entityWriteResult.entity),
+        new SetConsumerGroup(entityWriteResult.entity)
       ])
       .subscribe();
 
     if (entityWriteResult != null) {
       if (entityWriteResult.validationResult.conforms) {
-        this.router.navigate(["admin", "consumerGroups"]);
+        this.router.navigate(['admin', 'consumerGroups']);
       } else {
         this.validationResult = entityWriteResult.validationResult;
       }
@@ -173,7 +173,7 @@ export class ConsumerGroupFormComponent implements OnInit, OnDestroy {
   }
 
   handleCancelEditEntityEmitter() {
-    this.router.navigate(["admin", "consumerGroups"]);
+    this.router.navigate(['admin', 'consumerGroups']);
   }
 
   handleResponseError(error: HttpErrorResponse) {

@@ -1,13 +1,13 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { Metadata } from "src/app/shared/models/metadata/meta-data";
-import { Entity } from "src/app/shared/models/entities/entity";
-import { Constants } from "src/app/shared/constants";
-import { Guid } from "guid-typescript";
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Metadata } from 'src/app/shared/models/metadata/meta-data';
+import { Entity } from 'src/app/shared/models/entities/entity';
+import { Constants } from 'src/app/shared/constants';
+import { Guid } from 'guid-typescript';
 
 @Component({
-  selector: "app-form-item-create-nested",
-  templateUrl: "./form-item-create-nested.component.html",
-  styleUrls: ["./form-item-create-nested.component.scss"],
+  selector: 'app-form-item-create-nested',
+  templateUrl: './form-item-create-nested.component.html',
+  styleUrls: ['./form-item-create-nested.component.scss']
 })
 export class FormItemCreateNestedComponent {
   @Input() disabled: boolean = false;
@@ -16,8 +16,6 @@ export class FormItemCreateNestedComponent {
 
   @Output() createNestedEntity: EventEmitter<Entity> =
     new EventEmitter<Entity>();
-
-  constructor() {}
 
   addNestedEntity() {
     const entity = new Entity();

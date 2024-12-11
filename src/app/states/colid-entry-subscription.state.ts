@@ -1,14 +1,14 @@
-import { Selector, State, StateContext, Action } from "@ngxs/store";
-import { tap } from "rxjs/operators";
-import { ColidEntrySubscriptionDto } from "src/app/shared/models/user/colid-entry-subscription-dto";
-import { ResourceOverviewCTO } from "src/app/shared/models/resources/resource-overview-cto";
-import { ResourceApiService } from "src/app/core/http/resource.api.service";
-import { ResourceSearchDTO } from "src/app/shared/models/resources/resource-search-dto";
-import { Injectable } from "@angular/core";
+import { Selector, State, StateContext, Action } from '@ngxs/store';
+import { tap } from 'rxjs/operators';
+import { ColidEntrySubscriptionDto } from 'src/app/shared/models/user/colid-entry-subscription-dto';
+import { ResourceOverviewCTO } from 'src/app/shared/models/resources/resource-overview-cto';
+import { ResourceApiService } from 'src/app/core/http/resource.api.service';
+import { ResourceSearchDTO } from 'src/app/shared/models/resources/resource-search-dto';
+import { Injectable } from '@angular/core';
 
 export class FetchColidEntrySubscriptions {
   static readonly type =
-    "[ColidEntrySubscription] Fetch ColidEntrySubscriptions";
+    '[ColidEntrySubscription] Fetch ColidEntrySubscriptions';
   constructor(public colidEntrySubscriptions: ColidEntrySubscriptionDto[]) {}
 }
 
@@ -18,11 +18,11 @@ export class ColidEntrySubscriptionsStateModel {
 }
 
 @State<ColidEntrySubscriptionsStateModel>({
-  name: "ColidEntrySubscription",
+  name: 'ColidEntrySubscription',
   defaults: {
     loading: false,
-    colidEntrySubscriptions: null,
-  },
+    colidEntrySubscriptions: null
+  }
 })
 @Injectable()
 export class ColidEntrySubscriptionsState {
@@ -46,7 +46,7 @@ export class ColidEntrySubscriptionsState {
     action: FetchColidEntrySubscriptions
   ) {
     ctx.patchState({
-      loading: true,
+      loading: true
     });
 
     const colidEntrySubscriptions = action.colidEntrySubscriptions;
@@ -56,7 +56,7 @@ export class ColidEntrySubscriptionsState {
       colidEntrySubscriptions.length === 0
     ) {
       ctx.patchState({
-        loading: false,
+        loading: false
       });
       return;
     }
@@ -73,13 +73,13 @@ export class ColidEntrySubscriptionsState {
           if (resourceOverviewCto != null) {
             ctx.patchState({
               loading: false,
-              colidEntrySubscriptions: resourceOverviewCto,
+              colidEntrySubscriptions: resourceOverviewCto
             });
           }
         },
         (_) => {
           ctx.patchState({
-            loading: false,
+            loading: false
           });
         }
       )

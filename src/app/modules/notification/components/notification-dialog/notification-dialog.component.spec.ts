@@ -1,24 +1,32 @@
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NotificationDialogComponent } from "./notification-dialog.component";
+import { NotificationDialogComponent } from './notification-dialog.component';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 
-describe("NotificationDialogComponent", () => {
+describe('NotificationDialogComponent', () => {
   let component: NotificationDialogComponent;
   let fixture: ComponentFixture<NotificationDialogComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [NotificationDialogComponent],
-    }).compileComponents();
-  }));
+  const mockData = {};
 
   beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [NotificationDialogComponent],
+      imports: [MatDialogModule],
+      providers: [
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: mockData
+        }
+      ]
+    }).compileComponents();
+
     fixture = TestBed.createComponent(NotificationDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

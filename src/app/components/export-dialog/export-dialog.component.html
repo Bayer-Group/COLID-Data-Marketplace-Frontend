@@ -15,10 +15,10 @@
         aria-label="Select an option"
         [(ngModel)]="exportOptions.exportFormat"
       >
-        <mat-radio-button value="excelTemplate"
+        <mat-radio-button value="excelTemplate" color="primary"
           >Data Import Template compatible</mat-radio-button
         ><br />
-        <mat-radio-button value="readableExcel"
+        <mat-radio-button value="readableExcel" color="primary"
           >Individually configurable file (metadata in columns and resources in
           rows)</mat-radio-button
         >
@@ -29,6 +29,7 @@
     </p>
     <p>
       <mat-checkbox
+        color="primary"
         [(ngModel)]="exportOptions.includeHeader"
         [disabled]="exportOptions.exportFormat === 'excelTemplate'"
       >
@@ -44,15 +45,17 @@
         [(ngModel)]="exportOptions.readableValues"
         [disabled]="exportOptions.exportFormat === 'excelTemplate'"
       >
-        <mat-radio-button value="clearText"
+        <mat-radio-button value="clearText" color="primary"
           >...human readable text as in the hitlist</mat-radio-button
         ><br />
-        <mat-radio-button value="uris">...URIs</mat-radio-button>
+        <mat-radio-button value="uris" color="primary"
+          >...URIs</mat-radio-button
+        >
       </mat-radio-group>
     </p>
   </div>
-  <mat-dialog-actions align="center">
-    <button mat-raised-button (click)="startExport()">
+  <mat-dialog-actions align="end">
+    <button mat-raised-button color="primary" (click)="startExport()">
       <mat-icon fontSet="material-icons-outlined">get_app</mat-icon>
       Start Export
     </button>

@@ -1,16 +1,16 @@
-import { Selector, State, StateContext, Action } from "@ngxs/store";
-import { tap } from "rxjs/operators";
-import { StatusBuildInformationDto } from "../shared/models/status/status-build-information-dto";
-import { StatusApiService } from "../core/http/status.api.service";
-import { Injectable } from "@angular/core";
+import { Selector, State, StateContext, Action } from '@ngxs/store';
+import { tap } from 'rxjs/operators';
+import { StatusBuildInformationDto } from '../shared/models/status/status-build-information-dto';
+import { StatusApiService } from '../core/http/status.api.service';
+import { Injectable } from '@angular/core';
 
 export class FetchBuildInformation {
-  static readonly type = "[BuildInformation] Fetch buildInformation";
+  static readonly type = '[BuildInformation] Fetch buildInformation';
   constructor() {}
 }
 
 export class FetchReleaseNotes {
-  static readonly type = "[ReleaseNotes] Fetching release notes";
+  static readonly type = '[ReleaseNotes] Fetching release notes';
   constructor() {}
 }
 
@@ -20,11 +20,11 @@ export class StatusStateModel {
 }
 
 @State<StatusStateModel>({
-  name: "status",
+  name: 'status',
   defaults: {
     buildInformation: null,
-    releaseNotes: null,
-  },
+    releaseNotes: null
+  }
 })
 @Injectable()
 export class StatusState {
@@ -48,7 +48,7 @@ export class StatusState {
     return this.statusApiService.getBuildInformation().pipe(
       tap((res: StatusBuildInformationDto) => {
         patchState({
-          buildInformation: res,
+          buildInformation: res
         });
       })
     );
@@ -62,7 +62,7 @@ export class StatusState {
     return this.statusApiService.getReleaseNotes().pipe(
       tap((res: string) => {
         patchState({
-          releaseNotes: res,
+          releaseNotes: res
         });
       })
     );

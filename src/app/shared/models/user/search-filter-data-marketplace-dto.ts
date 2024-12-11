@@ -1,5 +1,5 @@
-import { SearchFilterCollectionDto } from "./search-filter-collection-dto";
-import { StoredQueryDto } from "./stored-query-dto";
+import { SearchFilterCollectionDto } from './search-filter-collection-dto';
+import { StoredQueryDto } from './stored-query-dto';
 
 export class SearchFilterDataMarketplaceDto {
   id: number;

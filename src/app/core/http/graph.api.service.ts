@@ -1,17 +1,17 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { GraphResultDTO } from "src/app/shared/models/graphs/graph-result-dto";
-import { GraphRequestDTO } from "src/app/shared/models/graphs/graph-request-dto";
-import { GraphOverViewDto } from "src/app/shared/models/graphs/graph-overview-dto";
-import { Observable } from "rxjs";
-import { environment } from "src/environments/environment";
-import { GraphWriteResultCTO } from "src/app/shared/models/graphs/graph-write-result-cto";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { GraphResultDTO } from 'src/app/shared/models/graphs/graph-result-dto';
+import { GraphRequestDTO } from 'src/app/shared/models/graphs/graph-request-dto';
+import { GraphOverViewDto } from 'src/app/shared/models/graphs/graph-overview-dto';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { GraphWriteResultCTO } from 'src/app/shared/models/graphs/graph-write-result-cto';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class GraphApiService {
-  url = environment.colidApiUrl + "/metadataGraphConfiguration";
+  url = environment.colidApiUrl + '/metadataGraphConfiguration';
 
   constructor(private httpClient: HttpClient) {}
 
@@ -25,7 +25,7 @@ export class GraphApiService {
 
   getHistoricGraph(id: string): Observable<GraphResultDTO> {
     let params = new HttpParams();
-    params = params.append("id", id);
+    params = params.append('id', id);
     return this.httpClient.get<GraphResultDTO>(this.url, { params });
   }
 

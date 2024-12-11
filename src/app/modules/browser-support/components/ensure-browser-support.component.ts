@@ -1,10 +1,10 @@
-import { Component, OnInit } from "@angular/core";
-import { EnsureBrowserSupportService } from "../services/ensure-browser-support.service";
+import { Component, OnInit } from '@angular/core';
+import { EnsureBrowserSupportService } from '../services/ensure-browser-support.service';
 
 @Component({
-  selector: "ensure-browser-support",
-  templateUrl: "./ensure-browser-support.component.html",
-  styles: [],
+  selector: 'ensure-browser-support',
+  templateUrl: './ensure-browser-support.component.html',
+  styles: []
 })
 export class BrowserSupportComponent implements OnInit {
   supportedBrowser: boolean;

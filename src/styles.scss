@@ -67,13 +67,8 @@ $font-size-base: 0.85rem;
 
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@import "@angular/material/theming";
-// Plus imports for other components in your app.
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
-@include mat.core();
+// Plus imports for other components in your app.
 
 :root {
   --bayer-dark-blue: rgb(16, 56, 79);
@@ -97,105 +92,6 @@ $font-size-base: 0.85rem;
 }
 
 /* For use in src/lib/core/theming/_palette.scss */
-$md-bayerbrightblue: (
-  50: #e0f7fd,
-  100: #b3eafa,
-  200: #80ddf7,
-  300: #4dcff3,
-  400: #26c4f1,
-  500: #00baee,
-  600: #00b3ec,
-  700: #00abe9,
-  800: #00a3e7,
-  900: #0094e2,
-  A100: #ffffff,
-  A200: #d6efff,
-  A400: #a3dbff,
-  A700: #8ad1ff,
-  contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    300: #000000,
-    400: #000000,
-    500: #000000,
-    600: #000000,
-    700: #ffffff,
-    800: #ffffff,
-    900: #ffffff,
-    A100: #000000,
-    A200: #000000,
-    A400: #000000,
-    A700: #000000,
-  ),
-);
-
-$md-bayerblue: (
-  50: #e0f2f9,
-  100: #b3dff1,
-  200: #80c9e7,
-  300: #4db3dd,
-  400: #26a3d6,
-  500: #0093cf,
-  600: #008bca,
-  700: #0080c3,
-  800: #0076bd,
-  900: #0064b2,
-  A100: #dbedff,
-  A200: #a8d4ff,
-  A400: #75baff,
-  A700: #5cadff,
-  contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    300: #000000,
-    400: #000000,
-    500: #ffffff,
-    600: #ffffff,
-    700: #ffffff,
-    800: #ffffff,
-    900: #ffffff,
-    A100: #000000,
-    A200: #000000,
-    A400: #000000,
-    A700: #000000,
-  ),
-);
-
-$md-bayermidblue: (
-  50: #e0eef3,
-  100: #b3d5e2,
-  200: #80b9ce,
-  300: #4d9dba,
-  400: #2688ac,
-  500: #00739d,
-  600: #006b95,
-  700: #00608b,
-  800: #005681,
-  900: #00436f,
-  A100: #9ed2ff,
-  A200: #6bbaff,
-  A400: #38a2ff,
-  A700: #1f96ff,
-  contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    300: #000000,
-    400: #ffffff,
-    500: #ffffff,
-    600: #ffffff,
-    700: #ffffff,
-    800: #ffffff,
-    900: #ffffff,
-    A100: #000000,
-    A200: #000000,
-    A400: #000000,
-    A700: #ffffff,
-  ),
-);
-
 $md-bayerdarkblue: (
   50: #e0e6e9,
   100: #b3c0c8,
@@ -226,138 +122,6 @@ $md-bayerdarkblue: (
     A200: #ffffff,
     A400: #ffffff,
     A700: #ffffff,
-  ),
-);
-
-$md-bayerbrightgreen: (
-  50: #f5f9e2,
-  100: #e7efb6,
-  200: #d7e585,
-  300: #c7da54,
-  400: #bbd230,
-  500: #afca0b,
-  600: #a8c50a,
-  700: #9fbd08,
-  800: #96b706,
-  900: #86ab03,
-  A100: #f4ffd4,
-  A200: #e8ffa1,
-  A400: #dbff6e,
-  A700: #d4ff55,
-  contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    300: #000000,
-    400: #000000,
-    500: #000000,
-    600: #000000,
-    700: #000000,
-    800: #000000,
-    900: #000000,
-    A100: #000000,
-    A200: #000000,
-    A400: #000000,
-    A700: #000000,
-  ),
-);
-
-$md-bayergreen: (
-  50: #f0f7e5,
-  100: #d9eabe,
-  200: #c0dd93,
-  300: #a6cf68,
-  400: #93c447,
-  500: #80ba27,
-  600: #78b323,
-  700: #6dab1d,
-  800: #63a317,
-  900: #50940e,
-  A100: #deffc3,
-  A200: #c3ff90,
-  A400: #a7ff5d,
-  A700: #99ff44,
-  contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    300: #000000,
-    400: #000000,
-    500: #000000,
-    600: #000000,
-    700: #000000,
-    800: #ffffff,
-    900: #ffffff,
-    A100: #000000,
-    A200: #000000,
-    A400: #000000,
-    A700: #000000,
-  ),
-);
-
-$md-bayermidgreen: (
-  50: #e7eee6,
-  100: #c2d4c0,
-  200: #99b896,
-  300: #709c6b,
-  400: #52864c,
-  500: #33712c,
-  600: #2e6927,
-  700: #275e21,
-  800: #20541b,
-  900: #144210,
-  A100: #86ff7d,
-  A200: #57ff4a,
-  A400: #27ff17,
-  A700: #12fc00,
-  contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    300: #000000,
-    400: #ffffff,
-    500: #ffffff,
-    600: #ffffff,
-    700: #ffffff,
-    800: #ffffff,
-    900: #ffffff,
-    A100: #000000,
-    A200: #000000,
-    A400: #000000,
-    A700: #000000,
-  ),
-);
-
-$md-bayerdarkgreen: (
-  50: #e1e7e5,
-  100: #b4c2bf,
-  200: #829a94,
-  300: #507269,
-  400: #2b5349,
-  500: #053529,
-  600: #043024,
-  700: #04281f,
-  800: #032219,
-  900: #01160f,
-  A100: #56ffb2,
-  A200: #23ff9b,
-  A400: #00ef82,
-  A700: #00d574,
-  contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    300: #ffffff,
-    400: #ffffff,
-    500: #ffffff,
-    600: #ffffff,
-    700: #ffffff,
-    800: #ffffff,
-    900: #ffffff,
-    A100: #000000,
-    A200: #000000,
-    A400: #000000,
-    A700: #000000,
   ),
 );
 
@@ -427,72 +191,6 @@ $md-bayerraspberry: (
   ),
 );
 
-$md-bayermidpurple: (
-  50: #f1eaee,
-  100: #dccbd4,
-  200: #c4a8b7,
-  300: #ac859a,
-  400: #9b6b84,
-  500: #89516e,
-  600: #814a66,
-  700: #76405b,
-  800: #6c3751,
-  900: #59273f,
-  A100: #ffa0cb,
-  A200: #ff6db0,
-  A400: #ff3a94,
-  A700: #ff2086,
-  contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    300: #000000,
-    400: #ffffff,
-    500: #ffffff,
-    600: #ffffff,
-    700: #ffffff,
-    800: #ffffff,
-    900: #ffffff,
-    A100: #000000,
-    A200: #000000,
-    A400: #ffffff,
-    A700: #ffffff,
-  ),
-);
-
-$md-bayerdarkpurple: (
-  50: #e9e4e7,
-  100: #c8bbc3,
-  200: #a48e9c,
-  300: #806074,
-  400: #643e56,
-  500: #491c38,
-  600: #421932,
-  700: #39142b,
-  800: #311124,
-  900: #210917,
-  A100: #ff60b4,
-  A200: #ff2d9c,
-  A400: #f90084,
-  A700: #e00076,
-  contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    300: #ffffff,
-    400: #ffffff,
-    500: #ffffff,
-    600: #ffffff,
-    700: #ffffff,
-    800: #ffffff,
-    900: #ffffff,
-    A100: #000000,
-    A200: #ffffff,
-    A400: #ffffff,
-    A700: #ffffff,
-  ),
-);
-
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
@@ -520,47 +218,7 @@ $colid-data-marketplace-frontend-theme: mat.define-light-theme(
   $colid-data-marketplace-frontend-warn
 );
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
 @include mat.all-component-themes($colid-data-marketplace-frontend-theme);
-
-$colid-typography: mat.define-typography-config(
-  $font-family: 'Roboto, "Helvetica Neue", sans-serif'
-    /*// Large, one-off header, usually at the top of the page (e.g. a hero header).
-  $display-4:     mat.define-typography-level(110px, 110px, 300, $letter-spacing: -0.05em),
-  // Large, one-off header, usually at the top of the page (e.g. a hero header).
-  $display-3:     mat.define-typography-level(54px, 54px, 400, $letter-spacing: -0.02em),
-  // Large, one-off header, usually at the top of the page (e.g. a hero header).
-  $display-2:     mat.define-typography-level(43px, 43px, 400, $letter-spacing: -0.005em),
-  // Large, one-off header, usually at the top of the page (e.g. a hero header).
-  $display-1:     mat.define-typography-level(32px, 38px, 400),
-  // Section heading corresponding to the <h1> tag.
-  $headline:      mat.define-typography-level(22px, 30px, 400),
-  // Section heading corresponding to the <h2> tag.
-  $title:         mat.define-typography-level(18px, 30px, 500),
-  // Section heading corresponding to the <h3> tag.
-  $subheading-2:  mat.define-typography-level(14px, 26px, 400),
-  // Section heading corresponding to the <h4> tag.
-  $subheading-1:  mat.define-typography-level(13px, 22px, 400),
-  // Bolder body text.
-  $body-2:        mat.define-typography-level(12px, 22px, 500),
-  // Base body text.
-  $body-1:        mat.define-typography-level(12px, 18px, 400),
-  // Smaller body and hint text.
-  $caption:       mat.define-typography-level(10px, 18px, 400),
-  // Buttons and anchors.
-  $button:        mat.define-typography-level(12px, 12px, 500),
-  // Line-height must be unit-less fraction of the font-size.
-  // Form input fields.
-  $input:         mat.define-typography-level(inherit, 1.125, 400)*/,
-);
-
-@include mat.typography-hierarchy($colid-typography);
-
-@include mat.all-component-typographies($colid-typography);
-// Override the typography in the core CSS.
-@include mat.core($colid-typography);
 
 // Dark hues
 $bayer-dark-blue: rgb(16, 56, 79);
@@ -591,14 +249,6 @@ $bayer-raspberry-text: rgb(222, 0, 67);
 // Bayer Snackbar info background
 $bayer-info-background: #eee;
 
-$theme-colors: (
-  "primary": $bayer-blue-text,
-  //"secondary": $bayer-green-text,
-  "success": $bayer-green,
-  "danger": $bayer-raspberry-text,
-  "info": $bayer-blue-text,
-);
-
 body {
   font-family: "Roboto", sans-serif !important;
   margin: 0;
@@ -610,6 +260,12 @@ html,
 body {
   height: 100%;
   overflow-y: hidden;
+
+  --mat-list-list-item-leading-icon-start-space: 8px;
+  --mat-list-list-item-leading-icon-end-space: 8px;
+  --mdc-list-list-item-label-text-line-height: 20px;
+  --mdc-radio-state-layer-size: 20px;
+  --mat-select-arrow-transform: transformY(0px);
 }
 
 button:focus,
@@ -636,16 +292,29 @@ $bayer-info-background: #eee;
 .success-snackbar {
   background-color: #51a351;
   color: white !important;
+  --mdc-snackbar-container-color: #51a351 !important;
+  --mdc-snackbar-supporting-text-color: white !important;
+  --mat-mdc-snack-bar-button-color: white !important;
+  --mdc-text-button-label-text-color: white !important;
+  white-space: pre-wrap;
 }
 
 .warning-snackbar {
   background-color: #f89406;
   color: white !important;
+  --mdc-snackbar-container-color: #f89406 !important;
+  --mdc-snackbar-supporting-text-color: white !important;
+  --mat-mdc-snack-bar-button-color: white !important;
+  --mdc-text-button-label-text-color: white !important;
 }
 
 .error-snackbar {
   background-color: $bayer-raspberry;
   color: white !important;
+  --mdc-snackbar-container-color: $bayer-raspberry !important;
+  --mdc-snackbar-supporting-text-color: white !important;
+  --mat-mdc-snack-bar-button-color: white !important;
+  --mdc-text-button-label-text-color: white !important;
 }
 
 .h-content {
@@ -670,6 +339,48 @@ mat-sidenav-container {
   height: calc(100vh - #{$mat-toolbar-height}) !important;
 }
 
+@include mat.form-field-density(-3);
+@include mat.icon-density(-3);
+@include mat.datepicker-density(-3);
+
+button:disabled.mat-mdc-tooltip-trigger {
+  pointer-events: auto !important;
+  // remove the ripple effect on hover
+  > span:first-child {
+    display: none;
+  }
+}
+
+.mat-mdc-tab:not(.mdc-tab--stacked) {
+  height: 40px;
+}
+
+.mat-mdc-checkbox {
+  --mdc-checkbox-state-layer-size: 32px;
+}
+
+.mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
+  display: none;
+}
+
+.mat-mdc-icon-button img {
+  vertical-align: baseline;
+}
+
+.ng-select.ng-select-multiple
+  .ng-select-container
+  .ng-value-container
+  .ng-value {
+  background-color: #3f51b5;
+  border-radius: 16px;
+  padding: 4px 10px;
+}
+
+.ng-select .ng-arrow-wrapper {
+  bottom: 4px;
+  margin-right: 4px;
+}
+
 /************************
  * Draft Badges and Icons
  ************************/
@@ -678,7 +389,7 @@ mat-sidenav-container {
   color: white !important;
 }
 
-.mat-chip.mat-draft {
+.mat-mdc-chip.mat-mdc-standard-chip.mat-draft {
   background-color: $bayer-green;
   color: white !important;
 }

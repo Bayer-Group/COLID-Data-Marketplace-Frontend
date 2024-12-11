@@ -8,7 +8,7 @@ export class ResourceSearchDTO {
   type: string;
   author: string;
   orderPredicate: string;
-  sequence: "asc" | "desc";
+  sequence: 'asc' | 'desc';
   limit: number;
   offset: number;
   pidUris: string[];

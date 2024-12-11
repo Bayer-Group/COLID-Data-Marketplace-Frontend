@@ -1,18 +1,18 @@
-import { State, Action, StateContext, Selector } from "@ngxs/store";
-import { Aggregation } from "../shared/models/aggregation";
-import { SearchService } from "../core/http/search.service";
-import { MetadataService } from "../core/http/metadata.service";
-import { RangeFilter } from "../shared/models/range-filter";
-import { Injectable } from "@angular/core";
-import { FilterGroupingOrderRaw } from "../shared/models/metadata/filter-grouping-order-raw";
-import { forkJoin } from "rxjs";
+import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { Aggregation } from '../shared/models/aggregation';
+import { SearchService } from '../core/http/search.service';
+import { MetadataService } from '../core/http/metadata.service';
+import { RangeFilter } from '../shared/models/range-filter';
+import { Injectable } from '@angular/core';
+import { FilterGroupingOrderRaw } from '../shared/models/metadata/filter-grouping-order-raw';
+import { forkJoin } from 'rxjs';
 
 export class FetchFilter {
-  static readonly type = "[Filter] FetchFilterItems";
+  static readonly type = '[Filter] FetchFilterItems';
 }
 
 export class SetFilterItems {
-  static readonly type = "[Filter] SetFilterItems";
+  static readonly type = '[Filter] SetFilterItems';
   constructor(
     public aggregations: Aggregation[],
     public rangeFilters: RangeFilter[]
@@ -20,12 +20,15 @@ export class SetFilterItems {
 }
 
 export class SetFilterGroupPanelState {
-  static readonly type = "[Filter] SetFilterGroupPanelState";
-  constructor(public groupName: string, public opened: boolean) {}
+  static readonly type = '[Filter] SetFilterGroupPanelState';
+  constructor(
+    public groupName: string,
+    public opened: boolean
+  ) {}
 }
 
 export class SetTypeItems {
-  static readonly type = "[Filter] SetTypeItems";
+  static readonly type = '[Filter] SetTypeItems';
   constructor(public typeItemIds: string[]) {}
 }
 
@@ -37,13 +40,13 @@ export interface FilterStateModel {
 }
 
 @State<FilterStateModel>({
-  name: "filter",
+  name: 'filter',
   defaults: {
     loading: false,
     aggregationFilters: null,
     rangeFilters: null,
-    filterOrder: null,
-  },
+    filterOrder: null
+  }
 })
 @Injectable()
 export class FilterState {
@@ -79,16 +82,16 @@ export class FilterState {
   @Action(FetchFilter)
   fetchResource({ patchState }: StateContext<FilterStateModel>) {
     patchState({
-      loading: true,
+      loading: true
     });
     forkJoin({
       filterGroupsRaw: this.metadataService.getFilterGroups(),
-      filters: this.searchService.getFilterItems(),
+      filters: this.searchService.getFilterItems()
     }).subscribe(({ filterGroupsRaw, filters }) => {
       const filterGroups = filterGroupsRaw.map((filterGroupRaw) => {
         const singleFilterGroup: FilterGroupingOrderRaw = {
           ...filterGroupRaw,
-          expanded: filterGroupRaw.groupName === "Primary",
+          expanded: filterGroupRaw.groupName === 'Primary'
         };
         return singleFilterGroup;
       });
@@ -96,7 +99,7 @@ export class FilterState {
         loading: false,
         aggregationFilters: filters.aggregations,
         rangeFilters: filters.rangeFilters,
-        filterOrder: filterGroups,
+        filterOrder: filterGroups
       });
     });
   }
@@ -112,7 +115,7 @@ export class FilterState {
         const filterGroups = filterGroupsRaw.map((filterGroupRaw) => {
           const singleFilterGroup: FilterGroupingOrderRaw = {
             ...filterGroupRaw,
-            expanded: filterGroupRaw.groupName === "Primary",
+            expanded: filterGroupRaw.groupName === 'Primary'
           };
           return singleFilterGroup;
         });
@@ -120,14 +123,14 @@ export class FilterState {
           loading: false,
           aggregationFilters: aggregations,
           rangeFilters: rangeFilters,
-          filterOrder: filterGroups,
+          filterOrder: filterGroups
         });
       });
     } else {
       patchState({
         loading: false,
         aggregationFilters: aggregations,
-        rangeFilters: rangeFilters,
+        rangeFilters: rangeFilters
       });
     }
   }
@@ -143,7 +146,7 @@ export class FilterState {
     );
     groupFilter.expanded = opened;
     patchState({
-      filterOrder,
+      filterOrder
     });
   }
 }

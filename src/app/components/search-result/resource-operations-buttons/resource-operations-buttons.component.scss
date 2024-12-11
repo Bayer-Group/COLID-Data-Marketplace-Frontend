@@ -1,0 +1,26 @@
+.resource-operations-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+
+  button {
+    --mdc-icon-button-state-layer-size: 2.5rem;
+    padding: 0.375rem;
+  }
+
+  &__button {
+    border: 1px solid currentColor !important;
+    border-color: rgba(0, 0, 0, 0.12) !important;
+  }
+
+  &__button[disabled] {
+    background-color: lightgray;
+    cursor: not-allowed;
+  }
+
+  &__button--with-menu {
+    min-width: 5.125rem;
+    border-radius: 32px;
+  }
+}

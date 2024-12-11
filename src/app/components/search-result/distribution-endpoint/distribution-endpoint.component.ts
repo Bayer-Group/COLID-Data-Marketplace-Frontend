@@ -1,22 +1,22 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { DetailsViewModel } from "../search-result.component";
+import { Component, OnInit, Input } from '@angular/core';
+import { DetailsViewModel } from '../search-result.component';
 import {
   getValueForKey,
   getPidUriForHref,
-  getUriForKey,
-} from "src/app/shared/operators/document-operators";
-import { LogService } from "src/app/core/logging/log.service";
-import { Observable } from "rxjs";
-import { SearchState } from "src/app/states/search.state";
-import { Select } from "@ngxs/store";
-import { Constants } from "src/app/shared/constants";
-import { ViewDescriptionDialogComponent } from "../../search-result/view-description-dialog/view-description-dialog.component";
-import { MatDialog } from "@angular/material/dialog";
+  getUriForKey
+} from 'src/app/shared/operators/document-operators';
+import { LogService } from 'src/app/core/logging/log.service';
+import { Observable } from 'rxjs';
+import { SearchState } from 'src/app/states/search.state';
+import { Select } from '@ngxs/store';
+import { Constants } from 'src/app/shared/constants';
+import { ViewDescriptionDialogComponent } from '../../search-result/view-description-dialog/view-description-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: "app-distribution-endpoint",
-  templateUrl: "./distribution-endpoint.component.html",
-  styleUrls: ["./distribution-endpoint.component.scss"],
+  selector: 'app-distribution-endpoint',
+  templateUrl: './distribution-endpoint.component.html',
+  styleUrls: ['./distribution-endpoint.component.scss']
 })
 export class DistributionEndpointComponent implements OnInit {
   @Input() resource: DetailsViewModel[];
@@ -32,7 +32,7 @@ export class DistributionEndpointComponent implements OnInit {
   invisibleProperties: Array<string> = [
     Constants.Metadata.EntityType,
     Constants.Metadata.HasTargetUri,
-    Constants.Metadata.HasNetworkedResourceLabel,
+    Constants.Metadata.HasNetworkedResourceLabel
   ];
 
   sortedMetadataProperties: any;
@@ -50,7 +50,10 @@ export class DistributionEndpointComponent implements OnInit {
   comment: string;
   metaDescription: string;
 
-  constructor(private logger: LogService, private dialog: MatDialog) {}
+  constructor(
+    private logger: LogService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     if (this.metadata) {
@@ -143,10 +146,10 @@ export class DistributionEndpointComponent implements OnInit {
 
   onLinkClicked(event: Event): void {
     event.preventDefault();
-    window.open(this.pidUrlForHref, "_blank");
+    window.open(this.pidUrlForHref, '_blank');
 
     this.logger.info(
-      "DMP_RESULT_PAGE_RESOURCE_DISTRIBUTION_ENDPOINT_LINK_CLICKED",
+      'DMP_RESULT_PAGE_RESOURCE_DISTRIBUTION_ENDPOINT_LINK_CLICKED',
       {
         searchText: this.searchText,
         searchTimestamp: this.searchTimestamp,
@@ -160,7 +163,7 @@ export class DistributionEndpointComponent implements OnInit {
         clickedLinkType: this.endpoint.find(
           (d) => d.key === Constants.Metadata.EntityType
         ).valueEdge[0],
-        clickedLinkCategory: Constants.DistributionEndpoint.DistributionKey,
+        clickedLinkCategory: Constants.DistributionEndpoint.DistributionKey
       }
     );
   }
@@ -168,13 +171,13 @@ export class DistributionEndpointComponent implements OnInit {
   openMetaDescriptionDialog(comment, metalabel, metaDescription) {
     if (comment || metaDescription) {
       this.dialog.open(ViewDescriptionDialogComponent, {
-        width: "450px",
-        height: "auto",
+        width: '450px',
+        height: 'auto',
         data: {
           comment: comment,
           label: metalabel,
-          description: metaDescription,
-        },
+          description: metaDescription
+        }
       });
     }
   }

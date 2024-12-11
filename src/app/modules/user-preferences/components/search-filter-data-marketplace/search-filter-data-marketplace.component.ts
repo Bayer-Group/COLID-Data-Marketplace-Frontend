@@ -1,31 +1,31 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from "@angular/core";
-import { Observable, Subscription } from "rxjs";
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import {
   UserInfoState,
   RemoveSearchFilterDataMarketplace,
   RemoveStoredQueryToSearchFiltersDataMarketplace,
-  FetchSearchFilterDataMarketplace,
-} from "src/app/states/user-info.state";
-import { SearchFilterDataMarketplaceDto } from "src/app/shared/models/user/search-filter-data-marketplace-dto";
-import { Select, Store } from "@ngxs/store";
-import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
-import { Constants } from "src/app/shared/constants";
-import { MatDialog } from "@angular/material/dialog";
-import { IntervalNotificationDiallogComponent } from "../../interval-notification-diallog/interval-notification-diallog.component";
+  FetchSearchFilterDataMarketplace
+} from 'src/app/states/user-info.state';
+import { SearchFilterDataMarketplaceDto } from 'src/app/shared/models/user/search-filter-data-marketplace-dto';
+import { Select, Store } from '@ngxs/store';
+import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
+import { Constants } from 'src/app/shared/constants';
+import { MatDialog } from '@angular/material/dialog';
+import { IntervalNotificationDiallogComponent } from '../../interval-notification-diallog/interval-notification-diallog.component';
 import {
   ChangePage,
   ChangeSearchText,
   OverwriteActiveAggregationBuckets,
   OverwriteActiveRangeFilters,
-  RefreshRoute,
-} from "src/app/states/search.state";
-import { CreateBrowsableUriDialogComponent } from "./create-browsable-uri-dialog/create-browsable-uri-dialog.component";
+  RefreshRoute
+} from 'src/app/states/search.state';
+import { CreateBrowsableUriDialogComponent } from './create-browsable-uri-dialog/create-browsable-uri-dialog.component';
 
 @Component({
-  selector: "app-search-filter-data-marketplace",
-  templateUrl: "./search-filter-data-marketplace.component.html",
-  styleUrls: ["./search-filter-data-marketplace.component.scss"],
-  encapsulation: ViewEncapsulation.None,
+  selector: 'app-search-filter-data-marketplace',
+  templateUrl: './search-filter-data-marketplace.component.html',
+  styleUrls: ['./search-filter-data-marketplace.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class SearchFilterDataMarketplaceComponent implements OnInit, OnDestroy {
   @Select(UserInfoState.getUserSearchFilters) userSearchFilters$: Observable<
@@ -71,8 +71,8 @@ export class SearchFilterDataMarketplaceComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.store.dispatch(new FetchSearchFilterDataMarketplace());
         this.snackbar.success(
-          "Saved Search Deleted",
-          "The saved search has been deleted successfully."
+          'Saved Search Deleted',
+          'The saved search has been deleted successfully.'
         );
       });
   }
@@ -86,8 +86,8 @@ export class SearchFilterDataMarketplaceComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.store.dispatch(new FetchSearchFilterDataMarketplace());
         this.snackbar.success(
-          "Saved Search Deleted",
-          "The saved search has been deleted successfully."
+          'Saved Search Deleted',
+          'The saved search has been deleted successfully.'
         );
       });
   }
@@ -95,7 +95,7 @@ export class SearchFilterDataMarketplaceComponent implements OnInit, OnDestroy {
   onOpenIntervalNotificationDiallog(event: MouseEvent, storedQuery: any) {
     event.stopPropagation();
     this.dialog.open(IntervalNotificationDiallogComponent, {
-      data: storedQuery,
+      data: storedQuery
     });
 
     this.dialog.afterAllClosed.subscribe((_) => {
@@ -118,8 +118,8 @@ export class SearchFilterDataMarketplaceComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.snackbar.success(
-          "Removed Subscription",
-          "The selected search has been unsubscribed successfully."
+          'Removed Subscription',
+          'The selected search has been unsubscribed successfully.'
         );
       });
   }
@@ -127,21 +127,21 @@ export class SearchFilterDataMarketplaceComponent implements OnInit, OnDestroy {
   createBrowsableUri(search: SearchFilterDataMarketplaceDto) {
     this.dialog.open(CreateBrowsableUriDialogComponent, {
       data: {
-        search: search,
+        search: search
       },
-      disableClose: true,
+      disableClose: true
     });
   }
 
   getAggregationLabel(filterKey: string) {
     let filterKeyLabel =
-      this.getKeyByValue(Constants.Metadata, filterKey) ?? "";
+      this.getKeyByValue(Constants.Metadata, filterKey) ?? '';
     return filterKeyLabel;
   }
 
   getStateInitializationActionsFromQueryParams(userSearchFilter: any): any {
-    const page = "";
-    const query = userSearchFilter.searchTerm || "*";
+    const page = '';
+    const query = userSearchFilter.searchTerm || '*';
     const filter = new Map<string, string[]>(
       Object.entries(userSearchFilter.filterJson.aggregations)
     ); //""//params['f'];
@@ -161,7 +161,9 @@ export class SearchFilterDataMarketplaceComponent implements OnInit, OnDestroy {
     if (rangeFilter) {
       try {
         initActions.push(new OverwriteActiveRangeFilters(rangeFilter, true));
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     }
     this.store.dispatch([...initActions, new RefreshRoute()]).subscribe();
   }

@@ -1,50 +1,54 @@
-import { StateContext, Action, Selector, State } from "@ngxs/store";
-import { mergeMap, tap } from "rxjs/operators";
-import { MetaDataProperty } from "../shared/models/metadata/meta-data-property";
-import { PidUriTemplateResultDTO } from "../shared/models/pidUriTemplates/pid-uri-template-result-dto";
-import { PidUriTemplateApiService } from "src/app/core/http/pid-uri-template.api.service";
-import { Constants } from "../shared/constants";
-import { PidUriTemplateRequestDTO } from "../shared/models/pidUriTemplates/pid-uri-template-request-dto";
-import { Injectable } from "@angular/core";
-import { MetadataService } from "../core/http/metadata.service";
+import { StateContext, Action, Selector, State } from '@ngxs/store';
+import { mergeMap, tap } from 'rxjs/operators';
+import { MetaDataProperty } from '../shared/models/metadata/meta-data-property';
+import { PidUriTemplateResultDTO } from '../shared/models/pidUriTemplates/pid-uri-template-result-dto';
+import { PidUriTemplateApiService } from 'src/app/core/http/pid-uri-template.api.service';
+import { Constants } from '../shared/constants';
+import { PidUriTemplateRequestDTO } from '../shared/models/pidUriTemplates/pid-uri-template-request-dto';
+import { Injectable } from '@angular/core';
+import { MetadataService } from '../core/http/metadata.service';
+import { FetchTaxonomyList } from './taxonomy.state';
 
 export class FetchPidUriTemplates {
-  static readonly type = "[PidUriTemplate] Fetch PidUriTemplates";
+  static readonly type = '[PidUriTemplate] Fetch PidUriTemplates';
   constructor() {}
 }
 
 export class FetchPidUriTemplateDetails {
-  static readonly type = "[PidUriTemplate] Fetch PidUriTemplateDetails";
+  static readonly type = '[PidUriTemplate] Fetch PidUriTemplateDetails';
   constructor(public payload: string) {}
 }
 
 export class FetchPidUriTemplateMetadata {
-  static readonly type = "[PidUriTemplate] Fetch PidUriTemplateMetadata";
+  static readonly type = '[PidUriTemplate] Fetch PidUriTemplateMetadata';
   constructor() {}
 }
 
 export class CreatePidUriTemplate {
-  static readonly type = "[PidUriTemplate] Create PidUriTemplate";
+  static readonly type = '[PidUriTemplate] Create PidUriTemplate';
   constructor(public payload: PidUriTemplateRequestDTO) {}
 }
 
 export class EditPidUriTemplate {
-  static readonly type = "[PidUriTemplate] Edit PidUriTemplate";
-  constructor(public id: string, public payload: PidUriTemplateRequestDTO) {}
+  static readonly type = '[PidUriTemplate] Edit PidUriTemplate';
+  constructor(
+    public id: string,
+    public payload: PidUriTemplateRequestDTO
+  ) {}
 }
 
 export class DeletePidUriTemplate {
-  static readonly type = "[PidUriTemplate] Delete PidUriTemplate";
+  static readonly type = '[PidUriTemplate] Delete PidUriTemplate';
   constructor(public payload: string) {}
 }
 
 export class ReactivatePidUriTemplate {
-  static readonly type = "[PidUriTemplate] Reactivate PidUriTemplate";
+  static readonly type = '[PidUriTemplate] Reactivate PidUriTemplate';
   constructor(public payload: string) {}
 }
 
 export class ClearPidUriTemplate {
-  static readonly type = "[PidUriTemplate] Clear PidUriTemplate";
+  static readonly type = '[PidUriTemplate] Clear PidUriTemplate';
 }
 
 export class PidUriTemplateStateModel {
@@ -55,13 +59,13 @@ export class PidUriTemplateStateModel {
 }
 
 @State<PidUriTemplateStateModel>({
-  name: "pidUriTemplates",
+  name: 'pidUriTemplates',
   defaults: {
     pidUriTemplatesFetched: false,
     pidUriTemplates: null,
     pidUriTemplate: null,
-    metadata: null,
-  },
+    metadata: null
+  }
 })
 @Injectable()
 export class PidUriTemplateState {
@@ -97,13 +101,13 @@ export class PidUriTemplateState {
   ) {
     patchState({
       pidUriTemplates: null,
-      pidUriTemplatesFetched: false,
+      pidUriTemplatesFetched: false
     });
     return this.pidUriTemplateApiService.getAllEntities().pipe(
       tap((res) => {
         patchState({
           pidUriTemplates: res,
-          pidUriTemplatesFetched: true,
+          pidUriTemplatesFetched: true
         });
       })
     );
@@ -111,22 +115,29 @@ export class PidUriTemplateState {
 
   @Action(FetchPidUriTemplateMetadata)
   fetchPidUriTemplateMetadata(
-    { getState, patchState }: StateContext<PidUriTemplateStateModel>,
+    { getState, patchState, dispatch }: StateContext<PidUriTemplateStateModel>,
     {}: FetchPidUriTemplateMetadata
   ) {
     if (getState().metadata != null) {
       return;
     }
 
-    return this.metadataService
-      .getMetaData(Constants.ResourceTypes.PidUriTemplate)
-      .pipe(
-        tap((res) => {
-          patchState({
-            metadata: res,
-          });
-        })
-      );
+    return dispatch([
+      new FetchTaxonomyList(Constants.Metadata.PidUriTemplateIdType),
+      new FetchTaxonomyList(Constants.Metadata.PidUriTemplateSuffix)
+    ]).pipe(
+      mergeMap((_) => {
+        return this.metadataService
+          .getMetaData(Constants.ResourceTypes.PidUriTemplate)
+          .pipe(
+            tap((res) => {
+              patchState({
+                metadata: res
+              });
+            })
+          );
+      })
+    );
   }
 
   @Action(CreatePidUriTemplate)
@@ -177,7 +188,7 @@ export class PidUriTemplateState {
     return this.pidUriTemplateApiService.getEntityById(payload).pipe(
       tap((res) => {
         patchState({
-          pidUriTemplate: res,
+          pidUriTemplate: res
         });
       })
     );
@@ -189,7 +200,7 @@ export class PidUriTemplateState {
     {}: ClearPidUriTemplate
   ) {
     patchState({
-      pidUriTemplate: null,
+      pidUriTemplate: null
     });
   }
 }

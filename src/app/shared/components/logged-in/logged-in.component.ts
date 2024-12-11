@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Subscription } from "rxjs";
-import { AuthService } from "src/app/modules/authentication/services/auth.service";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/modules/authentication/services/auth.service';
 
 @Component({
-  selector: "app-logged-in",
-  templateUrl: "./logged-in.component.html",
-  styleUrls: ["./logged-in.component.css"],
+  selector: 'app-logged-in',
+  templateUrl: './logged-in.component.html',
+  styleUrls: ['./logged-in.component.css']
 })
 export class LoggedInComponent implements OnInit, OnDestroy {
   isBrowserSupported = false;
@@ -17,7 +17,7 @@ export class LoggedInComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.checkAccSub.unsubscribe();
+    this.checkAccSub?.unsubscribe();
   }
 
   redirect() {

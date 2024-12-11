@@ -1,20 +1,20 @@
-import { Component, Inject } from "@angular/core";
+import { Component, Inject } from '@angular/core';
 
 import {
   MatDialog,
   MatDialogRef,
-  MAT_DIALOG_DATA,
-} from "@angular/material/dialog";
-import { Store } from "@ngxs/store";
-import { DeleteFavorite } from "../../favorites.state";
+  MAT_DIALOG_DATA
+} from '@angular/material/dialog';
+import { Store } from '@ngxs/store';
+import { DeleteFavorite } from '../../favorites.state';
 
 @Component({
-  selector: "colid-delete-favorite-list",
-  templateUrl: "./delete-favorite-list.component.html",
+  selector: 'colid-delete-favorite-list',
+  templateUrl: './delete-favorite-list.component.html',
   styleUrls: [
-    "../favorite-list.component.scss",
-    "./delete-favorite-list.component.scss",
-  ],
+    '../favorite-list.component.scss',
+    './delete-favorite-list.component.scss'
+  ]
 })
 export class DeleteFavoriteListComponent {
   userId: string;

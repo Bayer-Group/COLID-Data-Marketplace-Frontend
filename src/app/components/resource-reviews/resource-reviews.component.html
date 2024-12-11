@@ -1,5 +1,5 @@
 <div class="m-4 justify-content-center">
-  <h3>Resource Reviews</h3>
+  <h4>Resource Reviews</h4>
   <ng-container *ngIf="consumerGroups$ | async as consumerGroups">
     <mat-form-field
       *ngIf="
@@ -115,7 +115,7 @@
         *matCellDef="let review"
         [class.red-text]="isDateDue(review.reviewDueDate)"
       >
-        {{ review.reviewDueDate | date : "dd.MM.yyyy" }}
+        {{ review.reviewDueDate | date: 'dd.MM.yyyy' }}
       </td>
     </ng-container>
 
@@ -178,8 +178,12 @@
       [class.reviewed-resource]="entry.resourceReviewed"
     ></tr>
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" [attr.colspan]="columnsToDisplay.length">
-        No data matching the filter.
+      <td
+        class="mat-cell"
+        [attr.colspan]="columnsToDisplay.length"
+        style="padding: 8px"
+      >
+        No data matching the filter
       </td>
     </tr>
   </table>

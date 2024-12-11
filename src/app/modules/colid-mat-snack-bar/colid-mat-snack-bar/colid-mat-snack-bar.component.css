@@ -1,14 +1,12 @@
-button {
-  transform: scale(0.9);
-}
-
 p {
   margin-bottom: 0;
 }
 
 .mat-icon {
+  width: 45px;
+  height: 45px;
   font-size: 45px;
-  overflow: unset;
+  margin-right: 4px;
 }
 
 .notification-header {

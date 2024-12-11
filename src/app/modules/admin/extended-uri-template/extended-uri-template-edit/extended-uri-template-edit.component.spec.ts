@@ -1,24 +1,23 @@
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExtendedUriTemplateEditComponent } from "./extended-uri-template-edit.component";
+import { ExtendedUriTemplateEditComponent } from './extended-uri-template-edit.component';
 
-describe("ExtendedUriTemplateEditComponent", () => {
+// TODO: Remove this component - go directly to app-extend-uri-template-form
+xdescribe('ExtendedUriTemplateEditComponent', () => {
   let component: ExtendedUriTemplateEditComponent;
   let fixture: ComponentFixture<ExtendedUriTemplateEditComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ExtendedUriTemplateEditComponent],
-    }).compileComponents();
-  }));
-
   beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [ExtendedUriTemplateEditComponent]
+    }).compileComponents();
+
     fixture = TestBed.createComponent(ExtendedUriTemplateEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

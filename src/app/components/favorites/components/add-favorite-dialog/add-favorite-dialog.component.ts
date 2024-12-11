@@ -1,33 +1,35 @@
-import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
-  MAT_DIALOG_DATA,
-} from "@angular/material/dialog";
-import { Select, Store } from "@ngxs/store";
-import { Observable, Subscription } from "rxjs";
-import { AuthService } from "src/app/modules/authentication/services/auth.service";
-import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
-import { FavoriteListMetadata } from "src/app/shared/models/favorites";
-import { FavoritesState, FetchFavorites } from "../../favorites.state";
-import { FavoritesService } from "../../services/favorites.service";
-import { CreateFavoriteListComponent } from "../create-favorite-list/create-favorite-list.component";
-import { ClearSelectedPIDURIs, SearchState } from "src/app/states/search.state";
+  MAT_DIALOG_DATA
+} from '@angular/material/dialog';
+import { Select, Store } from '@ngxs/store';
+import { Observable, Subscription } from 'rxjs';
+import { AuthService } from 'src/app/modules/authentication/services/auth.service';
+import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
+import { FavoriteListMetadata } from 'src/app/shared/models/favorites';
+import { FavoritesState, FetchFavorites } from '../../favorites.state';
+import { FavoritesService } from '../../services/favorites.service';
+import { CreateFavoriteListComponent } from '../create-favorite-list/create-favorite-list.component';
+import { ClearSelectedPIDURIs, SearchState } from 'src/app/states/search.state';
 
 @Component({
-  selector: "colid-add-favorite-dialog",
-  templateUrl: "./add-favorite-dialog.component.html",
+  selector: 'colid-add-favorite-dialog',
+  templateUrl: './add-favorite-dialog.component.html',
   styleUrls: [
-    "../favorite-list.component.scss",
-    "./add-favorite-dialog.component.scss",
-  ],
+    '../favorite-list.component.scss',
+    './add-favorite-dialog.component.scss'
+  ]
 })
 export class AddFavoriteDialogComponent implements OnInit, OnDestroy {
   @Select(FavoritesState.getFavorites) favorites$: Observable<
     FavoriteListMetadata[]
   >;
+
   @Select(FavoritesState.getFavoriteUrisToListMapping)
   uriMappings$: Observable<{ [pidUri: string]: string[] }>;
+
   @Select(SearchState.getSelectedPIDURIs) selectedPIDURIs$: Observable<
     string[]
   >;
@@ -110,15 +112,15 @@ export class AddFavoriteDialogComponent implements OnInit, OnDestroy {
             favoriteListPayload.push({
               favoritesListId: this.selectedFavoriteListIds[j],
               pidUri: this.selectedPIDURIs[i],
-              personalNote: "",
+              personalNote: ''
             });
           }
         }
       }
       if (favoriteListPayload.length === 0) {
         this.snackBar.info(
-          "Favorites already added",
-          "These resources have been already added to the selected favorite lists"
+          'Favorites already added',
+          'These resources have been already added to the selected favorite lists'
         );
         this.store.dispatch(new ClearSelectedPIDURIs());
         this.dialogRef.close;
@@ -134,8 +136,8 @@ export class AddFavoriteDialogComponent implements OnInit, OnDestroy {
           .subscribe(() => {
             if (i === numberOfIterations) {
               this.snackBar.success(
-                "Favorite added",
-                "Selected resources have been marked as favorite."
+                'Favorite added',
+                'Selected resources have been marked as favorite.'
               );
               this.store.dispatch(new FetchFavorites(this.userId));
               this.store.dispatch(new ClearSelectedPIDURIs());
@@ -157,15 +159,15 @@ export class AddFavoriteDialogComponent implements OnInit, OnDestroy {
           favoriteListPayload.push({
             favoritesListId: this.selectedFavoriteListIds[i],
             pidUri: this.data.pidUri,
-            personalNote: "",
+            personalNote: ''
           });
         }
       }
 
       if (favoriteListPayload.length === 0) {
         this.snackBar.info(
-          "Favorites already added",
-          "This resource has been already added to the selected favorite lists"
+          'Favorites already added',
+          'This resource has been already added to the selected favorite lists'
         );
         this.dialogRef.close;
         return;
@@ -175,8 +177,8 @@ export class AddFavoriteDialogComponent implements OnInit, OnDestroy {
         .addFavoriteEntries(this.userId, favoriteListPayload)
         .subscribe(() => {
           this.snackBar.success(
-            "Favorite added",
-            "This resource has been mark as favorite."
+            'Favorite added',
+            'This resource has been mark as favorite.'
           );
           this.store.dispatch(new FetchFavorites(this.userId));
           this.dialogRef.close;

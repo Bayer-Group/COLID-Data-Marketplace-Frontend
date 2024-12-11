@@ -1,24 +1,24 @@
-import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
-import { Observable, Subscription } from "rxjs";
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import {
   IdentifierState,
   FetchOrphanedIdentifiers,
-  DeleteOrphanedIdentifier,
-} from "src/app/states/identifier.state";
-import { Select, Store } from "@ngxs/store";
-import { IdentifierResultDTO } from "src/app/shared/models/identifier/identifier-result-dto";
-import { MatTableDataSource } from "@angular/material/table";
-import { DeleteItemDialogComponent } from "src/app/shared/components/delete-item-dialog/delete-item-dialog.component";
-import { MatDialog } from "@angular/material/dialog";
-import { MatSort } from "@angular/material/sort";
-import { MatPaginator } from "@angular/material/paginator";
-import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
-import { EntityFormStatus } from "src/app/shared/models/entity-form.status";
+  DeleteOrphanedIdentifier
+} from 'src/app/states/identifier.state';
+import { Select, Store } from '@ngxs/store';
+import { IdentifierResultDTO } from 'src/app/shared/models/identifier/identifier-result-dto';
+import { MatTableDataSource } from '@angular/material/table';
+import { DeleteItemDialogComponent } from 'src/app/shared/components/delete-item-dialog/delete-item-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
+import { EntityFormStatus } from 'src/app/shared/models/entity-form.status';
 
 @Component({
-  selector: "app-oprhaned-identifier",
-  templateUrl: "./orphaned-identifier.component.html",
-  styleUrls: ["./orphaned-identifier.component.css"],
+  selector: 'app-oprhaned-identifier',
+  templateUrl: './orphaned-identifier.component.html',
+  styleUrls: ['./orphaned-identifier.component.css']
 })
 export class OrphanedIdentifierComponent implements OnInit, OnDestroy {
   @Select(IdentifierState.getIsLoading) loading$: Observable<boolean>;
@@ -29,7 +29,7 @@ export class OrphanedIdentifierComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  displayedColumns: string[] = ["identifierUri", "delete"];
+  displayedColumns: string[] = ['identifierUri', 'delete'];
 
   dataSource: MatTableDataSource<IdentifierResultDTO>;
   dataSourceLength: number = 0;
@@ -96,10 +96,10 @@ export class OrphanedIdentifierComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(DeleteItemDialogComponent, {
       data: {
         header: `Deleting Identifier`,
-        body: `Are you sure you want to delete the following identifier:<br><br> ${identifierUri}`,
+        body: `Are you sure you want to delete the following identifier:<br><br> ${identifierUri}`
       },
-      width: "auto",
-      disableClose: true,
+      width: 'auto',
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -111,8 +111,8 @@ export class OrphanedIdentifierComponent implements OnInit, OnDestroy {
           .subscribe(
             (_) => {
               this.snackBar.success(
-                "Permanent Identifier",
-                "Deleted successfully"
+                'Permanent Identifier',
+                'Deleted successfully'
               );
               this.status = EntityFormStatus.SUCCESS;
               this.loadData();

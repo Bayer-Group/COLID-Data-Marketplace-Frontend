@@ -1,8 +1,8 @@
-import { Pipe, PipeTransform } from "@angular/core";
-import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+import { Pipe, PipeTransform } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Pipe({
-  name: "bypassSanitizer",
+  name: 'bypassSanitizer'
 })
 export class BypassSanitizerPipe implements PipeTransform {
   constructor(protected sanitizer: DomSanitizer) {}

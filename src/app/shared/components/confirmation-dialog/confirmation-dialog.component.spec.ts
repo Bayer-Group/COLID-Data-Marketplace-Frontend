@@ -1,24 +1,32 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ConfirmationDialogComponent } from './confirmation-dialog.component';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 
-import { DeleteItemDialogComponent } from "./delete-item-dialog.component";
-
-describe("DeleteItemDialogComponent", () => {
-  let component: DeleteItemDialogComponent;
-  let fixture: ComponentFixture<DeleteItemDialogComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [DeleteItemDialogComponent],
-    }).compileComponents();
-  }));
+describe('ConfirmationDialogComponent', () => {
+  let component: ConfirmationDialogComponent;
+  let fixture: ComponentFixture<ConfirmationDialogComponent>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DeleteItemDialogComponent);
+    TestBed.configureTestingModule({
+      declarations: [ConfirmationDialogComponent],
+      imports: [MatDialogModule],
+      providers: [
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {
+            header: 'test header',
+            body: 'test body'
+          }
+        }
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ConfirmationDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

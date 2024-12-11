@@ -1,0 +1,96 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <div class="row w-100 justify-content-between">
+        <div class="col col-auto mb-2">
+          {{ chart?.name }}
+        </div>
+        <div class="col col-auto">
+          <mat-button-toggle-group>
+            <mat-button-toggle
+              *ngFor="let toggle of toggleChartTypes"
+              [class.active]="chart.initalChart === toggle"
+              (click)="chart.initalChart = toggle"
+            >
+              <ng-container [ngSwitch]="toggle">
+                <mat-icon
+                  *ngSwitchCase="'pie'"
+                  matTooltip="Show results as pie chart"
+                  >pie_chart</mat-icon
+                >
+                <mat-icon
+                  *ngSwitchCase="'bar-vertical'"
+                  matTooltip="Show results as bar chart"
+                  >bar_chart</mat-icon
+                >
+                <mat-icon
+                  *ngSwitchCase="'bar-horizontal-normalized'"
+                  matTooltip="Show results as normalized bar chart"
+                  >bar_chart</mat-icon
+                >
+              </ng-container>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="align-bottom chart-wrapper" [ngSwitch]="chart?.initalChart">
+      <ngx-charts-bar-vertical
+        *ngSwitchCase="'bar-vertical'"
+        [scheme]="colorScheme"
+        [results]="chart?.data"
+        [xAxis]="true"
+        [yAxis]="true"
+        [legend]="false"
+        [showXAxisLabel]="true"
+        [showYAxisLabel]="true"
+        [showDataLabel]="true"
+        [xAxisLabel]="chart?.xLabel"
+        [yAxisLabel]="chart?.yLabel"
+      >
+      </ngx-charts-bar-vertical>
+
+      <ngx-charts-pie-chart
+        *ngSwitchCase="'pie'"
+        [scheme]="colorScheme"
+        [results]="chart?.data"
+        [legend]="false"
+        [labels]="true"
+      >
+      </ngx-charts-pie-chart>
+
+      <ngx-charts-line-chart
+        *ngSwitchCase="'line-chart'"
+        [scheme]="colorScheme"
+        [results]="chart?.data"
+        [xAxis]="true"
+        [yAxis]="true"
+        [legend]="false"
+        [showXAxisLabel]="true"
+        [showYAxisLabel]="true"
+        [xAxisLabel]="chart?.xLabel"
+        [yAxisLabel]="chart?.yLabel"
+        [autoScale]="true"
+      >
+      </ngx-charts-line-chart>
+
+      <ngx-charts-bar-horizontal-normalized
+        *ngSwitchCase="'bar-horizontal-normalized'"
+        [scheme]="colorScheme"
+        [results]="chart?.data"
+        [xAxis]="true"
+        [yAxis]="true"
+        [legend]="false"
+        [showXAxisLabel]="true"
+        [showYAxisLabel]="true"
+        [xAxisLabel]="chart?.xLabel"
+        [yAxisLabel]="chart?.yLabel"
+      >
+      </ngx-charts-bar-horizontal-normalized>
+
+      <div *ngSwitchDefault>Wrong chart type selected</div>
+    </div>
+  </mat-card-content>
+</mat-card>

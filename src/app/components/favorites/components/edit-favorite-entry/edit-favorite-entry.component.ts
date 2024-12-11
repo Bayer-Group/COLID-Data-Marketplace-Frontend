@@ -1,24 +1,24 @@
-import { Component, Inject, Input } from "@angular/core";
+import { Component, Inject, Input } from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
-  MAT_DIALOG_DATA,
-} from "@angular/material/dialog";
-import { Select, Store } from "@ngxs/store";
-import { Observable } from "rxjs";
-import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
-import { FavoriteListEntry, Favorites } from "src/app/shared/models/favorites";
+  MAT_DIALOG_DATA
+} from '@angular/material/dialog';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
+import { FavoriteListEntry, Favorites } from 'src/app/shared/models/favorites';
 import {
   FavoritesState,
   FetchFavorites,
-  SaveFavoriteListEntry,
-} from "../../favorites.state";
-import { AuthService } from "src/app/modules/authentication/services/auth.service";
+  SaveFavoriteListEntry
+} from '../../favorites.state';
+import { AuthService } from 'src/app/modules/authentication/services/auth.service';
 
 @Component({
-  selector: "colid-edit-favorite-entry",
-  templateUrl: "./edit-favorite-entry.component.html",
-  styleUrls: ["../favorite-list.component.scss"],
+  selector: 'colid-edit-favorite-entry',
+  templateUrl: './edit-favorite-entry.component.html',
+  styleUrls: ['../favorite-list.component.scss']
 })
 
 //TODO: To be removed since it is unused
@@ -72,7 +72,7 @@ export class EditFavoriteEntryComponent {
         this.personalNote
       )
     );
-    this.snackBar.success("Note updated", "This resource updated.");
+    this.snackBar.success('Note updated', 'This resource updated.');
     this.dialogRef.close();
   }
 }

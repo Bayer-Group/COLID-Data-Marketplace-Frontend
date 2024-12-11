@@ -1,4 +1,4 @@
-import { Constants } from "src/app/shared/constants";
+import { Constants } from 'src/app/shared/constants';
 
 export const HasLabel: string = Constants.Metadata.HasLabel;
 export const EntityType: string = Constants.Metadata.EntityType;

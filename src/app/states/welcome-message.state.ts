@@ -1,28 +1,18 @@
-import { Injectable } from "@angular/core";
-import { Selector, State, StateContext, Action } from "@ngxs/store";
-import { tap } from "rxjs/operators";
-import { WelcomeMessageApiService } from "../core/http/welcome-message.api.service";
-import { WelcomeMessage } from "../shared/models/welcome-message";
+import { Injectable } from '@angular/core';
+import { Selector, State, StateContext, Action } from '@ngxs/store';
+import { tap } from 'rxjs/operators';
+import { WelcomeMessageApiService } from '../core/http/welcome-message.api.service';
+import { WelcomeMessage } from '../shared/models/welcome-message';
 
 export class FetchWelcomeMessageDataMarketplace {
   static readonly type =
-    "[WelcomeMessage] Fetch welcome message datamarketplace";
-  constructor() {}
-}
-
-export class FetchWelcomeMessageEditor {
-  static readonly type = "[WelcomeMessage] Fetch welcome message editor";
+    '[WelcomeMessage] Fetch welcome message datamarketplace';
   constructor() {}
 }
 
 export class UpdateWelcomeMessageDataMarketplace {
   static readonly type =
-    "[WelcomeMessage] Update welcome message datamarketplace";
-  constructor(public str: string) {}
-}
-
-export class UpdateWelcomeMessageEditor {
-  static readonly type = "[WelcomeMessage] Update welcome message editor";
+    '[WelcomeMessage] Update welcome message datamarketplace';
   constructor(public str: string) {}
 }
 
@@ -32,11 +22,11 @@ export class WelcomeMessageStateModel {
 }
 
 @State<WelcomeMessageStateModel>({
-  name: "WelcomeMessage",
+  name: 'WelcomeMessage',
   defaults: {
     welcomeMessageEditor: null,
-    welcomeMessageDataMarketplace: null,
-  },
+    welcomeMessageDataMarketplace: null
+  }
 })
 @Injectable()
 export class WelcomeMessageState {
@@ -54,23 +44,10 @@ export class WelcomeMessageState {
     return state.welcomeMessageDataMarketplace;
   }
 
-  @Action(FetchWelcomeMessageEditor)
-  fetchWelcomeMessageEditor({
-    patchState,
-  }: StateContext<WelcomeMessageStateModel>) {
-    return this.welcomeMessageApiService.getWelcomeMessageEditor().pipe(
-      tap((res: WelcomeMessage) => {
-        patchState({
-          welcomeMessageEditor: res,
-        });
-      })
-    );
-  }
-
   @Action(FetchWelcomeMessageDataMarketplace)
   fetchWelcomeMessageDataMarketplace({
     getState,
-    patchState,
+    patchState
   }: StateContext<WelcomeMessageStateModel>) {
     if (getState().welcomeMessageDataMarketplace) {
       return;
@@ -80,23 +57,7 @@ export class WelcomeMessageState {
       .pipe(
         tap((res: WelcomeMessage) => {
           patchState({
-            welcomeMessageDataMarketplace: res,
-          });
-        })
-      );
-  }
-
-  @Action(UpdateWelcomeMessageEditor)
-  UpdateWelcomeMessageEditor(
-    ctx: StateContext<WelcomeMessageStateModel>,
-    action: UpdateWelcomeMessageEditor
-  ) {
-    return this.welcomeMessageApiService
-      .updateWelcomeMessageEditor(action.str)
-      .pipe(
-        tap((res: WelcomeMessage) => {
-          ctx.patchState({
-            welcomeMessageEditor: res,
+            welcomeMessageDataMarketplace: res
           });
         })
       );
@@ -112,7 +73,7 @@ export class WelcomeMessageState {
       .pipe(
         tap((res: WelcomeMessage) => {
           ctx.patchState({
-            welcomeMessageDataMarketplace: res,
+            welcomeMessageDataMarketplace: res
           });
         })
       );

@@ -1,5 +1,5 @@
-import { Aggregation } from "../aggregation";
-import { FilterGroupingOrderRaw } from "./filter-grouping-order-raw";
+import { Aggregation } from '../aggregation';
+import { FilterGroupingOrderRaw } from './filter-grouping-order-raw';
 
 export interface FilterGroupingOrder extends FilterGroupingOrderRaw {
   expanded: boolean;

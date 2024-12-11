@@ -1,38 +1,56 @@
-import { State, Action, StateContext, Selector, Store } from "@ngxs/store";
-import { ResourceApiService } from "../core/http/resource.api.service";
-import { Router } from "@angular/router";
-import { tap } from "rxjs/operators";
-import { LogService } from "../core/logging/log.service";
-import { Resource } from "../shared/models/resources/resource";
-import { Entity } from "../shared/models/entities/entity";
-import { ResourceOverviewCTO } from "../shared/models/resources/resource-overview-cto";
+import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
+import { ResourceApiService } from '../core/http/resource.api.service';
+import { Router } from '@angular/router';
+import { tap } from 'rxjs/operators';
+import { LogService } from '../core/logging/log.service';
+import { Resource } from '../shared/models/resources/resource';
+import { Entity } from '../shared/models/entities/entity';
+import { ResourceOverviewCTO } from '../shared/models/resources/resource-overview-cto';
 import {
   HistoricResourceOverviewDTO,
-  ResourceRevisionHistory,
-} from "../shared/models/resources/historic-resource-overview-dto";
-import { Constants } from "../shared/constants";
+  ResourceRevisionHistory
+} from '../shared/models/resources/historic-resource-overview-dto';
+import { Constants } from '../shared/constants';
+import { Injectable } from '@angular/core';
+import { ResourceSearchDTO } from '../shared/models/resources/resource-search-dto';
+import { UserInfoState } from './user-info.state';
 
-import { Injectable } from "@angular/core";
-import { ResourceSearchDTO } from "../shared/models/resources/resource-search-dto";
+export class DeleteDraftResource {
+  static readonly type = '[Resource] Delete Draft';
+  constructor(public payload: string) {}
+}
+
+export class MarkResourceAsDeleted {
+  static readonly type = '[Resource] MarkAsDeleted';
+  constructor(public pidUri: string) {}
+}
 
 export class DeleteResources {
-  static readonly type = "[Resources] Delete";
-  constructor(public payload: string[], public requester: string) {}
+  static readonly type = '[Resources] Delete';
+  constructor(
+    public payload: string[],
+    public requester: string
+  ) {}
 }
 
 export class FetchResourceMarkedAsDeleted {
-  static readonly type = "[Resource] FetchMarkedDeleted";
+  static readonly type = '[Resource] FetchMarkedDeleted';
 }
 
 export class RejectResourceMarkedAsDeleted {
-  static readonly type = "[Resource] RejectMarkedAsDeleted";
+  static readonly type = '[Resource] RejectMarkedAsDeleted';
   constructor(public payload: string[]) {}
 }
 
 export class SetMainDistribution {
-  static readonly type = "[Resource] SetMainDistribution";
+  static readonly type = '[Resource] SetMainDistribution';
 
   constructor(public mainDistributionId: string) {}
+}
+
+export class UnlinkResource {
+  static readonly type = '[Resource] Unlink';
+  constructor(public pidUri: string) {}
 }
 
 export class ResourceStateModel {
@@ -48,7 +66,7 @@ export class ResourceStateModel {
 }
 
 @State<ResourceStateModel>({
-  name: "resource",
+  name: 'resource',
   defaults: {
     fetched: false,
     activeResource: null,
@@ -58,8 +76,8 @@ export class ResourceStateModel {
     history: null,
     revisionHistory: null,
     selectedHistoricResource: null,
-    historicResources: new Map<string, Resource>(),
-  },
+    historicResources: new Map<string, Resource>()
+  }
 })
 @Injectable()
 export class ResourceState {
@@ -123,7 +141,7 @@ export class ResourceState {
     ctx.patchState({
       fetched: true,
       activeResource: result.resource,
-      activeMainDistribution: result.mainDistribution,
+      activeMainDistribution: result.mainDistribution
     });
   }
 
@@ -156,21 +174,16 @@ export class ResourceState {
 
   @Action(RejectResourceMarkedAsDeleted)
   rejectResourceMarkedAsDeleted(
-    { patchState }: StateContext<ResourceStateModel>,
+    { patchState, dispatch }: StateContext<ResourceStateModel>,
     { payload }: RejectResourceMarkedAsDeleted
   ) {
     patchState({
-      loadingMarked: true,
+      loadingMarked: true
     });
     return this.resourceService.rejectResourcesMarkedDeleted(payload).pipe(
-      tap(
-        () => {},
-        (_) => {
-          patchState({
-            loadingMarked: false,
-          });
-        }
-      )
+      tap(() => {
+        dispatch(new FetchResourceMarkedAsDeleted());
+      })
     );
   }
 
@@ -180,7 +193,7 @@ export class ResourceState {
     {}: FetchResourceMarkedAsDeleted
   ) {
     patchState({
-      loadingMarked: true,
+      loadingMarked: true
     });
 
     const searchObject = new ResourceSearchDTO();
@@ -190,20 +203,37 @@ export class ResourceState {
     this.resourceService.getFilteredResources(searchObject).subscribe((res) => {
       patchState({
         markedResource: res,
-        loadingMarked: false,
+        loadingMarked: false
       });
     });
   }
 
+  @Action(DeleteDraftResource)
+  deleteDraftResource(ctx: StateContext<ResourceStateModel>, { payload }) {
+    const userEmail = this.store.selectSnapshot(UserInfoState.getUserEmail);
+    return this.resourceService.deleteResource(payload, userEmail);
+  }
+
+  @Action(MarkResourceAsDeleted)
+  markResourceAsDeleted(
+    ctx: StateContext<ResourceStateModel>,
+    action: MarkResourceAsDeleted
+  ) {
+    const userEmail = this.store.selectSnapshot(UserInfoState.getUserEmail);
+    return this.resourceService.markResourceAsDeleted(action.pidUri, userEmail);
+  }
+
   @Action(DeleteResources)
   deleteResources(
-    { patchState }: StateContext<ResourceStateModel>,
+    { patchState, dispatch }: StateContext<ResourceStateModel>,
     { payload, requester }: DeleteResources
   ) {
     patchState({
-      loadingMarked: true,
+      loadingMarked: true
     });
-    return this.resourceService.deleteResources(payload, requester);
+    return this.resourceService
+      .deleteResources(payload, requester)
+      .pipe(tap(() => dispatch(new FetchResourceMarkedAsDeleted())));
   }
 
   @Action(SetMainDistribution)
@@ -216,7 +246,15 @@ export class ResourceState {
       activeMainDistribution:
         activeMainDistribution === mainDistributionId
           ? null
-          : mainDistributionId,
+          : mainDistributionId
     });
+  }
+
+  @Action(UnlinkResource)
+  unlinkResource(
+    ctx: StateContext<ResourceStateModel>,
+    { pidUri }: UnlinkResource
+  ) {
+    return this.resourceService.unlinkResource(pidUri);
   }
 }

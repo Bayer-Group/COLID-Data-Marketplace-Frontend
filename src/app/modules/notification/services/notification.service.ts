@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { environment } from "src/environments/environment";
-import { MessageDto } from "src/app/shared/models/user/message-dto";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { MessageDto } from 'src/app/shared/models/user/message-dto';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class NotificationService {
   constructor(private httpClient: HttpClient) {}

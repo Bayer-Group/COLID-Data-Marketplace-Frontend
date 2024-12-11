@@ -1,11 +1,11 @@
-import { Pipe, PipeTransform } from "@angular/core";
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: "removeHtml",
+  name: 'removeHtml'
 })
 export class RemoveHtmlTagsPipe implements PipeTransform {
   transform(input: string): string {
     const regex = /(<([^>]+)>)/gi;
-    return input.replace(regex, "");
+    return input.replace(regex, '');
   }
 }

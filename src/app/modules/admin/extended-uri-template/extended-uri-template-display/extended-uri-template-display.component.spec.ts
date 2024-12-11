@@ -1,24 +1,36 @@
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExtendedUriTemplateDisplayComponent } from "./extended-uri-template-display.component";
+import { ExtendedUriTemplateDisplayComponent } from './extended-uri-template-display.component';
+import { RouterModule } from '@angular/router';
+import { NgxsModule } from '@ngxs/store';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MockColidSpinnerComponent } from 'src/app/shared/mocks/unit-test-mocks';
 
-describe("ExtendedUriTemplateDisplayComponent", () => {
+describe('ExtendedUriTemplateDisplayComponent', () => {
   let component: ExtendedUriTemplateDisplayComponent;
   let fixture: ComponentFixture<ExtendedUriTemplateDisplayComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ExtendedUriTemplateDisplayComponent],
-    }).compileComponents();
-  }));
-
   beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        ExtendedUriTemplateDisplayComponent,
+        MockColidSpinnerComponent
+      ],
+      imports: [
+        RouterModule,
+        NgxsModule.forRoot(),
+        MatIconModule,
+        MatButtonModule
+      ]
+    }).compileComponents();
+
     fixture = TestBed.createComponent(ExtendedUriTemplateDisplayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

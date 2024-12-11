@@ -1,19 +1,19 @@
-import { Component, Inject } from "@angular/core";
+import { Component, Inject } from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
-  MAT_DIALOG_DATA,
-} from "@angular/material/dialog";
-import { Store } from "@ngxs/store";
-import { SaveFavoriteList } from "../../favorites.state";
+  MAT_DIALOG_DATA
+} from '@angular/material/dialog';
+import { Store } from '@ngxs/store';
+import { SaveFavoriteList } from '../../favorites.state';
 
 @Component({
-  selector: "colid-edit-favorite-list",
-  templateUrl: "./edit-favorite-list.component.html",
+  selector: 'colid-edit-favorite-list',
+  templateUrl: './edit-favorite-list.component.html',
   styleUrls: [
-    "../favorite-list.component.scss",
-    "./edit-favorite-list.component.scss",
-  ],
+    '../favorite-list.component.scss',
+    './edit-favorite-list.component.scss'
+  ]
 })
 export class EditFavoriteListComponent {
   userId: string;

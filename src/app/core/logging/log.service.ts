@@ -1,13 +1,13 @@
-import { Injectable } from "@angular/core";
-import { environment } from "../../../environments/environment";
-import { LogPublishersService } from "./log-publishers.service";
-import { LogPublisher } from "./publishers/log-publisher";
-import { LogLevel } from "../../shared/models/logging/log-level";
-import { EdmLogEntry } from "../../shared/models/logging/edm-log-entry";
-import { LogType } from "src/app/shared/models/logging/log-type";
+import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
+import { LogPublishersService } from './log-publishers.service';
+import { LogPublisher } from './publishers/log-publisher';
+import { LogLevel } from '../../shared/models/logging/log-level';
+import { EdmLogEntry } from '../../shared/models/logging/edm-log-entry';
+import { LogType } from 'src/app/shared/models/logging/log-type';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class LogService {
   publishers: LogPublisher[];
@@ -65,13 +65,13 @@ export class LogService {
       message: msg,
       logType: logType,
       product: environment.adalConfig.clientId,
-      layer: "angular_client",
+      layer: 'angular_client',
       location: window.location.toString(),
-      hostname: "",
-      userId: "",
-      department: "",
+      hostname: '',
+      userId: '',
+      department: '',
       elapsedMilliseconds: null,
-      additionalInfo: {},
+      additionalInfo: {}
     };
 
     logEntry.additionalInfo = {};
@@ -81,13 +81,13 @@ export class LogService {
         if (!(value instanceof Function)) {
           logEntry.additionalInfo[key] = value;
         }
-        if (key == "department") {
+        if (key == 'department') {
           logEntry.department = value;
         }
       }
     }
 
-    logEntry.additionalInfo["user-agent"] = window.navigator.userAgent;
+    logEntry.additionalInfo['user-agent'] = window.navigator.userAgent;
 
     return logEntry;
   }

@@ -1,5 +1,5 @@
-import { ValidationResultProperty } from "./validation-result-property";
-import { ValidationResultSeverity } from "./validation-result-severity";
+import { ValidationResultProperty } from './validation-result-property';
+import { ValidationResultSeverity } from './validation-result-severity';
 
 export class ValidationResult {
   conforms: boolean;
@@ -10,5 +10,5 @@ export class ValidationResult {
 export enum ConformLevel {
   SUCCESS,
   WARNING,
-  CRITICAL,
+  CRITICAL
 }

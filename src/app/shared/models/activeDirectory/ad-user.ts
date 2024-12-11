@@ -1,4 +1,4 @@
-import { AdObject } from "./ad-object";
+import { AdObject } from './ad-object';
 
 export class AdUser extends AdObject {
   givenName: string;

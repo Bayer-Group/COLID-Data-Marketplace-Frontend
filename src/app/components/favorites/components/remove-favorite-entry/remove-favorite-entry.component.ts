@@ -1,13 +1,13 @@
-import { Component } from "@angular/core";
-import { MatDialogRef } from "@angular/material/dialog";
+import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: "colid-remove-favorite-entry",
-  templateUrl: "./remove-favorite-entry.component.html",
+  selector: 'colid-remove-favorite-entry',
+  templateUrl: './remove-favorite-entry.component.html',
   styleUrls: [
-    "../favorite-list.component.scss",
-    "./remove-favorite-entry.component.scss",
-  ],
+    '../favorite-list.component.scss',
+    './remove-favorite-entry.component.scss'
+  ]
 })
 export class RemoveFavoriteEntryComponent {
   constructor(private dialogRef: MatDialogRef<RemoveFavoriteEntryComponent>) {}

@@ -1,18 +1,18 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input } from '@angular/core';
 import {
   RangeFilter,
-  RangeFilterSelection,
-} from "src/app/shared/models/range-filter";
-import { Store } from "@ngxs/store";
+  RangeFilterSelection
+} from 'src/app/shared/models/range-filter';
+import { Store } from '@ngxs/store';
 import {
   ChangeActiveRangeFilter,
-  ResetSingleActiveRangeFilter,
-} from "src/app/states/search.state";
+  ResetSingleActiveRangeFilter
+} from 'src/app/states/search.state';
 
 @Component({
-  selector: "app-range-box",
-  templateUrl: "./range-box.component.html",
-  styleUrls: ["./range-box.component.scss"],
+  selector: 'app-range-box',
+  templateUrl: './range-box.component.html',
+  styleUrls: ['./range-box.component.scss']
 })
 export class RangeBoxComponent implements OnInit {
   @Input() rangeFilter: RangeFilter;
@@ -46,8 +46,8 @@ export class RangeBoxComponent implements OnInit {
       this.rangeFilterSelection = this._activeRangeFilter;
     } else {
       this.rangeFilterSelection = {
-        from: this.rangeFilter.from,
-        to: this.rangeFilter.to,
+        from: this.rangeFilter?.from,
+        to: this.rangeFilter?.to
       };
     }
   }

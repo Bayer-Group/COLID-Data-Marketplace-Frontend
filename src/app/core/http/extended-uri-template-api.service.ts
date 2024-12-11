@@ -1,12 +1,12 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { ExtendedUriTemplateResultDTO } from "../../shared/models/extendedUriTemplates/extended-uri-template-result-dto";
-import { ExtendedUriTemplateRequestDTO } from "../../shared/models/extendedUriTemplates/extended-uri-template-request-dto";
-import { ExtendedUriTemplateWriteResultCTO } from "../../shared/models/extendedUriTemplates/extended-uri-template-write-result-cto";
-import { EntityBaseApiService } from "./entity.base.api.service";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ExtendedUriTemplateResultDTO } from '../../shared/models/extendedUriTemplates/extended-uri-template-result-dto';
+import { ExtendedUriTemplateRequestDTO } from '../../shared/models/extendedUriTemplates/extended-uri-template-request-dto';
+import { ExtendedUriTemplateWriteResultCTO } from '../../shared/models/extendedUriTemplates/extended-uri-template-write-result-cto';
+import { EntityBaseApiService } from './entity.base.api.service';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class ExtendedUriTemplateApiService extends EntityBaseApiService<
   ExtendedUriTemplateRequestDTO,
@@ -14,6 +14,6 @@ export class ExtendedUriTemplateApiService extends EntityBaseApiService<
   ExtendedUriTemplateWriteResultCTO
 > {
   constructor(protected httpClient: HttpClient) {
-    super(httpClient, "extendedUriTemplate", "extendedUriTemplateList");
+    super(httpClient, 'extendedUriTemplate', 'extendedUriTemplateList');
   }
 }

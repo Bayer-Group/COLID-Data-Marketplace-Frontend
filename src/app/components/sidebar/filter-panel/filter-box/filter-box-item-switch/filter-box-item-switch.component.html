@@ -4,12 +4,12 @@
     [checked]="active"
     type="checkbox"
     class="custom-control-input"
-    id="{{ aggregation.key }}"
+    id="{{ aggregation?.key }}"
   />
   <label
     class="custom-control-label"
     [class.text-primary]="active"
     [class.font-weight-bold]="active"
-    for="{{ aggregation.key }}"
+    for="{{ aggregation?.key }}"
   ></label>
 </div>

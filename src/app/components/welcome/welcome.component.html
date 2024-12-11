@@ -12,9 +12,10 @@
     </mat-sidenav>
     <mat-sidenav-content>
       <div class="h-100 m-0 d-flex flex-column">
-        <div class="d-flex align-items-center p-2 mb-4">
+        <div class="d-flex align-items-center p-2 mb-2">
           <app-search-bar-autocomplete
-            class="w-100 me-4"
+            class="me-4"
+            style="flex-grow: 1"
             (searchChange)="handleSearchChange($event)"
             (inputChange)="handleInputChange($event)"
             [focusSearchbar]="true"
@@ -22,9 +23,10 @@
           <div
             class="me-4"
             style="flex: none"
-            *ngIf="hasCreatePrivilege$ | async"
+            *ngIf="hasEditorFunctionalitiesPrivilege$ | async"
           >
             <mat-radio-group
+              class="density-settings-3"
               color="primary"
               value="published"
               (change)="setSearchIndex($event)"
@@ -37,16 +39,8 @@
               <mat-radio-button value="all">Draft + Published</mat-radio-button>
             </mat-radio-group>
           </div>
-          <div>
-            <button
-              mat-raised-button
-              class="text-large center-button"
-              id="button-welcome-search"
-              (click)="search()"
-            >
-              Start Search
-            </button>
-          </div>
+
+          <button mat-raised-button (click)="search()">Start Search</button>
         </div>
         <div class="px-2" *ngIf="reindexProgress$ | async as reindexProgress">
           <ng-container *ngIf="reindexProgress && reindexProgress.inProgress">
@@ -54,8 +48,9 @@
             <div class="d-flex align-items-center">
               <mat-progress-bar
                 [value]="
-                  reindexProgress.currentDocCount /
-                  reindexProgress.totalDocCount
+                  (reindexProgress.currentDocCount /
+                    reindexProgress.totalDocCount) *
+                  100
                 "
                 style="max-width: 800px"
                 class="me-2"
@@ -65,20 +60,14 @@
                 {{ reindexProgress.totalDocCount }} items reindexed</span
               >
             </div>
+            Re-indexing is being performed, you will not see any fresh metadata
+            changes in the Data Marketplace until the new index is ready
           </ng-container>
         </div>
-        <div
-          class="flex-fill overflow-hidden mb-2 mx-2"
-          *ngIf="user$ | async as user; else loading"
-        >
-          <app-welcome-content [user]="user"></app-welcome-content>
+        <div class="flex-fill overflow-hidden mb-2 mx-2">
+          <app-welcome-content></app-welcome-content>
         </div>
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
-<ng-template #loading>
-  <div class="d-flex h-100 align-items-center justify-content-center">
-    <mat-spinner [diameter]="100" [strokeWidth]="5"></mat-spinner>
-  </div>
-</ng-template>

@@ -1,5 +1,5 @@
 export enum ResourceCreationType {
-  NEW = "new",
-  COPY = "copy",
-  NEWVERSION = "newVersion",
+  NEW = 'new',
+  COPY = 'copy',
+  NEWVERSION = 'newVersion'
 }

@@ -25,7 +25,7 @@
                 >
                 </app-search-bar-autocomplete>
               </div>
-              <div *ngIf="hasCreatePrivilege$ | async">
+              <div *ngIf="hasEditorFunctionalitiesPrivilege$ | async">
                 <mat-radio-group
                   color="primary"
                   [value]="searchIndex"
@@ -56,7 +56,6 @@
                       searchIndex === 'draft' ||
                       searchIndex === 'all'
                     "
-                    class="cluster-buttons"
                   >
                     <mat-icon fontSet="material-icons-outlined" class="me-1"
                       >workspaces</mat-icon
@@ -68,7 +67,6 @@
                     *ngIf="showResultsClustered$ | async"
                     matTooltip="Get back to all results"
                     (click)="showAllResultsList()"
-                    class="cluster-buttons"
                   >
                     <mat-icon class="me-1">list</mat-icon>All Results
                   </button>

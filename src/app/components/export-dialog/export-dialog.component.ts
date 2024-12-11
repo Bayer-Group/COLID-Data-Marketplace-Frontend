@@ -1,14 +1,14 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 import {
   defaultExportSettings,
-  ExportDto,
-} from "src/app/shared/models/export-dto";
-import { MatDialogRef } from "@angular/material/dialog";
+  ExportDto
+} from 'src/app/shared/models/export-dto';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: "app-export-dialog",
-  templateUrl: "./export-dialog.component.html",
-  styleUrls: ["./export-dialog.component.scss"],
+  selector: 'app-export-dialog',
+  templateUrl: './export-dialog.component.html',
+  styleUrls: ['./export-dialog.component.scss']
 })
 export class ExportDialogComponent {
   public exportOptions: ExportDto = { ...defaultExportSettings };

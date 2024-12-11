@@ -1,4 +1,4 @@
-import { LogType } from "./log-type";
+import { LogType } from './log-type';
 
 export interface EdmLogEntry {
   timestamp: Date;

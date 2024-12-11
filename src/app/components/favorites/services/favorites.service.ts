@@ -1,16 +1,16 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { environment } from "src/environments/environment";
-import { MessageDto } from "src/app/shared/models/user/message-dto";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { MessageDto } from 'src/app/shared/models/user/message-dto';
 import {
   FavoriteListEntry,
   FavoriteListMetadata,
-  Favorites,
-} from "src/app/shared/models/favorites";
+  Favorites
+} from 'src/app/shared/models/favorites';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class FavoritesService {
   constructor(private httpClient: HttpClient) {}

@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { IdentityProvider } from "./identity-provider.service";
-import { Constants } from "src/app/shared/constants";
-import { ColidAccount } from "../models/colid-account.model";
-import { BehaviorSubject, Observable, of } from "rxjs";
+import { Injectable } from '@angular/core';
+import { IdentityProvider } from './identity-provider.service';
+import { Constants } from 'src/app/shared/constants';
+import { ColidAccount } from '../models/colid-account.model';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class MockIdentityProvider implements IdentityProvider {
   isLoggedIn$: BehaviorSubject<boolean | null> = new BehaviorSubject(null);
@@ -18,18 +18,17 @@ export class MockIdentityProvider implements IdentityProvider {
       Constants.Authentication.Roles.Administration,
       Constants.Authentication.EditorRoles.Administration,
       Constants.Authentication.EditorRoles.SuperAdministration,
-      "PID.Group10Data.ReadWrite",
-      "PID.Group11Data.ReadWrite",
+      'PID.Group10Data.ReadWrite',
+      'PID.Group11Data.ReadWrite'
     ];
-    const nonAdminIdTokenClaims = [];
+
     return of(
       new ColidAccount(
-        "SuperAdmin",
-        "superadmin@bayer.com",
-        "87654321-4321-4321-4321-210987654321",
+        'SuperAdmin',
+        'superadmin@bayer.com',
+        '87654321-4321-4321-4321-210987654321',
         // "87654321-4321-4321-4321-210987654325",
-        idTokenClaimes,
-        // nonAdminIdTokenClaims
+        idTokenClaimes
       )
     );
   }

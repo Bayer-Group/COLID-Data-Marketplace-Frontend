@@ -3,33 +3,33 @@ import {
   forwardRef,
   Input,
   Output,
-  EventEmitter,
-} from "@angular/core";
-import { FormItemInputBaseComponent } from "../form-item-input-base/form-item-input-base.component";
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { Metadata } from "src/app/shared/models/metadata/meta-data";
-import { Entity } from "src/app/shared/models/entities/entity";
-import { FormItemChangedDTO } from "src/app/shared/models/form/form-item-changed-dto";
-import { FormChangedDTO } from "src/app/shared/models/form/form-changed-dto";
-import { FormService } from "src/app/shared/services/form.service";
-import { Constants } from "src/app/shared/constants";
-import { Observable, of } from "rxjs";
-import { PidUriTemplateResultDTO } from "src/app/shared/models/pidUriTemplates/pid-uri-template-result-dto";
-import { MatDialog } from "@angular/material/dialog";
-import { DeleteItemDialogComponent } from "src/app/shared/components/delete-item-dialog/delete-item-dialog.component";
-import { MetaDataProperty } from "src/app/shared/models/metadata/meta-data-property";
+  EventEmitter
+} from '@angular/core';
+import { FormItemInputBaseComponent } from '../form-item-input-base/form-item-input-base.component';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Metadata } from 'src/app/shared/models/metadata/meta-data';
+import { Entity } from 'src/app/shared/models/entities/entity';
+import { FormItemChangedDTO } from 'src/app/shared/models/form/form-item-changed-dto';
+import { FormChangedDTO } from 'src/app/shared/models/form/form-changed-dto';
+import { FormService } from 'src/app/shared/services/form.service';
+import { Constants } from 'src/app/shared/constants';
+import { Observable, of } from 'rxjs';
+import { PidUriTemplateResultDTO } from 'src/app/shared/models/pidUriTemplates/pid-uri-template-result-dto';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteItemDialogComponent } from 'src/app/shared/components/delete-item-dialog/delete-item-dialog.component';
+import { MetaDataProperty } from 'src/app/shared/models/metadata/meta-data-property';
 
 @Component({
-  selector: "app-form-item-input-nested",
-  templateUrl: "./form-item-input-nested.component.html",
-  styleUrls: ["./form-item-input-nested.component.css"],
+  selector: 'app-form-item-input-nested',
+  templateUrl: './form-item-input-nested.component.html',
+  styleUrls: ['./form-item-input-nested.component.css'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => FormItemInputNestedComponent),
-      multi: true,
-    },
-  ],
+      multi: true
+    }
+  ]
 })
 export class FormItemInputNestedComponent extends FormItemInputBaseComponent {
   @Input() newNestedEntities: string[];
@@ -64,7 +64,10 @@ export class FormItemInputNestedComponent extends FormItemInputBaseComponent {
     return null;
   }
 
-  constructor(private formService: FormService, public dialog: MatDialog) {
+  constructor(
+    private formService: FormService,
+    public dialog: MatDialog
+  ) {
     super();
   }
 
@@ -78,10 +81,10 @@ export class FormItemInputNestedComponent extends FormItemInputBaseComponent {
     const dialogRef = this.dialog.open(DeleteItemDialogComponent, {
       data: {
         header: `Deleting ${this.label}`,
-        body: `Are you sure you want to delete this ${this.label}?`,
+        body: `Are you sure you want to delete this ${this.label}?`
       },
-      width: "auto",
-      disableClose: true,
+      width: 'auto',
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe((result) => {

@@ -1,28 +1,49 @@
-.mat-list-base .mat-list-item.mat-list-item-with-avatar, .mat-list-base .mat-list-option.mat-list-item-with-avatar {
-    height: auto;
-}
+.resource-item-tile {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 0.5rem 0;
 
-.resource-name {
+  &__contents {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-left: 0.5rem;
+  }
+
+  &__text-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    max-width: 34rem;
+  }
+
+  &__title {
     font-size: 0.85rem;
     font-weight: 500;
-}
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
-.resource-description {
-    font-size: 0.70rem;
-}
+  &__description {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: initial;
+    // Limit to 2 lines
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
 
-.clamped-desc {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  white-space: initial;
-  font-size: 0.85rem;
+  &__status-indicators {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 5.5rem;
+  }
 }
-
-.mat-standard-chip {
-    border-radius: 10px;
-    min-height: 20px;
-    padding: 0px 8px;
-}
-

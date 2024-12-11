@@ -1,31 +1,31 @@
-import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
-import { GraphDto } from "src/app/shared/models/graphs/graph-dto";
-import { MatTableDataSource } from "@angular/material/table";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { Subscription } from "rxjs";
-import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
-import { DeleteItemDialogComponent } from "src/app/shared/components/delete-item-dialog/delete-item-dialog.component";
-import { MatDialog } from "@angular/material/dialog";
-import { GraphUploadDialogComponent } from "./graph-upload-dialog/graph-upload-dialog.component";
-import { GraphManagementApiService } from "src/app/core/http/graph-management-api.service";
-import { saveAs } from "file-saver-es";
-import { EntityFormStatus } from "src/app/shared/components/entity-form/entity-form-status";
-import { environment } from "src/environments/environment";
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { GraphDto } from 'src/app/shared/models/graphs/graph-dto';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { Subscription } from 'rxjs';
+import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
+import { DeleteItemDialogComponent } from 'src/app/shared/components/delete-item-dialog/delete-item-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { GraphUploadDialogComponent } from './graph-upload-dialog/graph-upload-dialog.component';
+import { GraphManagementApiService } from 'src/app/core/http/graph-management-api.service';
+import { saveAs } from 'file-saver-es';
+import { EntityFormStatus } from 'src/app/shared/components/entity-form/entity-form-status';
+import { environment } from 'src/environments/environment';
 
 export enum GraphManagmentAction {
-  LOADING = "loading",
-  DELETION = "deletion",
-  DOWNLOAD = "download",
+  LOADING = 'loading',
+  DELETION = 'deletion',
+  DOWNLOAD = 'download'
 }
 
 @Component({
-  selector: "app-graph-management",
-  templateUrl: "./graph-management.component.html",
-  styleUrls: ["./graph-management.component.scss"],
+  selector: 'app-graph-management',
+  templateUrl: './graph-management.component.html',
+  styleUrls: ['./graph-management.component.scss']
 })
 export class GraphManagementComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = ["name", "status", "startTime", "action"];
+  displayedColumns: string[] = ['name', 'status', 'startTime', 'action'];
 
   loadingStatus: EntityFormStatus = EntityFormStatus.INITIAL;
   currentAction: GraphManagmentAction;
@@ -77,7 +77,7 @@ export class GraphManagementComponent implements OnInit, OnDestroy {
 
     this.graphApiService.getGraphs().subscribe(
       (res) => {
-        this.dataSource.data = res.filter((x) => !x.name.includes("Rev"));
+        this.dataSource.data = res.filter((x) => !x.name.includes('Rev'));
         this.loadingStatus = EntityFormStatus.SUCCESS;
       },
       (_) => {
@@ -90,10 +90,10 @@ export class GraphManagementComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(DeleteItemDialogComponent, {
       data: {
         header: `Delete Graph`,
-        body: `Are you sure you want to delete the graph:<br><br> ${graph.name}`,
+        body: `Are you sure you want to delete the graph:<br><br> ${graph.name}`
       },
-      width: "auto",
-      disableClose: true,
+      width: 'auto',
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -104,7 +104,7 @@ export class GraphManagementComponent implements OnInit, OnDestroy {
           (_) => {
             this.loadingStatus = EntityFormStatus.SUCCESS;
             this.loadGraphs();
-            this.snackBar.success("Graph", "Deleted successfully");
+            this.snackBar.success('Graph', 'Deleted successfully');
           },
           (_) => {
             this.loadingStatus = EntityFormStatus.ERROR;
@@ -132,8 +132,8 @@ export class GraphManagementComponent implements OnInit, OnDestroy {
           (x) => x !== namedGraph
         );
         this.snackBar.error(
-          "Error",
-          "An error occured during the graph download!"
+          'Error',
+          'An error occured during the graph download!'
         );
         this.loadingStatus = EntityFormStatus.ERROR;
       }
@@ -143,8 +143,8 @@ export class GraphManagementComponent implements OnInit, OnDestroy {
   getFileName(namedGraph: string): string {
     var prefix = `https://pid.${environment.baseUrl}/`;
     var filename =
-      namedGraph.replace(prefix, "").replace("graph/", "").replace("/", "__") +
-      ".ttl";
+      namedGraph.replace(prefix, '').replace('graph/', '').replace('/', '__') +
+      '.ttl';
     return filename;
   }
 
@@ -158,9 +158,9 @@ export class GraphManagementComponent implements OnInit, OnDestroy {
 
   uploadGraph() {
     const dialogRef = this.dialog.open(GraphUploadDialogComponent, {
-      minWidth: "40vw",
-      minHeight: "30vh",
-      disableClose: true,
+      minWidth: '40vw',
+      minHeight: '30vh',
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe((result) => {

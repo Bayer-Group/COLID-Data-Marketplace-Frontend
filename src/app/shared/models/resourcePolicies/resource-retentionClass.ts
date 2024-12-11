@@ -1,4 +1,4 @@
-import { RetentionClassPolicies } from "./retentionClass-Policies";
+import { RetentionClassPolicies } from './retentionClass-Policies';
 
 export class ResourceRetentionClasses {
   pidUri: string;

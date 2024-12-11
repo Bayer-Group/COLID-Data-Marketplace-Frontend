@@ -1,4 +1,5 @@
 <mat-tab-group
+  mat-stretch-tabs="false"
   class="px-2"
   dynamicHeight
   [selectedIndex]="activeTab"
@@ -32,7 +33,7 @@
           <ng-container *ngIf="!node.instantiable && node.isCategory">
             <!-- [indeterminate]="descendantsPartiallySelected(node)"[checked]="descendantsAllSelected(node)"-->
             <mat-checkbox
-              color="active"
+              color="primary"
               [checked]="descendantsAllSelected(node)"
               (change)="itemSelectionToggle(node)"
             >
@@ -43,7 +44,7 @@
                 class="categoryHelp"
                 matTooltip="{{ node.description }}"
               >
-                {{ "help_outline" }}
+                {{ 'help_outline' }}
               </mat-icon>
             </button>
           </ng-container>
@@ -65,7 +66,7 @@
             <button mat-icon-button disabled></button>
             <mat-checkbox
               class="checklist-leaf-node"
-              color="active"
+              color="primary"
               [checked]="activeNodes.includes(node.id)"
               (change)="leafItemSelectionToggle(node)"
             >
@@ -79,7 +80,7 @@
                   color: black;
                   border-radius: 10rem;
                 "
-                >{{ _buckets[node.name] ? _buckets[node.name] : "" }}</span
+                >{{ _buckets[node.name] ? _buckets[node.name] : '' }}</span
               >
             </div>
           </ng-container>
@@ -94,12 +95,12 @@
             <button mat-icon-button matTreeNodeToggle>
               <mat-icon>
                 {{
-                  treeControl.isExpanded(node) ? "expand_more" : "chevron_right"
+                  treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'
                 }}
               </mat-icon>
             </button>
             <mat-checkbox
-              color="active"
+              color="primary"
               [checked]="descendantsAllSelected(node)"
               [indeterminate]="descendantsPartiallySelected(node)"
               (change)="itemSelectionToggle(node)"

@@ -1,24 +1,29 @@
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SearchBarAutocompleteComponent } from "./search-bar-autocomplete.component";
+import { SearchBarAutocompleteComponent } from './search-bar-autocomplete.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxsModule } from '@ngxs/store';
+import { MockSearchBarComponent } from 'src/app/shared/mocks/unit-test-mocks';
 
-describe("SearchBarAutocompleteComponent", () => {
+describe('SearchBarAutocompleteComponent', () => {
   let component: SearchBarAutocompleteComponent;
   let fixture: ComponentFixture<SearchBarAutocompleteComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [SearchBarAutocompleteComponent],
-    }).compileComponents();
-  }));
-
   beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [SearchBarAutocompleteComponent, MockSearchBarComponent],
+      imports: [NoopAnimationsModule, NgxsModule.forRoot()]
+    }).compileComponents();
+
     fixture = TestBed.createComponent(SearchBarAutocompleteComponent);
     component = fixture.componentInstance;
+
+    component.initialSearchText = 'test';
+
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

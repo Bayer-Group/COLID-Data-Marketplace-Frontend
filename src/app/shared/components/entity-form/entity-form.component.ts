@@ -1,26 +1,26 @@
-import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
-import { MetaDataProperty } from "src/app/shared/models/metadata/meta-data-property";
-import { Constants } from "src/app/shared/constants";
-import { UntypedFormGroup, UntypedFormBuilder } from "@angular/forms";
-import { FormItemSettings } from "src/app/shared/models/form/form-item-settings";
-import { MatDialog } from "@angular/material/dialog";
-import { DeleteItemDialogComponent } from "../delete-item-dialog/delete-item-dialog.component";
-import { ValidationResult } from "src/app/shared/models/validation/validation-result";
-import { EntityBase } from "src/app/shared/models/entities/entity-base";
-import { Entity } from "src/app/shared/models/entities/entity";
-import { EntityFormService } from "../../services/entity-form.service";
-import { EntityFormStatus } from "./entity-form-status";
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { MetaDataProperty } from 'src/app/shared/models/metadata/meta-data-property';
+import { Constants } from 'src/app/shared/constants';
+import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
+import { FormItemSettings } from 'src/app/shared/models/form/form-item-settings';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteItemDialogComponent } from '../delete-item-dialog/delete-item-dialog.component';
+import { ValidationResult } from 'src/app/shared/models/validation/validation-result';
+import { EntityBase } from 'src/app/shared/models/entities/entity-base';
+import { Entity } from 'src/app/shared/models/entities/entity';
+import { EntityFormService } from '../../services/entity-form.service';
+import { EntityFormStatus } from './entity-form-status';
 
 export enum EntityFormAction {
-  CREATE = "create",
-  SAVE = "save",
-  DELETE = "delete",
+  CREATE = 'create',
+  SAVE = 'save',
+  DELETE = 'delete'
 }
 
 @Component({
-  selector: "app-entity-form",
-  templateUrl: "./entity-form.component.html",
-  styleUrls: ["./entity-form.component.scss"],
+  selector: 'app-entity-form',
+  templateUrl: './entity-form.component.html',
+  styleUrls: ['./entity-form.component.scss']
 })
 export class EntityFormComponent implements OnInit {
   @Input() label: string;
@@ -81,7 +81,7 @@ export class EntityFormComponent implements OnInit {
   }
 
   formItemSettings: FormItemSettings = {
-    debounceTime: 500,
+    debounceTime: 500
   };
 
   get f() {
@@ -156,10 +156,10 @@ export class EntityFormComponent implements OnInit {
         header: `Deleting ${this.label}`,
         body:
           this.deletionText ||
-          `Are you sure you want to delete this ${this.label}?'`,
+          `Are you sure you want to delete this ${this.label}?'`
       },
-      width: "auto",
-      disableClose: true,
+      width: 'auto',
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -173,7 +173,7 @@ export class EntityFormComponent implements OnInit {
     validationResult.results.forEach((result) => {
       this.entityForm.controls[result.path].setErrors({
         incorrect: true,
-        result: result,
+        result: result
       });
     });
   }

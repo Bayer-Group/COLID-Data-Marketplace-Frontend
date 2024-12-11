@@ -4,24 +4,24 @@ import {
   Input,
   Output,
   EventEmitter,
-  OnDestroy,
-} from "@angular/core";
-import { AggregationBucket } from "src/app/shared/models/aggregation-bucket";
-import { MetadataState } from "src/app/states/metadata.state";
-import { Observable, Subscription } from "rxjs";
-import { Select } from "@ngxs/store";
-import { TaxonomyDTO } from "src/app/shared/models/taxonomy-dto";
-import { FlatTreeControl } from "@angular/cdk/tree";
-import { SelectionModel } from "@angular/cdk/collections";
+  OnDestroy
+} from '@angular/core';
+import { AggregationBucket } from 'src/app/shared/models/aggregation-bucket';
+import { MetadataState } from 'src/app/states/metadata.state';
+import { Observable, Subscription } from 'rxjs';
+import { Select } from '@ngxs/store';
+import { TaxonomyDTO } from 'src/app/shared/models/taxonomy-dto';
+import { FlatTreeControl } from '@angular/cdk/tree';
+import { SelectionModel } from '@angular/cdk/collections';
 import {
   MatTreeFlatDataSource,
-  MatTreeFlattener,
-} from "@angular/material/tree";
+  MatTreeFlattener
+} from '@angular/material/tree';
 
 @Component({
-  selector: "app-filter-box-item-taxonomy",
-  templateUrl: "./filter-box-item-taxonomy.component.html",
-  styleUrls: ["./filter-box-item-taxonomy.component.scss"],
+  selector: 'app-filter-box-item-taxonomy',
+  templateUrl: './filter-box-item-taxonomy.component.html',
+  styleUrls: ['./filter-box-item-taxonomy.component.scss']
 })
 export class FilterBoxItemTaxonomyComponent implements OnInit, OnDestroy {
   @Select(MetadataState.getMetadata) metadata$: Observable<any>;
@@ -74,8 +74,6 @@ export class FilterBoxItemTaxonomyComponent implements OnInit, OnDestroy {
   get isTaxonomy(): boolean {
     return this.taxonomyTreeData.some((t) => t.hasChild);
   }
-
-  constructor() {}
 
   ngOnInit() {
     this.metadataSubscription = this.metadata$.subscribe((m) => {

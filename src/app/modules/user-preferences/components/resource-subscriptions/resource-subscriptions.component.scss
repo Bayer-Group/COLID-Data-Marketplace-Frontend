@@ -24,3 +24,7 @@ font-size: 16px;
 mat-chip-list {
 margin-left: 1em;
 }
+
+mat-chip {
+  --mdc-chip-label-text-color: white;
+}

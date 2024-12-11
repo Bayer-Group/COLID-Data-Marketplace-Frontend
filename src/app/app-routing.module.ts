@@ -1,74 +1,74 @@
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
-import { SearchComponent } from "./components/search/search.component";
-import { WelcomeComponent } from "./components/welcome/welcome.component";
-import { HelpComponent } from "./components/help/help.component";
-import { UnauthorizedComponent } from "./shared/components/unauthorized/unauthorized.component";
-import { LoggedInComponent } from "./shared/components/logged-in/logged-in.component";
-import { LoginInProgressComponent } from "./shared/components/login-in-progress/login-in-progress.component";
-import { AuthGuardService } from "./modules/authentication/guards/auth-guard.service";
-import { AuthGuardAdminService } from "./modules/authentication/guards/auth-guard-admin.service";
-import { SearchResultStandaloneContainerComponent } from "./components/search-result-standalone-container/search-result-standalone-container.component";
-import { FavoritesOpenComponent } from "./components/favorites/components/favorites-open/favorites-open.component";
-import { ResourceReviewsComponent } from "./components/resource-reviews/resource-reviews.component";
-import { EditorPrivilegeGuard } from "./modules/authentication/guards/editor-privilege.guard";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { SearchComponent } from './components/search/search.component';
+import { WelcomeComponent } from './components/welcome/welcome.component';
+import { HelpComponent } from './components/help/help.component';
+import { UnauthorizedComponent } from './shared/components/unauthorized/unauthorized.component';
+import { LoggedInComponent } from './shared/components/logged-in/logged-in.component';
+import { LoginInProgressComponent } from './shared/components/login-in-progress/login-in-progress.component';
+import { AuthGuardService } from './modules/authentication/guards/auth-guard.service';
+import { AuthGuardAdminService } from './modules/authentication/guards/auth-guard-admin.service';
+import { SearchResultStandaloneContainerComponent } from './components/search-result-standalone-container/search-result-standalone-container.component';
+import { FavoritesOpenComponent } from './components/favorites/components/favorites-open/favorites-open.component';
+import { ResourceReviewsComponent } from './components/resource-reviews/resource-reviews.component';
+import { EditorPrivilegeGuard } from './modules/authentication/guards/editor-privilege.guard';
 
 const welcomeRoute = {
-  path: "",
+  path: '',
   component: WelcomeComponent,
-  canActivate: [AuthGuardService],
+  canActivate: [AuthGuardService]
 };
 const searchRoute = {
-  path: "search",
+  path: 'search',
   component: SearchComponent,
-  canActivate: [AuthGuardService],
+  canActivate: [AuthGuardService]
 };
 const helpRoute = {
-  path: "help",
+  path: 'help',
   component: HelpComponent,
-  canActivate: [AuthGuardService],
+  canActivate: [AuthGuardService]
 };
 const detailRoute = {
-  path: "resource-detail",
+  path: 'resource-detail',
   component: SearchResultStandaloneContainerComponent,
-  canActivate: [AuthGuardService],
+  canActivate: [AuthGuardService]
 };
 const favoritesRoute = {
-  path: "favorites",
+  path: 'favorites',
   component: FavoritesOpenComponent,
-  canActivate: [AuthGuardService],
+  canActivate: [AuthGuardService]
 };
 const unauthorizedRoute = {
-  path: "unauthorized",
-  component: UnauthorizedComponent,
+  path: 'unauthorized',
+  component: UnauthorizedComponent
 };
-const loggedInRoute = { path: "logged-in", component: LoggedInComponent };
+const loggedInRoute = { path: 'logged-in', component: LoggedInComponent };
 const loginInProgressRoute = {
-  path: "login-in-progress",
-  component: LoginInProgressComponent,
+  path: 'login-in-progress',
+  component: LoginInProgressComponent
 };
-const catchAll = { path: "**", redirectTo: "" };
+const catchAll = { path: '**', redirectTo: '' };
 
 const userPreferencesRoute = {
-  path: "user",
+  path: 'user',
   loadChildren: () =>
-    import("./modules/user-preferences/user-preferences.module").then(
+    import('./modules/user-preferences/user-preferences.module').then(
       (m) => m.UserPreferencesModule
     ),
-  canActivate: [AuthGuardService],
+  canActivate: [AuthGuardService]
 };
 
 const resourceReviewsRoute = {
-  path: "resource-reviews",
+  path: 'resource-reviews',
   component: ResourceReviewsComponent,
-  canActivate: [EditorPrivilegeGuard],
+  canActivate: [EditorPrivilegeGuard]
 };
 
 const adminRoute = {
-  path: "admin",
+  path: 'admin',
   loadChildren: () =>
-    import("./modules/admin/admin.module").then((m) => m.AdminModule),
-  canActivate: [AuthGuardAdminService],
+    import('./modules/admin/admin.module').then((m) => m.AdminModule),
+  canActivate: [AuthGuardAdminService]
 };
 
 const routes: Routes = [
@@ -83,16 +83,15 @@ const routes: Routes = [
   userPreferencesRoute,
   resourceReviewsRoute,
   adminRoute,
-  catchAll,
+  catchAll
 ];
 
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
-      onSameUrlNavigation: "ignore",
-      relativeLinkResolution: "legacy",
-    }),
+      onSameUrlNavigation: 'ignore'
+    })
   ],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}

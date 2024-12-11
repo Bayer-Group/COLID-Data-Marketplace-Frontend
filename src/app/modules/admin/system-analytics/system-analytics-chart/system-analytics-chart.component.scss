@@ -1,0 +1,11 @@
+.chart-wrapper {
+  display: block;
+  min-height: 300px; 
+ 
+}
+
+::ng-deep ngx-charts-bar-horizontal-normalized {
+display: block;
+min-height: 1600px;
+max-height: 20000px;
+}

@@ -2,24 +2,24 @@ import {
   Component,
   OnInit,
   Input,
-  ChangeDetectionStrategy,
-} from "@angular/core";
-import { Observable, of } from "rxjs";
-import { Store } from "@ngxs/store";
-import { MetaDataProperty } from "src/app/shared/models/metadata/meta-data-property";
+  ChangeDetectionStrategy
+} from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { Store } from '@ngxs/store';
+import { MetaDataProperty } from 'src/app/shared/models/metadata/meta-data-property';
 import {
   FetchTaxonomyList,
-  TaxonomyState,
-} from "src/app/states/taxonomy.state";
-import { TaxonomyDTO } from "src/app/shared/models/taxonomy-dto";
-import { Constants } from "src/app/shared/constants";
-import { concatMap } from "rxjs/operators";
+  TaxonomyState
+} from 'src/app/states/taxonomy.state';
+import { TaxonomyDTO } from 'src/app/shared/models/taxonomy-dto';
+import { Constants } from 'src/app/shared/constants';
+import { concatMap } from 'rxjs/operators';
 
 @Component({
-  selector: "app-entity-display-item-taxonomy",
-  templateUrl: "./entity-display-item-taxonomy.component.html",
-  styleUrls: ["./entity-display-item-taxonomy.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-entity-display-item-taxonomy',
+  templateUrl: './entity-display-item-taxonomy.component.html',
+  styleUrls: ['./entity-display-item-taxonomy.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EntityDisplayItemTaxonomyComponent implements OnInit {
   @Input() values: string[] = [];
@@ -34,7 +34,7 @@ export class EntityDisplayItemTaxonomyComponent implements OnInit {
     Constants.Metadata.Keywords,
     Constants.ConsumerGroup.HasPidUriTemplate,
     Constants.Metadata.ContainsTherapeuticAreas,
-    Constants.Metadata.ContainsRwdDimensions,
+    Constants.Metadata.ContainsRwdDimensions
   ];
 
   get isBadgeTaxonomy(): boolean {

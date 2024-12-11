@@ -1,4 +1,4 @@
-import { Policy } from "./policy";
+import { Policy } from './policy';
 
 export class RetentionClassPolicies {
   classId: string;

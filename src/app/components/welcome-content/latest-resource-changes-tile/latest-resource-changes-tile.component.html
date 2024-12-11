@@ -22,9 +22,11 @@
       [resourceType]="resource.resourceType"
       [lifeCycleStatus]="resource.lifeCycleStatus"
       [resourceLinkedLifecycleStatus]="resource.resourceLinkedLifeCycleStatus"
-      [showLifeCycleStatus]="true"
     ></app-resource-item-tile>
-    <div class="d-flex justify-content-center" *ngIf="loadingBatch">
+    <div
+      class="d-flex justify-content-center"
+      *ngIf="loadingBatch || !userEmail"
+    >
       <mat-spinner [diameter]="100" [strokeWidth]="5"></mat-spinner>
     </div>
     <div *ngIf="lastChangedResources.length === 0">
@@ -32,3 +34,8 @@
     </div></mat-list
   >
 </mat-expansion-panel>
+<ng-template #loading>
+  <div class="d-flex justify-content-center p-4 bg-light">
+    <mat-spinner [diameter]="100" [strokeWidth]="5"></mat-spinner>
+  </div>
+</ng-template>

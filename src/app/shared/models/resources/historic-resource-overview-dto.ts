@@ -1,7 +1,7 @@
-import { Constants } from "src/app/shared/constants";
-import { Entity } from "../entities/entity";
-import { MetaDataProperty } from "../metadata/meta-data-property";
-import { VersionProperty } from "./version-property";
+import { Constants } from 'src/app/shared/constants';
+import { Entity } from '../entities/entity';
+import { MetaDataProperty } from '../metadata/meta-data-property';
+import { VersionProperty } from './version-property';
 export class HistoricResourceOverviewDTO {
   id: string;
   pidUri: string;

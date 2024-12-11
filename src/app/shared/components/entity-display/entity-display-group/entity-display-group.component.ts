@@ -1,23 +1,21 @@
-import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
-import { Constants } from "src/app/shared/constants";
-import { MetadataExtension } from "src/app/shared/extensions/metadata.extension";
-import { Entity } from "src/app/shared/models/entities/entity";
-import { MetaDataProperty } from "src/app/shared/models/metadata/meta-data-property";
-import { MetaDataPropertyGroup } from "src/app/shared/models/metadata/meta-data-property-group";
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Constants } from 'src/app/shared/constants';
+import { MetadataExtension } from 'src/app/shared/extensions/metadata.extension';
+import { Entity } from 'src/app/shared/models/entities/entity';
+import { MetaDataProperty } from 'src/app/shared/models/metadata/meta-data-property';
+import { MetaDataPropertyGroup } from 'src/app/shared/models/metadata/meta-data-property-group';
 
 @Component({
-  selector: "app-entity-display-group",
-  templateUrl: "./entity-display-group.component.html",
-  styleUrls: ["./entity-display-group.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-entity-display-group',
+  templateUrl: './entity-display-group.component.html',
+  styleUrls: ['./entity-display-group.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EntityDisplayGroupComponent {
   @Input() group: string;
   @Input() groupedMetadata: Array<MetaDataProperty>;
   @Input() entity: Entity;
   @Input() entityVersions: any;
-
-  constructor() {}
 
   get isDistribution(): boolean {
     return this.group === Constants.Resource.Groups.DistributionEndpoints;
@@ -31,7 +29,7 @@ export class EntityDisplayGroupComponent {
     const metadataProperty = this.groupedMetadata[0];
     const group: MetaDataPropertyGroup =
       metadataProperty.properties[Constants.Metadata.Group];
-    return group == null ? "" : group.label;
+    return group == null ? '' : group.label;
   }
 
   showLabel(metaDataProperty: MetaDataProperty): boolean {

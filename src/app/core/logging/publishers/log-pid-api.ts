@@ -1,10 +1,10 @@
-import { HttpClient } from "@angular/common/http";
-import { Observable, of as observableOf } from "rxjs";
-import { map, catchError } from "rxjs/operators";
-import { environment } from "../../../../environments/environment";
-import { LogPublisher } from "./log-publisher";
-import { EdmLogEntry } from "../../../shared/models/logging/edm-log-entry";
-import { LogLevel } from "src/app/shared/models/logging/log-level";
+import { HttpClient } from '@angular/common/http';
+import { Observable, of as observableOf } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
+import { LogPublisher } from './log-publisher';
+import { EdmLogEntry } from '../../../shared/models/logging/edm-log-entry';
+import { LogLevel } from 'src/app/shared/models/logging/log-level';
 
 export class LogPidApi implements LogPublisher {
   location: string;
@@ -16,7 +16,7 @@ export class LogPidApi implements LogPublisher {
 
   // Add log entry to back end data store
   log(logLevel: LogLevel, entry: EdmLogEntry): Observable<boolean> {
-    return this.httpClient.post(this.location + "/" + logLevel, entry).pipe(
+    return this.httpClient.post(this.location + '/' + logLevel, entry).pipe(
       map((response) => response),
       catchError(this.handleErrors)
     );

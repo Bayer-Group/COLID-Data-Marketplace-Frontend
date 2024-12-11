@@ -1,30 +1,32 @@
-import { Component, OnInit, Input, forwardRef } from "@angular/core";
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { FormItemInputBaseComponent } from "../form-item-input-base/form-item-input-base.component";
-import { MetaDataProperty } from "src/app/shared/models/metadata/meta-data-property";
-import { BaseEntityResultDTO } from "src/app/shared/models/entities/base-entity-result-dto";
-import { Constants } from "src/app/shared/constants";
-import { Observable, Subject } from "rxjs";
-import { BaseEntityRequestDTO } from "src/app/shared/models/entities/base-entity-request-dto";
-import { MultiselectSettings } from "src/app/shared/models/form/multi-select-settings";
-import { Store, Select } from "@ngxs/store";
+import { Component, OnInit, Input, forwardRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormItemInputBaseComponent } from '../form-item-input-base/form-item-input-base.component';
+import { MetaDataProperty } from 'src/app/shared/models/metadata/meta-data-property';
+import { BaseEntityResultDTO } from 'src/app/shared/models/entities/base-entity-result-dto';
+import { Constants } from 'src/app/shared/constants';
+import { Observable, Subject } from 'rxjs';
+import { BaseEntityRequestDTO } from 'src/app/shared/models/entities/base-entity-request-dto';
+import { MultiselectSettings } from 'src/app/shared/models/form/multi-select-settings';
+import { Store, Select } from '@ngxs/store';
 import {
   FetchTaxonomyList,
-  TaxonomyState,
-} from "src/app/states/taxonomy.state";
-import { TaxonomyResultDTO } from "src/app/shared/models/taxonomy/taxonomy-result-dto";
+  TaxonomyState
+} from 'src/app/states/taxonomy.state';
+import { TaxonomyResultDTO } from 'src/app/shared/models/taxonomy/taxonomy-result-dto';
+
+// TODO: Unify - duplicate code with colid-ui-editor-frontend
 
 @Component({
-  selector: "app-form-item-input-multiselect",
-  templateUrl: "./form-item-input-multiselect.component.html",
-  styleUrls: ["./form-item-input-multiselect.component.scss"],
+  selector: 'app-form-item-input-multiselect',
+  templateUrl: './form-item-input-multiselect.component.html',
+  styleUrls: ['./form-item-input-multiselect.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => FormItemInputMultiselectComponent),
-      multi: true,
-    },
-  ],
+      multi: true
+    }
+  ]
 })
 export class FormItemInputMultiselectComponent
   extends FormItemInputBaseComponent

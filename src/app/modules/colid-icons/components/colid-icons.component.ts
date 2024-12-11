@@ -1,22 +1,23 @@
-import { Component, Input } from "@angular/core";
-import { IconMapping } from "../models/icon-mapping";
-import { ColidIconsService } from "../services/colid-icons.service";
-import { IconTypes } from "../models/icon-types";
+import { Component, Input } from '@angular/core';
+import { IconMapping } from '../models/icon-mapping';
+import { ColidIconsService } from '../services/colid-icons.service';
+import { IconTypes } from '../models/icon-types';
+
+// TODO: Unify - duplicate code with colid-ui-editor-frontend
 
 @Component({
-  selector: "ds-icon",
-  templateUrl: "./colid-icons.component.html",
-  styles: ["::ng-deep mat-icon svg { pointer-events: none; }"],
+  selector: 'ds-icon',
+  templateUrl: './colid-icons.component.html',
+  styles: [
+    '::ng-deep mat-icon svg { pointer-events: none; }',
+    '.mat-icon { color: black }'
+  ]
 })
 export class ColidIconsComponent {
   @Input() icon: string;
-
   @Input() delay: number;
-
   @Input() tooltip: string;
-
   @Input() tooltipDisabled: boolean = true;
-
   @Input() iconType: IconTypes = IconTypes.Default;
 
   iconTypes = IconTypes;

@@ -1,19 +1,19 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { ExcelExportPayload } from "src/app/shared/models/export/excel-export-payload";
-import { ExportSettings } from "src/app/shared/models/export/export-settings";
-import { SearchRequest } from "src/app/shared/models/export/search-request";
-import { environment } from "src/environments/environment";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ExcelExportPayload } from 'src/app/shared/models/export/excel-export-payload';
+import { ExportSettings } from 'src/app/shared/models/export/export-settings';
+import { SearchRequest } from 'src/app/shared/models/export/search-request';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class ExportService {
   constructor(private httpClient: HttpClient) {}
 
   startExcelExport(requestBody: ExcelExportPayload) {
-    const url = environment.colidApiUrl + "/export";
+    const url = environment.colidApiUrl + '/export';
     return this.httpClient.post<any>(url, requestBody);
   }
 
@@ -26,19 +26,19 @@ export class ExportService {
     const searchRequestObject: SearchRequest = {
       from: 0,
       size: 0,
-      searchTerm: queryParams["q"],
+      searchTerm: queryParams['q'],
       aggregationFilters:
-        queryParams["f"] == null ? {} : JSON.parse(queryParams["f"]),
+        queryParams['f'] == null ? {} : JSON.parse(queryParams['f']),
       rangeFilters:
-        queryParams["r"] == null ? {} : JSON.parse(queryParams["r"]),
+        queryParams['r'] == null ? {} : JSON.parse(queryParams['r']),
       enableHighlighting: false,
-      apiCallTime: new Date().toUTCString(),
+      apiCallTime: new Date().toUTCString()
     };
 
     const payload: ExcelExportPayload = {
       exportSettings: exportSettings,
       searchRequest: searchRequestObject,
-      pidUris: [],
+      pidUris: []
     };
 
     return payload;
@@ -51,7 +51,7 @@ export class ExportService {
     const payload: ExcelExportPayload = {
       exportSettings,
       searchRequest: null,
-      pidUris,
+      pidUris
     };
 
     return payload;

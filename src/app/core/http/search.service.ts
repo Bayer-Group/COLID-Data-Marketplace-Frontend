@@ -1,22 +1,22 @@
-import { DocumentMap } from "src/app/shared/models/search-result";
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { HttpClient } from "@angular/common/http";
-import { environment } from "src/environments/environment";
-import { SearchResult } from "../../shared/models/search-result";
-import { map } from "rxjs/operators";
-import { ActiveRangeFilters } from "../../shared/models/active-range-filters";
-import { AggregationsResultDto } from "../../shared/models/aggregations-result-dto";
-import { ExcelExportPayload } from "../../shared/models/export/excel-export-payload";
-import { Constants } from "src/app/shared/constants";
-import { SearchClusterResults } from "src/app/shared/models/search-cluster-result";
+import { DocumentMap } from 'src/app/shared/models/search-result';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { SearchResult } from '../../shared/models/search-result';
+import { map } from 'rxjs/operators';
+import { ActiveRangeFilters } from '../../shared/models/active-range-filters';
+import { AggregationsResultDto } from '../../shared/models/aggregations-result-dto';
+import { ExcelExportPayload } from '../../shared/models/export/excel-export-payload';
+import { Constants } from 'src/app/shared/constants';
+import { SearchClusterResults } from 'src/app/shared/models/search-cluster-result';
 import {
   UserLastChangedResource,
-  UserLastChangedResources,
-} from "src/app/shared/models/user/last-changed-resource-dto";
+  UserLastChangedResources
+} from 'src/app/shared/models/user/last-changed-resource-dto';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class SearchService {
   private readonly baseUrl = environment.dmpCoreApiUrl;
@@ -47,11 +47,11 @@ export class SearchService {
       rangeFilters: activeRangeFilters,
       enableHighlighting: true,
       apiCallTime: new Date().toUTCString(),
-      searchIndex: searchIndex,
+      searchIndex: searchIndex
     };
     //return this.getMockData("./assets/mockdata/api_search_mock.json");
     return this.httpClient.post<SearchResult>(
-      this.baseUrl + "search",
+      this.baseUrl + 'search',
       searchRequestObject
     );
   }
@@ -64,56 +64,56 @@ export class SearchService {
       from: offset,
       size: this.pageSize,
       aggregationFilters: {
-        [Constants.Metadata.HasLastChangeUser]: [userEmailAddress],
+        [Constants.Metadata.HasLastChangeUser]: [userEmailAddress]
       },
       enableHighlighting: false,
       enableAggregation: false,
       enableSuggest: false,
-      order: "desc",
+      order: 'desc',
       orderField: Constants.Metadata.LastChangeDateTime,
-      searchIndex: "all",
-      searchTerm: "",
-      apiCallTime: new Date().toUTCString(),
+      searchIndex: 'all',
+      searchTerm: '',
+      apiCallTime: new Date().toUTCString()
     };
 
     return this.httpClient
-      .post<SearchResult>(this.baseUrl + "search", searchRequestObject)
+      .post<SearchResult>(this.baseUrl + 'search', searchRequestObject)
       .pipe(
         map((searchResult: SearchResult) => {
           const changedResources = searchResult.hits.hits.map((item) => {
             return {
               resourcePidUri:
-                item.source[Constants.Metadata.HasPidUri]["outbound"][0][
-                  "value"
+                item.source[Constants.Metadata.HasPidUri]['outbound'][0][
+                  'value'
                 ],
               resourceDefinition:
                 item.source[Constants.Metadata.HasResourceDefinition][
-                  "outbound"
-                ][0]["value"],
+                  'outbound'
+                ][0]['value'],
               resourceLabel:
-                item.source[Constants.Metadata.HasLabel]["outbound"][0][
-                  "value"
+                item.source[Constants.Metadata.HasLabel]['outbound'][0][
+                  'value'
                 ],
               resourceType:
-                item.source[Constants.Metadata.EntityType]["outbound"][0][
-                  "uri"
+                item.source[Constants.Metadata.EntityType]['outbound'][0][
+                  'uri'
                 ],
               lifeCycleStatus:
-                item.source[Constants.Metadata.LifeCycleStatus]["outbound"][0][
-                  "uri"
+                item.source[Constants.Metadata.LifeCycleStatus]['outbound'][0][
+                  'uri'
                 ],
               resourceLinkedLifeCycleStatus: item.source[
-                "resourceLinkedLifecycleStatus"
+                'resourceLinkedLifecycleStatus'
               ]
-                ? item.source["resourceLinkedLifecycleStatus"]["outbound"][0][
-                    "uri"
+                ? item.source['resourceLinkedLifecycleStatus']['outbound'][0][
+                    'uri'
                   ]
-                : null,
+                : null
             } as UserLastChangedResource;
           });
           return {
             changedResources,
-            total: searchResult.hits.total,
+            total: searchResult.hits.total
           };
         })
       );
@@ -137,7 +137,7 @@ export class SearchService {
       aggregationFilters: aggJson,
       rangeFilters: rangeFilters,
       enableHighlighting: false,
-      apiCallTime: new Date().toUTCString(),
+      apiCallTime: new Date().toUTCString()
     };
     return this.httpClient.post<SearchClusterResults>(
       this.baseUrl + `search/clusterSearchResult`,
@@ -165,12 +165,12 @@ export class SearchService {
       enableSuggest: false,
       fieldsToReturn: [
         Constants.Metadata.HasPidUri,
-        Constants.Metadata.HasLabel,
-      ],
+        Constants.Metadata.HasLabel
+      ]
     };
 
     return this.httpClient
-      .post<SearchResult>(this.baseUrl + "search", searchRequestObject)
+      .post<SearchResult>(this.baseUrl + 'search', searchRequestObject)
       .pipe(
         map((res) => res.hits.hits.map((hit) => decodeURIComponent(hit.id)))
       );
@@ -178,7 +178,7 @@ export class SearchService {
 
   searchDocument(pidUri: any): Observable<SearchResult> {
     return this.httpClient
-      .get<DocumentMap>(this.baseUrl + "document?id=" + pidUri)
+      .get<DocumentMap>(this.baseUrl + 'document?id=' + pidUri)
       .pipe(
         map((result) => {
           var output = {
@@ -189,7 +189,7 @@ export class SearchService {
                   score: 0,
                   source: result,
                   highlight: {},
-                  index: "",
+                  index: '',
                   innerHits: {},
                   matchedQueries: [],
                   nested: null,
@@ -197,18 +197,18 @@ export class SearchService {
                   routing: null,
                   sequenceNumber: null,
                   sorts: [],
-                  type: "_doc",
-                  version: 0,
-                },
+                  type: '_doc',
+                  version: 0
+                }
               ],
-              total: 1,
+              total: 1
             },
             originalSearchTerm: null,
             suggestedSearchTerm: null,
             aggregations: [], //done
             rangeFilters: [],
             suggest: {},
-            took: 0,
+            took: 0
           };
           return output;
         })
@@ -216,14 +216,14 @@ export class SearchService {
   }
 
   startExcelExport(requestBody: ExcelExportPayload): Observable<any> {
-    const url = environment.colidApiUrl + "/export";
+    const url = environment.colidApiUrl + '/export';
     return this.httpClient.post<any>(url, requestBody);
   }
 
   fetchAutoCompleteResults(searchTerm: string): Observable<string[]> {
     //return this.getMockData("./assets/mockdata/api_search_suggest_mock.json");
     return this.httpClient
-      .get<string[]>(this.baseUrl + "search/suggest?q=" + searchTerm)
+      .get<string[]>(this.baseUrl + 'search/suggest?q=' + searchTerm)
       .pipe(
         map((r) => {
           if (r.length === 0 || searchTerm === r[0]) {
@@ -235,9 +235,8 @@ export class SearchService {
   }
 
   getFilterItems(): Observable<AggregationsResultDto> {
-    //return this.getMockData("./assets/mockdata/api_search_aggregations_1_mock.json");
     return this.httpClient.get<AggregationsResultDto>(
-      this.baseUrl + "search/aggregations"
+      this.baseUrl + 'search/aggregations'
     );
   }
 
@@ -253,7 +252,7 @@ export class SearchService {
   }
 
   fetchSchemaUIItems(resourceIdList: any): Observable<any> {
-    const uri = this.baseUrl + "getSchemaUIResource";
+    const uri = this.baseUrl + 'getSchemaUIResource';
     return this.httpClient.post<any>(uri, resourceIdList);
   }
 }

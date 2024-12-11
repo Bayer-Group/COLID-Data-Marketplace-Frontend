@@ -6,31 +6,31 @@ import {
   Input,
   Inject,
   ChangeDetectionStrategy,
-  OnDestroy,
-} from "@angular/core";
-import { MatDialog, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { BehaviorSubject, Observable, Subscription } from "rxjs";
-import { Select, Store } from "@ngxs/store";
+  OnDestroy
+} from '@angular/core';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { Select, Store } from '@ngxs/store';
 import {
   FavoritesState,
   FetchFavoriteListEntries,
   FetchFavorites,
-  SetEntryDetailsMetadata,
-} from "./favorites.state";
-import { FavoriteListEntry, Favorites } from "src/app/shared/models/favorites";
-import { DeleteFavoriteListComponent } from "./components/delete-favorite-list/delete-favorite-list.component";
-import { RemoveFavoriteEntryComponent } from "./components/remove-favorite-entry/remove-favorite-entry.component";
-import { EditFavoriteEntryComponent } from "./components/edit-favorite-entry/edit-favorite-entry.component";
-import { Router } from "@angular/router";
-import { CreateFavoriteListComponent } from "./components/create-favorite-list/create-favorite-list.component";
-import { EditFavoriteListComponent } from "./components/edit-favorite-list/edit-favorite-list.component";
-import { Constants } from "src/app/shared/constants";
+  SetEntryDetailsMetadata
+} from './favorites.state';
+import { FavoriteListEntry, Favorites } from 'src/app/shared/models/favorites';
+import { DeleteFavoriteListComponent } from './components/delete-favorite-list/delete-favorite-list.component';
+import { RemoveFavoriteEntryComponent } from './components/remove-favorite-entry/remove-favorite-entry.component';
+import { EditFavoriteEntryComponent } from './components/edit-favorite-entry/edit-favorite-entry.component';
+import { Router } from '@angular/router';
+import { CreateFavoriteListComponent } from './components/create-favorite-list/create-favorite-list.component';
+import { EditFavoriteListComponent } from './components/edit-favorite-list/edit-favorite-list.component';
+import { Constants } from 'src/app/shared/constants';
 
 @Component({
-  selector: "colid-favorites",
-  templateUrl: "./favorites.component.html",
-  styleUrls: ["./favorites.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'colid-favorites',
+  templateUrl: './favorites.component.html',
+  styleUrls: ['./favorites.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FavoritesComponent implements OnInit, OnDestroy {
   @Select(FavoritesState.getFavoriteListEntries)
@@ -100,7 +100,7 @@ export class FavoritesComponent implements OnInit, OnDestroy {
 
   openFavoritesFullscreen() {
     this.closeSidebar.emit();
-    this.router.navigate(["/favorites"]);
+    this.router.navigate(['/favorites']);
   }
 
   openFavoritesPage(
@@ -109,7 +109,7 @@ export class FavoritesComponent implements OnInit, OnDestroy {
     pidUri: string,
     personalNote: string
   ) {
-    this.router.navigate(["/favorites"]);
+    this.router.navigate(['/favorites']);
     if (this.router.navigate) {
       this.store.dispatch(
         new SetEntryDetailsMetadata(
@@ -129,12 +129,12 @@ export class FavoritesComponent implements OnInit, OnDestroy {
 
   editFavoriteList(favoritesListId: string, favoritesListName: string) {
     this.dialog.open(EditFavoriteListComponent, {
-      width: "400px",
-      height: "400px",
+      width: '400px',
+      height: '400px',
       data: {
         name: favoritesListName,
-        id: favoritesListId,
-      },
+        id: favoritesListId
+      }
     });
   }
 
@@ -144,25 +144,25 @@ export class FavoritesComponent implements OnInit, OnDestroy {
     pidUri: string
   ) {
     this.dialog.open(EditFavoriteEntryComponent, {
-      width: "400px",
-      height: "400px",
+      width: '400px',
+      height: '400px',
       data: {
         personalNote: favoritesListEntryId.PersonalNote[0],
         id: favoritesListEntryId.EntryId[0],
         pidUri: pidUri,
-        favListId: favoriteListId,
-      },
+        favListId: favoriteListId
+      }
     });
   }
 
   deleteFavorite(favoritesListId: string, favoritesListName: string) {
     this.dialog.open(DeleteFavoriteListComponent, {
-      width: "400px",
-      height: "400px",
+      width: '400px',
+      height: '400px',
       data: {
         name: favoritesListName,
-        id: favoritesListId,
-      },
+        id: favoritesListId
+      }
     });
   }
 
@@ -172,13 +172,13 @@ export class FavoritesComponent implements OnInit, OnDestroy {
     favoriteListEntryDocument: any
   ) {
     this.dialog.open(RemoveFavoriteEntryComponent, {
-      width: "400px",
-      height: "400px",
+      width: '400px',
+      height: '400px',
       data: {
         id: favoriteListEntryDocument.EntryId[0],
         favoriteListId: favoriteListId,
-        pidUri: pidUri,
-      },
+        pidUri: pidUri
+      }
     });
   }
 
@@ -186,7 +186,7 @@ export class FavoritesComponent implements OnInit, OnDestroy {
     favoriteListEntries: { [favoritesListId: string]: FavoriteListEntry[] },
     favoriteListId: string
   ): boolean {
-    var proof = typeof favoriteListEntries[favoriteListId] !== "undefined";
+    var proof = typeof favoriteListEntries[favoriteListId] !== 'undefined';
     if (proof) {
       return Object.keys(favoriteListEntries[favoriteListId]).length > 0;
     }

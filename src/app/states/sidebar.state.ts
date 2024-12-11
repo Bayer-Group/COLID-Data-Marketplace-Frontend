@@ -1,22 +1,22 @@
-import { Injectable } from "@angular/core";
-import { State, Action, StateContext, Selector } from "@ngxs/store";
+import { Injectable } from '@angular/core';
+import { State, Action, StateContext, Selector } from '@ngxs/store';
 
 export class SetSidebarOpened {
-  static readonly type = "[Sidebar] SetSidebarOpened";
+  static readonly type = '[Sidebar] SetSidebarOpened';
   constructor(public payload: boolean) {}
 }
 
 export class SetSidebarMode {
-  static readonly type = "[Sidebar] SetSidebarMode";
+  static readonly type = '[Sidebar] SetSidebarMode';
   constructor(public payload: string) {}
 }
 
 export class ClickedSidebarLink {
-  static readonly type = "[Sidebar] ClickedSidebarLink";
+  static readonly type = '[Sidebar] ClickedSidebarLink';
 }
 
 export class ToggleSidebar {
-  static readonly type = "[Sidebar] ToggleSidebar";
+  static readonly type = '[Sidebar] ToggleSidebar';
 }
 
 export class SidebarStateModel {
@@ -25,11 +25,11 @@ export class SidebarStateModel {
 }
 
 @State<SidebarStateModel>({
-  name: "sidebar",
+  name: 'sidebar',
   defaults: {
     sidebarOpened: true,
-    sidebarMode: "side",
-  },
+    sidebarMode: 'side'
+  }
 })
 @Injectable()
 export class SidebarState {
@@ -51,7 +51,7 @@ export class SidebarState {
     { payload }: SetSidebarOpened
   ) {
     patchState({
-      sidebarOpened: payload,
+      sidebarOpened: payload
     });
   }
 
@@ -61,7 +61,7 @@ export class SidebarState {
     { payload }: SetSidebarMode
   ) {
     patchState({
-      sidebarMode: payload,
+      sidebarMode: payload
     });
   }
 
@@ -70,9 +70,9 @@ export class SidebarState {
     { getState, patchState }: StateContext<SidebarStateModel>,
     {}: ClickedSidebarLink
   ) {
-    if (getState().sidebarMode === "over") {
+    if (getState().sidebarMode === 'over') {
       patchState({
-        sidebarOpened: false,
+        sidebarOpened: false
       });
     }
   }
@@ -83,7 +83,7 @@ export class SidebarState {
     {}: ToggleSidebar
   ) {
     patchState({
-      sidebarOpened: !getState().sidebarOpened,
+      sidebarOpened: !getState().sidebarOpened
     });
   }
 }

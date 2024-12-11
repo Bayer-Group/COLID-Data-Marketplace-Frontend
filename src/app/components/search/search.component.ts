@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Observable, Subscription, EMPTY } from "rxjs";
-import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
-import { Select, Store } from "@ngxs/store";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription, EMPTY } from 'rxjs';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { Select, Store } from '@ngxs/store';
 import {
   ChangePage,
   ChangeSearchText,
@@ -14,33 +14,34 @@ import {
   ClearSelectedPIDURIs,
   ToggleClusterView,
   FetchClusterResults,
-  SetSearchIndex,
-} from "src/app/states/search.state";
-import { SidebarState, SetSidebarOpened } from "src/app/states/sidebar.state";
-import { jsonToStringMap } from "src/app/shared/converters/string-map-object.converter";
-import { ActiveRangeFilters } from "src/app/shared/models/active-range-filters";
-import { SearchFilterDialogComponent } from "../sidebar/search-filter-dialog/search-filter-dialog.component";
-import { LogService } from "src/app/core/logging/log.service";
-import { MatDialog } from "@angular/material/dialog";
-import { mapToObject } from "src/app/shared/converters/map-object.converter";
-import { ExportDialogComponent } from "../export-dialog/export-dialog.component";
-import { switchMap, take, tap } from "rxjs/operators";
-import { SearchHit, SearchResult } from "src/app/shared/models/search-result";
-import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
-import { MultiselectWarningDialogComponent } from "../multiselect-warning-dialog/multiselect-warning-dialog.component";
-import { AddFavoriteDialogComponent } from "../favorites/components/add-favorite-dialog/add-favorite-dialog.component";
-import { environment } from "src/environments/environment";
-import { ExportService } from "src/app/core/http/export.service";
-import { ExportSettings } from "src/app/shared/models/export/export-settings";
-import { CookieService } from "ngx-cookie";
-import { ClearResourceTypeItem } from "src/app/states/metadata.state";
-import { AuthService } from "src/app/modules/authentication/services/auth.service";
-import { MatRadioChange } from "@angular/material/radio";
+  SetSearchIndex
+} from 'src/app/states/search.state';
+import { SidebarState, SetSidebarOpened } from 'src/app/states/sidebar.state';
+import { jsonToStringMap } from 'src/app/shared/converters/string-map-object.converter';
+import { ActiveRangeFilters } from 'src/app/shared/models/active-range-filters';
+import { SearchFilterDialogComponent } from '../sidebar/search-filter-dialog/search-filter-dialog.component';
+import { LogService } from 'src/app/core/logging/log.service';
+import { MatDialog } from '@angular/material/dialog';
+import { mapToObject } from 'src/app/shared/converters/map-object.converter';
+import { ExportDialogComponent } from '../export-dialog/export-dialog.component';
+import { switchMap, take, tap } from 'rxjs/operators';
+import { SearchHit, SearchResult } from 'src/app/shared/models/search-result';
+import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
+import { MultiselectWarningDialogComponent } from '../multiselect-warning-dialog/multiselect-warning-dialog.component';
+import { AddFavoriteDialogComponent } from '../favorites/components/add-favorite-dialog/add-favorite-dialog.component';
+import { environment } from 'src/environments/environment';
+import { ExportService } from 'src/app/core/http/export.service';
+import { ExportSettings } from 'src/app/shared/models/export/export-settings';
+import { CookieService } from 'ngx-cookie';
+import { ClearResourceTypeItem } from 'src/app/states/metadata.state';
+import { AuthService } from 'src/app/modules/authentication/services/auth.service';
+import { MatRadioChange } from '@angular/material/radio';
+import { FetchFilter } from 'src/app/states/filter.state';
 
 @Component({
-  selector: "app-search",
-  templateUrl: "./search.component.html",
-  styleUrls: ["./search.component.scss"],
+  selector: 'app-search',
+  templateUrl: './search.component.html',
+  styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit, OnDestroy {
   @Select(SearchState.getShowResultsClustered)
@@ -73,7 +74,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   activeAggregations: Map<string, string[]>;
   activeRangeFilters: ActiveRangeFilters;
-  searchText: string = "";
+  searchText: string = '';
   searchResult: SearchResult;
   pidUrisSearchResult: string[];
   selectedClusterPidUris: string[] = [];
@@ -81,6 +82,10 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   get hasCreatePrivilege$(): Observable<boolean> {
     return this.authService.hasCreatePrivilege$;
+  }
+
+  get hasEditorFunctionalitiesPrivilege$(): Observable<boolean> {
+    return this.authService.hasEditorFunctionalitiesPrivilege$;
   }
 
   constructor(
@@ -150,7 +155,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   receiveMessage(event: any) {
     const message = event.data.message;
-    if (message == "selectedPidURIs") {
+    if (message == 'selectedPidURIs') {
       let uris: string[] = event.data.value;
       this.pidUris = [];
       uris.forEach((u) => {
@@ -162,12 +167,12 @@ export class SearchComponent implements OnInit, OnDestroy {
   openInRRM() {
     this.selectedPIDURIs$.pipe(take(1)).subscribe((pidUris) => {
       // take only the first 40 PID URIs as the cookie has a memory limit
-      this.cookieService.putObject("selectedResources", pidUris.slice(0, 40), {
-        domain: environment.cookieSharingSubDomain,
+      this.cookieService.putObject('selectedResources', pidUris.slice(0, 40), {
+        domain: environment.cookieSharingSubDomain
       });
       this.store.dispatch(new ClearSelectedPIDURIs());
       const url = `${environment.rrmUrl}?viewSelectedResources=true`;
-      window.open(url, "_blank");
+      window.open(url, '_blank');
     });
   }
 
@@ -178,22 +183,22 @@ export class SearchComponent implements OnInit, OnDestroy {
         tap((pidUris: string[]) => {
           if (pidUris.length <= this.exportLimit) {
             this.dialog.open(AddFavoriteDialogComponent, {
-              height: "400px",
-              width: "500px",
+              height: '400px',
+              width: '500px',
               data: {
-                multiSelect: true,
-              },
+                multiSelect: true
+              }
             });
           } else {
             this.dialog.open(MultiselectWarningDialogComponent, {
-              width: "500px",
+              width: '500px',
               data: {
-                dialogTitle: "Favorites List Warning",
+                dialogTitle: 'Favorites List Warning',
                 dialogContent: `
                 Selected elements can not be added to a favorite list because it contains more than 500 results.
                 <br />
-                Please refine your selection to less than 500 results.`,
-              },
+                Please refine your selection to less than 500 results.`
+              }
             });
             this.store.dispatch(new ClearSelectedPIDURIs());
           }
@@ -208,10 +213,10 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   getStateInitializationActionsFromQueryParams(): any {
     const params = this.route.snapshot.queryParams;
-    const page = +params["p"];
-    const query = params["q"] || "*";
-    const filter = params["f"];
-    const rangeFilter = params["r"];
+    const page = +params['p'];
+    const query = params['q'] || '*';
+    const filter = params['f'];
+    const rangeFilter = params['r'];
 
     const initActions = [];
 
@@ -232,7 +237,9 @@ export class SearchComponent implements OnInit, OnDestroy {
         initActions.push(
           new OverwriteActiveRangeFilters(parsedRangeFilter, true)
         );
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     return initActions;
@@ -251,7 +258,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   //Saved search subscription function
 
   checkSearchText() {
-    if (this.searchText == "" || this.searchText == "*") {
+    if (this.searchText == '' || this.searchText == '*') {
       return true;
     } else {
       return false;
@@ -279,18 +286,18 @@ export class SearchComponent implements OnInit, OnDestroy {
     const activeAggregationFilters = mapToObject(this.activeAggregations);
     const activeRangeFilters = this.activeRangeFilters;
     const searchText = this.searchText;
-    this.logger.info("DMP_SAVE_SEARCH_FILTER_LINK_CLICKED", {
+    this.logger.info('DMP_SAVE_SEARCH_FILTER_LINK_CLICKED', {
       searchText: searchText,
       activeRangeFilters: activeRangeFilters,
-      activeAggregationFilters: activeAggregationFilters,
+      activeAggregationFilters: activeAggregationFilters
     });
     this.dialog.open(SearchFilterDialogComponent, {
       data: {
         searchText: searchText,
         activeRangeFilters: activeRangeFilters,
-        activeAggregationFilters: activeAggregationFilters,
+        activeAggregationFilters: activeAggregationFilters
       },
-      disableClose: true,
+      disableClose: true
     });
   }
 
@@ -303,7 +310,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.searchResult.hits.total <= this.exportLimit
     ) {
       const dialogRef = this.dialog.open(ExportDialogComponent, {
-        width: "50vw",
+        width: '50vw'
       });
       dialogRef
         .afterClosed()
@@ -317,8 +324,8 @@ export class SearchComponent implements OnInit, OnDestroy {
               return this.exportService.startExcelExport(payload).pipe(
                 tap((_) => {
                   this.snackBar.successCustomDuration(
-                    "Export started",
-                    "Your export has been started. It could take some minutes, until the download link will appear in your notifications",
+                    'Export started',
+                    'Your export has been started. It could take some minutes, until the download link will appear in your notifications',
                     null,
                     5000
                   );
@@ -336,7 +343,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.selectedClusterPidUris.length < this.exportLimit
     ) {
       const dialogRef = this.dialog.open(ExportDialogComponent, {
-        width: "50vw",
+        width: '50vw'
       });
       dialogRef
         .afterClosed()
@@ -351,8 +358,8 @@ export class SearchComponent implements OnInit, OnDestroy {
               return this.exportService.startExcelExport(payload).pipe(
                 tap((_) => {
                   this.snackBar.successCustomDuration(
-                    "Export started",
-                    "Your export has been started. It could take some minutes, until the download link will appear in your notifications",
+                    'Export started',
+                    'Your export has been started. It could take some minutes, until the download link will appear in your notifications',
                     null,
                     5000
                   );
@@ -366,14 +373,14 @@ export class SearchComponent implements OnInit, OnDestroy {
         .subscribe();
     } else {
       this.dialog.open(MultiselectWarningDialogComponent, {
-        width: "500px",
+        width: '500px',
         data: {
-          dialogTitle: "Export Warning!",
+          dialogTitle: 'Export Warning!',
           dialogContent: `
             This list cannot be exported because it contains more than 500 results.
             <br />
-            Please refine your search to return less than 500 results.`,
-        },
+            Please refine your search to return less than 500 results.`
+        }
       });
     }
   }
@@ -385,7 +392,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         switchMap((pidUris: string[]) => {
           if (pidUris.length <= this.exportLimit) {
             const dialogRef = this.dialog.open(ExportDialogComponent, {
-              width: "50vw",
+              width: '50vw'
             });
             return dialogRef.afterClosed().pipe(
               switchMap((exportSettings: ExportSettings) => {
@@ -398,8 +405,8 @@ export class SearchComponent implements OnInit, OnDestroy {
                   return this.exportService.startExcelExport(payload).pipe(
                     tap((_) => {
                       this.snackBar.successCustomDuration(
-                        "Export started",
-                        "Your export has been started. It could take some minutes, until the download link will appear in your notifications",
+                        'Export started',
+                        'Your export has been started. It could take some minutes, until the download link will appear in your notifications',
                         null,
                         5000
                       );
@@ -412,14 +419,14 @@ export class SearchComponent implements OnInit, OnDestroy {
             );
           } else {
             this.dialog.open(MultiselectWarningDialogComponent, {
-              width: "500px",
+              width: '500px',
               data: {
-                dialogTitle: "Export Warning!",
+                dialogTitle: 'Export Warning!',
                 dialogContent: `
                 This list cannot be exported because it contains more than 500 results.
                 <br />
-                Please refine your selection to less than 500 results.`,
-              },
+                Please refine your selection to less than 500 results.`
+              }
             });
             this.store.dispatch(new ClearSelectedPIDURIs());
             return EMPTY;
@@ -432,7 +439,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   showClusteredResults() {
     this.store.dispatch([
       new ToggleClusterView(true),
-      new FetchClusterResults(this.searchText),
+      new FetchClusterResults(this.searchText)
     ]);
   }
 
@@ -444,6 +451,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.store.dispatch([
       new SetSearchIndex(ev.value),
       new FetchSearchResult(this.route),
+      new FetchFilter()
     ]);
   }
 }

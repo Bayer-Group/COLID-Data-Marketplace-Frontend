@@ -3,34 +3,34 @@ import {
   OnInit,
   Output,
   EventEmitter,
-  OnDestroy,
-} from "@angular/core";
-import { environment } from "src/environments/environment";
-import { StatusState } from "src/app/states/status.state";
-import { ToggleSidebar } from "src/app/states/sidebar.state";
-import { Store, Select } from "@ngxs/store";
-import { StatusBuildInformationDto } from "src/app/shared/models/status/status-build-information-dto";
-import { Observable, of, Subscription } from "rxjs";
-import { Title } from "@angular/platform-browser";
-import { mapToObject } from "src/app/shared/converters/map-object.converter";
-import { SearchFilterDataMarketplaceDto } from "src/app/shared/models/user/search-filter-data-marketplace-dto";
-import { CreateDefaultSearchFilterDataMarketplace } from "src/app/states/user-info.state";
-import { SearchFilterCollectionDto } from "src/app/shared/models/user/search-filter-collection-dto";
-import { ActiveRangeFilters } from "src/app/shared/models/active-range-filters";
-import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
-import { SearchState } from "src/app/states/search.state";
-import { AuthService } from "src/app/modules/authentication/services/auth.service";
-import { NotificationState } from "src/app/modules/notification/notification.state";
-import { MessageDto } from "src/app/shared/models/user/message-dto";
-import { Favorites } from "src/app/shared/models/favorites";
-import { FavoritesState } from "../favorites/favorites.state";
-import { ReleasenotesDialogComponent } from "../releasenotes-dialog/releasenotes-dialog.component";
-import { MatDialog } from "@angular/material/dialog";
+  OnDestroy
+} from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { StatusState } from 'src/app/states/status.state';
+import { ToggleSidebar } from 'src/app/states/sidebar.state';
+import { Store, Select } from '@ngxs/store';
+import { StatusBuildInformationDto } from 'src/app/shared/models/status/status-build-information-dto';
+import { Observable, of, Subscription } from 'rxjs';
+import { Title } from '@angular/platform-browser';
+import { mapToObject } from 'src/app/shared/converters/map-object.converter';
+import { SearchFilterDataMarketplaceDto } from 'src/app/shared/models/user/search-filter-data-marketplace-dto';
+import { CreateDefaultSearchFilterDataMarketplace } from 'src/app/states/user-info.state';
+import { SearchFilterCollectionDto } from 'src/app/shared/models/user/search-filter-collection-dto';
+import { ActiveRangeFilters } from 'src/app/shared/models/active-range-filters';
+import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
+import { SearchState } from 'src/app/states/search.state';
+import { AuthService } from 'src/app/modules/authentication/services/auth.service';
+import { NotificationState } from 'src/app/modules/notification/notification.state';
+import { MessageDto } from 'src/app/shared/models/user/message-dto';
+import { Favorites } from 'src/app/shared/models/favorites';
+import { FavoritesState } from '../favorites/favorites.state';
+import { ReleasenotesDialogComponent } from '../releasenotes-dialog/releasenotes-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: "app-navbar",
-  templateUrl: "./navbar.component.html",
-  styleUrls: ["./navbar.component.scss"],
+  selector: 'app-navbar',
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   @Select(StatusState.getBuildInformation)
@@ -67,7 +67,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private dialog: MatDialog
   ) {
     this.titleService.setTitle(
-      "COLID Data Marketplace " + this.environmentLabel
+      'COLID Data Marketplace ' + this.environmentLabel
     );
   }
 
@@ -111,7 +111,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   get currentName$(): Observable<string> {
-    return this.authService.currentName$ || of("Unknown User");
+    return this.authService.currentName$ || of('Unknown User');
   }
 
   get hasEditorFunctionalitiesPrivilege$(): Observable<boolean> {
@@ -128,12 +128,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   goToEditor() {
     const url = environment.pidUrl;
-    window.open(url, "_blank");
+    window.open(url, '_blank');
   }
 
   goToRRM() {
     const url = environment.rrmUrl;
-    window.open(url, "_blank");
+    window.open(url, '_blank');
   }
 
   toggleNavbar() {
@@ -142,8 +142,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   showReleaseNotes() {
     this.dialog.open(ReleasenotesDialogComponent, {
-      width: "60vw",
-      autoFocus: false,
+      width: '60vw',
+      autoFocus: false
     });
   }
 
@@ -167,8 +167,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.snackBar.success(
-          "Default filters",
-          "The selected filter settings have been set as default filters."
+          'Default filters',
+          'The selected filter settings have been set as default filters.'
         );
       });
   }

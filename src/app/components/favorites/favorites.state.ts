@@ -1,33 +1,39 @@
-import { Injectable } from "@angular/core";
-import { Selector, State, StateContext, Action } from "@ngxs/store";
-import { patch, removeItem, updateItem } from "@ngxs/store/operators";
-import { tap } from "rxjs/operators";
-import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
+import { Injectable } from '@angular/core';
+import { Selector, State, StateContext, Action } from '@ngxs/store';
+import { patch, removeItem, updateItem } from '@ngxs/store/operators';
+import { tap } from 'rxjs/operators';
+import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
 import {
   FavoriteListEntry,
-  FavoriteListMetadata,
-} from "src/app/shared/models/favorites";
-import { FavoritesService } from "./services/favorites.service";
-import { Constants } from "src/app/shared/constants";
+  FavoriteListMetadata
+} from 'src/app/shared/models/favorites';
+import { FavoritesService } from './services/favorites.service';
+import { Constants } from 'src/app/shared/constants';
 
 export class FetchFavorites {
-  static readonly type = "[Favorite] Fetch favorites";
+  static readonly type = '[Favorite] Fetch favorites';
   constructor(public userId: string) {}
 }
 
 export class FetchFavoriteListEntries {
-  static readonly type = "[Favorite] Fetch favorite list entries";
-  constructor(public userId: string, public favoritesListId: string) {}
+  static readonly type = '[Favorite] Fetch favorite list entries';
+  constructor(
+    public userId: string,
+    public favoritesListId: string
+  ) {}
 }
 
 export class DeleteFavorite {
-  static readonly type = "[Favorite] Delete favorite";
-  constructor(public userId: string, public id: string) {}
+  static readonly type = '[Favorite] Delete favorite';
+  constructor(
+    public userId: string,
+    public id: string
+  ) {}
 }
 
 /** Remove an entry from the favorites list */
 export class RemoveEntry {
-  static readonly type = "[Favorite] Remove Item";
+  static readonly type = '[Favorite] Remove Item';
   constructor(
     public userId: string,
     public pidUri: string,
@@ -37,7 +43,7 @@ export class RemoveEntry {
 }
 
 export class SaveFavoriteListEntry {
-  static readonly type = "[Favorite] Save favorite list entry";
+  static readonly type = '[Favorite] Save favorite list entry';
   constructor(
     public userId: string,
     public favoriteListId: string,
@@ -48,7 +54,7 @@ export class SaveFavoriteListEntry {
 }
 
 export class SaveFavoriteList {
-  static readonly type = "[Favorite] Save favorite list";
+  static readonly type = '[Favorite] Save favorite list';
   constructor(
     public usedId: string,
     public favoriteListId: string,
@@ -57,7 +63,7 @@ export class SaveFavoriteList {
 }
 
 export class SetEntryDetailsMetadata {
-  static readonly type = "[Favorite] Show entry details";
+  static readonly type = '[Favorite] Show entry details';
   constructor(
     public favoritesListId: string,
     public favoriteEntryId: string,
@@ -67,7 +73,7 @@ export class SetEntryDetailsMetadata {
 }
 
 export class ResetEntryDetailsMetadata {
-  static readonly type = "[Favorite] Reset selected entry";
+  static readonly type = '[Favorite] Reset selected entry';
   constructor() {}
 }
 
@@ -87,19 +93,19 @@ export class FavoritesStateModel {
 }
 
 @State<FavoritesStateModel>({
-  name: "Favorites",
+  name: 'Favorites',
   defaults: {
     favorites: [],
     favoriteListEntries: {},
     favoriteListEntryList: {},
     currentlyLoadingListIds: [],
     selectedEntry: {
-      favoriteListId: "0",
-      favoriteEntryId: "0",
-      pidUri: "",
-      personalNote: "",
-    },
-  },
+      favoriteListId: '0',
+      favoriteEntryId: '0',
+      pidUri: '',
+      personalNote: ''
+    }
+  }
 })
 @Injectable()
 export class FavoritesState {
@@ -191,7 +197,7 @@ export class FavoritesState {
       .pipe(
         tap((res: FavoriteListMetadata[]) => {
           patchState({
-            favorites: res,
+            favorites: res
           });
         })
       )
@@ -208,8 +214,8 @@ export class FavoritesState {
         pidUri: action.pidUri,
         favoriteListId: action.favoritesListId,
         favoriteEntryId: action.favoriteEntryId,
-        personalNote: action.personalNote,
-      },
+        personalNote: action.personalNote
+      }
     });
   }
 
@@ -217,11 +223,11 @@ export class FavoritesState {
   ResetSelectedEntry({ patchState }: StateContext<FavoritesStateModel>) {
     patchState({
       selectedEntry: {
-        favoriteListId: "0",
-        favoriteEntryId: "0",
-        pidUri: "",
-        personalNote: "",
-      },
+        favoriteListId: '0',
+        favoriteEntryId: '0',
+        pidUri: '',
+        personalNote: ''
+      }
     });
   }
 
@@ -252,13 +258,13 @@ export class FavoritesState {
           });
 
           const newCurrentlyLoadingList = [
-            ...ctx.getState().currentlyLoadingListIds,
+            ...ctx.getState().currentlyLoadingListIds
           ].filter((x) => x !== action.favoritesListId);
 
           ctx.patchState({
             favoriteListEntries: tmp,
             favoriteListEntryList: tmpList,
-            currentlyLoadingListIds: newCurrentlyLoadingList,
+            currentlyLoadingListIds: newCurrentlyLoadingList
           });
         })
       )
@@ -277,23 +283,23 @@ export class FavoritesState {
       .subscribe({
         next: (_) => {
           this.snackbar.success(
-            "Favorite List updated",
-            "This list was successfully updated."
+            'Favorite List updated',
+            'This list was successfully updated.'
           );
           ctx.setState(
             patch<FavoritesStateModel>({
               favorites: updateItem<FavoriteListMetadata>(
                 (f) => f.id == action.favoriteListId,
                 patch<FavoriteListMetadata>({
-                  name: action.name,
+                  name: action.name
                 })
-              ),
+              )
             })
           );
         },
         error: () => {
-          this.snackbar.warning("Failed to save", "Failed to save the list");
-        },
+          this.snackbar.warning('Failed to save', 'Failed to save the list');
+        }
       });
   }
 
@@ -306,12 +312,13 @@ export class FavoritesState {
       .deleteFavoriteList(action.userId, action.id)
       .pipe(
         tap((_) => {
-          ctx.setState(
-            patch({
-              favorites: 
-                removeItem<FavoriteListMetadata>((f) => f.id == action.id)              
-            })
+          const state = ctx.getState();
+          const filteredFavorites = state.favorites.filter(
+            (f) => f.id !== action.id
           );
+          ctx.patchState({
+            favorites: filteredFavorites
+          });
         })
       )
       .subscribe();
@@ -339,21 +346,21 @@ export class FavoritesState {
                 patch<FavoriteListMetadata>({
                   favoritesListEntries: removeItem(
                     (m) => m.id == action.favoritesListEntryId
-                  ),
+                  )
                 })
               ),
               favoriteListEntries: patch({
                 [action.favoriteListId]: patch({
-                  ...updatedDocumentsItem,
-                }),
+                  ...updatedDocumentsItem
+                })
               }),
               favoriteListEntryList: patch({
                 [action.favoriteListId]: removeItem<any>(
                   (e) =>
-                    e[Constants.Metadata.HasPidUri]["outbound"][0].value ==
+                    e[Constants.Metadata.HasPidUri]['outbound'][0].value ==
                     action.pidUri
-                ),
-              }),
+                )
+              })
             })
           );
         })
@@ -381,23 +388,23 @@ export class FavoritesState {
           patch({
             favoriteListEntries: patch({
               [action.favoriteListId]: patch({
-                [action.pidUri]: patch(updatedPersonalNote),
-              }),
+                [action.pidUri]: patch(updatedPersonalNote)
+              })
             }),
             favoriteListEntryList: patch({
               [action.favoriteListId]: updateItem<any>(
                 (e) => e.EntryId[0] == action.favoriteListEntryId,
                 patch(updatedPersonalNote)
-              ),
-            }),
+              )
+            })
           })
         );
 
         ctx.setState(
           patch({
             selectedEntry: patch({
-              personalNote: action.personalNote,
-            }),
+              personalNote: action.personalNote
+            })
           })
         );
       });

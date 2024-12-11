@@ -1,182 +1,165 @@
-<div class="row p-2 justify-content-between">
-  <div class="col-auto">
-    <h2>Saved searches and subscriptions</h2>
+<h4>Saved searches and subscriptions</h4>
+
+<div>
+  <div class="w-100">
+    <span class="me-0">
+      If you select a search interval, this search will be performed
+      automatically and you will receive a notification when results change.
+    </span>
   </div>
-  <!-- <div class="col-auto">
-      <button mat-raised-button color="primary">
-          <mat-icon fontSet="material-icons-outlined">refresh</mat-icon>
-          Refresh
-      </button>
-  </div> -->
-</div>
-<br />
+  <br />
 
-<div class="row justify-content-center">
-  <div class="col-11 ng-star-inserted">
-    <div class="w-100">
-      <span class="me-0">
-        If you select a search interval, this search will be performed
-        automatically and you will receive a notification when results change.
-      </span>
-    </div>
-    <br />
-
-    <div class="w-100">
-      <span class="me-0">
-        Saved searches can be executed via execute search button.
-      </span>
-    </div>
-    <br />
-    <br />
-    <div *ngIf="userSearchFilters.length > 0; else emptyResults">
-      <mat-accordion multi="false">
-        <mat-expansion-panel *ngFor="let userSearchFilter of userSearchFilters">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <div>
-                <h5 class="mb-1">{{ userSearchFilter.name }}</h5>
-              </div>
-            </mat-panel-title>
-            <mat-panel-description style="flex-grow: 0; justify-content: right">
-              <button
-                *ngIf="userSearchFilter.pidUri"
-                matTooltip="Copy browsable URI to clipboard"
-                [cdkCopyToClipboard]="userSearchFilter.pidUri"
-                (click)="$event.stopPropagation()"
-                mat-icon-button
-                class="border-button me-2"
-              >
-                <mat-icon>content_copy</mat-icon>
-              </button>
-              <button
-                mat-icon-button
-                class="border-button me-2"
-                matTooltip="Execute search"
-              >
-                <mat-icon
-                  class="me-1"
-                  (click)="
-                    getStateInitializationActionsFromQueryParams(
-                      userSearchFilter
-                    )
-                  "
-                  fontSet="material-icons-outlined"
-                  >search</mat-icon
-                >
-              </button>
-              <button
-                mat-icon-button
-                class="border-button me-2"
-                matTooltip="Subscribe to saved search"
-                *ngIf="!userSearchFilter.storedQuery"
-                (click)="
-                  onOpenIntervalNotificationDiallog($event, userSearchFilter)
-                "
-              >
-                <mat-icon>notifications_none</mat-icon>
-              </button>
-
-              <button
-                mat-icon-button
-                class="border-button me-2"
-                matTooltip="Unsubscribe from saved search"
-                *ngIf="userSearchFilter.storedQuery"
-                (click)="
-                  onUnsubscribeIntervalNotification($event, userSearchFilter)
-                "
-              >
-                <mat-icon>notifications_active</mat-icon>
-              </button>
-
-              <button
-                mat-icon-button
-                class="border-button"
-                matTooltip="Delete saved search"
-                (click)="removeSearchFilters($event, userSearchFilter)"
-              >
-                <mat-icon fontSet="material-icons-outlined">delete</mat-icon>
-              </button>
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          <!-- <ng-template matExpansionPanelContent> -->
-          <mat-divider class="my-1"></mat-divider>
-          <div>
-            <div class="row pb-1 ng-star-inserted">
-              <div class="col-3 ng-star-inserted">
-                <span class="small text-muted text-uppercase"
-                  >Browsable URI</span
-                >
-              </div>
-              <div class="col-9">
-                <a
-                  *ngIf="userSearchFilter.pidUri; else browsableUri"
-                  href="{{ userSearchFilter.pidUri }}"
-                  target="_blank"
-                  >{{ userSearchFilter.pidUri }}</a
-                >
-                <ng-template #browsableUri>
-                  <span>There is no browsable URI. </span>
-                  <span
-                    (click)="createBrowsableUri(userSearchFilter)"
-                    class="create-browsable-uri"
-                    >Click here to create one</span
-                  >
-                </ng-template>
-              </div>
+  <div class="w-100">
+    <span class="me-0">
+      Saved searches can be executed via execute search button.
+    </span>
+  </div>
+  <br />
+  <br />
+  <div *ngIf="userSearchFilters?.length > 0; else emptyResults">
+    <mat-accordion multi="false">
+      <mat-expansion-panel *ngFor="let userSearchFilter of userSearchFilters">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <div>
+              <span class="mb-1">{{ userSearchFilter.name }}</span>
             </div>
-            <div class="row pb-1 ng-star-inserted">
-              <div class="col-3 ng-star-inserted">
-                <span class="small text-muted text-uppercase">Search Term</span>
-              </div>
-              <div class="col-9 ng-star-inserted">
-                <span class="ng-star-inserted">{{
-                  userSearchFilter.searchTerm
-                }}</span>
-              </div>
-            </div>
-
-            <div
-              class="row pb-1 ng-star-inserted"
-              *ngFor="
-                let details of userSearchFilter.filterJson.aggregations
-                  | keyvalue
+          </mat-panel-title>
+          <mat-panel-description style="flex-grow: 0; justify-content: right">
+            <button
+              *ngIf="userSearchFilter.pidUri"
+              matTooltip="Copy browsable URI to clipboard"
+              [cdkCopyToClipboard]="userSearchFilter.pidUri"
+              (click)="$event.stopPropagation()"
+              mat-icon-button
+              class="border-button me-2"
+            >
+              <mat-icon>content_copy</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              class="border-button me-2"
+              matTooltip="Execute search"
+            >
+              <mat-icon
+                class="me-1"
+                (click)="
+                  getStateInitializationActionsFromQueryParams(userSearchFilter)
+                "
+                fontSet="material-icons-outlined"
+                >search</mat-icon
+              >
+            </button>
+            <button
+              mat-icon-button
+              class="border-button me-2"
+              matTooltip="Subscribe to saved search"
+              *ngIf="!userSearchFilter.storedQuery"
+              (click)="
+                onOpenIntervalNotificationDiallog($event, userSearchFilter)
               "
             >
-              <div class="col-3 ng-star-inserted">
-                <span class="small text-muted text-uppercase">{{
-                  getAggregationLabel(details.key)
-                }}</span>
-              </div>
-              <div class="col-9 ng-star-inserted">
-                <span class="ng-star-inserted">{{ details.value }}</span>
-              </div>
-            </div>
+              <mat-icon>notifications_none</mat-icon>
+            </button>
 
-            <div
-              class="row pb-1 ng-star-inserted"
-              *ngFor="
-                let details of userSearchFilter.filterJson.ranges | keyvalue
+            <button
+              mat-icon-button
+              class="border-button me-2"
+              matTooltip="Unsubscribe from saved search"
+              *ngIf="userSearchFilter.storedQuery"
+              (click)="
+                onUnsubscribeIntervalNotification($event, userSearchFilter)
               "
             >
-              <div class="col-3 ng-star-inserted">
-                <span class="small text-muted text-uppercase">{{
-                  getAggregationLabel(details.key)
-                }}</span>
-              </div>
-              <div class="col-9 ng-star-inserted">
-                <span class="ng-star-inserted"
-                  >{{ details.value.from }} to {{ details.value.to }}</span
+              <mat-icon>notifications_active</mat-icon>
+            </button>
+
+            <button
+              mat-icon-button
+              class="border-button"
+              matTooltip="Delete saved search"
+              (click)="removeSearchFilters($event, userSearchFilter)"
+            >
+              <mat-icon fontSet="material-icons-outlined">delete</mat-icon>
+            </button>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <!-- <ng-template matExpansionPanelContent> -->
+        <mat-divider class="my-1"></mat-divider>
+        <div>
+          <div class="row pb-1 ng-star-inserted">
+            <div class="col-3 ng-star-inserted">
+              <span class="small text-muted text-uppercase">Browsable URI</span>
+            </div>
+            <div class="col-9">
+              <a
+                *ngIf="userSearchFilter.pidUri; else browsableUri"
+                href="{{ userSearchFilter.pidUri }}"
+                target="_blank"
+                >{{ userSearchFilter.pidUri }}</a
+              >
+              <ng-template #browsableUri>
+                <span>There is no browsable URI. </span>
+                <span
+                  (click)="createBrowsableUri(userSearchFilter)"
+                  class="create-browsable-uri"
+                  >Click here to create one</span
                 >
-              </div>
+              </ng-template>
             </div>
           </div>
-          <mat-divider class="my-1"></mat-divider>
-          <!-- </ng-template> -->
-        </mat-expansion-panel>
-      </mat-accordion>
-    </div>
+          <div class="row pb-1 ng-star-inserted">
+            <div class="col-3 ng-star-inserted">
+              <span class="small text-muted text-uppercase">Search Term</span>
+            </div>
+            <div class="col-9 ng-star-inserted">
+              <span class="ng-star-inserted">{{
+                userSearchFilter.searchTerm
+              }}</span>
+            </div>
+          </div>
+
+          <div
+            class="row pb-1 ng-star-inserted"
+            *ngFor="
+              let details of userSearchFilter.filterJson.aggregations | keyvalue
+            "
+          >
+            <div class="col-3 ng-star-inserted">
+              <span class="small text-muted text-uppercase">{{
+                getAggregationLabel(details.key)
+              }}</span>
+            </div>
+            <div class="col-9 ng-star-inserted">
+              <span class="ng-star-inserted">{{ details.value }}</span>
+            </div>
+          </div>
+
+          <div
+            class="row pb-1 ng-star-inserted"
+            *ngFor="
+              let details of userSearchFilter.filterJson.ranges | keyvalue
+            "
+          >
+            <div class="col-3 ng-star-inserted">
+              <span class="small text-muted text-uppercase">{{
+                getAggregationLabel(details.key)
+              }}</span>
+            </div>
+            <div class="col-9 ng-star-inserted">
+              <span class="ng-star-inserted"
+                >{{ details.value.from }} to {{ details.value.to }}</span
+              >
+            </div>
+          </div>
+        </div>
+        <mat-divider class="my-1"></mat-divider>
+        <!-- </ng-template> -->
+      </mat-expansion-panel>
+    </mat-accordion>
   </div>
 </div>
+
 <ng-template #spinner>
   <app-colid-spinner></app-colid-spinner>
 </ng-template>

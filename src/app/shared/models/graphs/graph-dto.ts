@@ -1,4 +1,4 @@
-import { GraphStatus } from "./graph-status";
+import { GraphStatus } from './graph-status';
 
 export class GraphDto {
   // Uri of the named graph

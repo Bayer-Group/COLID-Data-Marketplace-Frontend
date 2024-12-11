@@ -53,7 +53,7 @@
   <span class="row" *ngFor="let value of entityProperty; let i = index">
     <ng-container [ngSwitch]="displayType">
       <ng-container *ngSwitchCase="'datetime'">
-        <span>{{ value | date : "yyyy-MM-dd HH:mm" }}</span>
+        <span>{{ value | date: 'yyyy-MM-dd HH:mm' }}</span>
       </ng-container>
       <ng-container *ngSwitchCase="'url'">
         <a

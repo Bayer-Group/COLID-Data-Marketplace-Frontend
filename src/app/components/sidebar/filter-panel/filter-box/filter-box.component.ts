@@ -2,30 +2,30 @@ import {
   Component,
   OnInit,
   Input,
-  ChangeDetectionStrategy,
-} from "@angular/core";
-import { AggregationBucket } from "src/app/shared/models/aggregation-bucket";
-import { Store } from "@ngxs/store";
+  ChangeDetectionStrategy
+} from '@angular/core';
+import { AggregationBucket } from 'src/app/shared/models/aggregation-bucket';
+import { Store } from '@ngxs/store';
 import {
   Aggregation,
-  AggregationType,
-} from "src/app/shared/models/aggregation";
+  AggregationType
+} from 'src/app/shared/models/aggregation';
 import {
   ChangeActiveAggregationBuckets,
-  ChangeActiveAggregationBucketList,
-} from "src/app/states/search.state";
+  ChangeActiveAggregationBucketList
+} from 'src/app/states/search.state';
 
 enum CollapseStates {
   Initial,
   More,
-  All,
+  All
 }
 
 @Component({
-  selector: "app-filter-box",
+  selector: 'app-filter-box',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: "./filter-box.component.html",
-  styleUrls: ["./filter-box.component.scss"],
+  templateUrl: './filter-box.component.html',
+  styleUrls: ['./filter-box.component.scss']
 })
 export class FilterBoxComponent implements OnInit {
   constructor(private store: Store) {}
@@ -38,10 +38,10 @@ export class FilterBoxComponent implements OnInit {
   @Input() initialFilterBox: boolean = false;
 
   @Input() filterType:
-    | "taxonomy"
-    | "checkbox"
-    | "checkBoxHierarchy"
-    | "select" = "checkbox";
+    | 'taxonomy'
+    | 'checkbox'
+    | 'checkBoxHierarchy'
+    | 'select' = 'checkbox';
 
   aggregationType = AggregationType;
   visibleBuckets: AggregationBucket[] = [];
@@ -55,7 +55,7 @@ export class FilterBoxComponent implements OnInit {
 
   ngOnInit() {
     this.setCollapseState(
-      this.filterType === "checkbox"
+      this.filterType === 'checkbox'
         ? CollapseStates.Initial
         : CollapseStates.All
     );
@@ -81,25 +81,25 @@ export class FilterBoxComponent implements OnInit {
     this.collapseState = state;
     switch (state) {
       case CollapseStates.Initial:
-        this.visibleBuckets = this.aggregation.buckets.slice(
+        this.visibleBuckets = this.aggregation?.buckets.slice(
           0,
           this.initialSize
         );
         break;
       case CollapseStates.More:
-        this.visibleBuckets = this.aggregation.buckets.slice(0, this.moreSize);
+        this.visibleBuckets = this.aggregation?.buckets.slice(0, this.moreSize);
         break;
       case CollapseStates.All:
-        this.visibleBuckets = this.aggregation.buckets;
+        this.visibleBuckets = this.aggregation?.buckets;
         break;
     }
 
     this.canShowAll =
       this.collapseState === CollapseStates.More &&
-      this.aggregation.buckets.length > this.moreSize;
+      this.aggregation?.buckets.length > this.moreSize;
     this.canShowMore =
       this.collapseState === CollapseStates.Initial &&
-      this.aggregation.buckets.length > this.initialSize;
+      this.aggregation?.buckets.length > this.initialSize;
     this.canShowLess = this.collapseState !== CollapseStates.Initial;
   }
 
@@ -127,7 +127,7 @@ export class FilterBoxComponent implements OnInit {
     let bucketNames = [];
 
     bucketIds.forEach((item) => {
-      let suffixIndex = item.indexOf("#");
+      let suffixIndex = item.indexOf('#');
       let trimmed = item.substring(0, suffixIndex);
       if (!bucketNames.includes(trimmed)) {
         bucketNames.push(trimmed);

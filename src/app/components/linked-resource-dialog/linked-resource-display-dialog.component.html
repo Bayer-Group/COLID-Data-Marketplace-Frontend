@@ -1,6 +1,9 @@
 <div class="dialog-panel">
   <div *ngIf="document && metadata; else noData">
-    <div mat-dialog-content>
+    <div
+      mat-dialog-content
+      class="linked-resource-display-dialog__content-container"
+    >
       <app-search-result
         [source]="document"
         [result]="hit"
@@ -12,7 +15,7 @@
       ></app-search-result>
     </div>
 
-    <div mat-dialog-actions>
+    <div mat-dialog-actions align="end">
       <button mat-raised-button (click)="closeDialog()">
         <mat-icon fontSet="material-icons-outlined">close</mat-icon>
         Close

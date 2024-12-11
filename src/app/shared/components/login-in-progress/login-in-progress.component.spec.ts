@@ -1,24 +1,30 @@
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LoginInProgressComponent } from "./login-in-progress.component";
+import { LoginInProgressComponent } from './login-in-progress.component';
+import { AuthService } from 'src/app/modules/authentication/services/auth.service';
+import { MockAuthService } from '../../mocks/unit-test-mocks';
 
-describe("LoginInProgressComponent", () => {
+describe('LoginInProgressComponent', () => {
   let component: LoginInProgressComponent;
   let fixture: ComponentFixture<LoginInProgressComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [LoginInProgressComponent],
+      providers: [
+        {
+          provide: AuthService,
+          useClass: MockAuthService
+        }
+      ]
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(LoginInProgressComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

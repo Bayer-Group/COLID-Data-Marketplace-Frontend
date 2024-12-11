@@ -1,42 +1,44 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Select, Store } from "@ngxs/store";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Select, Store } from '@ngxs/store';
 import {
   PidUriTemplateState,
   DeletePidUriTemplate,
   CreatePidUriTemplate,
   EditPidUriTemplate,
-  ReactivatePidUriTemplate,
-} from "src/app/states/pid-uri-template.state";
-import { Observable, Subscription } from "rxjs";
-import { PidUriTemplateResultDTO } from "src/app/shared/models/pidUriTemplates/pid-uri-template-result-dto";
-import { MetaDataProperty } from "src/app/shared/models/metadata/meta-data-property";
-import { UntypedFormGroup, UntypedFormBuilder } from "@angular/forms";
-import { FormItemSettings } from "src/app/shared/models/form/form-item-settings";
-import { DeleteItemDialogComponent } from "src/app/shared/components/delete-item-dialog/delete-item-dialog.component";
-import { MatDialog } from "@angular/material/dialog";
-import { ValidationResult } from "src/app/shared/models/validation/validation-result";
-import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
-import { EntityFormService } from "src/app/shared/services/entity-form.service";
-import { Constants } from "src/app/shared/constants";
-import { EntityFormStatus } from "src/app/shared/components/entity-form/entity-form-status";
+  ReactivatePidUriTemplate
+} from 'src/app/states/pid-uri-template.state';
+import { Observable, Subscription } from 'rxjs';
+import { PidUriTemplateResultDTO } from 'src/app/shared/models/pidUriTemplates/pid-uri-template-result-dto';
+import { MetaDataProperty } from 'src/app/shared/models/metadata/meta-data-property';
+import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
+import { FormItemSettings } from 'src/app/shared/models/form/form-item-settings';
+import { DeleteItemDialogComponent } from 'src/app/shared/components/delete-item-dialog/delete-item-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ValidationResult } from 'src/app/shared/models/validation/validation-result';
+import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
+import { EntityFormService } from 'src/app/shared/services/entity-form.service';
+import { Constants } from 'src/app/shared/constants';
+import { EntityFormStatus } from 'src/app/shared/components/entity-form/entity-form-status';
 
 export enum PidUriTemplateAction {
-  CREATE = "create",
-  SAVE = "save",
-  DELETE = "delete",
-  REACTIVATE = "reactivate",
+  CREATE = 'create',
+  SAVE = 'save',
+  DELETE = 'delete',
+  REACTIVATE = 'reactivate'
 }
 
 @Component({
-  selector: "app-pid-uri-template-table",
-  templateUrl: "./pid-uri-template-table.component.html",
-  styleUrls: ["./pid-uri-template-table.component.css"],
+  selector: 'app-pid-uri-template-table',
+  templateUrl: './pid-uri-template-table.component.html',
+  styleUrls: ['./pid-uri-template-table.component.css']
 })
 export class PidUriTemplateTableComponent implements OnInit, OnDestroy {
   @Select(PidUriTemplateState.getPidUriTemplate)
   pidUriTemplate$: Observable<PidUriTemplateResultDTO>;
+
   @Select(PidUriTemplateState.getPidUriTemplateMetadata)
   pidUriTemplateMetadata$: Observable<Array<MetaDataProperty>>;
+
   @Select(PidUriTemplateState.getPidUriTemplates) pidUriTemplates$: Observable<
     Array<PidUriTemplateResultDTO>
   >;
@@ -45,6 +47,7 @@ export class PidUriTemplateTableComponent implements OnInit, OnDestroy {
   entityAction: PidUriTemplateAction;
 
   metaData: Array<MetaDataProperty>;
+  pidUriTemplates: Array<PidUriTemplateResultDTO>;
   pidUriTemplateForm: UntypedFormGroup;
   selectedForEdit: PidUriTemplateResultDTO;
   pidUriConstant = Constants.Metadata.HasPidUri;
@@ -53,10 +56,12 @@ export class PidUriTemplateTableComponent implements OnInit, OnDestroy {
   entityType = Constants.ResourceTypes.PidUriTemplate;
 
   formItemSettings: FormItemSettings = {
-    debounceTime: 500,
+    debounceTime: 500
   };
+  pageIndex: number = 0;
+  pageSize: number = 8;
 
-  pidUriTemplateMetadataSubscription: Subscription;
+  masterSub: Subscription = new Subscription();
 
   get isLoading(): boolean {
     return this.entityStatus === EntityFormStatus.LOADING;
@@ -76,7 +81,10 @@ export class PidUriTemplateTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setPlaceholder();
-    this.pidUriTemplateMetadataSubscription =
+    this.masterSub.add(
+      this.pidUriTemplates$.subscribe((res) => (this.pidUriTemplates = res))
+    );
+    this.masterSub.add(
       this.pidUriTemplateMetadata$.subscribe((res) => {
         if (res) {
           this.metaData = res
@@ -94,11 +102,12 @@ export class PidUriTemplateTableComponent implements OnInit, OnDestroy {
         if (this.metaData) {
           this.buildForm();
         }
-      });
+      })
+    );
   }
 
   ngOnDestroy() {
-    this.pidUriTemplateMetadataSubscription.unsubscribe();
+    this.masterSub.unsubscribe();
   }
 
   isCurrentEntity(
@@ -114,7 +123,7 @@ export class PidUriTemplateTableComponent implements OnInit, OnDestroy {
 
   setPlaceholder() {
     this.placeholder[Constants.PidUriTemplate.HasBaseUrl] = [
-      Constants.PidUriTemplate.BaseUrl,
+      Constants.PidUriTemplate.BaseUrl
     ];
     this.placeholder[
       Constants.PidUriTemplate.HasPidUriTemplateLifecycleStatus
@@ -126,7 +135,7 @@ export class PidUriTemplateTableComponent implements OnInit, OnDestroy {
 
     for (const m of this.metaData) {
       formBuilderGroup[m.properties[this.pidUriConstant]] = [
-        m.properties[this.pidUriConstant],
+        m.properties[this.pidUriConstant]
       ];
     }
 
@@ -169,14 +178,14 @@ export class PidUriTemplateTableComponent implements OnInit, OnDestroy {
   confirmAndDelete(pidUriTemplate) {
     const dialogRef = this.dialog.open(DeleteItemDialogComponent, {
       data: {
-        header: "Deleting PID URI template",
+        header: 'Deleting PID URI template',
         body:
-          "You are about to delete a pid uri template. <br>" +
-          "If the template is not used, it will be completely deleted by this procedure. <br>" +
-          "Otherwise, the template is set to status deprecated and can be reactivated later",
+          'You are about to delete a pid uri template. <br>' +
+          'If the template is not used, it will be completely deleted by this procedure. <br>' +
+          'Otherwise, the template is set to status deprecated and can be reactivated later'
       },
-      width: "auto",
-      disableClose: true,
+      width: 'auto',
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -193,7 +202,7 @@ export class PidUriTemplateTableComponent implements OnInit, OnDestroy {
     this.store.dispatch(new DeletePidUriTemplate(pidUriTemplate.id)).subscribe(
       () => {
         this.entityStatus = EntityFormStatus.SUCCESS;
-        this.snackbar.success("PID URI template", "Deleted successfully");
+        this.snackbar.success('PID URI template', 'Deleted successfully');
       },
       (error) => {
         this.handleResponseError(error);
@@ -215,7 +224,7 @@ export class PidUriTemplateTableComponent implements OnInit, OnDestroy {
       () => {
         this.buildForm();
         this.entityStatus = EntityFormStatus.SUCCESS;
-        this.snackbar.success("PID URI template", "Created successfully");
+        this.snackbar.success('PID URI template', 'Created successfully');
       },
       (error) => {
         this.handleResponseError(error);
@@ -244,7 +253,7 @@ export class PidUriTemplateTableComponent implements OnInit, OnDestroy {
         () => {
           this.cancelEditing();
           this.entityStatus = EntityFormStatus.SUCCESS;
-          this.snackbar.success("PID URI template", "Edited successfully");
+          this.snackbar.success('PID URI template', 'Edited successfully');
         },
         (error) => {
           this.handleResponseError(error);
@@ -262,8 +271,8 @@ export class PidUriTemplateTableComponent implements OnInit, OnDestroy {
         () => {
           this.entityStatus = EntityFormStatus.SUCCESS;
           this.snackbar.success(
-            "PID URI template",
-            "Reactivation successfully"
+            'PID URI template',
+            'Reactivation successfully'
           );
         },
         (error) => {
@@ -295,7 +304,7 @@ export class PidUriTemplateTableComponent implements OnInit, OnDestroy {
     validationResult.results.forEach((result) => {
       this.pidUriTemplateForm.controls[result.path].setErrors({
         incorrect: true,
-        result: result,
+        result: result
       });
     });
   }

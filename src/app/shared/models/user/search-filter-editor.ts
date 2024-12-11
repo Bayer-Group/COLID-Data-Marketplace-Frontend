@@ -1,4 +1,4 @@
-import { ResourceSearchDTO } from "src/app/shared/models/resources/resource-search-dto";
+import { ResourceSearchDTO } from 'src/app/shared/models/resources/resource-search-dto';
 
 export class SearchFilterEditor {
   filterJson: ResourceSearchDTO;

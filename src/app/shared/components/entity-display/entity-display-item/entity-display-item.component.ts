@@ -1,17 +1,17 @@
-import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
-import { Constants } from "src/app/shared/constants";
-import { StringExtension } from "src/app/shared/extensions/string.extension";
-import { MetaDataProperty } from "src/app/shared/models/metadata/meta-data-property";
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Constants } from 'src/app/shared/constants';
+import { StringExtension } from 'src/app/shared/extensions/string.extension';
+import { MetaDataProperty } from 'src/app/shared/models/metadata/meta-data-property';
 import {
   MetaDataPropertyIdentifier,
-  FieldTypeMapping,
-} from "src/app/shared/models/resources/resource-form.constants";
+  FieldTypeMapping
+} from 'src/app/shared/models/resources/resource-form.constants';
 
 @Component({
-  selector: "app-entity-display-item",
-  templateUrl: "./entity-display-item.component.html",
-  styleUrls: ["./entity-display-item.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-entity-display-item',
+  templateUrl: './entity-display-item.component.html',
+  styleUrls: ['./entity-display-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EntityDisplayItemComponent {
   @Input() metadataProperty: MetaDataProperty;
@@ -22,23 +22,21 @@ export class EntityDisplayItemComponent {
   replaceSpecialCharacterFromText =
     StringExtension.ReplaceSpecialCharacterFromText;
 
-  constructor() {}
-
   get displayType(): string {
     const group = this.metadataProperty.properties[Constants.Metadata.Group];
     if (
       this.metadataProperty.key === Constants.Metadata.HasPidUri ||
       this.metadataProperty.key === MetaDataPropertyIdentifier.baseUri
     ) {
-      return "identifier";
+      return 'identifier';
     }
 
     if (this.metadataProperty.key === Constants.Metadata.HasVersion) {
-      return "version";
+      return 'version';
     }
 
     if (this.isDistribution) {
-      return "distribution";
+      return 'distribution';
     }
 
     if (
@@ -47,37 +45,37 @@ export class EntityDisplayItemComponent {
         Constants.Metadata.NodeType.IRI &&
       !(group != null && group.key === Constants.Resource.Groups.LinkTypes)
     ) {
-      return "taxonomy";
+      return 'taxonomy';
     }
 
     if (this.checkEmail) {
-      return "email";
+      return 'email';
     }
 
     if (
       FieldTypeMapping[
         this.metadataProperty.properties[Constants.Metadata.Datatype]
-      ] === "html"
+      ] === 'html'
     ) {
-      return "html";
+      return 'html';
     }
 
     if (
       FieldTypeMapping[
         this.metadataProperty.properties[Constants.Metadata.Datatype]
-      ] === "datetime"
+      ] === 'datetime'
     ) {
-      return "datetime";
+      return 'datetime';
     }
 
     if (
       this.checkUrl &&
       this.metadataProperty.key === Constants.Metadata.HasTargetUri
     ) {
-      return this.checkProtocol ? "url" : "externalUrl";
+      return this.checkProtocol ? 'url' : 'externalUrl';
     }
 
-    return "default";
+    return 'default';
   }
 
   get isDistribution(): boolean {
@@ -137,45 +135,45 @@ export const re_email = new RegExp(
 );
 
 export const re_protocol = new RegExp(
-  "^" +
+  '^' +
     // protocol identifier
-    "(?:(?:https?|http?|ftp)://)"
+    '(?:(?:https?|http?|ftp)://)'
 );
 
 export const re_weburl = new RegExp(
-  "^" +
+  '^' +
     // protocol identifier
-    "(?:(?:https?|http?|ftp)://)*" +
+    '(?:(?:https?|http?|ftp)://)*' +
     // user:pass authentication
-    "(?:\\S+(?::\\S*)?@)?" +
-    "(?:" +
+    '(?:\\S+(?::\\S*)?@)?' +
+    '(?:' +
     // IP address exclusion
     // private & local networks
-    "(?!(?:10|127)(?:\\.\\d{1,3}){3})" +
-    "(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})" +
-    "(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})" +
+    '(?!(?:10|127)(?:\\.\\d{1,3}){3})' +
+    '(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})' +
+    '(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})' +
     // IP address dotted notation octets
     // excludes loopback network 0.0.0.0
     // excludes reserved space >= 224.0.0.0
     // excludes network & broacast addresses
     // (first & last IP address of each class)
-    "(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])" +
-    "(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
-    "(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))" +
-    "|" +
+    '(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])' +
+    '(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}' +
+    '(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))' +
+    '|' +
     // host name
-    "(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)" +
+    '(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)' +
     // domain name
-    "(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*" +
+    '(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*' +
     // TLD identifier
-    "(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))" +
+    '(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))' +
     // TLD may end with dot
-    "\\.?" +
-    ")" +
+    '\\.?' +
+    ')' +
     // port number
-    "(?::\\d{2,5})?" +
+    '(?::\\d{2,5})?' +
     // resource path
-    "(?:[/?#]\\S*)?" +
-    "$",
-  "i"
+    '(?:[/?#]\\S*)?' +
+    '$',
+  'i'
 );

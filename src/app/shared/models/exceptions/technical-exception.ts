@@ -1,3 +1,3 @@
-import { GeneralException } from "./general-exception";
+import { GeneralException } from './general-exception';
 
 export class TechnicalException extends GeneralException {}

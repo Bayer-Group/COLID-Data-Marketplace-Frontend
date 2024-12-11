@@ -10,160 +10,46 @@
     <mat-expansion-panel-header>
       <mat-panel-title>
         <div class="w-100 py-2">
-          <div class="mb-2 result-header-wrapper">
+          <div class="result-header-wrapper">
             <div class="result-header">
               <ds-icon
-                class="icon-20"
+                style="display: inline-block; line-height: 1; margin-right: 4px"
                 iconType="S3"
                 [tooltipDisabled]="false"
                 [delay]="300"
                 [icon]="resourceType[0]"
               >
               </ds-icon>
-              <span class="mb-0 font-weight-bold">{{ label }}</span>
+              <span class="font-weight-bold">{{ label }}</span>
             </div>
-            <div class="buttons">
-              <mat-chip-list *ngIf="hasCreatePrivilege$ | async">
-                <mat-chip
-                  selected
-                  color="deleted"
-                  *ngIf="hasMarkedDeletionVersion"
-                >
-                  <ds-icon
-                    iconType="Mapping"
-                    tooltipDisabled="false"
-                    [delay]="300"
-                    [icon]="entryLifeCycleStatus"
-                  ></ds-icon>
-                </mat-chip>
-                <mat-chip selected color="draft" *ngIf="hasDraftVersion">
-                  <ds-icon
-                    iconType="Mapping"
-                    [tooltipDisabled]="false"
-                    [delay]="300"
-                    [icon]="entryLifeCycleStatus"
-                  >
-                  </ds-icon>
-                </mat-chip>
-                <mat-chip
-                  selected
-                  color="published"
-                  *ngIf="hasPublishedVersion"
-                >
-                  <ds-icon
-                    iconType="Mapping"
-                    [tooltipDisabled]="false"
-                    [delay]="300"
-                    [icon]="entryLifeCycleStatus"
-                  ></ds-icon>
-                </mat-chip>
-                <mat-chip
-                  selected
-                  [color]="
-                    resourceLinkedLifecycleStatus === publishedVersionIcon
-                      ? 'published'
-                      : 'draft'
-                  "
-                  *ngIf="hasDraftAndPublishedVersion"
-                >
-                  <ds-icon
-                    iconType="Mapping"
-                    [tooltipDisabled]="false"
-                    [delay]="300"
-                    [icon]="resourceLinkedLifecycleStatus"
-                  ></ds-icon>
-                </mat-chip>
-              </mat-chip-list>
-              <img
-                *ngIf="brokenDistributionEndpoints.length > 0"
-                src="assets/broken-link.svg"
-                style="height: 25px"
-                matTooltip="{{
-                  'Resource has following invalid endpoint(s): ' +
-                    (brokenDistributionEndpoints | join | removeHtml)
-                }}"
-              />
-              <img
-                *ngIf="brokenContacts.length > 0"
-                src="assets/invalid-user.svg"
-                class="broken-icon"
-                matTooltip="{{
-                  'Resource has following invalid contact(s): ' +
-                    (brokenContacts | join)
-                }}"
-              />
-              <img
-                *ngIf="nextReviewIsDue != null && nextReviewIsDue === true"
-                src="assets/review_cycle_due.svg"
-                class="broken-icon"
-                matTooltip="Deadline for the resource review has expired"
-              />
-              <img
-                *ngIf="nextReviewIsDue != null && nextReviewIsDue === false"
-                src="assets/review_cycle_success.svg"
-                class="broken-icon"
-                matTooltip="Resource is in a valid review cycle"
-              />
-              <span class="spacer"></span>
-              <button
-                mat-icon-button
-                class="border-button"
-                matTooltip="Edit the resource"
-                (click)="openInColidEditor($event)"
-                editorAccessControl
-                [resourceDetails]="details"
-              >
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button
-                [disabled]="hasDraftVersion"
-                mat-icon-button
-                class="border-button"
-                matTooltip="Subscribe to resource"
-                *ngIf="colidEntrySubscriptions && !isSubscribed"
-                (click)="subscribeToResource($event)"
-              >
-                <mat-icon>notifications_none</mat-icon>
-              </button>
 
-              <button
-                [disabled]="hasDraftVersion"
-                mat-icon-button
-                class="border-button"
-                matTooltip="Unsubscribe from resource"
-                *ngIf="colidEntrySubscriptions && isSubscribed"
-                (click)="unsubscribeFromResource($event)"
-              >
-                <mat-icon>notifications_active</mat-icon>
-              </button>
-              <button
-                mat-icon-button
-                class="border-button"
-                matTooltip="Add to favorites"
-                *ngIf="!isFavorited"
-                (click)="openFavoritesDialog($event)"
-              >
-                <mat-icon>bookmark_border_none</mat-icon>
-              </button>
+            <div class="search-result__indicators-and-buttons">
+              <app-resource-status-indicators
+                [entryLifeCycleStatus]="entryLifeCycleStatus"
+                [resourceLinkedLifecycleStatus]="resourceLinkedLifecycleStatus"
+              ></app-resource-status-indicators>
 
-              <button
-                mat-icon-button
-                class="border-button"
-                matTooltip="Manage favorites"
-                *ngIf="isFavorited"
-                (click)="openFavoritesDialog($event)"
+              <app-resource-quality-indicators
+                [brokenDistributionEndpoints]="brokenDistributionEndpoints"
+                [brokenContacts]="brokenContacts"
+                [nextReviewIsDue]="nextReviewIsDue"
               >
-                <mat-icon>bookmark_active</mat-icon>
-              </button>
-              <button
-                [disabled]="hasDraftVersion"
-                mat-icon-button
-                class="border-button"
-                matTooltip="View in Resource Relationship Manager"
-                (click)="openInResourceRelationshipManager($event)"
+              </app-resource-quality-indicators>
+
+              <app-resource-operations-buttons
+                [pidUri]="pidUri"
+                [details]="details"
+                [source]="source"
+                [entryLifeCycleStatus]="entryLifeCycleStatus"
+                [resourceLinkedLifecycleStatus]="resourceLinkedLifecycleStatus"
+                [colidEntrySubscriptions]="colidEntrySubscriptions"
+                [searchText]="searchText"
+                [searchTimestamp]="searchTimestamp"
+                [entityType]="entityType"
+                [showFavoritesButton]="true"
+                [showSubscribeButton]="true"
               >
-                <img src="assets/dmp-rrm.svg" width="24" height="24" />
-              </button>
+              </app-resource-operations-buttons>
             </div>
           </div>
 
@@ -181,9 +67,9 @@
             >
               <mat-icon>open_in_full</mat-icon>
             </button>
-            <span *ngIf="resourceSubNumbers.length > 0">
+            <span *ngIf="resourceSubNumbers?.length > 0">
               {{ getNumSubscribers() }} subscriber{{
-                getNumSubscribers() > 1 ? "s" : ""
+                getNumSubscribers() > 1 ? 's' : ''
               }}</span
             >
             <br />
@@ -197,21 +83,15 @@
           ></span>
         </div>
       </mat-panel-title>
-      <!-- <mat-panel-description class="mt-2">
-      <button *ngIf="!(PoliciesLoadingState$ | async)" mat-icon-button class="border-button mr-2" matTooltip="Find retention rules related to this resource"
-        (click)="findPolicies($event)">
-           <mat-icon>policy</mat-icon>
-        </button>-->
-
-      <!-- </mat-panel-description> -->
     </mat-expansion-panel-header>
     <mat-tab-group
+      mat-stretch-tabs="false"
       mat-align-tabs="bottom"
       [id]="index"
       [selectedIndex]="selectedIndex"
       (selectedTabChange)="GetSchemeUI($event, details)"
     >
-      <mat-tab label="Resource Detail" [active]="true">
+      <mat-tab label="Resource Detail">
         <ng-template matTabContent>
           <div class="details-container">
             <!-- <mat-divider class="my-1"></mat-divider>  -->
@@ -256,8 +136,8 @@
                         <mat-panel-description class="text-muted">
                           {{
                             expandedNested[detail.key]
-                              ? "Show less"
-                              : "Show more"
+                              ? 'Show less'
+                              : 'Show more'
                           }}
                         </mat-panel-description>
                       </mat-expansion-panel-header>
@@ -305,7 +185,7 @@
                                         >
                                           {{
                                             nestedDetail.value
-                                              | date : "yyyy-MM-dd hh:mm"
+                                              | date: 'yyyy-MM-dd hh:mm'
                                           }}</ng-container
                                         >
                                       </span>
@@ -361,7 +241,7 @@
 
                     <span *ngSwitchCase="InputType.Date">
                       <ng-container *ngIf="detail.value !== ''"
-                        >{{ detail.value | date : "yyyy-MM-dd hh:mm" }}
+                        >{{ detail.value | date: 'yyyy-MM-dd hh:mm' }}
                       </ng-container>
                     </span>
                     <ng-container *ngSwitchCase="InputType.Version">
@@ -392,6 +272,18 @@
                           >{{ next.value[version].value }}</a
                         >
                       </ng-container>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="InputType.Boolean">
+                      <ng-template
+                        [ngIf]="detail.value[0] === 'true'"
+                        [ngIfElse]="notSelected"
+                        ><mat-icon class="mat-icon-check"
+                          >check</mat-icon
+                        ></ng-template
+                      >
+                      <ng-template #notSelected>
+                        <mat-icon class="mat-icon-cross">close</mat-icon>
+                      </ng-template>
                     </ng-container>
                   </ng-container>
                 </div>
@@ -429,33 +321,79 @@
         <div class="container">
           <ng-template matTabContent>
             <div class="container m-0" [id]="index">
-              <ng-container
-                *ngFor="
-                  let linkType of linkedResourceData.nested;
-                  let i = index
-                "
+              <div class="search-result__nested-links-filter-container">
+                <label for="search-result--nested-links-filter-input">
+                  Filter:
+                </label>
+                <input
+                  type="text"
+                  class="search-result__nested-links-filter-input"
+                  id="search-result--nested-links-filter-input"
+                  [(ngModel)]="nestedLinksFilterValue"
+                  (keyup)="applyNestedLinksFilter()"
+                />
+
+                <mat-radio-group
+                  color="primary"
+                  [(ngModel)]="nestedLinksVisibilityValue"
+                  (change)="setNestedLinksVisibility($event)"
+                >
+                  <mat-radio-button
+                    class="search-result__nested-links-filter-radio-button"
+                    value="all"
+                  >
+                    All
+                  </mat-radio-button>
+
+                  <mat-radio-button
+                    class="search-result__nested-links-filter-radio-button"
+                    value="outbound"
+                  >
+                    Outbound only
+                  </mat-radio-button>
+
+                  <mat-radio-button
+                    class="search-result__nested-links-filter-radio-button"
+                    value="inbound"
+                  >
+                    Inbound only
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+              <div
+                *ngIf="showNoMatchingFilteredResultPlaceholder"
+                class="search-result__no-matching-filtered-result-placeholder"
               >
+                No linked resources match applied filter.
+              </div>
+
+              <ng-container *ngIf="showOutboundNestedLinks">
                 <app-search-result-link-type
+                  *ngFor="
+                    let linkType of filteredOutboundNestedLinks;
+                    let i = index
+                  "
                   [resource]="details"
                   [linkType]="linkType.value"
                   [edge]="linkType.edge"
-                  [lastElement]="linkedResourceData.nested.length === i + 1"
+                  [lastElement]="filteredOutboundNestedLinks.length === i + 1"
                   [metadata]="metadata"
                 >
                 </app-search-result-link-type>
               </ng-container>
-              <ng-container
-                *ngFor="
-                  let linkType of linkedResourceData.nestedInbound;
-                  let i = index
-                "
-              >
+
+              <ng-container *ngIf="showInboundNestedLinks">
                 <app-search-result-link-type
+                  *ngFor="
+                    let linkType of filteredInboundNestedLinks;
+                    let i = index
+                  "
                   [resource]="details"
                   [linkType]="linkType.value"
                   [edge]="linkType.edge"
                   [inbound]="true"
-                  [lastElement]="linkedResourceData.nested.length === i + 1"
+                  [lastElement]="filteredInboundNestedLinks === i + 1"
                   [metadata]="metadata"
                 >
                 </app-search-result-link-type>

@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Output, Input } from "@angular/core";
-import { ControlValueAccessor } from "@angular/forms";
-import { FormItemChangedDTO } from "src/app/shared/models/form/form-item-changed-dto";
+import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { ControlValueAccessor } from '@angular/forms';
+import { FormItemChangedDTO } from 'src/app/shared/models/form/form-item-changed-dto';
 
 @Component({
-  template: "",
+  template: ''
 })
 export class FormItemInputBaseComponent implements ControlValueAccessor {
   internalValue: any = null;
@@ -13,10 +13,9 @@ export class FormItemInputBaseComponent implements ControlValueAccessor {
 
   onChange: any = () => {};
   onTouched: any = () => {};
+
   @Output() valueChanged: EventEmitter<FormItemChangedDTO> =
     new EventEmitter<FormItemChangedDTO>();
-
-  constructor() {}
 
   registerOnChange(fn) {
     this.onChange = fn;

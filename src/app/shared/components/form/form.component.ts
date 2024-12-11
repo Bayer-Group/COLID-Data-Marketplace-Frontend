@@ -1,37 +1,39 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
   UntypedFormControl,
   UntypedFormArray,
-  AbstractControl,
-} from "@angular/forms";
-import { MetaDataProperty } from "src/app/shared/models/metadata/meta-data-property";
-import { MetaDataPropertyIdentifier } from "src/app/shared/resource-form.constants";
-import { FormItemSettings } from "src/app/shared/models/form/form-item-settings";
-import { Observable } from "rxjs";
+  AbstractControl
+} from '@angular/forms';
+import { MetaDataProperty } from 'src/app/shared/models/metadata/meta-data-property';
+import { MetaDataPropertyIdentifier } from 'src/app/shared/resource-form.constants';
+import { FormItemSettings } from 'src/app/shared/models/form/form-item-settings';
+import { Observable } from 'rxjs';
 import {
   ValidationResultProperty,
-  ValidationResultPropertyType,
-} from "src/app/shared/models/validation/validation-result-property";
-import { Entity } from "src/app/shared/models/entities/entity";
-import { FormChangedDTO } from "src/app/shared/models/form/form-changed-dto";
-import { FormItemChangedDTO } from "src/app/shared/models/form/form-item-changed-dto";
-import { PidUriTemplateResultDTO } from "src/app/shared/models/pidUriTemplates/pid-uri-template-result-dto";
-import { StringExtension } from "src/app/shared/extensions/string.extension";
-import { MetaDataPropertyGroup } from "src/app/shared/models/metadata/meta-data-property-group";
-import { Constants } from "src/app/shared/constants";
-import { Store } from "@ngxs/store";
-import { SetMainDistribution } from "src/app/states/resource.state";
-import { MetadataExtension } from "src/app/shared/extensions/metadata.extension";
-import { ResourceCreationType as EntityCreationType } from "src/app/shared/models/resources/resource-creation-type";
-import { Resource } from "src/app/shared/models/resources/resource";
-import { LinkingMapping } from "src/app/shared/models/resources/linking-mapping";
+  ValidationResultPropertyType
+} from 'src/app/shared/models/validation/validation-result-property';
+import { Entity } from 'src/app/shared/models/entities/entity';
+import { FormChangedDTO } from 'src/app/shared/models/form/form-changed-dto';
+import { FormItemChangedDTO } from 'src/app/shared/models/form/form-item-changed-dto';
+import { PidUriTemplateResultDTO } from 'src/app/shared/models/pidUriTemplates/pid-uri-template-result-dto';
+import { StringExtension } from 'src/app/shared/extensions/string.extension';
+import { MetaDataPropertyGroup } from 'src/app/shared/models/metadata/meta-data-property-group';
+import { Constants } from 'src/app/shared/constants';
+import { Store } from '@ngxs/store';
+import { SetMainDistribution } from 'src/app/states/resource.state';
+import { MetadataExtension } from 'src/app/shared/extensions/metadata.extension';
+import { ResourceCreationType as EntityCreationType } from 'src/app/shared/models/resources/resource-creation-type';
+import { Resource } from 'src/app/shared/models/resources/resource';
+import { LinkingMapping } from 'src/app/shared/models/resources/linking-mapping';
+
+// TODO: Unify - duplicate code with colid-ui-editor-frontend
 
 @Component({
-  selector: "app-form",
-  templateUrl: "./form.component.html",
-  styleUrls: ["./form.component.css"],
+  selector: 'app-form',
+  templateUrl: './form.component.html',
+  styleUrls: ['./form.component.css']
 })
 export class FormComponent implements OnInit {
   @Output() handleFormChanged = new EventEmitter<FormChangedDTO>();
@@ -53,7 +55,7 @@ export class FormComponent implements OnInit {
   @Input() indexerNested: number;
 
   get indexerNested_() {
-    return this.indexerNested == null ? "" : this.indexerNested;
+    return this.indexerNested == null ? '' : this.indexerNested;
   }
   _resource: Resource;
 
@@ -111,7 +113,7 @@ export class FormComponent implements OnInit {
 
   newNestedEntities = new Array<string>();
   formItemSettings: FormItemSettings = {
-    debounceTime: 500,
+    debounceTime: 500
   };
 
   linkingGroupFirstIndex: number;
@@ -142,16 +144,16 @@ export class FormComponent implements OnInit {
         propertylist[Constants.Metadata.Group.toString()] =
           new MetaDataPropertyGroup(
             Constants.Resource.Groups.LinkTypes.toString(),
-            "Linked Resources",
+            'Linked Resources',
             900,
-            "A group for all link types between resources",
-            "Grouping all link types"
+            'A group for all link types between resources',
+            'Grouping all link types'
           );
         propertylist[Constants.Metadata.HasPidUri] = x;
         propertylist[Constants.Metadata.Comment] =
-          this._links[x][0]["inboundLinkComment"];
+          this._links[x][0]['inboundLinkComment'];
         propertylist[Constants.Metadata.Name] =
-          this._links[x][0]["inboundLinkLabel"];
+          this._links[x][0]['inboundLinkLabel'];
         metadataproperty.properties = propertylist;
         metadataproperty.nestedMetadata = [];
         var metadataproperty_object = JSON.parse(
@@ -178,7 +180,10 @@ export class FormComponent implements OnInit {
     return this.isNew && this.creationType === EntityCreationType.NEW;
   }
 
-  constructor(private formBuilder: UntypedFormBuilder, private store: Store) {}
+  constructor(
+    private formBuilder: UntypedFormBuilder,
+    private store: Store
+  ) {}
 
   ngOnInit() {
     this.buildForm();
@@ -189,7 +194,7 @@ export class FormComponent implements OnInit {
       const formBuilderGroup = {};
       for (const m of this._metaData) {
         if (
-          m.properties[Constants.Metadata.Group]["key"] ==
+          m.properties[Constants.Metadata.Group]['key'] ==
           Constants.Resource.Groups.LinkTypes
         ) {
           continue;
@@ -339,7 +344,7 @@ export class FormComponent implements OnInit {
 
     Object.keys(this.ontologyForm.controls).forEach((key) => {
       const formArray = this.ontologyForm.controls[key];
-      const error: ValidationResultProperty = formArray.getError("result");
+      const error: ValidationResultProperty = formArray.getError('result');
       if (
         error != null &&
         error.type === ValidationResultPropertyType.DUPLICATE
@@ -351,13 +356,13 @@ export class FormComponent implements OnInit {
         Object.keys(formArray.controls).forEach((key2) => {
           const formItem = formArray.controls[key2];
           const formItemError: ValidationResultProperty =
-            formItem.getError("result");
+            formItem.getError('result');
           if (Array.isArray(formItemError)) {
             formItem.setErrors({
               incorrect: false,
               result: formItemError.filter(
                 (t) => t.type !== ValidationResultPropertyType.DUPLICATE
-              ),
+              )
             });
           }
         });
