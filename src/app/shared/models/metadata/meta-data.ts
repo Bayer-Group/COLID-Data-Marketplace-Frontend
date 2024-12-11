@@ -1,4 +1,4 @@
-import { MetaDataProperty } from "./meta-data-property";
+import { MetaDataProperty } from './meta-data-property';
 
 export interface Metadata {
   key: string;

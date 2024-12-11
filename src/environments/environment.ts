@@ -5,10 +5,11 @@ export const environment = {
   allowAnonymous: true,
   interceptors: [],
   pageSize: 10,
-  dmpCoreApiUrl: "http://localhost:51801/api/",
-  appDataApiUrl: "http://localhost:51811/api",
+  dmpCoreApiUrl: "http://localhost:51800/api/",
+  appDataApiUrl: "http://localhost:51810/api",
   colidApiUrl: "http://localhost:51770/api/v3",
   loggingUrl: "http://localhost:51800/api/log",
+  reportingApiUrl: 'http://localhost:51910/api',
   dmpUrl: "http://localhost:4300/",
   releaseNotesUrl: "https://info.dev.colid.int.bayer.com/current_release_notes.md",
   adalConfig: {

@@ -1,8 +1,8 @@
-import { ColidEntrySubscriptionDto } from "./colid-entry-subscription-dto";
-import { SearchFilterDataMarketplaceDto } from "./search-filter-data-marketplace-dto";
-import { MessageConfigDto } from "./message-config-dto";
-import { DefaultConsumerGroupDto } from "./default-consumer-group-dto";
-import { SearchFilterEditor } from "./search-filter-editor";
+import { ColidEntrySubscriptionDto } from './colid-entry-subscription-dto';
+import { SearchFilterDataMarketplaceDto } from './search-filter-data-marketplace-dto';
+import { MessageConfigDto } from './message-config-dto';
+import { DefaultConsumerGroupDto } from './default-consumer-group-dto';
+import { SearchFilterEditor } from './search-filter-editor';
 
 export class UserDto {
   id: string;

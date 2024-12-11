@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { environment } from "src/environments/environment";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { AttachmentDto } from "src/app/shared/models/attachment/attachment-dto";
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { AttachmentDto } from 'src/app/shared/models/attachment/attachment-dto';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class AttachmentApiService {
   regex_attachment_id: RegExp = new RegExp(
@@ -18,13 +18,13 @@ export class AttachmentApiService {
     const url = `${environment.colidApiUrl}/attachment`;
 
     const formData: FormData = new FormData();
-    formData.append("file", fileToUpload, fileToUpload.name);
-
-    let httpHeaders = new HttpHeaders().set("x-skip-content-type", "");
+    formData.append('file', fileToUpload, fileToUpload.name);
 
     const httpOptions = {
-      headers: httpHeaders,
-      params: { comment: comment },
+      // When uploading files, the content type must not be set at all,
+      // so that the browser can choose the correct content type depending on the file type.
+      headers: new HttpHeaders().set('x-skip-content-type', ''),
+      params: { comment: comment }
     };
 
     return this.httpClient.post<AttachmentDto>(url, formData, httpOptions);
@@ -37,8 +37,8 @@ export class AttachmentApiService {
     const httpOptions = {
       params: {
         guid: guidFileName[0],
-        fileName: guidFileName[1],
-      },
+        fileName: guidFileName[1]
+      }
     };
 
     return this.httpClient.delete(url, httpOptions);

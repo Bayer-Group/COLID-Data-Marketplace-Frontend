@@ -1,4 +1,4 @@
-import { BaseEntityResultDTO } from "../entities/base-entity-result-dto";
+import { BaseEntityResultDTO } from '../entities/base-entity-result-dto';
 
 export class ConsumerGroupResultDTO extends BaseEntityResultDTO {
   lifecycleStatus: string;

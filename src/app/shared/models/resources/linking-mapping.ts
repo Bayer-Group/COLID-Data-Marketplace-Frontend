@@ -11,5 +11,5 @@ export class LinkingMapping {
 
 export enum LinkType {
   Inbound,
-  Outbound,
+  Outbound
 }

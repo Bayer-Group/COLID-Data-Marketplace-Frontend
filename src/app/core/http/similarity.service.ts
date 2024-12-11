@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { SimilarityResult } from "src/app/shared/models/similarity-result";
-import { environment } from "src/environments/environment";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { SimilarityResult } from 'src/app/shared/models/similarity-result';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class SimilarityService {
   baseUrl: string = `${environment.dmpCoreApiUrl}Search/similarity/`;
@@ -14,11 +14,11 @@ export class SimilarityService {
 
   loadSimilarityResource(pidUri: string): Observable<SimilarityResult> {
     const requestObject = {
-      id: pidUri,
+      id: pidUri
     };
 
     return this.httpClient.post<SimilarityResult>(
-      this.baseUrl + "?model=ft",
+      this.baseUrl + '?model=ft',
       requestObject
     );
   }
@@ -27,7 +27,7 @@ export class SimilarityService {
     pidResource: object
   ): Observable<SimilarityResult> {
     return this.httpClient.post<SimilarityResult>(
-      this.baseUrl + "?model=ft",
+      this.baseUrl + '?model=ft',
       pidResource
     );
   }
@@ -37,7 +37,7 @@ export class SimilarityService {
     threshold: number
   ): Observable<SimilarityResult> {
     const requestObject = {
-      id: pidUri,
+      id: pidUri
     };
 
     return this.httpClient.post<SimilarityResult>(

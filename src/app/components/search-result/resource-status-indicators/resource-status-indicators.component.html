@@ -1,0 +1,33 @@
+<div class="resource-status-indicators">
+  <mat-chip-set>
+    @if (entryLifeCycleStatus && showResourceStatusIndicator) {
+      <mat-chip
+        [disableRipple]="true"
+        [color]="entryChipColor"
+        class="resource-status-indicators__chip"
+      >
+        <ds-icon
+          iconType="Mapping"
+          tooltipDisabled="false"
+          [delay]="300"
+          [icon]="entryLifeCycleStatus"
+        ></ds-icon>
+      </mat-chip>
+    }
+
+    @if (resourceLinkedLifecycleStatus && hasCreatePrivilege) {
+      <mat-chip
+        [disableRipple]="true"
+        [color]="resourceLinkedChipColor"
+        class="resource-status-indicators__chip"
+      >
+        <ds-icon
+          iconType="Mapping"
+          tooltipDisabled="false"
+          [delay]="300"
+          [icon]="resourceLinkedLifecycleStatus"
+        ></ds-icon>
+      </mat-chip>
+    }
+  </mat-chip-set>
+</div>

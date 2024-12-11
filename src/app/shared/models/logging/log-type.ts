@@ -1,5 +1,5 @@
 export enum LogType {
   General = 0,
   AuditTrail = 1,
-  Performance = 2,
+  Performance = 2
 }

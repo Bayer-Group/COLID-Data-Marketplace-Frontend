@@ -11,3 +11,8 @@
 .mat-icon {
   font-size: 15px;
 }
+
+.mat-mdc-icon-button.mat-mdc-button-base {
+  padding: 4px;
+  --mdc-icon-button-state-layer-size: 32px;
+}

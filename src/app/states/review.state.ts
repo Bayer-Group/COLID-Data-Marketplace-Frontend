@@ -1,8 +1,8 @@
-import { Injectable } from "@angular/core";
-import { Action, Selector, State, StateContext } from "@ngxs/store";
+import { Injectable } from '@angular/core';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
 
 export class AddReviewedResource {
-  static readonly type = "[Resource Reviews] AddReviewedResource";
+  static readonly type = '[Resource Reviews] AddReviewedResource';
   constructor(public reviewedResourceId: string) {}
 }
 
@@ -11,10 +11,10 @@ export class ReviewStateModel {
 }
 
 @State<ReviewStateModel>({
-  name: "resourceReviews",
+  name: 'resourceReviews',
   defaults: {
-    reviewedResourcesIds: [],
-  },
+    reviewedResourcesIds: []
+  }
 })
 @Injectable()
 export class ReviewState {
@@ -33,7 +33,7 @@ export class ReviewState {
     const reviewedResourcesIds = [...getState().reviewedResourcesIds];
     reviewedResourcesIds.push(reviewedResourceId);
     patchState({
-      reviewedResourcesIds,
+      reviewedResourcesIds
     });
   }
 }

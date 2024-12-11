@@ -1,18 +1,19 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { environment } from "src/environments/environment";
-import { ResourceOverviewCTO } from "src/app/shared/models/resources/resource-overview-cto";
-import { Observable } from "rxjs";
-import { ResourceSearchDTO } from "src/app/shared/models/resources/resource-search-dto";
-import { CheckboxHierarchyDTO } from "src/app/shared/models/checkboxHierarchy-dto";
-import { ResourceOverviewDTO } from "src/app/shared/models/resources/resource-overview-dto";
-import { ResourceRevisionHistory } from "src/app/shared/models/resources/historic-resource-overview-dto";
-import { Resource } from "src/app/shared/models/resources/resource";
-import { LinkHistoryDto } from "src/app/shared/models/linkHistory/link-history-dto";
-import { LinkHistorySearchBody } from "src/app/shared/models/linkHistory/link-history-search-body";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { ResourceOverviewCTO } from 'src/app/shared/models/resources/resource-overview-cto';
+import { Observable } from 'rxjs';
+import { ResourceSearchDTO } from 'src/app/shared/models/resources/resource-search-dto';
+import { CheckboxHierarchyDTO } from 'src/app/shared/models/checkboxHierarchy-dto';
+import { ResourceOverviewDTO } from 'src/app/shared/models/resources/resource-overview-dto';
+import { ResourceRevisionHistory } from 'src/app/shared/models/resources/historic-resource-overview-dto';
+import { Resource } from 'src/app/shared/models/resources/resource';
+import { LinkHistoryDto } from 'src/app/shared/models/linkHistory/link-history-dto';
+import { LinkHistorySearchBody } from 'src/app/shared/models/linkHistory/link-history-search-body';
+import { EntityTypeDto } from 'src/app/shared/models/entities/entity-type-dto';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class ResourceApiService {
   constructor(private httpClient: HttpClient) {}
@@ -20,7 +21,7 @@ export class ResourceApiService {
   getFilteredResources(
     resourceSearchObject: ResourceSearchDTO
   ): Observable<ResourceOverviewCTO> {
-    const url = environment.colidApiUrl + "/resource/search";
+    const url = environment.colidApiUrl + '/resource/search';
 
     //const params = this.toHttpParams(resourceSearchObject);
     const params = this.removeNullProperties(resourceSearchObject);
@@ -30,9 +31,15 @@ export class ResourceApiService {
     );
   }
 
-  getHierarchy(): Observable<CheckboxHierarchyDTO[]> {
+  getCheckboxHierarchy(): Observable<CheckboxHierarchyDTO[]> {
     return this.httpClient.get<CheckboxHierarchyDTO[]>(
-      environment.colidApiUrl + "/metadata/hierarchyDmp"
+      environment.colidApiUrl + '/metadata/hierarchyDmp'
+    );
+  }
+
+  getResourceHierarchy(): Observable<EntityTypeDto> {
+    return this.httpClient.get<EntityTypeDto>(
+      `${environment.colidApiUrl}/metadata/hierarchy`
     );
   }
 
@@ -41,22 +48,22 @@ export class ResourceApiService {
     endDate: string
   ): Observable<ResourceOverviewDTO[]> {
     const params = new HttpParams()
-      .set("consumerGroup", encodeURI(consumerGroupId))
-      .set("endDate", endDate);
+      .set('consumerGroup', encodeURI(consumerGroupId))
+      .set('endDate', endDate);
 
     return this.httpClient.get<ResourceOverviewDTO[]>(
-      environment.colidApiUrl + "/resource/dueReviews",
+      environment.colidApiUrl + '/resource/dueReviews',
       {
-        params: params,
+        params: params
       }
     );
   }
 
   confirmReview(pidUri: string): Observable<ResourceOverviewDTO> {
-    const params = new HttpParams().set("pidUri", encodeURI(pidUri));
+    const params = new HttpParams().set('pidUri', encodeURI(pidUri));
 
     return this.httpClient.put<ResourceOverviewDTO>(
-      environment.colidApiUrl + "/resource/confirmReview",
+      environment.colidApiUrl + '/resource/confirmReview',
       {},
       { params: params }
     );
@@ -66,22 +73,22 @@ export class ResourceApiService {
     resourcePidUri: string
   ): Observable<ResourceRevisionHistory[]> {
     const url = `${environment.colidApiUrl}/resource/resourcerevisionshistory`;
-    let params = new HttpParams().set("pidUri", resourcePidUri);
+    let params = new HttpParams().set('pidUri', resourcePidUri);
     return this.httpClient.get<ResourceRevisionHistory[]>(url, { params });
   }
 
   getHistoricResource(id: string, pidUri: string): Observable<Resource> {
-    const url = environment.colidApiUrl + "/resource/history";
+    const url = environment.colidApiUrl + '/resource/history';
     let params = new HttpParams();
-    params = params.append("pidUri", pidUri);
-    params = params.append("id", id);
+    params = params.append('pidUri', pidUri);
+    params = params.append('id', id);
     return this.httpClient.get<Resource>(url, { params });
   }
 
   getResourcesByPidUri(resourcePidUri: string): Observable<Resource> {
-    const url = environment.colidApiUrl + "/resource";
+    const url = environment.colidApiUrl + '/resource';
     let params = new HttpParams();
-    params = params.append("pidUri", resourcePidUri);
+    params = params.append('pidUri', resourcePidUri);
     return this.httpClient.get<Resource>(url, { params });
   }
 
@@ -89,27 +96,35 @@ export class ResourceApiService {
     resourcePidUri: string,
     requester: string
   ): Observable<any> {
-    const url = environment.colidApiUrl + "/resource/markForDeletion";
+    const url = environment.colidApiUrl + '/resource/markForDeletion';
     let params = new HttpParams();
-    params = params.append("pidUri", resourcePidUri);
-    params = params.append("requester", requester);
+    params = params.append('pidUri', resourcePidUri);
+    params = params.append('requester', requester);
 
     return this.httpClient.put(url, null, { params });
+  }
+
+  deleteResource(resourcePidUri: string, requester: string): Observable<any> {
+    const url = environment.colidApiUrl + '/resource';
+    let params = new HttpParams();
+    params = params.append('pidUri', resourcePidUri);
+    params = params.append('requester', requester);
+    return this.httpClient.delete(url, { params });
   }
 
   deleteResources(
     resourcePidUris: string[],
     requester: string
   ): Observable<any> {
-    const url = environment.colidApiUrl + "/resource/resourceList";
+    const url = environment.colidApiUrl + '/resource/resourceList';
     let params = new HttpParams();
-    params = params.append("requester", requester);
+    params = params.append('requester', requester);
 
     return this.httpClient.put(url, resourcePidUris, { params });
   }
 
   rejectResourcesMarkedDeleted(resourcePidUris: string[]): Observable<any> {
-    const url = environment.colidApiUrl + "/resource/resourceList/reject";
+    const url = environment.colidApiUrl + '/resource/resourceList/reject';
     return this.httpClient.put(url, resourcePidUris);
   }
 
@@ -119,12 +134,12 @@ export class ResourceApiService {
     pidUriToLink: string,
     requester: string
   ): Observable<Resource> {
-    const url = environment.colidApiUrl + "/resource/addLink";
+    const url = environment.colidApiUrl + '/resource/addLink';
     let params = new HttpParams();
-    params = params.append("pidUri", pidUri);
-    params = params.append("linkType", linkType);
-    params = params.append("pidUriToLink", pidUriToLink);
-    params = params.append("requester", requester);
+    params = params.append('pidUri', pidUri);
+    params = params.append('linkType', linkType);
+    params = params.append('pidUriToLink', pidUriToLink);
+    params = params.append('requester', requester);
     return this.httpClient.post<Resource>(url, null, { params });
   }
 
@@ -133,6 +148,13 @@ export class ResourceApiService {
   ): Observable<LinkHistoryDto[]> {
     const url = `${environment.colidApiUrl}/resource/searchLinkHistory`;
     return this.httpClient.post<LinkHistoryDto[]>(url, searchBody);
+  }
+
+  unlinkResource(pidUri: string): Observable<string> {
+    const url = environment.colidApiUrl + '/resource/version/unlink';
+    let params = new HttpParams();
+    params = params.append('pidUri', pidUri);
+    return this.httpClient.put<string>(url, null, { params });
   }
 
   toHttpParams(obj: Object): HttpParams {
@@ -154,7 +176,7 @@ export class ResourceApiService {
     const outParams = {};
     return Object.getOwnPropertyNames(obj).reduce((p, key) => {
       const value = obj[key];
-      if (value == null || value == "") {
+      if (value == null || value == '') {
         outParams[key] = undefined;
       } else {
         outParams[key] = value;

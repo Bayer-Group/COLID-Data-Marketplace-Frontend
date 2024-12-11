@@ -1,0 +1,9 @@
+.resource-status-indicators {
+  display: flex;
+  flex-direction: row-reverse;
+  width: 5.5rem;
+
+  &__chip {
+    --mdc-chip-label-text-color: white;
+  }
+}

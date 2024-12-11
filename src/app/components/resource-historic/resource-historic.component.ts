@@ -2,26 +2,26 @@ import {
   Component,
   OnInit,
   Input,
-  ChangeDetectionStrategy,
-} from "@angular/core";
-import { Select, Store } from "@ngxs/store";
-import { combineLatest, Observable } from "rxjs";
-import { concatMap, map, tap } from "rxjs/operators";
-import { ResourceApiService } from "src/app/core/http/resource.api.service";
-import { Constants } from "src/app/shared/constants";
-import { MetaDataProperty } from "src/app/shared/models/metadata/meta-data-property";
-import { HistoryEntity } from "src/app/shared/models/resources/history-entity";
-import { VersionProperty } from "src/app/shared/models/resources/version-property";
+  ChangeDetectionStrategy
+} from '@angular/core';
+import { Select, Store } from '@ngxs/store';
+import { combineLatest, Observable } from 'rxjs';
+import { concatMap, map, tap } from 'rxjs/operators';
+import { ResourceApiService } from 'src/app/core/http/resource.api.service';
+import { Constants } from 'src/app/shared/constants';
+import { MetaDataProperty } from 'src/app/shared/models/metadata/meta-data-property';
+import { HistoryEntity } from 'src/app/shared/models/resources/history-entity';
+import { VersionProperty } from 'src/app/shared/models/resources/version-property';
 import {
   FetchEntityMetadata,
-  MetadataState,
-} from "src/app/states/metadata.state";
+  MetadataState
+} from 'src/app/states/metadata.state';
 
 @Component({
-  selector: "app-resource-historic",
-  templateUrl: "./resource-historic.component.html",
-  styleUrls: ["./resource-historic.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-resource-historic',
+  templateUrl: './resource-historic.component.html',
+  styleUrls: ['./resource-historic.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ResourceHistoricComponent implements OnInit {
   @Input() pidUri: string;
@@ -43,7 +43,7 @@ export class ResourceHistoricComponent implements OnInit {
         concatMap((_) => {
           return combineLatest([
             this.resourceService.getResourceRevisionHistory(this.pidUri),
-            this.entityMetadata$,
+            this.entityMetadata$
           ]).pipe(
             map(([historieEntities, metadata]) => {
               let values = metadata.get(this.entityType);
@@ -57,17 +57,17 @@ export class ResourceHistoricComponent implements OnInit {
                     metadata: values.filter(
                       (metadata) =>
                         additionsEntityProps.indexOf(metadata.key) > -1
-                    ),
+                    )
                   },
                   removals: {
                     entity: this.getPropertyRemoval(entity),
                     entityVersion: this.getRemovalVersion(entity),
                     metadata: values.filter(
                       (x) => removalEntityProps.indexOf(x.key) > -1
-                    ),
+                    )
                   },
                   lastChangedByDateTime: this.getLastChangeDateTime(entity),
-                  lastChangeUser: "",
+                  lastChangeUser: ''
                 };
                 return historyEntity;
               });
@@ -90,14 +90,14 @@ export class ResourceHistoricComponent implements OnInit {
 
   getPropertyAdditional(entity) {
     const additionals = {
-      properties: JSON.parse(JSON.stringify(entity.additionals)),
+      properties: JSON.parse(JSON.stringify(entity.additionals))
     };
     return additionals;
   }
 
   getPropertyRemoval(entity) {
     const removals = {
-      properties: JSON.parse(JSON.stringify(entity.removals)),
+      properties: JSON.parse(JSON.stringify(entity.removals))
     };
     return removals;
   }
@@ -109,7 +109,7 @@ export class ResourceHistoricComponent implements OnInit {
         version: entity.additionals[Constants.Metadata.HasVersion][0],
         id: entity.name,
         pidUri: uri ? uri[0] : null,
-        baseUri: null,
+        baseUri: null
       };
 
       return [version];
@@ -125,7 +125,7 @@ export class ResourceHistoricComponent implements OnInit {
         version: entity.removals[Constants.Metadata.HasVersion][0],
         id: entity.name,
         pidUri: uri ? uri[0].id : null,
-        baseUri: null,
+        baseUri: null
       };
       return [version];
     }
@@ -177,11 +177,11 @@ export class ResourceHistoricComponent implements OnInit {
   getPreLastchangeUser(entities: HistoryEntity[], startIndex: number) {
     for (let index = startIndex; index < entities.length; index++) {
       if (
-        entities[index]["additions"]["entity"]["properties"][
+        entities[index]['additions']['entity']['properties'][
           Constants.Metadata.HasLastChangeUser
         ]
       ) {
-        return entities[index]["additions"]["entity"]["properties"][
+        return entities[index]['additions']['entity']['properties'][
           Constants.Metadata.HasLastChangeUser
         ][0];
       }

@@ -1,27 +1,36 @@
-import { Injectable } from "@angular/core";
-import { Selector, State, StateContext, Action } from "@ngxs/store";
-import { tap } from "rxjs/operators";
-import { MessageDto } from "src/app/shared/models/user/message-dto";
-import { NotificationService } from "./services/notification.service";
+import { Injectable } from '@angular/core';
+import { Selector, State, StateContext, Action } from '@ngxs/store';
+import { tap } from 'rxjs/operators';
+import { MessageDto } from 'src/app/shared/models/user/message-dto';
+import { NotificationService } from './services/notification.service';
 
 export class FetchNotifications {
-  static readonly type = "[Notification] Fetch notifications by user";
+  static readonly type = '[Notification] Fetch notifications by user';
   constructor(public userId: string) {}
 }
 
 export class ReadNotification {
-  static readonly type = "[Notification] Read notification";
-  constructor(public userId: string, public id: string) {}
+  static readonly type = '[Notification] Read notification';
+  constructor(
+    public userId: string,
+    public id: string
+  ) {}
 }
 
 export class ReadNotifications {
-  static readonly type = "[Notification] Read notifications";
-  constructor(public userId: string, public notifications: MessageDto[]) {}
+  static readonly type = '[Notification] Read notifications';
+  constructor(
+    public userId: string,
+    public notifications: MessageDto[]
+  ) {}
 }
 
 export class DeleteNotification {
-  static readonly type = "[Notification] Delete notifications";
-  constructor(public userId: string, public id: string) {}
+  static readonly type = '[Notification] Delete notifications';
+  constructor(
+    public userId: string,
+    public id: string
+  ) {}
 }
 
 export class NotificationStateModel {
@@ -29,10 +38,10 @@ export class NotificationStateModel {
 }
 
 @State<NotificationStateModel>({
-  name: "Notification",
+  name: 'Notification',
   defaults: {
-    notifications: null,
-  },
+    notifications: null
+  }
 })
 @Injectable()
 export class NotificationState {
@@ -59,7 +68,7 @@ export class NotificationState {
     return this.notificationApiService.getUserNotifications(action.userId).pipe(
       tap((res: MessageDto[]) => {
         patchState({
-          notifications: res,
+          notifications: res
         });
       })
     );
@@ -79,7 +88,7 @@ export class NotificationState {
         tap((res: MessageDto) => {
           filteredNotifications.push(res);
           patchState({
-            notifications: filteredNotifications,
+            notifications: filteredNotifications
           });
         })
       );
@@ -96,7 +105,7 @@ export class NotificationState {
       .pipe(
         tap((res: MessageDto[]) => {
           patchState({
-            notifications: res,
+            notifications: res
           });
         })
       );
@@ -115,7 +124,7 @@ export class NotificationState {
       .pipe(
         tap((_) => {
           patchState({
-            notifications: filteredNotifications,
+            notifications: filteredNotifications
           });
         })
       );

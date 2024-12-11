@@ -1,19 +1,19 @@
-import { Component, OnInit } from "@angular/core";
-import { WelcomeMessageApiService } from "src/app/core/http/welcome-message.api.service";
-import { WelcomeMessage } from "src/app/shared/models/welcome-message";
-import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
-import { EntityFormStatus } from "src/app/shared/models/entity-form.status";
+import { Component, OnInit } from '@angular/core';
+import { WelcomeMessageApiService } from 'src/app/core/http/welcome-message.api.service';
+import { WelcomeMessage } from 'src/app/shared/models/welcome-message';
+import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
+import { EntityFormStatus } from 'src/app/shared/models/entity-form.status';
 import {
   UpdateWelcomeMessageDataMarketplace,
-  WelcomeMessageState,
-} from "src/app/states/welcome-message.state";
-import { Select, Store } from "@ngxs/store";
-import { Observable, Subscription } from "rxjs";
+  WelcomeMessageState
+} from 'src/app/states/welcome-message.state';
+import { Select, Store } from '@ngxs/store';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
-  selector: "app-welcome-message-data-marketplace",
-  templateUrl: "./welcome-message-data-marketplace.component.html",
-  styleUrls: ["./welcome-message-data-marketplace.component.css"],
+  selector: 'app-welcome-message-data-marketplace',
+  templateUrl: './welcome-message-data-marketplace.component.html',
+  styleUrls: ['./welcome-message-data-marketplace.component.css']
 })
 export class WelcomeMessageDataMarketplaceComponent implements OnInit {
   status: EntityFormStatus = EntityFormStatus.INITIAL;
@@ -22,9 +22,9 @@ export class WelcomeMessageDataMarketplaceComponent implements OnInit {
   welcomeMessageDataMarketplaceSub: Subscription;
   welcomeMessageDataMarketplace: WelcomeMessage;
 
-  msg_header_datamarketplace = "Welcome Message Data Marketplace";
-  error_general = "An error occured during welcome message processing";
-  success_msg_update = "Message has been updated successfully";
+  msg_header_datamarketplace = 'Welcome Message Data Marketplace';
+  error_general = 'An error occured during welcome message processing';
+  success_msg_update = 'Message has been updated successfully';
 
   constructor(
     private welcomeMessageApiService: WelcomeMessageApiService,

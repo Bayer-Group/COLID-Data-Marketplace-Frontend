@@ -1,4 +1,4 @@
-import { ColidMatSnackBarType } from "./colid-mat-snack-bar-type.model";
+import { ColidMatSnackBarType } from './colid-mat-snack-bar-type.model';
 
 export class ColidMatSnackBarData {
   header: string;

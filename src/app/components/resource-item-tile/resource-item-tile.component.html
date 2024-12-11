@@ -1,62 +1,25 @@
-<mat-list-item
-  class="mb-2"
-  (click)="openResourceDetailsDialog()"
-  style="cursor: pointer"
->
+<mat-list-item class="resource-item-tile" (click)="openResourceDetailsDialog()">
   <ds-icon
-    mat-list-icon
+    matListItemIcon
     iconType="S3"
     [tooltipDisabled]="false"
     [delay]="300"
     [icon]="resourceType"
   ></ds-icon>
-  <div mat-line>
-    <div class="truncate resource-name d-flex justify-content-between">
-      <span>{{ label }}</span>
-      <mat-chip-list *ngIf="showLifeCycleStatus">
-        <mat-chip selected color="deleted" *ngIf="hasMarkedDeletionVersion">
-          <ds-icon
-            iconType="Mapping"
-            tooltipDisabled="false"
-            [delay]="300"
-            [icon]="lifeCycleStatus"
-          ></ds-icon>
-        </mat-chip>
-        <mat-chip selected color="draft" *ngIf="hasDraftVersion">
-          <ds-icon
-            iconType="Mapping"
-            [tooltipDisabled]="false"
-            [delay]="300"
-            [icon]="lifeCycleStatus"
-          >
-          </ds-icon>
-        </mat-chip>
-        <mat-chip selected color="published" *ngIf="hasPublishedVersion">
-          <ds-icon
-            iconType="Mapping"
-            [tooltipDisabled]="false"
-            [delay]="300"
-            [icon]="lifeCycleStatus"
-          ></ds-icon>
-        </mat-chip>
-        <mat-chip
-          selected
-          color="published"
-          *ngIf="hasResourceLinkedLifecycleStatus"
-        >
-          <ds-icon
-            iconType="Mapping"
-            [tooltipDisabled]="false"
-            [delay]="300"
-            [icon]="publishedResourceIcon"
-          ></ds-icon>
-        </mat-chip>
-      </mat-chip-list>
+  <div class="resource-item-tile__contents">
+    <div class="resource-item-tile__text-container">
+      <span class="resource-item-tile__title">{{ label }}</span>
+      <span
+        class="resource-item-tile__description"
+        [innerHTML]="strippedDefinition"
+      ></span>
     </div>
-    <span
-      class="clamped-desc resource-description"
-      [innerHTML]="strippedDefinition"
-    ></span>
+    <app-resource-status-indicators
+      class="resource-item-tile__status-indicators"
+      [entryLifeCycleStatus]="lifeCycleStatus"
+      [resourceLinkedLifecycleStatus]="resourceLinkedLifecycleStatus"
+    ></app-resource-status-indicators>
   </div>
 </mat-list-item>
-<mat-divider class="my-1"></mat-divider>
+
+<mat-divider></mat-divider>

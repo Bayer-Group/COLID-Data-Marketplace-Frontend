@@ -3,46 +3,46 @@ import {
   OnInit,
   HostListener,
   ViewChild,
-  OnDestroy,
-} from "@angular/core";
-import { Store, Select } from "@ngxs/store";
-import { FetchBuildInformation } from "./states/status.state";
-import { MetadataState, FetchMetadata } from "./states/metadata.state";
-import { Observable, of, Subscription } from "rxjs";
+  OnDestroy
+} from '@angular/core';
+import { Store, Select } from '@ngxs/store';
+import { FetchBuildInformation } from './states/status.state';
+import { MetadataState, FetchMetadata } from './states/metadata.state';
+import { Observable, of, Subscription } from 'rxjs';
 import {
   SetSidebarMode,
   ToggleSidebar,
-  SetSidebarOpened,
-} from "./states/sidebar.state";
-import { EnsureBrowserSupportService } from "./modules/browser-support/services/ensure-browser-support.service";
-import { ColidIconsService } from "./modules/colid-icons/services/colid-icons.service";
-import { CustomMaterialIcon } from "./modules/colid-icons/models/custom-material-icon";
+  SetSidebarOpened
+} from './states/sidebar.state';
+import { EnsureBrowserSupportService } from './modules/browser-support/services/ensure-browser-support.service';
+import { ColidIconsService } from './modules/colid-icons/services/colid-icons.service';
+import { CustomMaterialIcon } from './modules/colid-icons/models/custom-material-icon';
 import {
   SetLastLoginDataMarketplace,
   FetchUser,
   FetchConsumerGroupsByUser,
   FetchLatestSubscriptions,
-  FetchMostSubscribedResources,
-} from "./states/user-info.state";
-import { AuthService } from "./modules/authentication/services/auth.service";
-import { FetchNotifications } from "./modules/notification/notification.state";
-import { map, switchMap } from "rxjs/operators";
-import { FetchFavorites } from "./components/favorites/favorites.state";
-import { MatSidenav } from "@angular/material/sidenav";
-import { Event, NavigationEnd, Router } from "@angular/router";
+  FetchMostSubscribedResources
+} from './states/user-info.state';
+import { AuthService } from './modules/authentication/services/auth.service';
+import { FetchNotifications } from './modules/notification/notification.state';
+import { map, switchMap } from 'rxjs/operators';
+import { FetchFavorites } from './components/favorites/favorites.state';
+import { MatSidenav } from '@angular/material/sidenav';
+import { Event, NavigationEnd, Router } from '@angular/router';
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"],
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  @ViewChild("notificationSidenav") sidenav: MatSidenav;
+  @ViewChild('notificationSidenav') sidenav: MatSidenav;
   @Select(MetadataState.getMetadataTypes) metadataTypes$: Observable<any>;
 
-  activeSidebar: string = "notification";
+  activeSidebar: string = 'notification';
   openedSidenav: boolean = false;
-  currentRoute: string = "";
+  currentRoute: string = '';
 
   masterSub: Subscription = new Subscription();
 
@@ -61,7 +61,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   toggleSidenav(type: string) {
-    if (type === "favorite" && this.currentRoute.startsWith("/favorite")) {
+    if (type === 'favorite' && this.currentRoute.startsWith('/favorite')) {
       return;
     }
     //when sidenav type is changed
@@ -104,7 +104,7 @@ export class AppComponent implements OnInit, OnDestroy {
         .pipe(
           switchMap((identity) => {
             if (identity) {
-              console.log("Account identifier is", identity.accountIdentifier);
+              console.log('Account identifier is', identity.accountIdentifier);
               return this.store.dispatch([
                 new FetchUser(identity.accountIdentifier, identity.email),
                 new FetchNotifications(identity.accountIdentifier),
@@ -112,7 +112,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 new FetchMostSubscribedResources(),
                 new FetchFavorites(identity.accountIdentifier),
                 new FetchConsumerGroupsByUser(),
-                new SetLastLoginDataMarketplace(),
+                new SetLastLoginDataMarketplace()
               ]);
             } else {
               return of(null);
@@ -139,7 +139,7 @@ export class AppComponent implements OnInit, OnDestroy {
     );
   }
 
-  @HostListener("window:resize", ["$event"])
+  @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setSidebarMode(event.target);
   }
@@ -152,10 +152,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   setSidebarMode(window: Window) {
     if (window.innerWidth < 1000) {
-      this.store.dispatch(new SetSidebarMode("over")).subscribe();
+      this.store.dispatch(new SetSidebarMode('over')).subscribe();
     } else {
       this.store
-        .dispatch([new SetSidebarMode("side"), new SetSidebarOpened(true)])
+        .dispatch([new SetSidebarMode('side'), new SetSidebarOpened(true)])
         .subscribe();
     }
   }

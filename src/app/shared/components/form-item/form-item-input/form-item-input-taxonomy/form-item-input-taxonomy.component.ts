@@ -1,28 +1,30 @@
-import { Component, forwardRef, Input, OnInit } from "@angular/core";
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
+import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import {
   TaxonomyState,
-  FetchTaxonomyList,
-} from "src/app/states/taxonomy.state";
-import { Observable } from "rxjs";
-import { Select, Store } from "@ngxs/store";
-import { TaxonomyResultDTO } from "src/app/shared/models/taxonomy/taxonomy-result-dto";
-import { FormItemInputBaseComponent } from "../form-item-input-base/form-item-input-base.component";
-import { MetaDataProperty } from "src/app/shared/models/metadata/meta-data-property";
-import { Constants } from "src/app/shared/constants";
-import { TreeViewSelectionChangeEvent } from "src/app/shared/models/tree-view-selection-change-event";
+  FetchTaxonomyList
+} from 'src/app/states/taxonomy.state';
+import { Observable } from 'rxjs';
+import { Select, Store } from '@ngxs/store';
+import { TaxonomyResultDTO } from 'src/app/shared/models/taxonomy/taxonomy-result-dto';
+import { FormItemInputBaseComponent } from '../form-item-input-base/form-item-input-base.component';
+import { MetaDataProperty } from 'src/app/shared/models/metadata/meta-data-property';
+import { Constants } from 'src/app/shared/constants';
+import { TreeViewSelectionChangeEvent } from 'src/app/shared/models/tree-view-selection-change-event';
+
+// TODO: Unify - duplicate code with colid-ui-editor-frontend
 
 @Component({
-  selector: "app-form-item-input-taxonomy",
-  templateUrl: "./form-item-input-taxonomy.component.html",
-  styleUrls: ["./form-item-input-taxonomy.component.scss"],
+  selector: 'app-form-item-input-taxonomy',
+  templateUrl: './form-item-input-taxonomy.component.html',
+  styleUrls: ['./form-item-input-taxonomy.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => FormItemInputTaxonomyComponent),
-      multi: true,
-    },
-  ],
+      multi: true
+    }
+  ]
 })
 export class FormItemInputTaxonomyComponent
   extends FormItemInputBaseComponent
@@ -43,7 +45,7 @@ export class FormItemInputTaxonomyComponent
   _internalValue: TaxonomyResultDTO[] = [];
 
   get taxonomyType(): string {
-    return this.metadata.properties[Constants.Metadata.Range];
+    return this.metadata?.properties[Constants.Metadata.Range];
   }
 
   constructor(private store: Store) {
@@ -79,7 +81,7 @@ export class FormItemInputTaxonomyComponent
     event: TaxonomyResultDTO[]
   ): TaxonomyResultDTO[] {
     let resultList: TaxonomyResultDTO[] = [
-      ...new Map(event.map((item) => [item.id, item])).values(),
+      ...new Map(event.map((item) => [item.id, item])).values()
     ];
 
     resultList.forEach((r) => {
@@ -117,7 +119,7 @@ export class FormItemInputTaxonomyComponent
     }
     this.handleSelectionChanged({
       initialChange: false,
-      values: selectedValues,
+      values: selectedValues
     });
   }
 

@@ -1,14 +1,20 @@
 .mat-dialog-actions {
-    justify-content: flex-end;
+  justify-content: flex-end;
 }
 
 .icon-error {
-    height: 100px;
-    width: 100px;
-    font-size: 100px;
+  height: 100px;
+  width: 100px;
+  font-size: 100px;
 }
 
 .text-error {
-    margin-top: 10px;
-    margin-bottom: 30px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.linked-resource-display-dialog {
+  &__content-container {
+    height: 65vh;
+  }
 }

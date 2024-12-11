@@ -1,68 +1,81 @@
-import { Injectable } from "@angular/core";
-import { State, Action, StateContext, Selector } from "@ngxs/store";
-import { MetadataService } from "../core/http/metadata.service";
-import { ResourceApiService } from "src/app/core/http/resource.api.service";
+import { Injectable } from '@angular/core';
+import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
+import { MetadataService } from '../core/http/metadata.service';
+import { ResourceApiService } from 'src/app/core/http/resource.api.service';
 
-import { Constants } from "../shared/constants";
-import { CheckboxHierarchyDTO } from "../shared/models/checkboxHierarchy-dto";
-import { MetaDataProperty } from "../shared/models/metadata/meta-data-property";
-import { tap } from "rxjs/operators";
-import { EMPTY } from "rxjs";
+import { Constants } from '../shared/constants';
+import { CheckboxHierarchyDTO } from '../shared/models/checkboxHierarchy-dto';
+import { MetaDataProperty } from '../shared/models/metadata/meta-data-property';
+import { tap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
+import { EntityTypeDto } from '../shared/models/entities/entity-type-dto';
 
 export class FetchMetadata {
-  static readonly type = "[Metadata] FetchMetadata";
+  static readonly type = '[Metadata] FetchMetadata';
 }
 
 export class FetchEntityMetadata {
-  static readonly type = "[Metadata] FetchEntityMetadata";
+  static readonly type = '[Metadata] FetchEntityMetadata';
 
   constructor(public entityType: string) {}
 }
 
-export class FetchResourceTypeHierarchy {
-  static readonly type = "[Metadata] FetchResourceTypeHierarchy";
+export class FetchCheckboxResourceTypeHierarchy {
+  static readonly type = '[Metadata] FetchCheckboxResourceTypeHierarchy';
 }
+
+export class FetchResourceTypeHierarchy {
+  static readonly type = '[Metadata] FetchResourceHierarchy';
+}
+
 export class ToggleCategoryFilterTab {
-  static readonly type = "[Metadata] ToggleCategoryFilterTab";
+  static readonly type = '[Metadata] ToggleCategoryFilterTab';
   constructor(public tabNumber: number) {}
 }
+
 export class ToggleResourceTypeItem {
-  static readonly type = "[Metadata] ToggleResourceTypeItem";
+  static readonly type = '[Metadata] ToggleResourceTypeItem';
   constructor(public id: string) {}
 }
+
 export class EnableResourceTypeItem {
-  static readonly type = "[Metadata] EnableResourceTypeItem";
+  static readonly type = '[Metadata] EnableResourceTypeItem';
   constructor(public idList: string[]) {}
 }
+
 export class DisableResourceTypeItem {
-  static readonly type = "[Metadata] DisableResourceTypeItem";
+  static readonly type = '[Metadata] DisableResourceTypeItem';
   constructor(public idList: string[]) {}
 }
+
 export class ClearResourceTypeItem {
-  static readonly type = "[Metadata] ClearResourceTypeItem";
+  static readonly type = '[Metadata] ClearResourceTypeItem';
   constructor() {}
 }
+
 export interface MetadataStateModel {
   metadata: any;
   metadataType: string;
   entityMetadata: Map<string, Array<MetaDataProperty>>;
   types: any;
-  hierarchy: CheckboxHierarchyDTO[];
+  resourceHiearchy: EntityTypeDto;
+  checkboxHierarchy: CheckboxHierarchyDTO[];
   categoryTab: number;
   activeNodes: string[];
 }
 
 @State<MetadataStateModel>({
-  name: "metadata",
+  name: 'metadata',
   defaults: {
     metadata: null,
     metadataType: null,
     entityMetadata: new Map<string, Array<MetaDataProperty>>(),
     types: null,
-    hierarchy: null,
+    resourceHiearchy: null,
+    checkboxHierarchy: null,
     categoryTab: 0,
-    activeNodes: [],
-  },
+    activeNodes: []
+  }
 })
 @Injectable()
 export class MetadataState {
@@ -105,8 +118,13 @@ export class MetadataState {
   }
 
   @Selector()
+  public static getCheckboxResourceTypeHierarchy(state: MetadataStateModel) {
+    return state.checkboxHierarchy;
+  }
+
+  @Selector()
   public static getResourceTypeHierarchy(state: MetadataStateModel) {
-    return state.hierarchy;
+    return state.resourceHiearchy;
   }
 
   @Selector()
@@ -116,7 +134,8 @@ export class MetadataState {
 
   constructor(
     private metadataService: MetadataService,
-    private resourceApiService: ResourceApiService
+    private resourceApiService: ResourceApiService,
+    private store: Store
   ) {}
 
   @Action(ToggleCategoryFilterTab)
@@ -125,7 +144,7 @@ export class MetadataState {
     { tabNumber }: ToggleCategoryFilterTab
   ) {
     patchState({
-      categoryTab: tabNumber,
+      categoryTab: tabNumber
     });
   }
 
@@ -144,7 +163,7 @@ export class MetadataState {
       }
     }
     patchState({
-      activeNodes: list,
+      activeNodes: list
     });
   }
 
@@ -161,7 +180,7 @@ export class MetadataState {
     });
 
     patchState({
-      activeNodes: list,
+      activeNodes: list
     });
   }
   @Action(DisableResourceTypeItem)
@@ -179,7 +198,7 @@ export class MetadataState {
       }
     });
     patchState({
-      activeNodes: list,
+      activeNodes: list
     });
   }
 
@@ -189,20 +208,27 @@ export class MetadataState {
     {}: ClearResourceTypeItem
   ) {
     patchState({
-      activeNodes: [],
+      activeNodes: []
+    });
+  }
+
+  @Action(FetchCheckboxResourceTypeHierarchy)
+  fetchCheckboxResourceTypeHierarchy(
+    { patchState }: StateContext<MetadataStateModel>,
+    {}: FetchCheckboxResourceTypeHierarchy
+  ) {
+    this.resourceApiService.getCheckboxHierarchy().subscribe((res) => {
+      patchState({
+        checkboxHierarchy: res
+      });
     });
   }
 
   @Action(FetchResourceTypeHierarchy)
-  fetchResourceTypeHierarchy(
-    { patchState }: StateContext<MetadataStateModel>,
-    {}: FetchResourceTypeHierarchy
-  ) {
-    this.resourceApiService.getHierarchy().subscribe((res) => {
-      patchState({
-        hierarchy: res,
-      });
-    });
+  fetchResourceTypeHierarchy({ patchState }: StateContext<MetadataStateModel>) {
+    return this.resourceApiService
+      .getResourceHierarchy()
+      .pipe(tap((res) => patchState({ resourceHiearchy: res })));
   }
 
   @Action(FetchMetadata)
@@ -214,11 +240,11 @@ export class MetadataState {
       const types =
         res[Constants.Metadata.EntityType].properties[Constants.Shacl.Taxonomy];
       patchState({
-        types: types,
+        types: types
       });
 
       patchState({
-        metadata: res,
+        metadata: res
       });
     });
   }
@@ -238,7 +264,7 @@ export class MetadataState {
         const entityMetadataMap = ctx.getState().entityMetadata;
         entityMetadataMap.set(action.entityType, res);
         ctx.patchState({
-          entityMetadata: entityMetadataMap,
+          entityMetadata: entityMetadataMap
         });
       })
     );

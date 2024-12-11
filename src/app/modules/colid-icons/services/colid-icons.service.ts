@@ -1,12 +1,12 @@
-import { Injectable } from "@angular/core";
-import { MatIconRegistry } from "@angular/material/icon";
-import { DomSanitizer } from "@angular/platform-browser";
-import { CustomMaterialIcon } from "../models/custom-material-icon";
-import { BehaviorSubject } from "rxjs";
-import { environment } from "src/environments/environment";
+import { Injectable } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { CustomMaterialIcon } from '../models/custom-material-icon';
+import { BehaviorSubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class ColidIconsService {
   public _tooltipMapping = new Map<string, string>();
@@ -57,12 +57,12 @@ export class ColidIconsService {
   }
 
   replaceSpecialCharacter(str: string): string {
-    return str.replace(/%/gi, "%25");
+    return str.replace(/%/gi, '%25');
   }
 
   getEncodedS3Url(str: string): string {
     str = this.encodeString(str);
     str = this.replaceSpecialCharacter(str);
-    return environment.colidIconsUrl + str + ".svg";
+    return environment.colidIconsUrl + str + '.svg';
   }
 }

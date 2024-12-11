@@ -1,12 +1,9 @@
 <div class="search-field">
   <mat-form-field appearance="outline">
-        <mat-icon
-      style="cursor: pointer"
-      (click)="onEnter(search.value)"
-      matPrefix
+    <mat-icon style="cursor: pointer" (click)="onEnter(search.value)" matPrefix
       >search</mat-icon
     >
-        <input
+    <input
       id="searchBarInput1"
       matInput
       #search
@@ -25,7 +22,7 @@
         <mat-option
           *ngFor="let option of autocompleteResult | async"
           [value]="option"
-          ><span [innerHTML]="option | highlight : search.value"></span
+          ><span [innerHTML]="option | highlight: search.value"></span
         ></mat-option>
       </ng-container>
     </mat-autocomplete>

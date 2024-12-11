@@ -3,21 +3,21 @@ import {
   ChangeDetectionStrategy,
   OnDestroy,
   Inject,
-  ChangeDetectorRef,
-} from "@angular/core";
+  ChangeDetectorRef
+} from '@angular/core';
 import {
   DateAdapter,
   MAT_DATE_FORMATS,
-  MatDateFormats,
-} from "@angular/material/core";
-import { MatCalendar } from "@angular/material/datepicker";
-import { Subject, takeUntil } from "rxjs";
-import moment from "moment";
-import { AppMaterialModule } from "src/app/app-material.module";
+  MatDateFormats
+} from '@angular/material/core';
+import { MatCalendar } from '@angular/material/datepicker';
+import { Subject, takeUntil } from 'rxjs';
+import moment from 'moment';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 /** Custom header component for datepicker. */
 @Component({
-  selector: "custom-header-with-today-button",
+  selector: 'custom-header-with-today-button',
   styles: [
     `
       .custom-header {
@@ -32,7 +32,7 @@ import { AppMaterialModule } from "src/app/app-material.module";
         font-weight: 500;
         text-align: center;
       }
-    `,
+    `
   ],
   template: `
     <div class="custom-header">
@@ -54,7 +54,7 @@ import { AppMaterialModule } from "src/app/app-material.module";
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [AppMaterialModule],
+  imports: [AppMaterialModule]
 })
 export class DatePickerCustomHeaderWithTodayButtonComponent
   implements OnDestroy
@@ -90,16 +90,16 @@ export class DatePickerCustomHeaderWithTodayButtonComponent
       .toLocaleUpperCase();
   }
 
-  previousClicked(mode: "month" | "year") {
+  previousClicked(mode: 'month' | 'year') {
     this._calendar.activeDate =
-      mode === "month"
+      mode === 'month'
         ? this._dateAdapter.addCalendarMonths(this._calendar.activeDate, -1)
         : this._dateAdapter.addCalendarYears(this._calendar.activeDate, -1);
   }
 
-  nextClicked(mode: "month" | "year") {
+  nextClicked(mode: 'month' | 'year') {
     this._calendar.activeDate =
-      mode === "month"
+      mode === 'month'
         ? this._dateAdapter.addCalendarMonths(this._calendar.activeDate, 1)
         : this._dateAdapter.addCalendarYears(this._calendar.activeDate, 1);
   }

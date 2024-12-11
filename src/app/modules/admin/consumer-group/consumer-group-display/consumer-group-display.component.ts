@@ -1,20 +1,20 @@
-import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
-import { Select, Store } from "@ngxs/store";
-import { Observable } from "rxjs";
-import { ConsumerGroupResultDTO } from "src/app/shared/models/consumerGroups/ConsumerGroupResultDTO";
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { ConsumerGroupResultDTO } from 'src/app/shared/models/consumerGroups/ConsumerGroupResultDTO';
 import {
   ConsumerGroupState,
   FetchConsumerGroups,
-  ReactivateConsumerGroup,
-} from "src/app/states/consumer-group.state";
-import { MetaDataProperty } from "src/app/shared/models/metadata/meta-data-property";
-import { Constants } from "src/app/shared/constants";
+  ReactivateConsumerGroup
+} from 'src/app/states/consumer-group.state';
+import { MetaDataProperty } from 'src/app/shared/models/metadata/meta-data-property';
+import { Constants } from 'src/app/shared/constants';
 
 @Component({
-  selector: "app-consumer-group-display",
-  templateUrl: "./consumer-group-display.component.html",
-  styleUrls: ["./consumer-group-display.component.css"],
+  selector: 'app-consumer-group-display',
+  templateUrl: './consumer-group-display.component.html',
+  styleUrls: ['./consumer-group-display.component.css']
 })
 export class ConsumerGroupDisplayComponent implements OnInit {
   @Select(ConsumerGroupState.getConsumerGroups) consumerGroups$: Observable<
@@ -27,11 +27,14 @@ export class ConsumerGroupDisplayComponent implements OnInit {
   isConsumerGroupReactivating: ConsumerGroupResultDTO;
 
   lifecycleStatusMapping = {
-    [Constants.ConsumerGroup.LifecycleStatus.Active]: "Active",
-    [Constants.ConsumerGroup.LifecycleStatus.Deprecated]: "Deprecated",
+    [Constants.ConsumerGroup.LifecycleStatus.Active]: 'Active',
+    [Constants.ConsumerGroup.LifecycleStatus.Deprecated]: 'Deprecated'
   };
 
-  constructor(private router: Router, private store: Store) {}
+  constructor(
+    private router: Router,
+    private store: Store
+  ) {}
 
   ngOnInit() {
     this.loadConsumerGroups();
@@ -42,7 +45,7 @@ export class ConsumerGroupDisplayComponent implements OnInit {
   }
 
   createConsumerGroup() {
-    this.router.navigate(["admin/consumerGroups/create"]);
+    this.router.navigate(['admin/consumerGroups/create']);
   }
 
   reactivateConsumerGroup(consumerGroup: ConsumerGroupResultDTO) {

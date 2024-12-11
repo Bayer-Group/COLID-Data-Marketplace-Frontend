@@ -1,11 +1,11 @@
 <h3 mat-dialog-title>Confirm keyword adjustments</h3>
 <form [formGroup]="newGraphFormGroup" (ngSubmit)="saveNewGraphVersion()">
   <div mat-dialog-content>
-    <mat-form-field appearance="standard" class="w-100">
+    <mat-form-field appearance="outline" class="w-100">
       <mat-label>New Graph Name</mat-label>
       <input matInput #input [formControl]="graphNameFormControl" />
     </mat-form-field>
-    <mat-form-field appearance="standard" class="w-100">
+    <mat-form-field appearance="outline" class="w-100">
       <mat-label>Instance Type</mat-label>
       <input matInput #input [formControl]="graphTypeFormControl" />
     </mat-form-field>

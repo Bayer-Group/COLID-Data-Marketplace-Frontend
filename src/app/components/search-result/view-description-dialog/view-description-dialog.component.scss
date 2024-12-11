@@ -1,91 +1,73 @@
 .dialog {
-    height: 100%;
-    width: 100%;
-    padding: 12px;
+  height: 100%;
+  width: 100%;
+  padding: 12px;
 }
 
 .buttons {
-    margin-left: 8px;
-  }
-  
-  .favorites-area {
-    width: 100%;
-  
-    // Small devices (landscape phones, 576px and up)
-    @media (min-width: 576px) {
-        width: 500px;
-        max-width: 500px;
-    }
-  }
-  
-  .entry:hover {
-    cursor: pointer;
-  }
-  
-  .dialog {
-    border: lightgray solid 2px;
-  }
-  
-  // .ng-container .ng-appearance-outline:after {
-  //   border: solid 1px rgba(0,0,0,0.12);
-  //   border-radius: 5px;
-  //   height: calc(100% - 0.5em);
-  //   pointer-events: none;
-  //   transition: border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  // }
-  
-  // .ng-container:after {
-  //   border-bottom: thin solid rgba(0,0,0,0.42);
-  //   content: '';
-  //   width: 100%;
-  //   bottom: 0;
-  //   left: 0;
-  //   position: absolute;
-  //   transition: border-color 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
-  // }
-
-  .icon-100 {
-    font-size: 100px;
-    height: 100px;
-    width: auto;
+  margin-left: 8px;
 }
 
 .favorites-area {
-    width: 100%;
+  width: 100%;
 
-    // Small devices (landscape phones, 576px and up)
-    @media (min-width: 576px) {
-        width: 500px;
-        max-width: 500px;
-    }
-}
-
-mat-icon.close {
-    &:hover {
-        cursor: pointer;
-        font-weight: bold;
-    }
+  // Small devices (landscape phones, 576px and up)
+  @media (min-width: 576px) {
+    width: 500px;
+    max-width: 500px;
+  }
 }
 
 .entry:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-::ng-deep .favorites-item-sb>.mat-expansion-panel-header {
-    padding-left: 2 !important;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    height: auto !important;
-    font-size: 0.8rem !important;
+.dialog {
+  border: lightgray solid 2px;
+}
+
+.icon-100 {
+  font-size: 100px;
+  height: 100px;
+  width: auto;
+}
+
+.favorites-area {
+  width: 100%;
+
+  // Small devices (landscape phones, 576px and up)
+  @media (min-width: 576px) {
+    width: 500px;
+    max-width: 500px;
+  }
+}
+
+mat-icon.close {
+  &:hover {
+    cursor: pointer;
+    font-weight: bold;
+  }
+}
+
+.entry:hover {
+  cursor: pointer;
+}
+
+::ng-deep .favorites-item-sb > .mat-expansion-panel-header {
+  padding-left: 2 !important;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  height: auto !important;
+  font-size: 0.8rem !important;
 }
 
 .result-header {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .favorite-title {
-    max-width: 90%;
+  max-width: 90%;
 }
 
 ::ng-deep .mat-dialog-title {

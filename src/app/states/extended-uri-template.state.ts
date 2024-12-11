@@ -1,36 +1,36 @@
-import { State, Action, StateContext, Selector } from "@ngxs/store";
-import { mergeMap, tap } from "rxjs/operators";
-import { MetaDataProperty } from "../shared/models/metadata/meta-data-property";
-import { ExtendedUriTemplateResultDTO } from "../shared/models/extendedUriTemplates/extended-uri-template-result-dto";
-import { ExtendedUriTemplateApiService } from "../core/http/extended-uri-template-api.service";
-import { ExtendedUriTemplateRequestDTO } from "../shared/models/extendedUriTemplates/extended-uri-template-request-dto";
-import { MetadataService } from "../core/http/metadata.service";
-import { Constants } from "../shared/constants";
-import { Injectable } from "@angular/core";
+import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { mergeMap, tap } from 'rxjs/operators';
+import { MetaDataProperty } from '../shared/models/metadata/meta-data-property';
+import { ExtendedUriTemplateResultDTO } from '../shared/models/extendedUriTemplates/extended-uri-template-result-dto';
+import { ExtendedUriTemplateApiService } from '../core/http/extended-uri-template-api.service';
+import { ExtendedUriTemplateRequestDTO } from '../shared/models/extendedUriTemplates/extended-uri-template-request-dto';
+import { MetadataService } from '../core/http/metadata.service';
+import { Constants } from '../shared/constants';
+import { Injectable } from '@angular/core';
 
 export class FetchExtendedUriTemplates {
-  static readonly type = "[ExtendedUriTemplate] Fetch extendedUriTemplates";
+  static readonly type = '[ExtendedUriTemplate] Fetch extendedUriTemplates';
   constructor() {}
 }
 
 export class FetchExtendedUriTemplateDetails {
-  static readonly type = "[ExtendedUriTemplate] Fetch extendedUriTemplate";
+  static readonly type = '[ExtendedUriTemplate] Fetch extendedUriTemplate';
   constructor(public payload: string) {}
 }
 
 export class FetchExtendedUriTemplateMetadata {
   static readonly type =
-    "[ExtendedUriTemplate] Fetch extendedUriTemplateMetadata";
+    '[ExtendedUriTemplate] Fetch extendedUriTemplateMetadata';
   constructor() {}
 }
 
 export class CreateExtendedUriTemplate {
-  static readonly type = "[ExtendedUriTemplate] Create ExtendedUriTemplate";
+  static readonly type = '[ExtendedUriTemplate] Create ExtendedUriTemplate';
   constructor(public payload: ExtendedUriTemplateRequestDTO) {}
 }
 
 export class EditExtendedUriTemplate {
-  static readonly type = "[ExtendedUriTemplate] Edit ExtendedUriTemplate";
+  static readonly type = '[ExtendedUriTemplate] Edit ExtendedUriTemplate';
   constructor(
     public id: string,
     public payload: ExtendedUriTemplateRequestDTO
@@ -38,12 +38,12 @@ export class EditExtendedUriTemplate {
 }
 
 export class DeleteExtendedUriTemplate {
-  static readonly type = "[ExtendedUriTemplate] Delete extendedUriTemplate";
+  static readonly type = '[ExtendedUriTemplate] Delete extendedUriTemplate';
   constructor(public payload: string) {}
 }
 
 export class ClearExtendedUriTemplate {
-  static readonly type = "[ExtendedUriTemplate] Clear extendedUriTemplate";
+  static readonly type = '[ExtendedUriTemplate] Clear extendedUriTemplate';
 }
 
 export class ExtendedUriTemplateStateModel {
@@ -53,12 +53,12 @@ export class ExtendedUriTemplateStateModel {
 }
 
 @State<ExtendedUriTemplateStateModel>({
-  name: "extendedUriTemplates",
+  name: 'extendedUriTemplates',
   defaults: {
     extendedUriTemplates: null,
     extendedUriTemplate: null,
-    metadata: null,
-  },
+    metadata: null
+  }
 })
 @Injectable()
 export class ExtendedUriTemplateState {
@@ -92,7 +92,7 @@ export class ExtendedUriTemplateState {
     return this.extendedUriTemplateApiService.getAllEntities().pipe(
       tap((res) => {
         patchState({
-          extendedUriTemplates: res,
+          extendedUriTemplates: res
         });
       })
     );
@@ -112,7 +112,7 @@ export class ExtendedUriTemplateState {
       .pipe(
         tap((res) => {
           patchState({
-            metadata: res,
+            metadata: res
           });
         })
       );
@@ -156,7 +156,7 @@ export class ExtendedUriTemplateState {
     return this.extendedUriTemplateApiService.getEntityById(payload).pipe(
       tap((res) => {
         patchState({
-          extendedUriTemplate: res,
+          extendedUriTemplate: res
         });
       })
     );
@@ -168,7 +168,7 @@ export class ExtendedUriTemplateState {
     {}: ClearExtendedUriTemplate
   ) {
     patchState({
-      extendedUriTemplate: null,
+      extendedUriTemplate: null
     });
   }
 }

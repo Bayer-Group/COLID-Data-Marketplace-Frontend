@@ -4,57 +4,57 @@ import {
   Input,
   OnInit,
   Output,
-  ViewEncapsulation,
-} from "@angular/core";
+  ViewEncapsulation
+} from '@angular/core';
 import {
   RangeFilter,
-  RangeFilterSelection,
-} from "src/app/shared/models/range-filter";
-import { DatePipe } from "@angular/common";
-import { MatDatepickerInputEvent } from "@angular/material/datepicker";
-import { MomentDateAdapter } from "@angular/material-moment-adapter";
+  RangeFilterSelection
+} from 'src/app/shared/models/range-filter';
+import { DatePipe } from '@angular/common';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import {
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
-  DateAdapter,
-} from "@angular/material/core";
-import { Select } from "@ngxs/store";
-import { Observable } from "rxjs";
-import { ActiveRangeFilters } from "src/app/shared/models/active-range-filters";
-import { SearchState } from "src/app/states/search.state";
-import { DatePickerCustomHeaderWithTodayButtonComponent } from "./datepicker-custom-header-with-today-button.component";
+  DateAdapter
+} from '@angular/material/core';
+import { Select } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { ActiveRangeFilters } from 'src/app/shared/models/active-range-filters';
+import { SearchState } from 'src/app/states/search.state';
+import { DatePickerCustomHeaderWithTodayButtonComponent } from './datepicker-custom-header-with-today-button.component';
 
 export enum RangeDirection {
-  From = "from",
-  To = "to",
+  From = 'from',
+  To = 'to'
 }
 
 // https://momentjs.com/docs/#/parsing/string-format/
 export const DATE_FORMAT = {
   parse: {
-    dateInput: "YYYY-MM-DD",
+    dateInput: 'YYYY-MM-DD'
   },
   display: {
-    dateInput: "YYYY-MM-DD",
-    monthYearLabel: "YYYY",
-    dateA11yLabel: "LL",
-    monthYearA11yLabel: "YYYY",
-  },
+    dateInput: 'YYYY-MM-DD',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY'
+  }
 };
 
 @Component({
-  selector: "app-filter-box-item-daterange",
-  templateUrl: "./filter-box-item-daterange.component.html",
-  styleUrls: ["./filter-box-item-daterange.component.scss"],
+  selector: 'app-filter-box-item-daterange',
+  templateUrl: './filter-box-item-daterange.component.html',
+  styleUrls: ['./filter-box-item-daterange.component.scss'],
   providers: [
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE],
+      deps: [MAT_DATE_LOCALE]
     },
-    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT },
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT }
   ],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
 export class FilterBoxItemDaterangeComponent implements OnInit {
   @Input() rangeFilter: RangeFilter;
@@ -131,13 +131,13 @@ export class FilterBoxItemDaterangeComponent implements OnInit {
       }
     }
 
-    const formattedDate = this.datePipe.transform(newDate, "yyyy-MM-dd");
+    const formattedDate = this.datePipe.transform(newDate, 'yyyy-MM-dd');
     const selection = new RangeFilterSelection();
-    if (direction === "from") {
+    if (direction === 'from') {
       selection.from = formattedDate;
-      selection.to = this.datePipe.transform(currentTo, "yyyy-MM-dd");
+      selection.to = this.datePipe.transform(currentTo, 'yyyy-MM-dd');
     } else {
-      selection.from = this.datePipe.transform(currentFrom, "yyyy-MM-dd");
+      selection.from = this.datePipe.transform(currentFrom, 'yyyy-MM-dd');
       selection.to = formattedDate;
     }
     this.changeRange.emit(selection);

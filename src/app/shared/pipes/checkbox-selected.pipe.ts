@@ -1,7 +1,7 @@
-import { Pipe, PipeTransform } from "@angular/core";
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: "checkboxSelected",
+  name: 'checkboxSelected'
 })
 export class CheckboxSelectedPipe implements PipeTransform {
   transform(value: string, selectedValues: string[]): unknown {

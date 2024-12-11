@@ -1,32 +1,32 @@
-import { Component, OnInit, ViewChild, NgZone, Input } from "@angular/core";
-import { take } from "rxjs/operators";
-import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
-import { CdkTextareaAutosize } from "@angular/cdk/text-field";
-import { MessageTemplate } from "src/app/shared/models/message-template/message-template";
+import { Component, OnInit, ViewChild, NgZone, Input } from '@angular/core';
+import { take } from 'rxjs/operators';
+import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { MessageTemplate } from 'src/app/shared/models/message-template/message-template';
 import {
   UntypedFormGroup,
   Validators,
   UntypedFormControl,
-  AbstractControl,
-} from "@angular/forms";
-import { Store } from "@ngxs/store";
-import { UpdateMessageTemplate } from "src/app/states/message-templates.state";
+  AbstractControl
+} from '@angular/forms';
+import { Store } from '@ngxs/store';
+import { UpdateMessageTemplate } from 'src/app/states/message-templates.state';
 
 @Component({
-  selector: "app-message-template-edit",
-  templateUrl: "./message-template-edit.component.html",
-  styleUrls: ["./message-template-edit.component.css"],
+  selector: 'app-message-template-edit',
+  templateUrl: './message-template-edit.component.html',
+  styleUrls: ['./message-template-edit.component.css']
 })
 export class MessageTemplateEditComponent implements OnInit {
   @Input() messageTemplate: MessageTemplate;
 
-  @ViewChild("autosize", { static: false }) autosize: CdkTextareaAutosize;
+  @ViewChild('autosize', { static: false }) autosize: CdkTextareaAutosize;
 
   placeholders = {
-    ColidEntrySubscriptionUpdate: ["%COLID_LABEL%", "%COLID_PID_URI%"],
-    ColidEntrySubscriptionDelete: ["%COLID_LABEL%", "%COLID_PID_URI%"],
-    InvalidUserWarning: ["%COLID_LABEL%", "%COLID_PID_URI%", "%INVALID_USERS%"],
-    StoredQueryResult: ["%SEARCH_NAME%", "%UPDATED_RESOURCES%"],
+    ColidEntrySubscriptionUpdate: ['%COLID_LABEL%', '%COLID_PID_URI%'],
+    ColidEntrySubscriptionDelete: ['%COLID_LABEL%', '%COLID_PID_URI%'],
+    InvalidUserWarning: ['%COLID_LABEL%', '%COLID_PID_URI%', '%INVALID_USERS%'],
+    StoredQueryResult: ['%SEARCH_NAME%', '%UPDATED_RESOURCES%']
   };
 
   templateForm: UntypedFormGroup;
@@ -44,8 +44,8 @@ export class MessageTemplateEditComponent implements OnInit {
 
   ngOnInit() {
     this.templateForm = new UntypedFormGroup({
-      subjectControl: new UntypedFormControl("", Validators.required),
-      bodyControl: new UntypedFormControl("", Validators.required),
+      subjectControl: new UntypedFormControl('', Validators.required),
+      bodyControl: new UntypedFormControl('', Validators.required)
     });
     this.fillFormControl();
   }
@@ -55,12 +55,12 @@ export class MessageTemplateEditComponent implements OnInit {
       return;
     }
 
-    const subControl = this.templateForm.controls["subjectControl"];
+    const subControl = this.templateForm.controls['subjectControl'];
     if (subControl != null) {
       subControl.setValue(this.messageTemplate.subject);
     }
 
-    const bodControl = this.templateForm.controls["bodyControl"];
+    const bodControl = this.templateForm.controls['bodyControl'];
     if (bodControl != null) {
       bodControl.setValue(this.messageTemplate.body);
     }
@@ -87,18 +87,18 @@ export class MessageTemplateEditComponent implements OnInit {
 
   get valuesChanged() {
     const sameSubject =
-      this.templateForm.controls["subjectControl"].value.trim() !==
+      this.templateForm.controls['subjectControl'].value.trim() !==
       this.messageTemplate.subject;
     const sameBody =
-      this.templateForm.controls["bodyControl"].value.trim() !==
+      this.templateForm.controls['bodyControl'].value.trim() !==
       this.messageTemplate.body;
 
     return sameSubject || sameBody;
   }
 
   get valuesValid() {
-    const emptySubject = !this.templateForm.controls["subjectControl"].value;
-    const emptyBody = !this.templateForm.controls["bodyControl"].value;
+    const emptySubject = !this.templateForm.controls['subjectControl'].value;
+    const emptyBody = !this.templateForm.controls['bodyControl'].value;
     return emptySubject || emptyBody;
   }
 
@@ -115,21 +115,21 @@ export class MessageTemplateEditComponent implements OnInit {
   onSubmit() {
     if (!this.valuesChanged) {
       this.snackbar.warning(
-        "Template unchanged",
+        'Template unchanged',
         "The template hasn't been changed."
       );
     } else {
       if (this.valuesValid) {
         this.snackbar.warning(
-          "Template empty",
-          "The template contains empty fields."
+          'Template empty',
+          'The template contains empty fields.'
         );
         return;
       }
       this.messageTemplate.subject =
-        this.templateForm.controls["subjectControl"].value.trim();
+        this.templateForm.controls['subjectControl'].value.trim();
       this.messageTemplate.body =
-        this.templateForm.controls["bodyControl"].value.trim();
+        this.templateForm.controls['bodyControl'].value.trim();
 
       this.updateMessageTemplate();
     }

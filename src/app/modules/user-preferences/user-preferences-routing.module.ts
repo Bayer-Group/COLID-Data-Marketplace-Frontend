@@ -1,42 +1,42 @@
-import { RouterModule, Routes } from "@angular/router";
-import { NgModule } from "@angular/core";
-import { UserPreferencesComponent } from "./components/user-preferences/user-preferences.component";
-import { ResourceSubscriptionsComponent } from "./components/resource-subscriptions/resource-subscriptions.component";
-import { SearchSubscriptionsComponent } from "./components/search-subscriptions/search-subscriptions.component";
-import { SearchFilterDataMarketplaceComponent } from "./components/search-filter-data-marketplace/search-filter-data-marketplace.component";
-import { UserPreferencesGeneralComponent } from "./components/user-preferences-general/user-preferences-general.component";
+import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { UserPreferencesComponent } from './components/user-preferences/user-preferences.component';
+import { ResourceSubscriptionsComponent } from './components/resource-subscriptions/resource-subscriptions.component';
+import { SearchSubscriptionsComponent } from './components/search-subscriptions/search-subscriptions.component';
+import { SearchFilterDataMarketplaceComponent } from './components/search-filter-data-marketplace/search-filter-data-marketplace.component';
+import { UserPreferencesGeneralComponent } from './components/user-preferences-general/user-preferences-general.component';
 
 const routes: Routes = [
   {
-    path: "",
+    path: '',
     component: UserPreferencesComponent,
     children: [
       {
-        path: "resourceSubscriptions",
+        path: 'resourceSubscriptions',
         component: ResourceSubscriptionsComponent,
-        pathMatch: "full",
+        pathMatch: 'full'
       },
       {
-        path: "storedQueries",
+        path: 'storedQueries',
         component: SearchSubscriptionsComponent,
-        pathMatch: "full",
+        pathMatch: 'full'
       },
       {
-        path: "searchFiltersDataMarketplace",
+        path: 'searchFiltersDataMarketplace',
         component: SearchFilterDataMarketplaceComponent,
-        pathMatch: "full",
+        pathMatch: 'full'
       },
       {
-        path: "",
+        path: '',
         component: UserPreferencesGeneralComponent,
-        pathMatch: "full",
-      },
-    ],
-  },
+        pathMatch: 'full'
+      }
+    ]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class UserPreferencesRoutingModule {}

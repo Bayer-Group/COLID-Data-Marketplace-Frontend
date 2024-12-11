@@ -1,14 +1,27 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ReleasenotesDialogComponent } from "./releasenotes-dialog.component";
+import { ReleasenotesDialogComponent } from './releasenotes-dialog.component';
+import { NgxsModule } from '@ngxs/store';
+import { MarkdownModule } from 'ngx-markdown';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
-describe("ReleasenotesDialogComponent", () => {
+describe('ReleasenotesDialogComponent', () => {
   let component: ReleasenotesDialogComponent;
   let fixture: ComponentFixture<ReleasenotesDialogComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       declarations: [ReleasenotesDialogComponent],
+      imports: [
+        NgxsModule.forRoot(),
+        MarkdownModule.forRoot(),
+        MatDialogModule,
+        MatIconModule,
+        MatButtonModule
+      ],
+      providers: []
     }).compileComponents();
 
     fixture = TestBed.createComponent(ReleasenotesDialogComponent);
@@ -16,7 +29,7 @@ describe("ReleasenotesDialogComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

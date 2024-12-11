@@ -1,16 +1,16 @@
 <div
-  class="d-flex justify-content-between align-items-center text-uppercase text-muted"
+  class="d-flex justify-content-between align-items-center text-uppercase text-muted px-2"
   (click)="hidden = !hidden"
 >
   <span
-    ><small style="font-weight: 600">{{ rangeFilter.label }}</small></span
+    ><small style="font-weight: 600">{{ rangeFilter?.label }}</small></span
   >
   <!-- <small>
     <mat-icon *ngIf="hidden">expand_more</mat-icon>
     <mat-icon *ngIf="!hidden">expand_less</mat-icon>
   </small> -->
 </div>
-<div class="range-box-content py-2">
+<div class="range-box-content p-2">
   <div class="d-flex flex-column">
     <app-filter-box-item-daterange
       (changeRange)="rangeChanged($event)"

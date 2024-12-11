@@ -1,4 +1,4 @@
-import { DatePipe } from "@angular/common";
+import { DatePipe } from '@angular/common';
 import {
   Component,
   Input,
@@ -8,29 +8,29 @@ import {
   SimpleChanges,
   ChangeDetectorRef,
   NgZone,
-  ChangeDetectionStrategy,
-} from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { Select, Store } from "@ngxs/store";
-import { Observable } from "rxjs";
-import { DocumentService } from "src/app/core/http/document.service";
-import { Constants } from "src/app/shared/constants";
+  ChangeDetectionStrategy
+} from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { DocumentService } from 'src/app/core/http/document.service';
+import { Constants } from 'src/app/shared/constants';
 import {
   SchemaUIResult,
   SchemeUi,
-  SchemeUiResult,
-} from "src/app/shared/models/schemeUI";
-import { DocumentMap, SearchHit } from "src/app/shared/models/search-result";
-import { MetadataState } from "src/app/states/metadata.state";
-import { FetchSchemaUIResults, SearchState } from "src/app/states/search.state";
-import { LinkedResourceDisplayDialogComponent } from "../../linked-resource-dialog/linked-resource-display-dialog.component";
+  SchemeUiResult
+} from 'src/app/shared/models/schemeUI';
+import { DocumentMap, SearchHit } from 'src/app/shared/models/search-result';
+import { MetadataState } from 'src/app/states/metadata.state';
+import { FetchSchemaUIResults, SearchState } from 'src/app/states/search.state';
+import { LinkedResourceDisplayDialogComponent } from '../../linked-resource-dialog/linked-resource-display-dialog.component';
 //import { test } from '../scheme-ui.worker';
 
 @Component({
-  selector: "app-scheme-ui",
+  selector: 'app-scheme-ui',
   changeDetection: ChangeDetectionStrategy.Default,
-  templateUrl: "./scheme-ui.component.html",
-  styleUrls: ["./scheme-ui.component.scss"],
+  templateUrl: './scheme-ui.component.html',
+  styleUrls: ['./scheme-ui.component.scss']
 })
 export class SchemeUIComponent implements OnInit, OnChanges, OnDestroy {
   @Input() schemeUiDetail: SchemeUi;
@@ -74,7 +74,7 @@ export class SchemeUIComponent implements OnInit, OnChanges, OnDestroy {
     private dialog: MatDialog
   ) {}
 
-  selectedPidUriCurrent: string = "";
+  selectedPidUriCurrent: string = '';
   indexCurrent: number = 0;
   documents: DocumentMap[] = [];
   searchHits: SearchHit[] = [];
@@ -95,9 +95,9 @@ export class SchemeUIComponent implements OnInit, OnChanges, OnDestroy {
       if (error) {
         if (error.status == 404) {
           this.error =
-            "The selected COLID entry could not be found. It may not yet be published to the Data Marketplace.";
+            'The selected COLID entry could not be found. It may not yet be published to the Data Marketplace.';
         } else {
-          this.error = "An unknown error has occurred.";
+          this.error = 'An unknown error has occurred.';
         }
       }
     });
@@ -115,25 +115,25 @@ export class SchemeUIComponent implements OnInit, OnChanges, OnDestroy {
     if (event.source.checked) {
       this.selectedPIDURIs.push(event.source.value);
       window.parent.postMessage(
-        { message: "selectedPidURIs", value: this.selectedPIDURIs },
-        "*"
+        { message: 'selectedPidURIs', value: this.selectedPIDURIs },
+        '*'
       );
     } else {
       this.selectedPIDURIs = this.selectedPIDURIs.filter(
         (item) => item != event.source.value
       );
       window.parent.postMessage(
-        { message: "selectedPidURIs", value: this.selectedPIDURIs },
-        "*"
+        { message: 'selectedPidURIs', value: this.selectedPIDURIs },
+        '*'
       );
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes["schemeUiDetail"] && changes["schemeUiDetail"].currentValue) {
+    if (changes['schemeUiDetail'] && changes['schemeUiDetail'].currentValue) {
       //this.schemaStatusChecked=true;
       this.schemeUiValues = new SchemeUi();
-      this.schemeUiValues = changes["schemeUiDetail"].currentValue;
+      this.schemeUiValues = changes['schemeUiDetail'].currentValue;
       var result = this.schemeUiValues;
       this.schemaStatus =
         result?.columns.length > 0 || result?.tables.length > 0 ? true : false;
@@ -174,17 +174,17 @@ export class SchemeUIComponent implements OnInit, OnChanges, OnDestroy {
         columnName == this.lastChnagedByDate
       ) {
         return [
-          this.datePipe.transform(row.outbound[0].value, "yyyy-MM-dd hh:mm"),
+          this.datePipe.transform(row.outbound[0].value, 'yyyy-MM-dd hh:mm')
         ];
       }
       if (columnName == this.nameColumn) {
         return [
-          `<a href="${pidUri}" (click)="clickColumn($event, '${pidUri}')">${row.outbound[0].value}</a href>`,
+          `<a href="${pidUri}" (click)="clickColumn($event, '${pidUri}')">${row.outbound[0].value}</a href>`
         ];
       }
       return [row.outbound[0].value];
     }
-    return [""];
+    return [''];
   }
 
   columnSchemeUi() {
@@ -229,7 +229,7 @@ export class SchemeUIComponent implements OnInit, OnChanges, OnDestroy {
     var pidUri = table[this.hasPIDURI].outbound[0].value;
     this.dialog.open(LinkedResourceDisplayDialogComponent, {
       data: { id: pidUri, confirmReview: false },
-      width: "80vw",
+      width: '80vw'
     });
   }
 
@@ -237,7 +237,7 @@ export class SchemeUIComponent implements OnInit, OnChanges, OnDestroy {
     event.preventDefault();
     this.dialog.open(LinkedResourceDisplayDialogComponent, {
       data: { id: pidUri, confirmReview: false },
-      width: "80vw",
+      width: '80vw'
     });
   }
 
@@ -281,7 +281,7 @@ export class SchemeUIComponent implements OnInit, OnChanges, OnDestroy {
         columnName == Constants.Shacl.Groups.LinkTypes ||
         columnName == Constants.DistributionEndpoint.DistributionKey
       ) {
-        return "";
+        return '';
       }
       var name = this.metadata[columnName].properties[Constants.Shacl.Name];
       var piduri = columnName;
@@ -290,7 +290,7 @@ export class SchemeUIComponent implements OnInit, OnChanges, OnDestroy {
       var obj = { name, order, piduri, group };
       return obj;
     }
-    return "";
+    return '';
   }
 
   columnNamePolulate(column) {
@@ -310,6 +310,6 @@ export class SchemeUIComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.someDataSubscription.unsubscribe();
+    this.someDataSubscription?.unsubscribe();
   }
 }

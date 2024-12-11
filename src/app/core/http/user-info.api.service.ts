@@ -1,17 +1,17 @@
-import { Injectable } from "@angular/core";
-import { environment } from "src/environments/environment";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { UserDto } from "src/app/shared/models/user/user-dto";
-import { ColidEntrySubscriptionDto } from "src/app/shared/models/user/colid-entry-subscription-dto";
-import { SearchFilterDataMarketplaceDto } from "src/app/shared/models/user/search-filter-data-marketplace-dto";
-import { MessageConfigDto } from "src/app/shared/models/user/message-config-dto";
-import { StoredQueryDto } from "src/app/shared/models/user/stored-query-dto";
-import { HierarchicalData } from "src/app/shared/models/user/hierarchical-dto";
-import { ColidEntrySubscriptionDetailsDto } from "src/app/shared/models/user/colid-entry-subscription-details-dto";
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { UserDto } from 'src/app/shared/models/user/user-dto';
+import { ColidEntrySubscriptionDto } from 'src/app/shared/models/user/colid-entry-subscription-dto';
+import { SearchFilterDataMarketplaceDto } from 'src/app/shared/models/user/search-filter-data-marketplace-dto';
+import { MessageConfigDto } from 'src/app/shared/models/user/message-config-dto';
+import { StoredQueryDto } from 'src/app/shared/models/user/stored-query-dto';
+import { HierarchicalData } from 'src/app/shared/models/user/hierarchical-dto';
+import { ColidEntrySubscriptionDetailsDto } from 'src/app/shared/models/user/colid-entry-subscription-details-dto';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class UserInfoApiService {
   constructor(private httpClient: HttpClient) {}
@@ -56,8 +56,8 @@ export class UserInfoApiService {
     const url = `${environment.appDataApiUrl}/Users/${id}/colidEntrySubscriptions`;
 
     const httpOptions = {
-      headers: new HttpHeaders({ "Content-Type": "application/json" }),
-      body: colidEntrySubscriptionDto,
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      body: colidEntrySubscriptionDto
     };
 
     return this.httpClient.delete(url, httpOptions);
@@ -93,8 +93,8 @@ export class UserInfoApiService {
   ): Observable<any> {
     const url = `${environment.appDataApiUrl}/Users/${id}/searchFiltersDataMarketplace/${searchFilterDataMarketplaceId}`;
     const httpOptions = {
-      headers: new HttpHeaders({ "Content-Type": "application/json" }),
-      body: null,
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      body: null
     };
     return this.httpClient.delete(url, httpOptions);
   }
@@ -140,8 +140,8 @@ export class UserInfoApiService {
   ): Observable<any> {
     const url = `${environment.appDataApiUrl}/Users/${id}/removeSubscriptionFromSearchFilterDataMarketplace/${searchFilterDataMarketplaceId}`;
     const httpOptions = {
-      headers: new HttpHeaders({ "Content-Type": "application/json" }),
-      body: null,
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      body: null
     };
     return this.httpClient.delete(url, httpOptions);
   }

@@ -7,7 +7,7 @@ export interface ExportDto {
 
 export const defaultExportSettings: ExportDto = {
   includeHeader: true,
-  exportContent: "uriAndMeta",
-  readableValues: "clearText",
-  exportFormat: "excelTemplate",
+  exportContent: 'uriAndMeta',
+  readableValues: 'clearText',
+  exportFormat: 'excelTemplate'
 };

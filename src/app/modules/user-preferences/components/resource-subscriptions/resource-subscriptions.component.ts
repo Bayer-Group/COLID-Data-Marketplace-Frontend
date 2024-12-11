@@ -1,35 +1,38 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ColidEntrySubscriptionDto } from "src/app/shared/models/user/colid-entry-subscription-dto";
-import { Observable, Subscription } from "rxjs";
-import { Constants } from "src/app/shared/constants";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ColidEntrySubscriptionDto } from 'src/app/shared/models/user/colid-entry-subscription-dto';
+import { Observable, Subscription } from 'rxjs';
+import { Constants } from 'src/app/shared/constants';
 import {
   UserInfoState,
   AddColidEntrySubscription,
   ReloadUser,
-  RemoveColidEntrySubscription,
-} from "src/app/states/user-info.state";
-import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
-import { ResourceOverviewCTO } from "src/app/shared/models/resources/resource-overview-cto";
-import { Store, Select } from "@ngxs/store";
+  RemoveColidEntrySubscription
+} from 'src/app/states/user-info.state';
+import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
+import { ResourceOverviewCTO } from 'src/app/shared/models/resources/resource-overview-cto';
+import { Store, Select } from '@ngxs/store';
 import {
   ColidEntrySubscriptionsState,
-  FetchColidEntrySubscriptions,
-} from "src/app/states/colid-entry-subscription.state";
-import { ColidEntrySubscription } from "src/app/shared/models/colidEntrySubscription/colid-entry-subscription";
-import { environment } from "src/environments/environment";
+  FetchColidEntrySubscriptions
+} from 'src/app/states/colid-entry-subscription.state';
+import { ColidEntrySubscription } from 'src/app/shared/models/colidEntrySubscription/colid-entry-subscription';
+import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: "app-resource-subscriptions",
-  templateUrl: "./resource-subscriptions.component.html",
-  styleUrls: ["./resource-subscriptions.component.scss"],
+  selector: 'app-resource-subscriptions',
+  templateUrl: './resource-subscriptions.component.html',
+  styleUrls: ['./resource-subscriptions.component.scss']
 })
 export class ResourceSubscriptionsComponent implements OnInit, OnDestroy {
   constants = Constants;
   @Select(UserInfoState.getColidEntrySubscriptions)
   colidEntrySubscriptions$: Observable<ColidEntrySubscriptionDto[]>;
+
   @Select(ColidEntrySubscriptionsState.getColidEntrySubscriptions)
   colidEntrySubscriptionOverview$: Observable<ResourceOverviewCTO>;
-  @Select(ColidEntrySubscriptionsState.loading) loading$: Observable<boolean>;
+
+  @Select(ColidEntrySubscriptionsState.loading)
+  loading$: Observable<boolean>;
 
   cesSubscription: Subscription;
   cesoSubscription: Subscription;
@@ -92,7 +95,7 @@ export class ResourceSubscriptionsComponent implements OnInit, OnDestroy {
 
         this.colidEntrySubscriptions = new Map([
           ...this.colidEntrySubscriptionsUnsubscripted,
-          ...this.colidEntrySubscriptions,
+          ...this.colidEntrySubscriptions
         ]);
       }
     );
@@ -115,8 +118,8 @@ export class ResourceSubscriptionsComponent implements OnInit, OnDestroy {
         this.colidEntrySubscriptions.set(pidUri, subscription);
 
         this.snackbar.success(
-          "Resource subscribed",
-          "You have successfully subscribed the resource."
+          'Resource subscribed',
+          'You have successfully subscribed the resource.'
         );
       });
   }
@@ -131,8 +134,8 @@ export class ResourceSubscriptionsComponent implements OnInit, OnDestroy {
       .dispatch(new RemoveColidEntrySubscription(colidEntrySubscriptionDto))
       .subscribe(() => {
         this.snackbar.success(
-          "Resource unsubscribed",
-          "You have successfully unsubscribed to the resource."
+          'Resource unsubscribed',
+          'You have successfully unsubscribed to the resource.'
         );
       });
   }

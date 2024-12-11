@@ -1,4 +1,4 @@
-FROM node:14-alpine as build-phase
+FROM node:18-alpine AS build-phase
 
 ARG ANGULAR_ENVIRONMENT
 ENV ANGULAR_ENVIRONMENT=${ANGULAR_ENVIRONMENT}
@@ -12,17 +12,14 @@ ENV Build__CiPipelineId=${BUILD_CIPIPELINEID}
 ARG BUILD_CICOMMITSHA
 ENV Build__CiCommitSha=${BUILD_CICOMMITSHA}
 
-ARG NODE_OPTIONS
+ARG NODE_OPTIONS=--max-old-space-size=8192
 
 COPY package.json package-lock.json ./
 
 ## Storing node modules on a separate layer will prevent unnecessary npm installs at each build
 RUN npm install \
- && mkdir /ng-app \
- && cp -R ./node_modules ./ng-app
-
-##3 against vulnerable packages
-RUN npm audit fix
+    && mkdir /ng-app \
+    && cp -R ./node_modules ./ng-app
 
 WORKDIR /ng-app
 
@@ -32,10 +29,10 @@ RUN echo "export const BUILD = {\
     jobId: '$Build__CiJobId',\
     pipelineId: '$Build__CiPipelineId',\
     ciCommitSha: '$Build__CiCommitSha'\
-}" > ./src/assets/build-variables.ts
+    }" > ./src/assets/build-variables.ts
 
 ## Build the angular app and store the artifacts in dist folder
-RUN $(npm bin)/ng build --configuration=$ANGULAR_ENVIRONMENT --build-optimizer=false --output-hashing=all
+RUN npx ng build --configuration=$ANGULAR_ENVIRONMENT
 
 FROM nginx:alpine
 

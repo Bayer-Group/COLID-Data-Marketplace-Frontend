@@ -1,30 +1,30 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { AggregationBucket } from "src/app/shared/models/aggregation-bucket";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { AggregationBucket } from 'src/app/shared/models/aggregation-bucket';
 import {
   DisableResourceTypeItem,
   EnableResourceTypeItem,
   MetadataState,
   ToggleCategoryFilterTab,
-  ToggleResourceTypeItem,
-} from "src/app/states/metadata.state";
-import { Observable, Subscription } from "rxjs";
-import { Select, Store } from "@ngxs/store";
-import { CheckboxHierarchyDTO } from "src/app/shared/models/checkboxHierarchy-dto";
-import { FlatTreeControl } from "@angular/cdk/tree";
+  ToggleResourceTypeItem
+} from 'src/app/states/metadata.state';
+import { Observable, Subscription } from 'rxjs';
+import { Select, Store } from '@ngxs/store';
+import { CheckboxHierarchyDTO } from 'src/app/shared/models/checkboxHierarchy-dto';
+import { FlatTreeControl } from '@angular/cdk/tree';
 import {
   MatTreeFlatDataSource,
-  MatTreeFlattener,
-} from "@angular/material/tree";
-import { MatTabChangeEvent } from "@angular/material/tabs";
+  MatTreeFlattener
+} from '@angular/material/tree';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
-  selector: "app-filter-box-item-checkboxHierarchy",
-  templateUrl: "./filter-box-item-checkboxHierarchy.component.html",
-  styleUrls: ["./filter-box-item-checkboxHierarchy.component.scss"],
+  selector: 'app-filter-box-item-checkboxHierarchy',
+  templateUrl: './filter-box-item-checkboxHierarchy.component.html',
+  styleUrls: ['./filter-box-item-checkboxHierarchy.component.scss']
 })
 export class FilterBoxItemCheckboxHierarchyComponent implements OnInit {
   @Select(MetadataState.getMetadata) metadata$: Observable<any>;
-  @Select(MetadataState.getResourceTypeHierarchy)
+  @Select(MetadataState.getCheckboxResourceTypeHierarchy)
   resourceHierarchy$: Observable<CheckboxHierarchyDTO[]>;
   @Select(MetadataState.getActiveNodes) activeNodes$: Observable<string[]>;
   @Select(MetadataState.getActiveCategoryTab)
@@ -135,7 +135,7 @@ export class FilterBoxItemCheckboxHierarchyComponent implements OnInit {
       if (!node.instantiable) {
         var element = {
           key: node.name,
-          doc_count: 0,
+          doc_count: 0
         };
         if (!this.aggregationBuckets.some((x) => x.key == node.name)) {
           this.aggregationBuckets.push(element);

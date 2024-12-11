@@ -1,12 +1,16 @@
-<h1 class="mat-headline pt-2 pl-3">User Preferences</h1>
+<h4 class="mat-headline pt-2 pl-3">User Preferences</h4>
 <mat-nav-list>
   <mat-list-item
     routerLink="/user"
     (click)="linkClicked()"
     routerLinkActive="active"
   >
-    <mat-icon class="me-1" fontSet="material-icons-outlined">settings</mat-icon>
-    <a>General</a>
+    <div class="d-flex">
+      <mat-icon class="me-1" fontSet="material-icons-outlined"
+        >settings</mat-icon
+      >
+      <a>General</a>
+    </div>
   </mat-list-item>
   <!-- <h1 matSubheader>Subscriptions</h1> -->
   <mat-list-item
@@ -14,10 +18,12 @@
     (click)="linkClicked()"
     routerLinkActive="active"
   >
-    <mat-icon class="me-1" fontSet="material-icons-outlined"
-      >notifications</mat-icon
-    >
-    <a>Resource subscriptions</a>
+    <div class="d-flex">
+      <mat-icon class="me-1" fontSet="material-icons-outlined"
+        >notifications</mat-icon
+      >
+      <a>Resource subscriptions</a>
+    </div>
   </mat-list-item>
   <!--<mat-list-item routerLink="storedQueries" (click)="linkClicked()" routerLinkActive="active">
         <mat-icon class="mr-1" fontSet="material-icons-outlined">youtube_searched_for</mat-icon>
@@ -29,7 +35,9 @@
     (click)="linkClicked()"
     routerLinkActive="active"
   >
-    <mat-icon class="me-1" fontSet="material-icons-outlined">search</mat-icon>
-    <a>Saved searches and subscriptions</a>
+    <div class="d-flex">
+      <mat-icon class="me-1" fontSet="material-icons-outlined">search</mat-icon>
+      <a>Saved searches and subscriptions</a>
+    </div>
   </mat-list-item>
 </mat-nav-list>

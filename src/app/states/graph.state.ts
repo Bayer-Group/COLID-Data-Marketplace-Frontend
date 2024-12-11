@@ -1,41 +1,41 @@
-import { State, Action, StateContext, Selector } from "@ngxs/store";
-import { GraphApiService } from "src/app/core/http/graph.api.service";
-import { tap } from "rxjs/operators";
-import { GraphOverViewDto } from "src/app/shared/models/graphs/graph-overview-dto";
-import { GraphResultDTO } from "src/app/shared/models/graphs/graph-result-dto";
-import { MetaDataProperty } from "src/app/shared/models/metadata/meta-data-property";
-import { GraphRequestDTO } from "src/app/shared/models/graphs/graph-request-dto";
-import { MetadataService } from "src/app/core/http/metadata.service";
-import { Constants } from "src/app/shared/constants";
-import { Injectable } from "@angular/core";
+import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { GraphApiService } from 'src/app/core/http/graph.api.service';
+import { tap } from 'rxjs/operators';
+import { GraphOverViewDto } from 'src/app/shared/models/graphs/graph-overview-dto';
+import { GraphResultDTO } from 'src/app/shared/models/graphs/graph-result-dto';
+import { MetaDataProperty } from 'src/app/shared/models/metadata/meta-data-property';
+import { GraphRequestDTO } from 'src/app/shared/models/graphs/graph-request-dto';
+import { MetadataService } from 'src/app/core/http/metadata.service';
+import { Constants } from 'src/app/shared/constants';
+import { Injectable } from '@angular/core';
 
 export class FetchGraph {
-  static readonly type = "[Graph] Fetch graph";
+  static readonly type = '[Graph] Fetch graph';
   constructor() {}
 }
 
 export class FetchHistory {
-  static readonly type = "[Graph] Fetch history";
+  static readonly type = '[Graph] Fetch history';
   constructor() {}
 }
 
 export class FetchGraphMetadata {
-  static readonly type = "[Graph] Fetch metadata";
+  static readonly type = '[Graph] Fetch metadata';
   constructor() {}
 }
 
 export class FetchHistoricGraph {
-  static readonly type = "[Graph] Fetch historic graph";
+  static readonly type = '[Graph] Fetch historic graph';
   constructor(public payload: string) {}
 }
 
 export class CreateGraph {
-  static readonly type = "[Graph] Create graph";
+  static readonly type = '[Graph] Create graph';
   constructor(public payload: GraphRequestDTO) {}
 }
 
 export class UnselectHistoricGraph {
-  static readonly type = "[Graph] UnselectHistoricGraph";
+  static readonly type = '[Graph] UnselectHistoricGraph';
 }
 
 export class GraphStateModel {
@@ -47,14 +47,14 @@ export class GraphStateModel {
 }
 
 @State<GraphStateModel>({
-  name: "graphs",
+  name: 'graphs',
   defaults: {
     history: null,
     historicGraphs: new Map<string, GraphResultDTO>(),
     selectedHistoricGraph: null,
     actualGraph: null,
-    metadata: null,
-  },
+    metadata: null
+  }
 })
 @Injectable()
 export class GraphState {
@@ -97,7 +97,7 @@ export class GraphState {
 
     if (historicGraphs.has(payload)) {
       patchState({
-        selectedHistoricGraph: payload,
+        selectedHistoricGraph: payload
       });
       return;
     }
@@ -107,7 +107,7 @@ export class GraphState {
         historicGraphs.set(payload, res);
         patchState({
           historicGraphs: historicGraphs,
-          selectedHistoricGraph: payload,
+          selectedHistoricGraph: payload
         });
       })
     );
@@ -116,13 +116,13 @@ export class GraphState {
   @Action(FetchGraph)
   fetchGraph({ patchState }: StateContext<GraphStateModel>, {}: FetchGraph) {
     patchState({
-      actualGraph: null,
+      actualGraph: null
     });
 
     return this.graphApiService.getGraph().pipe(
       tap((res) => {
         patchState({
-          actualGraph: res,
+          actualGraph: res
         });
       })
     );
@@ -134,7 +134,7 @@ export class GraphState {
     {}: UnselectHistoricGraph
   ) {
     patchState({
-      selectedHistoricGraph: null,
+      selectedHistoricGraph: null
     });
   }
 
@@ -146,7 +146,7 @@ export class GraphState {
     return this.graphApiService.getHistory().pipe(
       tap((res) => {
         patchState({
-          history: res,
+          history: res
         });
       })
     );
@@ -166,7 +166,7 @@ export class GraphState {
       .pipe(
         tap((res) => {
           patchState({
-            metadata: res,
+            metadata: res
           });
         })
       );
@@ -181,7 +181,7 @@ export class GraphState {
       tap((res) => {
         dispatch(new FetchHistory());
         patchState({
-          actualGraph: res.entity,
+          actualGraph: res.entity
         });
       })
     );

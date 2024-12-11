@@ -11,8 +11,8 @@
     <mat-expansion-panel class="h-100" expanded="true">
       <mat-expansion-panel-header class="blue-bold-text">{{
         latestSubscriptions.length > 0
-          ? "Your latest subscriptions"
-          : "Most subscribed resources"
+          ? 'Your latest subscriptions'
+          : 'Most subscribed resources'
       }}</mat-expansion-panel-header>
       <ng-container
         *ngIf="latestSubscriptions.length === 0; else showSubscribedResources"

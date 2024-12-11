@@ -3,39 +3,37 @@ import {
   forwardRef,
   Input,
   Output,
-  EventEmitter,
-} from "@angular/core";
-import { FormItemInputBaseComponent } from "../form-item-input-base/form-item-input-base.component";
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { Metadata } from "src/app/shared/models/metadata/meta-data";
-import { Entity } from "src/app/shared/models/entities/entity";
-import { FormItemChangedDTO } from "src/app/shared/models/form/form-item-changed-dto";
-import { FormChangedDTO } from "src/app/shared/models/form/form-changed-dto";
-import { FormService } from "src/app/shared/services/form.service";
-import { Constants } from "src/app/shared/constants";
-import { Observable, of } from "rxjs";
-import { PidUriTemplateResultDTO } from "src/app/shared/models/pidUriTemplates/pid-uri-template-result-dto";
-import { MatDialog } from "@angular/material/dialog";
-import { DeleteItemDialogComponent } from "src/app/shared/components/delete-item-dialog/delete-item-dialog.component";
-import { MetaDataProperty } from "src/app/shared/models/metadata/meta-data-property";
-import { Select } from "@ngxs/store";
-import { MetadataState } from "src/app/states/metadata.state";
+  EventEmitter
+} from '@angular/core';
+import { FormItemInputBaseComponent } from '../form-item-input-base/form-item-input-base.component';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Metadata } from 'src/app/shared/models/metadata/meta-data';
+import { Entity } from 'src/app/shared/models/entities/entity';
+import { FormItemChangedDTO } from 'src/app/shared/models/form/form-item-changed-dto';
+import { FormChangedDTO } from 'src/app/shared/models/form/form-changed-dto';
+import { FormService } from 'src/app/shared/services/form.service';
+import { Constants } from 'src/app/shared/constants';
+import { Observable, of } from 'rxjs';
+import { PidUriTemplateResultDTO } from 'src/app/shared/models/pidUriTemplates/pid-uri-template-result-dto';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteItemDialogComponent } from 'src/app/shared/components/delete-item-dialog/delete-item-dialog.component';
+import { MetaDataProperty } from 'src/app/shared/models/metadata/meta-data-property';
+import { Select } from '@ngxs/store';
+import { MetadataState } from 'src/app/states/metadata.state';
 
 @Component({
-  selector: "app-form-item-input-distribution",
-  templateUrl: "./form-item-input-distribution.component.html",
-  styleUrls: ["./form-item-input-distribution.component.css"],
+  selector: 'app-form-item-input-distribution',
+  templateUrl: './form-item-input-distribution.component.html',
+  styleUrls: ['./form-item-input-distribution.component.css'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => FormItemInputDistributionComponent),
-      multi: true,
-    },
-  ],
+      multi: true
+    }
+  ]
 })
 export class FormItemInputDistributionComponent extends FormItemInputBaseComponent {
-  @Select(MetadataState.actualMetadataHasMainDistributionEndpoint)
-  hasMainDistributionProperty$: Observable<boolean>;
   @Input() newDistributionEntities: string[];
   @Input() errors: any;
   @Input() metaData: Metadata[];
@@ -50,6 +48,9 @@ export class FormItemInputDistributionComponent extends FormItemInputBaseCompone
   @Input() set mainDistribution(value) {
     setTimeout(() => (this._isMainDistribution = value), 100);
   }
+
+  @Select(MetadataState.actualMetadataHasMainDistributionEndpoint)
+  hasMainDistributionProperty$: Observable<boolean>;
 
   distributionObjects: Entity[];
   distributionTypesVisible = false;
@@ -76,7 +77,10 @@ export class FormItemInputDistributionComponent extends FormItemInputBaseCompone
     return null;
   }
 
-  constructor(private formService: FormService, public dialog: MatDialog) {
+  constructor(
+    private formService: FormService,
+    public dialog: MatDialog
+  ) {
     super();
   }
 
@@ -90,10 +94,10 @@ export class FormItemInputDistributionComponent extends FormItemInputBaseCompone
     const dialogRef = this.dialog.open(DeleteItemDialogComponent, {
       data: {
         header: `Deleting ${this.label}`,
-        body: `Are you sure you want to delete this ${this.label}?`,
+        body: `Are you sure you want to delete this ${this.label}?`
       },
-      width: "auto",
-      disableClose: true,
+      width: 'auto',
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe((result) => {

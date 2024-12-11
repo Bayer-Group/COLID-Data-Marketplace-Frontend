@@ -4,6 +4,10 @@
   padding: 0px 8px;
 }
 
+.chip-white-text {
+    --mdc-chip-label-text-color: white
+}
+
 mat-panel-description {
   justify-content: flex-end;
 }

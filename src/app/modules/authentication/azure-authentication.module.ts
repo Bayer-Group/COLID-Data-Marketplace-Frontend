@@ -1,9 +1,9 @@
-import { NgModule, ModuleWithProviders, Provider } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { environment } from "src/environments/environment";
-import { HTTP_INTERCEPTORS } from "@angular/common/http";
-import { AzureIdentityProvider } from "./services/azure-identity-provider.service";
-import { IDENT_PROV } from "src/app/shared/constants";
+import { NgModule, ModuleWithProviders, Provider } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { environment } from 'src/environments/environment';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AzureIdentityProvider } from './services/azure-identity-provider.service';
+import { IDENT_PROV } from 'src/app/shared/constants';
 
 import {
   MsalModule,
@@ -15,20 +15,20 @@ import {
   MSAL_GUARD_CONFIG,
   MSAL_INTERCEPTOR_CONFIG,
   MsalGuard,
-  MsalBroadcastService,
-} from "@azure/msal-angular";
+  MsalBroadcastService
+} from '@azure/msal-angular';
 import {
   BrowserCacheLocation,
   InteractionType,
   IPublicClientApplication,
   LogLevel,
-  PublicClientApplication,
-} from "@azure/msal-browser";
+  PublicClientApplication
+} from '@azure/msal-browser';
 
 // checks if the app is running on IE
 export const isIE =
-  window.navigator.userAgent.indexOf("MSIE ") > -1 ||
-  window.navigator.userAgent.indexOf("Trident/") > -1;
+  window.navigator.userAgent.indexOf('MSIE ') > -1 ||
+  window.navigator.userAgent.indexOf('Trident/') > -1;
 
 export function loggerCallback(_logLevel: LogLevel, _message: string) {}
 
@@ -39,20 +39,20 @@ export function MSALInstanceFactory(): IPublicClientApplication {
       authority: environment.adalConfig.authority,
       redirectUri: environment.adalConfig.redirectUri,
       postLogoutRedirectUri: environment.adalConfig.postLogoutRedirectUri,
-      navigateToLoginRequestUrl: false,
+      navigateToLoginRequestUrl: false
     },
     cache: {
       cacheLocation: BrowserCacheLocation.SessionStorage,
-      storeAuthStateInCookie: isIE, // set to true for IE 11
+      storeAuthStateInCookie: isIE // set to true for IE 11
     },
     system: {
       loggerOptions: {
         loggerCallback,
         logLevel: LogLevel.Info,
-        piiLoggingEnabled: false,
-      },
+        piiLoggingEnabled: false
+      }
       // allowRedirectInIframe: true,
-    },
+    }
   });
 }
 
@@ -63,7 +63,7 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
 
   return {
     interactionType: InteractionType.Redirect, //TODO: Maybe adjust?
-    protectedResourceMap,
+    protectedResourceMap
   };
 }
 
@@ -71,8 +71,8 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   return {
     interactionType: InteractionType.Redirect,
     authRequest: {
-      scopes: ["user.read", "openid", "profile", "email"],
-    },
+      scopes: ['user.read', 'openid', 'profile', 'email']
+    }
   };
 }
 
@@ -82,38 +82,38 @@ const providers: Provider[] = [
   MsalBroadcastService,
   {
     provide: IDENT_PROV,
-    useClass: AzureIdentityProvider,
+    useClass: AzureIdentityProvider
   },
   {
     provide: MSAL_INSTANCE,
-    useFactory: MSALInstanceFactory,
+    useFactory: MSALInstanceFactory
   },
   {
     provide: MSAL_GUARD_CONFIG,
-    useFactory: MSALGuardConfigFactory,
+    useFactory: MSALGuardConfigFactory
   },
   {
     provide: MSAL_INTERCEPTOR_CONFIG,
-    useFactory: MSALInterceptorConfigFactory,
+    useFactory: MSALInterceptorConfigFactory
   },
   {
     provide: HTTP_INTERCEPTORS,
     useClass: MsalInterceptor,
-    multi: true,
-  },
+    multi: true
+  }
 ];
 
 @NgModule({
   declarations: [],
   imports: [CommonModule, MsalModule],
   providers: providers,
-  exports: [MsalModule],
+  exports: [MsalModule]
 })
 export class AzureAuthenticationModule {
   static forRoot(): ModuleWithProviders<AzureAuthenticationModule> {
     return {
       ngModule: AzureAuthenticationModule,
-      providers: providers,
+      providers: providers
     };
   }
 }

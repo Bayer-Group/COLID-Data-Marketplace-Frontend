@@ -6,29 +6,4 @@
 
 ::ng-deep .search-field {
   white-space: nowrap;
-
-  .mat-form-field-infix {
-    padding-top: 1.3em !important;
-    border-top: none;
-  }
-
-  input {
-    font-size: 1.1em;
-    line-height: 1.0em !important;
-    margin-left: -1.4em;
-  }
-
-  .mat-form-field-wrapper {
-    padding: 0 !important;
-  }
-}
-
-::ng-deep {
-  mat-option {
-    height: 2em !important;
-  }
-
-  .mat-option-text {
-    font-size: 0.8em;
-  }
 }

@@ -4,35 +4,35 @@ import {
   forwardRef,
   Input,
   EventEmitter,
-  Output,
-} from "@angular/core";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { FormItemSettings } from "src/app/shared/models/form/form-item-settings";
-import { MetaDataProperty } from "src/app/shared/models/metadata/meta-data-property";
-import { FormItemChangedDTO } from "src/app/shared/models/form/form-item-changed-dto";
+  Output
+} from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormItemSettings } from 'src/app/shared/models/form/form-item-settings';
+import { MetaDataProperty } from 'src/app/shared/models/metadata/meta-data-property';
+import { FormItemChangedDTO } from 'src/app/shared/models/form/form-item-changed-dto';
 import {
   FieldTypeMapping,
-  MetaDataPropertyIdentifier,
-} from "../../resource-form.constants";
-import { Observable, of } from "rxjs";
-import { PidUriTemplateResultDTO } from "src/app/shared/models/pidUriTemplates/pid-uri-template-result-dto";
-import { MetaDataPropertyGroup } from "src/app/shared/models/metadata/meta-data-property-group";
-import { MultiselectSettings } from "../../models/form/multi-select-settings";
-import { Constants } from "src/app/shared/constants";
-import { FieldTypeFormItemMapping } from "./form-item.constants";
-import { AttachmentUploadedDto } from "src/app/shared/models/attachment/attachment-uploaded-dto";
+  MetaDataPropertyIdentifier
+} from '../../resource-form.constants';
+import { Observable, of } from 'rxjs';
+import { PidUriTemplateResultDTO } from 'src/app/shared/models/pidUriTemplates/pid-uri-template-result-dto';
+import { MetaDataPropertyGroup } from 'src/app/shared/models/metadata/meta-data-property-group';
+import { MultiselectSettings } from '../../models/form/multi-select-settings';
+import { Constants } from 'src/app/shared/constants';
+import { FieldTypeFormItemMapping } from './form-item.constants';
+import { AttachmentUploadedDto } from 'src/app/shared/models/attachment/attachment-uploaded-dto';
 
 @Component({
-  selector: "app-form-item",
-  templateUrl: "./form-item.component.html",
-  styleUrls: ["./form-item.component.scss"],
+  selector: 'app-form-item',
+  templateUrl: './form-item.component.html',
+  styleUrls: ['./form-item.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => FormItemComponent),
-      multi: true,
-    },
-  ],
+      multi: true
+    }
+  ]
 })
 export class FormItemComponent implements OnInit, ControlValueAccessor {
   internalValue: any = null;
@@ -82,15 +82,13 @@ export class FormItemComponent implements OnInit, ControlValueAccessor {
 
   created: boolean = true;
 
-  constructor() {}
-
   ngOnInit() {
     this.multiselectSettings = {
       multiple: !this.singleSelection,
       maxSelectedItems: this.limitSelection,
       disabled: this.readonly,
-      addTag: this.fieldType === "extendableList",
-      hideSelected: true,
+      addTag: this.fieldType === 'extendableList',
+      hideSelected: true
     };
     this.setReadOnly(this.readOnly);
   }
@@ -100,9 +98,9 @@ export class FormItemComponent implements OnInit, ControlValueAccessor {
       this.metaData.properties[Constants.Metadata.HasPidUri] ===
       Constants.Metadata.EntityType
     ) {
-      return "1";
+      return '1';
     }
-    return this.metaData.properties[Constants.Metadata.MaxCount] === "1"
+    return this.metaData.properties[Constants.Metadata.MaxCount] === '1'
       ? null
       : this.metaData.properties[Constants.Metadata.MaxCount];
   }
@@ -114,7 +112,7 @@ export class FormItemComponent implements OnInit, ControlValueAccessor {
     ) {
       return true;
     }
-    return this.metaData.properties[Constants.Metadata.MaxCount] === "1";
+    return this.metaData.properties[Constants.Metadata.MaxCount] === '1';
   }
 
   async setReadOnly(readOnly: boolean) {
@@ -142,7 +140,7 @@ export class FormItemComponent implements OnInit, ControlValueAccessor {
       return;
     }
 
-    if (this.fieldType === "nested") {
+    if (this.fieldType === 'nested') {
       this.readonly = false;
       return;
     }
@@ -206,18 +204,18 @@ export class FormItemComponent implements OnInit, ControlValueAccessor {
       metadataKey === MetaDataPropertyIdentifier.pidUri ||
       metadataKey === MetaDataPropertyIdentifier.baseUri
     ) {
-      return "identifier";
+      return 'identifier';
     }
 
     if (range === Constants.Person.Type) {
-      return "person";
+      return 'person';
     }
 
     if (
       this.metaData.properties[Constants.Metadata.Pattern] ===
       Constants.Regex.NaturalNumber
     ) {
-      fieldType = "number";
+      fieldType = 'number';
     }
 
     if (
@@ -225,7 +223,7 @@ export class FormItemComponent implements OnInit, ControlValueAccessor {
       (this.metaData.properties[Constants.Metadata.MaxCount] != null &&
         this.metaData.properties[Constants.Metadata.MaxCount] > 1)
     ) {
-      fieldType = "general-multi";
+      fieldType = 'general-multi';
     }
 
     if (
@@ -233,30 +231,30 @@ export class FormItemComponent implements OnInit, ControlValueAccessor {
         Constants.Metadata.NodeType.IRI &&
       range
     ) {
-      fieldType = "list";
+      fieldType = 'list';
     }
 
     if (
       this.metaData.key == Constants.Metadata.HasAttachment &&
       this.metaData.nestedMetadata.length !== 0
     ) {
-      fieldType = "attachment";
+      fieldType = 'attachment';
     }
 
     if (
       this.metaData.key == Constants.Metadata.Distribution &&
       this.metaData.nestedMetadata.length !== 0
     ) {
-      fieldType = "distribution";
+      fieldType = 'distribution';
     }
 
     const group: MetaDataPropertyGroup =
       this.metaData.properties[Constants.Metadata.Group];
     if (group != null && group.key === Constants.Resource.Groups.LinkTypes) {
-      fieldType = "linking";
+      fieldType = 'linking';
     }
 
-    if (fieldType === "taxonomy" || fieldType === "list") {
+    if (fieldType === 'taxonomy' || fieldType === 'list') {
       this.internalValue =
         Array.isArray(this.internalValue) || this.internalValue == null
           ? this.internalValue

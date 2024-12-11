@@ -1,16 +1,16 @@
-import { Injectable } from "@angular/core";
-import { Selector, State, StateContext, Action } from "@ngxs/store";
-import { tap } from "rxjs/operators";
-import { MessageTemplateApiService } from "../modules/admin/services/message-template.api.service";
-import { MessageTemplate } from "../shared/models/message-template/message-template";
+import { Injectable } from '@angular/core';
+import { Selector, State, StateContext, Action } from '@ngxs/store';
+import { tap } from 'rxjs/operators';
+import { MessageTemplateApiService } from '../modules/admin/services/message-template.api.service';
+import { MessageTemplate } from '../shared/models/message-template/message-template';
 
 export class FetchMessageTemplates {
-  static readonly type = "[MessageTemplate] Fetch message templates";
+  static readonly type = '[MessageTemplate] Fetch message templates';
   constructor() {}
 }
 
 export class UpdateMessageTemplate {
-  static readonly type = "[MessageTemplate] Update message template";
+  static readonly type = '[MessageTemplate] Update message template';
   constructor(public str: MessageTemplate) {}
 }
 
@@ -19,10 +19,10 @@ export class MessageTemplateStateModel {
 }
 
 @State<MessageTemplateStateModel>({
-  name: "MessageTemplates",
+  name: 'MessageTemplates',
   defaults: {
-    messageTemplates: null,
-  },
+    messageTemplates: null
+  }
 })
 @Injectable()
 export class MessageTemplateState {
@@ -58,7 +58,7 @@ export class MessageTemplateState {
     return this.messageTemplateApiService.getMessageTemplates().pipe(
       tap((res: MessageTemplate[]) => {
         patchState({
-          messageTemplates: res,
+          messageTemplates: res
         });
       })
     );

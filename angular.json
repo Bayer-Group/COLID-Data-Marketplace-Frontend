@@ -8,7 +8,11 @@
       "sourceRoot": "src",
       "projectType": "application",
       "prefix": "app",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -18,80 +22,83 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "assets": [
-              "src/assets"
-            ],
+            "assets": ["src/assets"],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss",
               "./node_modules/quill/dist/quill.core.css",
               "./node_modules/quill/dist/quill.bubble.css",
               "./node_modules/quill/dist/quill.snow.css",
               "./node_modules/bootstrap/dist/css/bootstrap.css"
             ],
-            "scripts": [
-              "./node_modules/marked/marked.min.js"
-            ],
-            "vendorChunk": true,
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
+            "scripts": ["./node_modules/marked/marked.min.js"],
+            "outputHashing": "none",
+            "aot": true,
             "optimization": false,
+            "vendorChunk": true,
+            "buildOptimizer": false,
             "namedChunks": true,
-            "aot": true
+            "extractLicenses": false
           },
           "configurations": {
             "production": {
-              "budgets": [
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
-                }
-              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.production.ts"
                 }
               ],
-              "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
+              "aot": true,
+              "optimization": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+              "buildOptimizer": true,
+              "namedChunks": true,
+              "extractLicenses": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "5mb",
+                  "maximumError": "10mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "12kb",
+                  "maximumError": "20kb"
+                }
+              ]
             },
             "es5": {
               "tsConfig": "src/tsconfig.app.json"
             },
             "release": {
-              "budgets": [
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
-                }
-              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.release.ts"
                 }
               ],
-              "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
+              "aot": true,
+              "optimization": true,
               "vendorChunk": false,
-              "buildOptimizer": true
-            },
-            "development": {
+              "buildOptimizer": true,
+              "namedChunks": true,
+              "extractLicenses": true,
               "budgets": [
                 {
+                  "type": "initial",
+                  "maximumWarning": "5mb",
+                  "maximumError": "10mb"
+                },
+                {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "12kb",
+                  "maximumError": "20kb"
                 }
-              ],
+              ]
+            },
+            "development": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -99,53 +106,78 @@
                 }
               ],
               "outputHashing": "all",
-              "namedChunks": false,
-              "aot": false,
-              "extractLicenses": true,
+              "aot": true,
+              "optimization": true,
               "vendorChunk": false,
-              "sourceMap": true,
-              "buildOptimizer": false,
-              "optimization": false
-            },
-            "docker": {
+              "buildOptimizer": true,
+              "namedChunks": true,
+              "extractLicenses": true,
               "budgets": [
                 {
+                  "type": "initial",
+                  "maximumWarning": "5mb",
+                  "maximumError": "10mb"
+                },
+                {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "12kb",
+                  "maximumError": "20kb"
                 }
-              ],
+              ]
+            },
+            "docker": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.docker.ts"
                 }
               ],
-              "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
+              "aot": true,
+              "optimization": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "namedChunks": true,
               "extractLicenses": true,
-              "vendorChunk": false
-            },
-            "onprem": {
               "budgets": [
                 {
+                  "type": "initial",
+                  "maximumWarning": "5mb",
+                  "maximumError": "10mb"
+                },
+                {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "12kb",
+                  "maximumError": "20kb"
                 }
-              ],
+              ]
+            },
+            "onprem": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.onprem.ts"
                 }
               ],
-              "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
+              "aot": true,
+              "optimization": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "namedChunks": true,
               "extractLicenses": true,
-              "vendorChunk": false
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "5mb",
+                  "maximumError": "10mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "12kb",
+                  "maximumError": "20kb"
+                }
+              ]
             }
           },
           "defaultConfiguration": ""
@@ -153,29 +185,29 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "colid-data-marketplace-frontend:build",
             "host": "0.0.0.0",
-            "port": 4301
+            "port": 4301,
+            "buildTarget": "colid-data-marketplace-frontend:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "colid-data-marketplace-frontend:build:production"
+              "buildTarget": "colid-data-marketplace-frontend:build:production"
             },
             "es5": {
               "tsConfig": "src/tsconfig.app.json"
             },
             "release": {
-              "browserTarget": "colid-data-marketplace-frontend:build:release"
+              "buildTarget": "colid-data-marketplace-frontend:build:release"
             },
             "development": {
-              "browserTarget": "colid-data-marketplace-frontend:build:development"
+              "buildTarget": "colid-data-marketplace-frontend:build:development"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "colid-data-marketplace-frontend:build"
+            "buildTarget": "colid-data-marketplace-frontend:build"
           }
         },
         "test": {
@@ -186,22 +218,18 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "src/styles.css"
+              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/styles.scss"
             ],
             "scripts": [],
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ]
+            "assets": ["src/favicon.ico", "src/assets"],
+            "codeCoverage": true
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         }
       }
@@ -229,12 +257,6 @@
           }
         }
       }
-    }
-  },
-  "defaultProject": "colid-data-marketplace-frontend",
-  "schematics": {
-    "@schematics/angular:component": {
-      "style": "scss"
     }
   },
   "cli": {

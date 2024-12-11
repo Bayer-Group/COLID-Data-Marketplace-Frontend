@@ -16,5 +16,5 @@ export class StoredQueryDto {
 export enum ExecutionInterval {
   Daily,
   Weekly,
-  Monthly,
+  Monthly
 }

@@ -1,6 +1,6 @@
-import { Constants } from "../constants";
-import { MetaDataProperty } from "../models/metadata/meta-data-property";
-import { MetaDataPropertyGroup } from "../models/metadata/meta-data-property-group";
+import { Constants } from '../constants';
+import { MetaDataProperty } from '../models/metadata/meta-data-property';
+import { MetaDataPropertyGroup } from '../models/metadata/meta-data-property-group';
 
 export class MetadataExtension {
   public static isInvisbleGroupKey(key: string): boolean {

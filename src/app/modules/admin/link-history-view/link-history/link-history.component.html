@@ -99,7 +99,7 @@
         </div>
       </th>
       <td mat-cell *matCellDef="let element">
-        {{ element.dateCreated | date : "MM/dd/yyyy HH:mm" }}
+        {{ element.dateCreated | date: 'MM/dd/yyyy HH:mm' }}
       </td>
     </ng-container>
     <ng-container matColumnDef="deletedby">
@@ -119,7 +119,7 @@
         </div>
       </th>
       <td mat-cell *matCellDef="let element">
-        {{ element.dateDeleted | date : "MM/dd/yyyy HH:mm" }}
+        {{ element.dateDeleted | date: 'MM/dd/yyyy HH:mm' }}
       </td>
     </ng-container>
     <ng-container matColumnDef="status">
@@ -177,7 +177,9 @@
     ></tr>
 
     <tr class="mat-row" *matNoDataRow [hidden]="isLoading$ | async">
-      <td class="mat-cell" colspan="11">No data matching the filter.</td>
+      <td class="mat-cell" colspan="11" style="padding: 8px">
+        No data matching the filter
+      </td>
     </tr>
   </table>
   <mat-progress-bar

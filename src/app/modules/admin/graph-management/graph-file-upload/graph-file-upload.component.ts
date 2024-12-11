@@ -1,32 +1,30 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-  selector: "app-graph-file-upload",
-  templateUrl: "./graph-file-upload.component.html",
-  styleUrls: ["./graph-file-upload.component.scss"],
+  selector: 'app-graph-file-upload',
+  templateUrl: './graph-file-upload.component.html',
+  styleUrls: ['./graph-file-upload.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: GraphFileUploadComponent,
-      multi: true,
-    },
-  ],
+      multi: true
+    }
+  ]
 })
 export class GraphFileUploadComponent implements ControlValueAccessor {
-  @ViewChild("fileDropRef", { static: false }) fileDropRef: ElementRef;
+  @ViewChild('fileDropRef', { static: false }) fileDropRef: ElementRef;
 
   onChange: any = () => {};
   onTouched: any = () => {};
 
   file: File | null = null;
 
-  constructor() {}
-
   writeValue(_value: any) {
     // clear file input after upload
     if (this.fileDropRef != null && this.fileDropRef.nativeElement != null) {
-      this.fileDropRef.nativeElement.value = "";
+      this.fileDropRef.nativeElement.value = '';
       this.file = null;
     }
   }

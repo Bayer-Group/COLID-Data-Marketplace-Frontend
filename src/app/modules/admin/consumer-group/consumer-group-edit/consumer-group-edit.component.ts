@@ -1,11 +1,13 @@
-import { Component, OnDestroy } from "@angular/core";
-import { Store } from "@ngxs/store";
-import { ClearConsumerGroup } from "src/app/states/consumer-group.state";
+import { Component, OnDestroy } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { ClearConsumerGroup } from 'src/app/states/consumer-group.state';
+
+// TODO: remove this component and call app-consumer-group-form directly!
 
 @Component({
-  selector: "app-consumer-group-edit",
-  templateUrl: "./consumer-group-edit.component.html",
-  styleUrls: ["./consumer-group-edit.component.css"],
+  selector: 'app-consumer-group-edit',
+  templateUrl: './consumer-group-edit.component.html',
+  styleUrls: ['./consumer-group-edit.component.css']
 })
 export class ConsumerGroupEditComponent implements OnDestroy {
   isNew = false;

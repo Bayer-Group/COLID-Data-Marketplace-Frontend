@@ -1,5 +1,5 @@
-import { DetailsViewModel } from "../../components/search-result/search-result.component";
-import { Constants } from "src/app/shared/constants";
+import { DetailsViewModel } from '../../components/search-result/search-result.component';
+import { Constants } from 'src/app/shared/constants';
 
 export function getValueForKey(details: DetailsViewModel[], key: string) {
   const foundValue: DetailsViewModel = details.find((d) => d.key === key);

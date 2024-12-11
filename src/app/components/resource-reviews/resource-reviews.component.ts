@@ -4,32 +4,32 @@ import {
   AfterViewInit,
   ViewChild,
   ChangeDetectionStrategy,
-  OnDestroy,
-} from "@angular/core";
-import { BehaviorSubject, Observable, Subscription } from "rxjs";
-import { map } from "rxjs/operators";
-import { ResourceApiService } from "src/app/core/http/resource.api.service";
-import { Constants } from "src/app/shared/constants";
-import { ResourceOverviewDTO } from "src/app/shared/models/resources/resource-overview-dto";
-import { ResourceReview } from "src/app/shared/models/resources/resource-review";
-import { MatTableDataSource } from "@angular/material/table";
-import { MatSort } from "@angular/material/sort";
-import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
-import { MatPaginator } from "@angular/material/paginator";
-import { environment } from "src/environments/environment";
-import { MatDialog } from "@angular/material/dialog";
-import { LinkedResourceDisplayDialogComponent } from "../linked-resource-dialog/linked-resource-display-dialog.component";
-import { Select, Store } from "@ngxs/store";
-import { UserInfoState } from "src/app/states/user-info.state";
-import { ConsumerGroupResultDTO } from "src/app/shared/models/consumerGroups/ConsumerGroupResultDTO";
-import { AddReviewedResource, ReviewState } from "src/app/states/review.state";
-import moment from "moment";
+  OnDestroy
+} from '@angular/core';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ResourceApiService } from 'src/app/core/http/resource.api.service';
+import { Constants } from 'src/app/shared/constants';
+import { ResourceOverviewDTO } from 'src/app/shared/models/resources/resource-overview-dto';
+import { ResourceReview } from 'src/app/shared/models/resources/resource-review';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { environment } from 'src/environments/environment';
+import { MatDialog } from '@angular/material/dialog';
+import { LinkedResourceDisplayDialogComponent } from '../linked-resource-dialog/linked-resource-display-dialog.component';
+import { Select, Store } from '@ngxs/store';
+import { UserInfoState } from 'src/app/states/user-info.state';
+import { ConsumerGroupResultDTO } from 'src/app/shared/models/consumerGroups/ConsumerGroupResultDTO';
+import { AddReviewedResource, ReviewState } from 'src/app/states/review.state';
+import moment from 'moment';
 
 @Component({
-  selector: "app-resource-reviews",
-  templateUrl: "./resource-reviews.component.html",
-  styleUrls: ["./resource-reviews.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-resource-reviews',
+  templateUrl: './resource-reviews.component.html',
+  styleUrls: ['./resource-reviews.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ResourceReviewsComponent
   implements OnInit, AfterViewInit, OnDestroy
@@ -53,14 +53,14 @@ export class ResourceReviewsComponent
   @ViewChild(MatSort) sort: MatSort;
 
   columnsToDisplay = [
-    "resourceName",
-    "brokenDistributionEndpointsCount",
-    "brokenContactsCount",
-    "reviewDueDate",
-    "dataSteward",
-    "reviewCycle",
-    "lastReviewer",
-    "actionButtons",
+    'resourceName',
+    'brokenDistributionEndpointsCount',
+    'brokenContactsCount',
+    'reviewDueDate',
+    'dataSteward',
+    'reviewCycle',
+    'lastReviewer',
+    'actionButtons'
   ];
 
   sub: Subscription = new Subscription();
@@ -74,7 +74,7 @@ export class ResourceReviewsComponent
   ) {
     this.dataSource = new MatTableDataSource([]);
     const today = new Date();
-    this.selectedUTCDate = moment().utcOffset(0).startOf("day").add(1, "M");
+    this.selectedUTCDate = moment().utcOffset(0).startOf('day').add(1, 'M');
     this.currentUTCDate = Date.UTC(
       today.getFullYear(),
       today.getMonth(),
@@ -142,14 +142,14 @@ export class ResourceReviewsComponent
                 Constants.Metadata.HasLastReviewer
               ]
                 ? review.properties[Constants.Metadata.HasLastReviewer][0]
-                : "",
+                : '',
               resourceReviewed: this.reviewedResourceIds.some(
                 (id) => id === review.pidUri
               ),
               brokenDistributionEndpointsCount:
                 this.getBrokenDistributionEndpointsCount(review),
               brokenContactsCount: this.getBrokenContactsCount(review),
-              currentlyLoading: this.getCurrentLoadingStatus(review.pidUri),
+              currentlyLoading: this.getCurrentLoadingStatus(review.pidUri)
             };
           })
         )
@@ -235,9 +235,9 @@ export class ResourceReviewsComponent
     this.dialog.open(LinkedResourceDisplayDialogComponent, {
       data: {
         id: pidUri,
-        confirmReview: false,
+        confirmReview: false
       },
-      width: "80vw",
+      width: '80vw'
     });
   }
 
@@ -245,15 +245,15 @@ export class ResourceReviewsComponent
     const url = `${environment.pidUrl}/resource/edit?pidUri=${encodeURI(
       pidUri
     )}`;
-    window.open(url, "_blank");
+    window.open(url, '_blank');
   }
 
   confirmReview(pidUri: string) {
     const dialogRef = this.dialog.open(LinkedResourceDisplayDialogComponent, {
       data: {
         id: pidUri,
-        confirmReview: true,
-      },
+        confirmReview: true
+      }
     });
     dialogRef.afterClosed().subscribe((reviewConfirmed) => {
       if (reviewConfirmed) {
@@ -265,8 +265,8 @@ export class ResourceReviewsComponent
             this.setLoadingStatusOfReview(pidUri, false);
             this.loadDueReviews();
             this.snackbar.success(
-              "Review successful",
-              "The resource was successfully reviewed"
+              'Review successful',
+              'The resource was successfully reviewed'
             );
           },
           (_) => this.setLoadingStatusOfReview(pidUri, false)

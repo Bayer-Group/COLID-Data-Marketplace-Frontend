@@ -1,69 +1,72 @@
-import { Selector, State, StateContext, Action, Store } from "@ngxs/store";
-import { tap, catchError } from "rxjs/operators";
-import { UserDto } from "../shared/models/user/user-dto";
-import { of } from "rxjs";
-import { ColidEntrySubscriptionDto } from "../shared/models/user/colid-entry-subscription-dto";
-import { UserInfoApiService } from "../core/http/user-info.api.service";
-import { SearchFilterDataMarketplaceDto } from "../shared/models/user/search-filter-data-marketplace-dto";
-import { MessageConfigDto } from "../shared/models/user/message-config-dto";
-import { FetchColidEntrySubscriptionNumbers } from "./colid-entry-subcriber-count.state";
-import { StoredQueryDto } from "../shared/models/user/stored-query-dto";
-import { Injectable } from "@angular/core";
-import { Favorites } from "../shared/models/favorites";
-import { ConsumerGroupApiService } from "../core/http/consumer-group.api.service";
-import { ConsumerGroupResultDTO } from "../shared/models/consumerGroups/ConsumerGroupResultDTO";
-import { ColidEntrySubscriptionDetailsDto } from "../shared/models/user/colid-entry-subscription-details-dto";
+import { Selector, State, StateContext, Action, Store } from '@ngxs/store';
+import { tap, catchError } from 'rxjs/operators';
+import { UserDto } from '../shared/models/user/user-dto';
+import { of } from 'rxjs';
+import { ColidEntrySubscriptionDto } from '../shared/models/user/colid-entry-subscription-dto';
+import { UserInfoApiService } from '../core/http/user-info.api.service';
+import { SearchFilterDataMarketplaceDto } from '../shared/models/user/search-filter-data-marketplace-dto';
+import { MessageConfigDto } from '../shared/models/user/message-config-dto';
+import { FetchColidEntrySubscriptionNumbers } from './colid-entry-subcriber-count.state';
+import { StoredQueryDto } from '../shared/models/user/stored-query-dto';
+import { Injectable } from '@angular/core';
+import { Favorites } from '../shared/models/favorites';
+import { ConsumerGroupApiService } from '../core/http/consumer-group.api.service';
+import { ConsumerGroupResultDTO } from '../shared/models/consumerGroups/ConsumerGroupResultDTO';
+import { ColidEntrySubscriptionDetailsDto } from '../shared/models/user/colid-entry-subscription-details-dto';
 
 export class FetchUser {
-  static readonly type = "[User] Fetch User";
-  constructor(public id: string, public emailAddress: string) {}
+  static readonly type = '[User] Fetch User';
+  constructor(
+    public id: string,
+    public emailAddress: string
+  ) {}
 }
 
 export class ReloadUser {
-  static readonly type = "[User] Reload User";
+  static readonly type = '[User] Reload User';
   constructor() {}
 }
 
 export class SetLastLoginDataMarketplace {
-  static readonly type = "[User] Select Last Login DataMarketplace";
+  static readonly type = '[User] Select Last Login DataMarketplace';
   constructor() {}
 }
 
 export class SetUserInformationFlag {
-  static readonly type = "[User] Set user information flag for latest changes";
+  static readonly type = '[User] Set user information flag for latest changes';
   constructor(public setFlag: boolean) {}
 }
 
 export class SetMessageConfig {
-  static readonly type = "[User] Set MessageConfig";
+  static readonly type = '[User] Set MessageConfig';
   constructor(public messageConfig: MessageConfigDto) {}
 }
 
 export class AddColidEntrySubscription {
   static readonly type =
-    "[ColidEntrySubscription] Add Colid Entry Subscription";
+    '[ColidEntrySubscription] Add Colid Entry Subscription';
   constructor(public colidEntrySubscriptionDto: ColidEntrySubscriptionDto) {}
 }
 
 export class RemoveColidEntrySubscription {
   static readonly type =
-    "[ColidEntrySubscription] Remove Colid Entry Subscription";
+    '[ColidEntrySubscription] Remove Colid Entry Subscription';
   constructor(public colidEntrySubscriptionDto: ColidEntrySubscriptionDto) {}
 }
 
 export class AddColidEntryFavorite {
-  static readonly type = "[ColidEntryFavorite] Add Colid Entry Favorite";
+  static readonly type = '[ColidEntryFavorite] Add Colid Entry Favorite';
   constructor(public colidEntryFavorite: Favorites) {}
 }
 
 export class RemoveColidEntryFavorite {
-  static readonly type = "[ColidEntryFavorite] Remove Colid Entry Favorite";
+  static readonly type = '[ColidEntryFavorite] Remove Colid Entry Favorite';
   constructor(public colidEntryFavorite: Favorites) {}
 }
 
 export class AddSearchFilterDataMarketplace {
   static readonly type =
-    "[SearchFilterDataMarketplace] Add Search Filter DataMarketplace";
+    '[SearchFilterDataMarketplace] Add Search Filter DataMarketplace';
   constructor(
     public searchFilterDataMarketplaceDto: SearchFilterDataMarketplaceDto
   ) {}
@@ -71,7 +74,7 @@ export class AddSearchFilterDataMarketplace {
 
 export class CreateDefaultSearchFilterDataMarketplace {
   static readonly type =
-    "[SearchFilterDataMarketplace] Create Default SearchFilter DataMarketplace";
+    '[SearchFilterDataMarketplace] Create Default SearchFilter DataMarketplace';
   constructor(
     public searchFilterDataMarketplaceDto: SearchFilterDataMarketplaceDto
   ) {}
@@ -79,7 +82,7 @@ export class CreateDefaultSearchFilterDataMarketplace {
 
 export class RemoveSearchFilterDataMarketplace {
   static readonly type =
-    "[SearchFilterDataMarketplace] Remove SearchFilter DataMarketplace";
+    '[SearchFilterDataMarketplace] Remove SearchFilter DataMarketplace';
   constructor(
     public searchFilterDataMarketplaceDto: SearchFilterDataMarketplaceDto
   ) {}
@@ -87,31 +90,31 @@ export class RemoveSearchFilterDataMarketplace {
 
 export class FetchSearchFilterDataMarketplace {
   static readonly type =
-    "[SearchFilterDataMarketplace] Fetch Search Filter Data Market place";
+    '[SearchFilterDataMarketplace] Fetch Search Filter Data Market place';
   constructor() {}
 }
 
 export class AddStoredQueryToSearchFiltersDataMarketplace {
-  static readonly type = "[SearchFilterDataMarketplace] Add StoredQuery";
+  static readonly type = '[SearchFilterDataMarketplace] Add StoredQuery';
   constructor(public storedQueryDto: StoredQueryDto) {}
 }
 export class RemoveStoredQueryToSearchFiltersDataMarketplace {
-  static readonly type = "[SearchFilterDataMarketplace] Remove StoredQuery";
+  static readonly type = '[SearchFilterDataMarketplace] Remove StoredQuery';
   constructor(public searchFilterDataMarketplaceId: number) {}
 }
 
 export class FetchConsumerGroupsByUser {
-  static readonly type = "[User] Fetch ConsumerGroups by user";
+  static readonly type = '[User] Fetch ConsumerGroups by user';
   constructor() {}
 }
 
 export class FetchLatestSubscriptions {
-  static readonly type = "[User] Fetch latest subscriptions of an user";
+  static readonly type = '[User] Fetch latest subscriptions of an user';
   constructor(public userId: string) {}
 }
 
 export class FetchMostSubscribedResources {
-  static readonly type = "[User] Fetch most subscribed resources";
+  static readonly type = '[User] Fetch most subscribed resources';
   constructor() {}
 }
 
@@ -123,13 +126,13 @@ export class UserInfoStateModel {
 }
 
 @State<UserInfoStateModel>({
-  name: "UserInfo",
+  name: 'UserInfo',
   defaults: {
     user: null,
     consumerGroups: null,
     latestSubscriptions: null,
-    mostSubscribedResources: null,
-  },
+    mostSubscribedResources: null
+  }
 })
 @Injectable()
 export class UserInfoState {
@@ -182,6 +185,16 @@ export class UserInfoState {
   }
 
   @Selector()
+  public static getUserId(state: UserInfoStateModel) {
+    return state.user?.id ?? '';
+  }
+
+  @Selector()
+  public static getUserEmail(state: UserInfoStateModel) {
+    return state.user?.emailAddress ?? '';
+  }
+
+  @Selector()
   public static getUserDepartment(state: UserInfoStateModel) {
     return state.user.department;
   }
@@ -204,7 +217,7 @@ export class UserInfoState {
     return this.userInfoApiService.getUser(id).pipe(
       tap((res: UserDto) => {
         patchState({
-          user: res,
+          user: res
         });
       }),
       catchError((err) => {
@@ -212,7 +225,7 @@ export class UserInfoState {
           return this.userInfoApiService.createUser(id, emailAddress).pipe(
             tap((res: UserDto) => {
               patchState({
-                user: res,
+                user: res
               });
             })
           );
@@ -243,7 +256,7 @@ export class UserInfoState {
           tap((res) => {
             user.lastLoginDataMarketplace = res.lastLoginDataMarketplace;
             patchState({
-              user: user,
+              user: user
             });
           })
         );
@@ -261,7 +274,7 @@ export class UserInfoState {
       .pipe(
         tap((res) => {
           patchState({
-            user: res,
+            user: res
           });
         })
       );
@@ -279,7 +292,7 @@ export class UserInfoState {
         tap((res: UserDto) => {
           user.messageConfig = res.messageConfig;
           patchState({
-            user: user,
+            user: user
           });
         })
       );
@@ -297,7 +310,7 @@ export class UserInfoState {
         tap((res: UserDto) => {
           user.colidEntrySubscriptions = res.colidEntrySubscriptions;
           patchState({
-            user: user,
+            user: user
           });
           this.store.dispatch(new FetchColidEntrySubscriptionNumbers());
         })
@@ -316,7 +329,7 @@ export class UserInfoState {
         tap((res: UserDto) => {
           user.colidEntrySubscriptions = res.colidEntrySubscriptions;
           patchState({
-            user: user,
+            user: user
           });
           this.store.dispatch(new FetchColidEntrySubscriptionNumbers());
         })
@@ -335,7 +348,7 @@ export class UserInfoState {
         tap((res: UserDto) => {
           user.searchFiltersDataMarketplace = res.searchFiltersDataMarketplace;
           patchState({
-            user: user,
+            user: user
           });
         })
       );
@@ -355,7 +368,7 @@ export class UserInfoState {
         if (res != null) {
           user.searchFiltersDataMarketplace = res.searchFiltersDataMarketplace;
           patchState({
-            user: user,
+            user: user
           });
 
           // Use the newly created search filter as default by comparing the latest name
@@ -378,7 +391,7 @@ export class UserInfoState {
                   user.defaultSearchFilterDataMarketplace =
                     res.defaultSearchFilterDataMarketplace;
                   patchState({
-                    user: user,
+                    user: user
                   });
                 });
             }
@@ -402,7 +415,7 @@ export class UserInfoState {
         tap((res: UserDto) => {
           user.searchFiltersDataMarketplace = res.searchFiltersDataMarketplace;
           patchState({
-            user: user,
+            user: user
           });
         })
       );
@@ -420,7 +433,7 @@ export class UserInfoState {
         tap((res: SearchFilterDataMarketplaceDto[]) => {
           user.searchFiltersDataMarketplace = res;
           patchState({
-            user: user,
+            user: user
           });
         })
       );
@@ -447,7 +460,7 @@ export class UserInfoState {
           user.searchFiltersDataMarketplace[index].storedQuery =
             res.storedQuery;
           patchState({
-            user: user,
+            user: user
           });
         })
       );
@@ -457,7 +470,7 @@ export class UserInfoState {
   RemoveStoredQueryToSearchFiltersDataMarketplace(
     { patchState, getState }: StateContext<UserInfoStateModel>,
     {
-      searchFilterDataMarketplaceId,
+      searchFilterDataMarketplaceId
     }: RemoveStoredQueryToSearchFiltersDataMarketplace
   ) {
     const user = getState().user;
@@ -472,7 +485,7 @@ export class UserInfoState {
             user.searchFiltersDataMarketplace[index].storedQuery = null;
           }
           patchState({
-            user: user,
+            user: user
           });
         })
       );
@@ -486,7 +499,7 @@ export class UserInfoState {
     return this.consumerGroupApi.getActiveEntities().pipe(
       tap((consumerGroups: ConsumerGroupResultDTO[]) => {
         patchState({
-          consumerGroups,
+          consumerGroups
         });
       })
     );
@@ -500,7 +513,7 @@ export class UserInfoState {
     return this.userInfoApiService.getLatestSubscriptions(userId).pipe(
       tap((res: ColidEntrySubscriptionDetailsDto[]) => {
         patchState({
-          latestSubscriptions: res,
+          latestSubscriptions: res
         });
       })
     );
@@ -508,12 +521,12 @@ export class UserInfoState {
 
   @Action(FetchMostSubscribedResources)
   fetchMostSubscribedResources({
-    patchState,
+    patchState
   }: StateContext<UserInfoStateModel>) {
     return this.userInfoApiService.getMostSubscribedResources().pipe(
       tap((res: ColidEntrySubscriptionDetailsDto[]) => {
         patchState({
-          mostSubscribedResources: res,
+          mostSubscribedResources: res
         });
       })
     );

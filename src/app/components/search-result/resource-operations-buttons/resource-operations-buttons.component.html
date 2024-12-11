@@ -1,0 +1,96 @@
+<div class="resource-operations-buttons">
+  <div
+    class="resource-operations-buttons__button resource-operations-buttons__button--with-menu"
+    editorAccessControl
+    [resourceDetails]="details"
+  >
+    <button
+      mat-icon-button
+      matTooltip="Edit the resource"
+      (click)="openInColidEditor($event)"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      matTooltip="More edit options"
+      [matMenuTriggerFor]="menu"
+      (click)="stopPropagation($event)"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="changeResourceType()">
+        <mat-icon>border_color</mat-icon>
+        <span>Change resource type</span>
+      </button>
+      <button
+        mat-menu-item
+        *ngIf="showDeleteDraftButton"
+        (click)="deleteDraftResource()"
+      >
+        <mat-icon>delete</mat-icon>
+        <span>Delete the resource draft</span>
+      </button>
+      <button
+        mat-menu-item
+        *ngIf="showMarkForDeletionButton"
+        (click)="markResourceForDeletion()"
+      >
+        <mat-icon>delete_forever</mat-icon>
+        <span>Mark this resource for deletion</span>
+      </button>
+      <button mat-menu-item (click)="linkResource()">
+        <mat-icon>link</mat-icon>
+        <span>Link this resource to another resource version</span>
+      </button>
+      <button mat-menu-item *ngIf="showUnlinkButton" (click)="unlinkResource()">
+        <mat-icon>link_off</mat-icon>
+        <span>Unlink this resource from its version list</span>
+      </button>
+      <button
+        mat-menu-item
+        *ngIf="!hasLaterVersion"
+        (click)="createNewVersion()"
+      >
+        <mat-icon>dynamic_feed</mat-icon>
+        <span>Create new version of this resource</span>
+      </button>
+      <button mat-menu-item (click)="copyResource()">
+        <mat-icon>content_copy</mat-icon>
+        <span>Copy current resource</span>
+      </button>
+    </mat-menu>
+  </div>
+
+  <button
+    mat-icon-button
+    *ngIf="showSubscribeButton"
+    class="resource-operations-buttons__button"
+    [matTooltip]="subscriptionButtonTooltip"
+    [disabled]="hasDraftVersion"
+    (click)="handleSubscriptionButtonClick($event)"
+  >
+    <mat-icon> {{ subscriptionButtonIcon }}</mat-icon>
+  </button>
+
+  <button
+    mat-icon-button
+    *ngIf="showFavoritesButton"
+    class="resource-operations-buttons__button"
+    [matTooltip]="favoritesButtonTooltip"
+    (click)="openFavoritesDialog($event)"
+  >
+    <mat-icon>{{ favoritesButtonIcon }}</mat-icon>
+  </button>
+
+  <button
+    mat-icon-button
+    class="resource-operations-buttons__button"
+    matTooltip="View in Resource Relationship Manager"
+    [disabled]="hasDraftVersion"
+    (click)="openInResourceRelationshipManager($event)"
+  >
+    <img src="assets/dmp-rrm.svg" width="24" height="24" />
+  </button>
+</div>

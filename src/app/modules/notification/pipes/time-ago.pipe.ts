@@ -1,7 +1,7 @@
-import { Pipe, PipeTransform } from "@angular/core";
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: "timeAgo",
+  name: 'timeAgo'
 })
 
 // Reference -> https://codersloth.com/blogs/a-simple-time-ago-pipe-to-display-relative-time-in-angular/
@@ -17,7 +17,7 @@ export class TimeAgoPipe implements PipeTransform {
       );
       // less than 30 seconds ago will show as 'Just now'
       if (differenceInSeconds < 30) {
-        return "Just now";
+        return 'Just now';
       }
       /* 
       If you want to show a relative date up to months only
@@ -44,7 +44,7 @@ export class TimeAgoPipe implements PipeTransform {
         day: 86400,
         hour: 3600,
         minute: 60,
-        second: 1,
+        second: 1
       };
       let counter;
       for (const i in timeIntervals) {
@@ -52,10 +52,10 @@ export class TimeAgoPipe implements PipeTransform {
         if (counter > 0) {
           if (counter === 1) {
             // singular (1 day ago)
-            return counter + " " + i + " ago";
+            return counter + ' ' + i + ' ago';
           } else {
             // plural (2 days ago)
-            return counter + " " + i + "s ago";
+            return counter + ' ' + i + 's ago';
           }
         }
       }

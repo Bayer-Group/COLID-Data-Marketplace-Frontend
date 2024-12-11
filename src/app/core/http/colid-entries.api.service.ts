@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { environment } from "src/environments/environment";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { ColidEntrySubscriptionDto } from "src/app/shared/models/user/colid-entry-subscription-dto";
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { ColidEntrySubscriptionDto } from 'src/app/shared/models/user/colid-entry-subscription-dto';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class ColidEntryApiService {
   constructor(private httpClient: HttpClient) {}

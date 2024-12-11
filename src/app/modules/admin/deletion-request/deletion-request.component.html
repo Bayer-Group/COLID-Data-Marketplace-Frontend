@@ -10,7 +10,7 @@
         resources != null && resources.items.length !== 0;
         else emptyResults
       "
-      class="col-12 d-flex align-items-center justify-content-between pl-16-px"
+      class="col-12 d-flex align-items-center justify-content-between"
     >
       <mat-checkbox
         color="primary"
@@ -18,11 +18,11 @@
         [checked]="someSelected"
         [indeterminate]="someSelected && !allSelected"
       >
-        <h3 class="m-0" *ngIf="!someSelected">Select all</h3>
-        <h3 class="m-0" *ngIf="someSelected">
+        <h6 class="m-0" *ngIf="!someSelected">Select all</h6>
+        <h6 class="m-0" *ngIf="someSelected">
           {{ this.deletionRequests.selectedOptions.selected.length }} entries
           selected
-        </h3>
+        </h6>
       </mat-checkbox>
       <div>
         <action-button
@@ -59,9 +59,7 @@
           color="primary"
           checkboxPosition="before"
           [value]="resource"
-          *ngFor="
-            let resource of resources.items | slice : lowValue : highValue
-          "
+          *ngFor="let resource of resources.items | slice: lowValue : highValue"
           matTooltip="{{ resource.definition.substring(0, 1000) }}..."
           matTooltipShowDelay="700"
         >
@@ -81,7 +79,7 @@
             style="width: fit-content"
           >
             <div class="d-flex align-items-center" style="width: fit-content">
-              <h4 class="mb-1">{{ resource.name }}</h4>
+              <span class="mb-1">{{ resource.name }}</span>
               &nbsp;&nbsp;
               <mat-icon style="font-size: large">open_in_new</mat-icon>
             </div>

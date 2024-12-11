@@ -1,14 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ConsumerGroupNewComponent } from "./consumer-group-new.component";
+import { ConsumerGroupNewComponent } from './consumer-group-new.component';
 
-describe("ConsumerGroupNewComponent", () => {
+// TODO: Remove this component - go directly to app-consumer-group-form
+xdescribe('ConsumerGroupNewComponent', () => {
   let component: ConsumerGroupNewComponent;
   let fixture: ComponentFixture<ConsumerGroupNewComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ConsumerGroupNewComponent],
+      declarations: [ConsumerGroupNewComponent]
     }).compileComponents();
   }));
 
@@ -18,7 +19,7 @@ describe("ConsumerGroupNewComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

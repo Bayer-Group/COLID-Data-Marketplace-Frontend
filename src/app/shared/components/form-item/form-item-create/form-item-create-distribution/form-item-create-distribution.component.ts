@@ -1,13 +1,13 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { Metadata } from "src/app/shared/models/metadata/meta-data";
-import { Entity } from "src/app/shared/models/entities/entity";
-import { Constants } from "src/app/shared/constants";
-import { Guid } from "guid-typescript";
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Metadata } from 'src/app/shared/models/metadata/meta-data';
+import { Entity } from 'src/app/shared/models/entities/entity';
+import { Constants } from 'src/app/shared/constants';
+import { Guid } from 'guid-typescript';
 
 @Component({
-  selector: "app-form-item-create-distribution",
-  templateUrl: "./form-item-create-distribution.component.html",
-  styleUrls: ["./form-item-create-distribution.component.scss"],
+  selector: 'app-form-item-create-distribution',
+  templateUrl: './form-item-create-distribution.component.html',
+  styleUrls: ['./form-item-create-distribution.component.scss']
 })
 export class FormItemCreateDistributionComponent {
   @Input() disabled: boolean = false;
@@ -22,7 +22,6 @@ export class FormItemCreateDistributionComponent {
   distributionTypesVisible = false;
 
   selectedDistributionType: Metadata;
-  constructor() {}
 
   showDistributionTypes() {
     this.distributionTypesVisible = true;
@@ -38,7 +37,7 @@ export class FormItemCreateDistributionComponent {
     entity.id = Constants.Resource.Prefix + Guid.create();
 
     entity.properties[Constants.Metadata.EntityType] = [
-      this.selectedDistributionType.key,
+      this.selectedDistributionType.key
     ];
 
     const selectedPreset: Entity[] =

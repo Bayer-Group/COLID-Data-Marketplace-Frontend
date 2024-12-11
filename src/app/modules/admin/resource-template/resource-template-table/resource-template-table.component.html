@@ -1,0 +1,127 @@
+<div class="row px-3" *ngIf="resourceTemplateForm">
+  <form [formGroup]="resourceTemplateForm" class="form-group w-100">
+    <table class="table" *ngIf="metaData && resourceTemplates">
+      <thead>
+        <tr>
+          <th scope="col" *ngFor="let m of metaData">
+            {{ m.properties[constants.Metadata.Name] }}
+          </th>
+          <th class="no-wrap"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let p of resourceTemplates.slice(
+              pageIndex * pageSize,
+              (pageIndex + 1) * pageSize
+            )
+          "
+        >
+          <td *ngFor="let m of metaData" class="vertical-align">
+            <ng-container *ngIf="p !== selectedForEdit">
+              {{
+                m.key === hasResourceTypeConstants
+                  ? getResourceTypeLabel(p.properties[m.key][0])
+                  : p.properties[m.key]
+              }}
+            </ng-container>
+            <div *ngIf="p === selectedForEdit">
+              <input
+                *ngIf="
+                  m.properties[this.pidUriConstant] !== hasResourceTypeConstants
+                "
+                type="text"
+                class="form-control"
+                [formControlName]="m.properties[this.pidUriConstant]"
+              />
+              <span
+                *ngIf="
+                  m.properties[this.pidUriConstant] === hasResourceTypeConstants
+                "
+                >{{ getResourceTypeLabel(p.properties[m.key][0]) }}
+              </span>
+            </div>
+          </td>
+          <td class="no-wrap" style="font-size: 1rem; cursor: pointer">
+            <div class="text-right d-flex" *ngIf="p !== selectedForEdit">
+              <action-button
+                type="mat-icon-button"
+                class="mr-2"
+                color="primary"
+                (click)="selectForEdit(p)"
+                matTooltip="Edit template"
+                [disabled]="isLoading"
+                [loading]="isCurrentEntity(p)"
+                icon="edit"
+              ></action-button>
+              <action-button
+                type="mat-icon-button"
+                color="primary"
+                (click)="confirmAndDelete(p)"
+                matTooltip="Delete template"
+                [disabled]="isLoading"
+                [loading]="isCurrentEntity(p, 'delete')"
+                icon="delete_forever"
+              ></action-button>
+            </div>
+            <div *ngIf="p === selectedForEdit" class="d-flex">
+              <action-button
+                type="mat-icon-button"
+                class="mr-2"
+                color="primary"
+                (click)="cancelEditing()"
+                matTooltip="Cancel editing"
+                icon="cancel"
+                [disabled]="isLoading"
+              ></action-button>
+              <action-button
+                type="mat-icon-button"
+                color="primary"
+                (click)="editResourceTemplate()"
+                matTooltip="Save template"
+                [disabled]="isLoading || resourceTemplateForm.invalid"
+                [loading]="isCurrentEntity(p, 'save')"
+                icon="save"
+              ></action-button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="!selectedForEdit">
+          <td *ngFor="let m of metaData" class="vertical-align">
+            <input
+              *ngIf="
+                m.properties[this.pidUriConstant] !== hasResourceTypeConstants
+              "
+              type="text"
+              class="form-control"
+              [formControlName]="m.properties[this.pidUriConstant]"
+            />
+            <span
+              *ngIf="
+                m.properties[this.pidUriConstant] === hasResourceTypeConstants
+              "
+              >Will be determined by provided resource PID URI
+            </span>
+          </td>
+          <td>
+            <action-button
+              color="primary"
+              (click)="create()"
+              [disabled]="isLoading || resourceTemplateForm.invalid"
+              [loading]="isCurrentEntity(null, 'create')"
+              icon="create"
+            >
+              Create
+            </action-button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <mat-paginator
+      [length]="resourceTemplates?.length ?? 0"
+      [pageSize]="pageSize"
+      (page)="pageIndex = $event.pageIndex"
+    ></mat-paginator>
+  </form>
+</div>

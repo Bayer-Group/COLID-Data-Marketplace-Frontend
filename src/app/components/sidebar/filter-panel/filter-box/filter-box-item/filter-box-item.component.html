@@ -1,8 +1,8 @@
 <div class="d-flex align-items-center">
   <mat-checkbox color="active" [checked]="active" (change)="changeFilterItem()">
-    {{ bucket.key }}
+    {{ bucket?.key }}
   </mat-checkbox>
   <div class="ms-2" style="margin-top: -0.15rem">
-    <span class="badge badge-pill badge-light">{{ bucket.doc_count }}</span>
+    <span class="badge badge-pill badge-light">{{ bucket?.doc_count }}</span>
   </div>
 </div>

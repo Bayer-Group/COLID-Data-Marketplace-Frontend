@@ -1,10 +1,10 @@
-import { Pipe, PipeTransform } from "@angular/core";
-import { MetaDataProperty } from "../models/metadata/meta-data-property";
-import { MetaDataPropertyGroup } from "../models/metadata/meta-data-property-group";
-import { Constants } from "src/app/shared/constants";
+import { Pipe, PipeTransform } from '@angular/core';
+import { MetaDataProperty } from '../models/metadata/meta-data-property';
+import { MetaDataPropertyGroup } from '../models/metadata/meta-data-property-group';
+import { Constants } from 'src/app/shared/constants';
 
 @Pipe({
-  name: "groupByGroup",
+  name: 'groupByGroup'
 })
 export class MetadataGroupByPipe implements PipeTransform {
   transform(collection: Array<MetaDataProperty>): Array<any> {
@@ -17,7 +17,7 @@ export class MetadataGroupByPipe implements PipeTransform {
       const group: MetaDataPropertyGroup =
         current.properties[Constants.Metadata.Group];
 
-      const groupKey = group ? group.key : "default";
+      const groupKey = group ? group.key : 'default';
 
       if (!previous[groupKey]) {
         previous[groupKey] = [current];
@@ -31,7 +31,7 @@ export class MetadataGroupByPipe implements PipeTransform {
     // this will return an array of objects, each object containing a group of objects
     return Object.keys(groupedCollection).map((key) => ({
       key,
-      value: groupedCollection[key],
+      value: groupedCollection[key]
     }));
   }
 }

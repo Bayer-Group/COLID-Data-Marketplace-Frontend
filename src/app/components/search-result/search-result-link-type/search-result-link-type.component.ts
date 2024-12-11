@@ -1,23 +1,23 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { DetailsViewModel } from "../search-result.component";
+import { Component, OnInit, Input } from '@angular/core';
+import { DetailsViewModel } from '../search-result.component';
 import {
   getValueForKey,
   getPidUriForHref,
-  getUriForKey,
-} from "src/app/shared/operators/document-operators";
-import { Select } from "@ngxs/store";
-import { SearchState } from "src/app/states/search.state";
-import { Observable } from "rxjs";
-import { LogService } from "src/app/core/logging/log.service";
-import { Constants } from "src/app/shared/constants";
-import { MatDialog } from "@angular/material/dialog";
-import { LinkedResourceDisplayDialogComponent } from "../../linked-resource-dialog/linked-resource-display-dialog.component";
-import { ViewDescriptionDialogComponent } from "../../search-result/view-description-dialog/view-description-dialog.component";
+  getUriForKey
+} from 'src/app/shared/operators/document-operators';
+import { Select } from '@ngxs/store';
+import { SearchState } from 'src/app/states/search.state';
+import { Observable } from 'rxjs';
+import { LogService } from 'src/app/core/logging/log.service';
+import { Constants } from 'src/app/shared/constants';
+import { MatDialog } from '@angular/material/dialog';
+import { LinkedResourceDisplayDialogComponent } from '../../linked-resource-dialog/linked-resource-display-dialog.component';
+import { ViewDescriptionDialogComponent } from '../../search-result/view-description-dialog/view-description-dialog.component';
 
 @Component({
-  selector: "app-search-result-link-type",
-  templateUrl: "./search-result-link-type.component.html",
-  styleUrls: ["./search-result-link-type.component.scss"],
+  selector: 'app-search-result-link-type',
+  templateUrl: './search-result-link-type.component.html',
+  styleUrls: ['./search-result-link-type.component.scss']
 })
 export class SearchResultLinkTypeComponent implements OnInit {
   @Input() resource: DetailsViewModel[];
@@ -26,7 +26,9 @@ export class SearchResultLinkTypeComponent implements OnInit {
   @Input() lastElement: boolean;
   @Input() inbound: boolean;
   @Input() edge: string;
+
   @Select(SearchState.getSearchText) searchTextObservable$: Observable<string>;
+
   @Select(SearchState.getSearchTimestamp)
   searchTimestampObservable$: Observable<Date>;
 
@@ -35,6 +37,7 @@ export class SearchResultLinkTypeComponent implements OnInit {
   label: string;
   definition: string;
   type: string;
+  typeEdge: string;
   description: string;
   edgeLabel: string;
   comment: string;
@@ -47,13 +50,16 @@ export class SearchResultLinkTypeComponent implements OnInit {
   hasDefinition: string;
   hasResourceType: string;
 
-  constructor(private logger: LogService, private dialog: MatDialog) {}
+  constructor(
+    private logger: LogService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     if (this.metadata) {
       this.description = this.metadata.description;
     }
-    this.edgeLabel = this.metadata[this.edge].properties[Constants.Shacl.Name];
+    this.edgeLabel = this.metadata[this.edge]?.properties[Constants.Shacl.Name];
     this.label = getValueForKey(this.linkType, Constants.Metadata.HasLabel)[0];
     this.pidUrl = getValueForKey(
       this.linkType,
@@ -64,7 +70,11 @@ export class SearchResultLinkTypeComponent implements OnInit {
       this.linkType,
       Constants.Metadata.HasResourceDefinition
     )[0];
-    this.type = getUriForKey(this.linkType, Constants.Metadata.EntityType)[0];
+    this.type = getValueForKey(this.linkType, Constants.Metadata.EntityType)[0];
+    this.typeEdge = getUriForKey(
+      this.linkType,
+      Constants.Metadata.EntityType
+    )[0];
 
     this.hasPIDURI = Constants.Metadata.HasPidUri;
     this.hasDefinition = Constants.Metadata.HasResourceDefinition;
@@ -84,7 +94,7 @@ export class SearchResultLinkTypeComponent implements OnInit {
 
   onLinkClicked(event: Event): void {
     event.preventDefault();
-    this.logger.info("DMP_RESULT_PAGE_RESOURCE_LINKED_RESOURCE_LINK_CLICKED", {
+    this.logger.info('DMP_RESULT_PAGE_RESOURCE_LINKED_RESOURCE_LINK_CLICKED', {
       searchText: this.searchText,
       searchTimestamp: this.searchTimestamp,
       resourcePIDUri: getPidUriForHref(this.resource)[0],
@@ -98,29 +108,29 @@ export class SearchResultLinkTypeComponent implements OnInit {
         (d) => d.key === Constants.Metadata.EntityType
       ).valueEdge[0],
       linkedResourceEdge:
-        this.metadata[this.edge].properties[Constants.Metadata.HasPidUri],
-      clickedLinkCategory: Constants.Shacl.Groups.LinkTypes,
+        this.metadata[this.edge]?.properties[Constants.Metadata.HasPidUri],
+      clickedLinkCategory: Constants.Shacl.Groups.LinkTypes
     });
 
     this.dialog.open(LinkedResourceDisplayDialogComponent, {
       data: { id: this.pidUrlForHref, confirmReview: false },
-      width: "80vw",
+      width: '80vw'
     });
   }
 
   openDescriptionDialog(metaPID, metalabel) {
-    this.comment = this.metadata[metaPID].properties[Constants.Shacl.Comment];
+    this.comment = this.metadata[metaPID]?.properties[Constants.Shacl.Comment];
     this.metaDescription =
-      this.metadata[metaPID].properties[Constants.Shacl.Description];
+      this.metadata[metaPID]?.properties[Constants.Shacl.Description];
     if (this.comment || this.metaDescription) {
       this.dialog.open(ViewDescriptionDialogComponent, {
-        width: "400px",
-        height: "auto",
+        width: '400px',
+        height: 'auto',
         data: {
           comment: this.comment,
           label: metalabel,
-          description: this.metaDescription,
-        },
+          description: this.metaDescription
+        }
       });
     }
   }

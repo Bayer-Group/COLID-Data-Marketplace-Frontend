@@ -3,26 +3,26 @@ import {
   Output,
   Component,
   Input,
-  EventEmitter,
-} from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { Sort } from "@angular/material/sort";
-import { AppMaterialModule } from "src/app/app-material.module";
-import { InfiniteScrollModule } from "ngx-infinite-scroll";
-import { IconTypes } from "src/app/modules/colid-icons/models/icon-types";
-import { Constants } from "src/app/shared/constants";
-import { ColidIconsModule } from "src/app/modules/colid-icons/colid-icons.module";
-import { BehaviorSubject, EMPTY, Observable, ReplaySubject } from "rxjs";
-import { DataSource } from "@angular/cdk/collections";
-import { MatDialog } from "@angular/material/dialog";
-import { ConfirmationDialogComponent } from "src/app/shared/components/confirmation-dialog/confirmation-dialog.component";
-import { UserInfoState } from "src/app/states/user-info.state";
-import { ResourceApiService } from "src/app/core/http/resource.api.service";
-import { catchError } from "rxjs/operators";
-import { Store } from "@ngxs/store";
-import { ColidSnackBarModule } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.module";
-import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
-import { environment } from "src/environments/environment";
+  EventEmitter
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Sort } from '@angular/material/sort';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { IconTypes } from 'src/app/modules/colid-icons/models/icon-types';
+import { Constants } from 'src/app/shared/constants';
+import { ColidIconsModule } from 'src/app/modules/colid-icons/colid-icons.module';
+import { BehaviorSubject, EMPTY, Observable, ReplaySubject } from 'rxjs';
+import { DataSource } from '@angular/cdk/collections';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
+import { UserInfoState } from 'src/app/states/user-info.state';
+import { ResourceApiService } from 'src/app/core/http/resource.api.service';
+import { catchError } from 'rxjs/operators';
+import { Store } from '@ngxs/store';
+import { ColidSnackBarModule } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.module';
+import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
+import { environment } from 'src/environments/environment';
 
 export interface HistoryItemTableEntry {
   linkType: {
@@ -43,18 +43,18 @@ export interface HistoryItemTableEntry {
 }
 
 @Component({
-  selector: "colid-link-history",
+  selector: 'colid-link-history',
   standalone: true,
   imports: [
     CommonModule,
     AppMaterialModule,
     InfiniteScrollModule,
     ColidIconsModule,
-    ColidSnackBarModule,
+    ColidSnackBarModule
   ],
-  templateUrl: "./link-history.component.html",
-  styleUrls: ["./link-history.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './link-history.component.html',
+  styleUrls: ['./link-history.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LinkHistoryComponent {
   @Input() set isLoading(value: boolean) {
@@ -74,17 +74,17 @@ export class LinkHistoryComponent {
   constants = Constants;
 
   displayedColumns = [
-    "source",
-    "sourceType",
-    "linkType",
-    "target",
-    "targetType",
-    "createddate",
-    "createdby",
-    "deletiondate",
-    "deletedby",
-    "status",
-    "restoreAction",
+    'source',
+    'sourceType',
+    'linkType',
+    'target',
+    'targetType',
+    'createddate',
+    'createdby',
+    'deletiondate',
+    'deletedby',
+    'status',
+    'restoreAction'
   ];
 
   constructor(
@@ -97,7 +97,7 @@ export class LinkHistoryComponent {
   onSortChange(sort: Sort) {
     const { active, direction } = sort;
     const isDescending =
-      direction === "desc" ? true : direction === "asc" ? false : null;
+      direction === 'desc' ? true : direction === 'asc' ? false : null;
     this.sortingColumn.emit({ column: active, descending: isDescending });
   }
 
@@ -107,22 +107,22 @@ export class LinkHistoryComponent {
 
   openInDMPResourceDetailView(pidUri: string) {
     const url = `${environment.dmpUrl}resource-detail?pidUri=${pidUri}`;
-    window.open(url, "_blank");
+    window.open(url, '_blank');
   }
 
   onRestoreLink(item: HistoryItemTableEntry) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
-        header: "Confirm Link Recovery",
+        header: 'Confirm Link Recovery',
         body: `
           <p>Are you sure you want to restore the following link:</p>
           <p><b>Source:</b> ${item.sourceName}</p>
           <p><b>Target:</b> ${item.targetName}</p>
           <p><b>Link Type:</b> ${item.linkType.value}</p>
-        `,
+        `
       },
-      width: "auto",
-      disableClose: true,
+      width: 'auto',
+      disableClose: true
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -139,16 +139,16 @@ export class LinkHistoryComponent {
           .pipe(
             catchError((error) => {
               this.snackbar.error(
-                "Linking resources",
-                error.error?.message || "Could not restore the link"
+                'Linking resources',
+                error.error?.message || 'Could not restore the link'
               );
               return EMPTY;
             })
           )
           .subscribe((_) => {
             this.snackbar.success(
-              "Linking resources",
-              "Successfully restored the link"
+              'Linking resources',
+              'Successfully restored the link'
             );
           });
       }

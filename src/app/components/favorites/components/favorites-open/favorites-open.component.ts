@@ -4,32 +4,32 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  ViewChild,
-} from "@angular/core";
-import { MatDialog, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { Select, Store } from "@ngxs/store";
-import { Observable, Subscription } from "rxjs";
-import { SearchResultComponent } from "src/app/components/search-result/search-result.component";
-import { AuthService } from "src/app/modules/authentication/services/auth.service";
-import { Favorites } from "src/app/shared/models/favorites";
-import { SearchHit } from "src/app/shared/models/search-result";
-import { MetadataState } from "src/app/states/metadata.state";
-import { SidebarState } from "src/app/states/sidebar.state";
+  ViewChild
+} from '@angular/core';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Select, Store } from '@ngxs/store';
+import { Observable, Subscription } from 'rxjs';
+import { SearchResultComponent } from 'src/app/components/search-result/search-result.component';
+import { AuthService } from 'src/app/modules/authentication/services/auth.service';
+import { Favorites } from 'src/app/shared/models/favorites';
+import { SearchHit } from 'src/app/shared/models/search-result';
+import { MetadataState } from 'src/app/states/metadata.state';
+import { SidebarState } from 'src/app/states/sidebar.state';
 import {
   FavoritesState,
   FetchFavorites,
   ResetEntryDetailsMetadata,
-  SaveFavoriteListEntry,
-} from "../../favorites.state";
-import { CreateFavoriteListComponent } from "../create-favorite-list/create-favorite-list.component";
+  SaveFavoriteListEntry
+} from '../../favorites.state';
+import { CreateFavoriteListComponent } from '../create-favorite-list/create-favorite-list.component';
 
 @Component({
-  selector: "colid-favorites-open",
-  templateUrl: "./favorites-open.component.html",
+  selector: 'colid-favorites-open',
+  templateUrl: './favorites-open.component.html',
   styleUrls: [
-    "../favorite-list.component.scss",
-    "./favorites-open.component.scss",
-  ],
+    '../favorite-list.component.scss',
+    './favorites-open.component.scss'
+  ]
 })
 export class FavoritesOpenComponent implements OnInit, OnDestroy {
   @Select(SidebarState.sidebarOpened) sidebarOpened$: Observable<any>;
@@ -47,7 +47,7 @@ export class FavoritesOpenComponent implements OnInit, OnDestroy {
   }>;
   @Select(MetadataState.getMetadata) metadata$: Observable<any>;
 
-  @ViewChild("res")
+  @ViewChild('res')
   searchResultComponent: SearchResultComponent;
 
   @Input() set user(id: string) {
@@ -144,7 +144,7 @@ export class FavoritesOpenComponent implements OnInit, OnDestroy {
         score: 0,
         source: sourceClone,
         highlight: {},
-        index: "",
+        index: '',
         innerHits: {},
         matchedQueries: [],
         nested: null,
@@ -152,8 +152,8 @@ export class FavoritesOpenComponent implements OnInit, OnDestroy {
         routing: null,
         sequenceNumber: null,
         sorts: [],
-        type: "_doc",
-        version: 0,
+        type: '_doc',
+        version: 0
       };
 
       this.hit = result;
@@ -163,8 +163,8 @@ export class FavoritesOpenComponent implements OnInit, OnDestroy {
 
   createFavoriteList() {
     this.dialog.open(CreateFavoriteListComponent, {
-      width: "400px",
-      height: "250px",
+      width: '400px',
+      height: '250px'
     });
   }
 

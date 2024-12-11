@@ -1,21 +1,21 @@
-import { Component, Input } from "@angular/core";
-import { LogService } from "src/app/core/logging/log.service";
+import { Component, Input } from '@angular/core';
+import { LogService } from 'src/app/core/logging/log.service';
 
 @Component({
-  selector: "app-feedback",
-  templateUrl: "./feedback.component.html",
-  styleUrls: ["./feedback.component.scss"],
+  selector: 'app-feedback',
+  templateUrl: './feedback.component.html',
+  styleUrls: ['./feedback.component.scss']
 })
 export class FeedbackComponent {
-  isFeedbackPageVisible: boolean = true;
-  iSentimentalScorePositive: boolean = null;
-  comment: string = "";
-  isCommentShown: boolean = false;
-
-  logMessage = "dmp-feedback-component";
-
   @Input() payload: object;
   @Input() feature: string;
+
+  isFeedbackPageVisible: boolean = true;
+  iSentimentalScorePositive: boolean = null;
+  comment: string = '';
+  isCommentShown: boolean = false;
+
+  logMessage = 'dmp-feedback-component';
 
   constructor(private logService: LogService) {}
 
@@ -30,7 +30,7 @@ export class FeedbackComponent {
       feature: this.feature,
       payload: this.payload,
       sentimental_score: this.iSentimentalScorePositive,
-      comment: this.comment,
+      comment: this.comment
     });
   }
 }

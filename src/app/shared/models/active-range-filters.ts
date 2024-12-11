@@ -1,4 +1,4 @@
-import { RangeFilterSelection } from "./range-filter";
+import { RangeFilterSelection } from './range-filter';
 
 export interface ActiveRangeFilters {
   [key: string]: RangeFilterSelection;

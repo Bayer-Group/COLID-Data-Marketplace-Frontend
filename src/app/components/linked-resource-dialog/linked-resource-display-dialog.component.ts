@@ -1,21 +1,22 @@
-import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { Select } from "@ngxs/store";
-import { Observable, Subscription } from "rxjs";
-import { MetadataState } from "src/app/states/metadata.state";
-import { DocumentMap, SearchHit } from "src/app/shared/models/search-result";
-import { DocumentService } from "src/app/core/http/document.service";
-import { environment } from "src/environments/environment";
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Select } from '@ngxs/store';
+import { Observable, Subscription } from 'rxjs';
+import { MetadataState } from 'src/app/states/metadata.state';
+import { DocumentMap, SearchHit } from 'src/app/shared/models/search-result';
+import { DocumentService } from 'src/app/core/http/document.service';
+import { environment } from 'src/environments/environment';
 
 export interface DialogData {
   id: string;
   confirmReview: boolean;
+  isDraftResource: boolean;
 }
 
 @Component({
-  selector: "app-linked-resource-display-dialog",
-  templateUrl: "linked-resource-display-dialog.component.html",
-  styleUrls: ["linked-resource-display-dialog.component.scss"],
+  selector: 'app-linked-resource-display-dialog',
+  templateUrl: 'linked-resource-display-dialog.component.html',
+  styleUrls: ['linked-resource-display-dialog.component.scss']
 })
 export class LinkedResourceDisplayDialogComponent implements OnInit, OnDestroy {
   private metadataSubscription: Subscription;
@@ -36,36 +37,61 @@ export class LinkedResourceDisplayDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.documentService.getDocument(this.documentData.id).subscribe(
-      (doc: DocumentMap) => {
-        this.document = doc;
-        var result = {
-          id: this.documentData.id,
-          score: 0,
-          source: doc,
-          highlight: {},
-          index: "",
-          innerHits: {},
-          matchedQueries: [],
-          nested: null,
-          primaryTerm: null,
-          routing: null,
-          sequenceNumber: null,
-          sorts: [],
-          type: "_doc",
-          version: 0,
-        };
-        this.hit = result;
-      },
-      (error) => {
-        if (error.status == 404) {
-          this.error =
-            "The selected COLID entry could not be found. It may not yet be published to the Data Marketplace.";
-        } else {
-          this.error = "An unknown error has occurred.";
+    if (this.data.isDraftResource) {
+      this.documentService
+        .getDraftDocument(this.documentData.id)
+        .subscribe((doc: DocumentMap) => {
+          this.document = doc;
+          let result = {
+            id: this.documentData.id,
+            score: 0,
+            source: doc,
+            highlight: {},
+            index: '',
+            innerHits: {},
+            matchedQueries: [],
+            nested: null,
+            primaryTerm: null,
+            routing: null,
+            sequenceNumber: null,
+            sorts: [],
+            type: '_doc',
+            version: 0
+          };
+          this.hit = result;
+        });
+    } else {
+      this.documentService.getDocument(this.documentData.id).subscribe({
+        next: (doc: DocumentMap) => {
+          this.document = doc;
+          let result = {
+            id: this.documentData.id,
+            score: 0,
+            source: doc,
+            highlight: {},
+            index: '',
+            innerHits: {},
+            matchedQueries: [],
+            nested: null,
+            primaryTerm: null,
+            routing: null,
+            sequenceNumber: null,
+            sorts: [],
+            type: '_doc',
+            version: 0
+          };
+          this.hit = result;
+        },
+        error: (error) => {
+          if (error.status == 404) {
+            this.error =
+              'The selected COLID entry could not be found. It may not yet be published to the Data Marketplace.';
+          } else {
+            this.error = 'An unknown error has occurred.';
+          }
         }
-      }
-    );
+      });
+    }
 
     this.metadataSubscription = this.metadata$.subscribe((met) => {
       this.metadata = met;
@@ -82,7 +108,7 @@ export class LinkedResourceDisplayDialogComponent implements OnInit, OnDestroy {
 
   openInEditor(): void {
     const url = `${environment.pidUrl}resource?pidUri=${this.documentData.id}`;
-    window.open(url, "_blank");
+    window.open(url, '_blank');
   }
 
   confirmReview(): void {

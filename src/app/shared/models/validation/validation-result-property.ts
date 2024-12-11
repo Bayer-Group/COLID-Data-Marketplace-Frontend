@@ -1,4 +1,4 @@
-import { ValidationResultSeverity } from "./validation-result-severity";
+import { ValidationResultSeverity } from './validation-result-severity';
 
 export class ValidationResultProperty {
   node: string;
@@ -10,5 +10,5 @@ export class ValidationResultProperty {
 
 export enum ValidationResultPropertyType {
   SHACL,
-  DUPLICATE,
+  DUPLICATE
 }

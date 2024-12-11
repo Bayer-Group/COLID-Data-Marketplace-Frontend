@@ -1,33 +1,33 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
-import { catchError, switchMap, tap } from "rxjs/operators";
-import { ResourceApiService } from "src/app/core/http/resource.api.service";
-import { UserInfoApiService } from "src/app/core/http/user-info.api.service";
-import { MetadataService } from "src/app/core/http/metadata.service";
-import { LinkHistorySearchBody } from "src/app/shared/models/linkHistory/link-history-search-body";
-import { HistoryItemTableEntry } from "./link-history/link-history.component";
-import moment from "moment";
-import { Subscription, EMPTY, BehaviorSubject, Observable } from "rxjs";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { catchError, switchMap, tap } from 'rxjs/operators';
+import { ResourceApiService } from 'src/app/core/http/resource.api.service';
+import { UserInfoApiService } from 'src/app/core/http/user-info.api.service';
+import { MetadataService } from 'src/app/core/http/metadata.service';
+import { LinkHistorySearchBody } from 'src/app/shared/models/linkHistory/link-history-search-body';
+import { HistoryItemTableEntry } from './link-history/link-history.component';
+import moment from 'moment';
+import { Subscription, EMPTY, BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
-  selector: "app-link-history-view",
-  templateUrl: "./link-history-view.component.html",
-  styleUrls: ["./link-history-view.component.css"],
+  selector: 'app-link-history-view',
+  templateUrl: './link-history-view.component.html',
+  styleUrls: ['./link-history-view.component.css']
 })
 export class LinkHistoryViewComponent implements OnInit, OnDestroy {
   filters: FormGroup;
   get email() {
-    return this.filters.get("email");
+    return this.filters.get('email');
   }
   get linkType() {
-    return this.filters.get("linkType");
+    return this.filters.get('linkType');
   }
 
   masterSub: Subscription = new Subscription();
 
   emailFilterSource: string[] = [];
   emailFilterData: string[] = [];
-  emailSearchString: string = "";
+  emailSearchString: string = '';
   filteredEmailAddresses: Observable<string[]>;
   linkTypeFilterSource = [];
 
@@ -56,14 +56,14 @@ export class LinkHistoryViewComponent implements OnInit, OnDestroy {
         .subscribe()
     );
     this.masterSub.add(
-      this.filters.get("end").valueChanges.subscribe((val) => {
+      this.filters.get('end').valueChanges.subscribe((val) => {
         if (val) {
           this.resetResults();
-          const startDate = this.filters.get("start").value;
+          const startDate = this.filters.get('start').value;
           this.setSearchBody(
             [
-              { property: "endDate", value: val.toDate() },
-              { property: "startDate", value: startDate.toDate() },
+              { property: 'endDate', value: val.toDate() },
+              { property: 'startDate', value: startDate.toDate() }
             ],
             true
           );
@@ -71,16 +71,16 @@ export class LinkHistoryViewComponent implements OnInit, OnDestroy {
       })
     );
     this.masterSub.add(
-      this.filters.get("email").valueChanges.subscribe((val) => {
+      this.filters.get('email').valueChanges.subscribe((val) => {
         this.resetResults();
         this.resetEmailSearch();
-        this.setSearchBody([{ property: "email", value: val }], true);
+        this.setSearchBody([{ property: 'email', value: val }], true);
       })
     );
     this.masterSub.add(
-      this.filters.get("linkType").valueChanges.subscribe((val) => {
+      this.filters.get('linkType').valueChanges.subscribe((val) => {
         this.resetResults();
-        this.setSearchBody([{ property: "linkType", value: val }], true);
+        this.setSearchBody([{ property: 'linkType', value: val }], true);
       })
     );
   }
@@ -114,7 +114,7 @@ export class LinkHistoryViewComponent implements OnInit, OnDestroy {
             <HistoryItemTableEntry>{
               linkType: {
                 key: item.linkType,
-                value: item.linkTypeLabel,
+                value: item.linkTypeLabel
               },
               linkStatus: item.linkStatus,
               source: item.linkStartResourcePidUri,
@@ -126,7 +126,7 @@ export class LinkHistoryViewComponent implements OnInit, OnDestroy {
               dateCreated: item.dateCreated,
               dateDeleted: item.dateDeleted,
               author: item.author,
-              deletedBy: item.deletedBy,
+              deletedBy: item.deletedBy
             }
         );
         if (!this.historyItemsSource) {
@@ -134,7 +134,7 @@ export class LinkHistoryViewComponent implements OnInit, OnDestroy {
         } else {
           this.historyItemsSource = [
             ...this.historyItemsSource,
-            ...mappedResponse,
+            ...mappedResponse
           ];
         }
         if (mappedResponse.length < this.size) {
@@ -155,13 +155,13 @@ export class LinkHistoryViewComponent implements OnInit, OnDestroy {
       !this.isLoading
     ) {
       const newFrom = this.searchBody$.value.from + 1;
-      this.setSearchBody([{ property: "from", value: newFrom }], false);
+      this.setSearchBody([{ property: 'from', value: newFrom }], false);
     }
   }
 
   sortResults({
     column,
-    descending,
+    descending
   }: {
     column: string;
     descending?: boolean;
@@ -170,16 +170,16 @@ export class LinkHistoryViewComponent implements OnInit, OnDestroy {
     if (descending == null) {
       this.setSearchBody(
         [
-          { property: "orderByColumn", value: null },
-          { property: "orderDescending", value: true },
+          { property: 'orderByColumn', value: null },
+          { property: 'orderDescending', value: true }
         ],
         true
       );
     } else {
       this.setSearchBody(
         [
-          { property: "orderByColumn", value: column },
-          { property: "orderDescending", value: descending },
+          { property: 'orderByColumn', value: column },
+          { property: 'orderDescending', value: descending }
         ],
         true
       );
@@ -188,7 +188,7 @@ export class LinkHistoryViewComponent implements OnInit, OnDestroy {
 
   onEmailSearch(searchValue: string) {
     this.emailSearchString = searchValue;
-    if (searchValue === "") {
+    if (searchValue === '') {
       this.emailFilterData = this.emailFilterSource.slice();
     } else {
       const filterValue = searchValue.toLowerCase();
@@ -199,7 +199,7 @@ export class LinkHistoryViewComponent implements OnInit, OnDestroy {
   }
 
   resetEmailSearch() {
-    this.emailSearchString = "";
+    this.emailSearchString = '';
     this.emailFilterData = this.emailFilterSource.slice();
   }
 
@@ -223,11 +223,11 @@ export class LinkHistoryViewComponent implements OnInit, OnDestroy {
   }
 
   private initFilters() {
-    const filterEndDate = moment().utcOffset(0).startOf("day");
+    const filterEndDate = moment().utcOffset(0).startOf('day');
     const filterStartDate = moment()
       .utcOffset(0)
-      .startOf("day")
-      .subtract(14, "d");
+      .startOf('day')
+      .subtract(14, 'd');
     const searchBody = {
       startDate: filterStartDate.toDate(),
       endDate: filterEndDate.toDate(),
@@ -236,14 +236,14 @@ export class LinkHistoryViewComponent implements OnInit, OnDestroy {
       from: this.from,
       size: this.size,
       orderByColumn: null,
-      orderDescending: true,
+      orderDescending: true
     };
     this.searchBody$ = new BehaviorSubject(searchBody);
     this.filters = new FormGroup({
       start: new FormControl<moment.Moment>(filterStartDate),
       end: new FormControl<moment.Moment>(filterEndDate),
       email: new FormControl<string | null>(null),
-      linkType: new FormControl<string | null>(null),
+      linkType: new FormControl<string | null>(null)
     });
   }
 }

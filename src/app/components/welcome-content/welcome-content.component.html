@@ -13,7 +13,7 @@
     </div>
     <div class="d-flex flex-column flex-1 px-2 pb-2">
       <div class="dashboard-tile">
-        <app-notifications-tile [user]="user"></app-notifications-tile>
+        <app-notifications-tile></app-notifications-tile>
       </div>
       <div
         class="dashboard-tile mt-2"
@@ -25,7 +25,6 @@
       >
         <app-latest-resource-changes-tile
           (expansionPanelToggled)="setExpansionStatus($event)"
-          [user]="user"
         ></app-latest-resource-changes-tile>
       </div>
     </div>

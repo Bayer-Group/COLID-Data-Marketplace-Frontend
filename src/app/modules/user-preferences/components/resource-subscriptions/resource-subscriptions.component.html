@@ -1,6 +1,6 @@
 <div class="row p-2 justify-content-between">
   <div class="col-auto">
-    <h2>Resource subscriptions</h2>
+    <h4>Resource subscriptions</h4>
   </div>
   <div class="col-auto">
     <button
@@ -17,125 +17,118 @@
   <div class="col-12" *ngIf="!loading; else spinner">
     <mat-list *ngIf="colidEntrySubscriptions?.size > 0; else emptyResults">
       <mat-list-item
+        style="height: auto; padding: 8px"
         *ngFor="
           let colidEntrySubscription of colidEntrySubscriptions | keyvalue
         "
       >
         <ds-icon
-          mat-list-icon
-          class="me-2"
+          matListItemIcon
+          style="display: inline-block; line-height: 1; margin-right: 4px"
           iconType="S3"
           [tooltipDisabled]="false"
           [delay]="300"
           [icon]="colidEntrySubscription.value.resourceType"
         ></ds-icon>
-        <a
-          mat-line
-          class="d-flex justify-content-between"
-          href="{{ colidUrl }}resource?pidUri={{ colidEntrySubscription.key }}"
-          target="_blank"
-          style="width: fit-content"
-        >
-          <div class="d-flex align-items-center">
-            <h5 class="mb-1">{{ colidEntrySubscription.value.label }}</h5>
-            &nbsp;&nbsp;
-            <mat-icon style="font-size: large">open_in_new</mat-icon>
-          </div>
-          <mat-chip-list>
-            <mat-chip
-              selected
-              color="deleted"
-              *ngIf="
-                colidEntrySubscription.value.lifecycleStatus ===
-                constants.Resource.LifeCycleStatus.MarkedDeletion
-              "
-            >
-              <ds-icon
-                iconType="Mapping"
-                [tooltipDisabled]="false"
-                [delay]="300"
-                [icon]="colidEntrySubscription.value.lifecycleStatus"
+        <div>
+          <a
+            class="d-flex justify-content-between w-100"
+            href="{{ colidUrl }}resource?pidUri={{
+              colidEntrySubscription.key
+            }}"
+            target="_blank"
+          >
+            <div class="d-flex align-items-center">
+              <span class="mb-1">{{ colidEntrySubscription.value.label }}</span>
+              <mat-icon style="font-size: large">open_in_new</mat-icon>
+            </div>
+            <mat-chip-list>
+              <mat-chip
+                selected
+                color="deleted"
+                *ngIf="
+                  colidEntrySubscription.value.lifecycleStatus ===
+                  constants.Resource.LifeCycleStatus.MarkedDeletion
+                "
               >
-              </ds-icon>
-            </mat-chip>
-            <mat-chip
-              selected
-              color="draft"
-              *ngIf="
-                colidEntrySubscription.value.lifecycleStatus ===
-                constants.Resource.LifeCycleStatus.Draft
-              "
-            >
-              <ds-icon
-                iconType="Mapping"
-                [tooltipDisabled]="false"
-                [delay]="300"
-                [icon]="colidEntrySubscription.value.lifecycleStatus"
+                <ds-icon
+                  iconType="Mapping"
+                  [tooltipDisabled]="false"
+                  [delay]="300"
+                  [icon]="colidEntrySubscription.value.lifecycleStatus"
+                >
+                </ds-icon>
+              </mat-chip>
+              <mat-chip
+                selected
+                color="draft"
+                *ngIf="
+                  colidEntrySubscription.value.lifecycleStatus ===
+                  constants.Resource.LifeCycleStatus.Draft
+                "
               >
-              </ds-icon>
-            </mat-chip>
-            <mat-chip
-              selected
-              color="published"
-              *ngIf="
-                colidEntrySubscription.value.lifecycleStatus ===
-                  constants.Resource.LifeCycleStatus.MarkedDeletion ||
-                colidEntrySubscription.value.lifecycleStatus ===
-                  constants.Resource.LifeCycleStatus.Published ||
-                colidEntrySubscription.value.publishedVersion
-              "
-            >
-              <ds-icon
-                iconType="Mapping"
-                [tooltipDisabled]="false"
-                [delay]="300"
-                [icon]="constants.Resource.LifeCycleStatus.Published"
-              ></ds-icon>
-            </mat-chip>
-          </mat-chip-list>
-        </a>
-        <div
-          mat-line
-          matTooltip="{{
-            colidEntrySubscription.value.definition.substring(0, 1000)
-          }}..."
-        >
-          {{ colidEntrySubscription.value.definition }}
+                <ds-icon
+                  iconType="Mapping"
+                  [tooltipDisabled]="false"
+                  [delay]="300"
+                  [icon]="colidEntrySubscription.value.lifecycleStatus"
+                >
+                </ds-icon>
+              </mat-chip>
+              <mat-chip
+                selected
+                color="published"
+                *ngIf="
+                  colidEntrySubscription.value.lifecycleStatus ===
+                    constants.Resource.LifeCycleStatus.MarkedDeletion ||
+                  colidEntrySubscription.value.lifecycleStatus ===
+                    constants.Resource.LifeCycleStatus.Published ||
+                  colidEntrySubscription.value.publishedVersion
+                "
+              >
+                <ds-icon
+                  iconType="Mapping"
+                  [tooltipDisabled]="false"
+                  [delay]="300"
+                  [icon]="constants.Resource.LifeCycleStatus.Published"
+                ></ds-icon>
+              </mat-chip>
+            </mat-chip-list>
+          </a>
         </div>
-        <button
-          *ngIf="colidEntrySubscription.value.isSubscribed"
-          mat-icon-button
-          (click)="unsubscribeFromResource(colidEntrySubscription.key)"
-        >
-          <mat-icon>notifications_active</mat-icon>
-        </button>
-        <button
-          *ngIf="!colidEntrySubscription.value.isSubscribed"
-          mat-icon-button
-          (click)="subscribeToResource(colidEntrySubscription.key)"
-        >
-          <mat-icon>notifications_none</mat-icon>
-        </button>
-        <div
-          mat-line
-          matTooltip="{{
-            colidEntrySubscription.value.definition.substring(0, 1000)
-          }}..."
-        >
-          {{ colidEntrySubscription.value.definition }}
+        <div>
+          <div class="d-flex align-items-center justify-content-between">
+            <div>{{ colidEntrySubscription.value.definition }}</div>
+            <button
+              *ngIf="colidEntrySubscription.value.isSubscribed"
+              mat-icon-button
+              (click)="unsubscribeFromResource(colidEntrySubscription.key)"
+            >
+              <mat-icon>notifications_active</mat-icon>
+            </button>
+            <button
+              *ngIf="!colidEntrySubscription.value.isSubscribed"
+              mat-icon-button
+              (click)="subscribeToResource(colidEntrySubscription.key)"
+            >
+              <mat-icon>notifications_none</mat-icon>
+            </button>
+          </div>
         </div>
       </mat-list-item>
     </mat-list>
   </div>
 </div>
 <ng-template #spinner>
-  <app-colid-spinner></app-colid-spinner>
+  <div class="d-flex w-100 justify-content-center">
+    <app-colid-spinner></app-colid-spinner>
+  </div>
 </ng-template>
 
 <ng-template #emptyResults>
   <div class="col-12">
     <div class="mt-4 text-center">
-      <mat-icon style="font-size: 5rem" [inline]="true"
+      <mat-icon style="font-size: 3rem" [inline]="true"
         >notifications_off</mat-icon
       >
       <h4 class="mb-0">You don't have any resource subscriptions yet.</h4>

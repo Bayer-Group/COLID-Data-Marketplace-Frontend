@@ -1,29 +1,29 @@
-import { Location } from "@angular/common";
+import { Location } from '@angular/common';
 import {
   Component,
   ElementRef,
   OnInit,
   ViewChild,
   AfterViewInit,
-  OnDestroy,
-} from "@angular/core";
-import { MatDatepickerInputEvent } from "@angular/material/datepicker";
-import { ActivatedRoute, Router } from "@angular/router";
-import moment from "moment";
-import { BehaviorSubject, EMPTY, Subscription } from "rxjs";
-import { catchError, switchMap } from "rxjs/operators";
-import { AgentStatisticsApiService } from "src/app/core/http/agent-statistics.api.service";
-import { DetailedStatisticsRawDto } from "src/app/shared/models/agent-statistics/DetailedStatisticsRawDto";
+  OnDestroy
+} from '@angular/core';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { ActivatedRoute, Router } from '@angular/router';
+import moment from 'moment';
+import { BehaviorSubject, EMPTY, Subscription } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
+import { AgentStatisticsApiService } from 'src/app/core/http/agent-statistics.api.service';
+import { DetailedStatisticsRawDto } from 'src/app/shared/models/agent-statistics/DetailedStatisticsRawDto';
 
 @Component({
-  selector: "app-agent-statistics-crawler-details",
-  templateUrl: "./agent-statistics-crawler-details.component.html",
-  styleUrls: ["./agent-statistics-crawler-details.component.css"],
+  selector: 'app-agent-statistics-crawler-details',
+  templateUrl: './agent-statistics-crawler-details.component.html',
+  styleUrls: ['./agent-statistics-crawler-details.component.css']
 })
 export class AgentStatisticsCrawlerDetailsComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
-  @ViewChild("chartContainer") chartContainer: ElementRef;
+  @ViewChild('chartContainer') chartContainer: ElementRef;
   crawlerName: string;
   startDate: moment.Moment;
   endDate: moment.Moment;
@@ -39,39 +39,9 @@ export class AgentStatisticsCrawlerDetailsComponent
   chartHeight = 0;
   chartWidth = 0;
 
-  filterDateSelected(
-    event: MatDatepickerInputEvent<moment.Moment>,
-    isStartDate: boolean
-  ) {
-    if (isStartDate) {
-      this.startDate = event.value;
-    } else {
-      this.endDate = event.value;
-    }
-    const url = this.router
-      .createUrlTree([], {
-        queryParams: {
-          crawlerName: this.crawlerName,
-          startDate: this.startDate.format("YYYY-MM-DD"),
-          endDate: this.endDate.format("YYYY-MM-DD"),
-        },
-        relativeTo: this.route,
-      })
-      .toString();
-    this.location.go(url);
-    this.selectedDatesSubject$.next({
-      startDate: this.startDate.format("YYYY-MM-DD"),
-      endDate: this.endDate.clone().add(1, "d").format("YYYY-MM-DD"),
-    });
-  }
-
-  checkForValidDate(date: moment.Moment) {
-    return date.valueOf() > this.startDate?.valueOf();
-  }
-
   endDateFilter = this.checkForValidDate.bind(this);
 
-  xAxisTicks = ["2023-06-17", "2023-06-19", "2023-06-21", "2023-06-23"];
+  xAxisTicks = ['2023-06-17', '2023-06-19', '2023-06-21', '2023-06-23'];
 
   dataItemsCrawled = [];
 
@@ -89,14 +59,14 @@ export class AgentStatisticsCrawlerDetailsComponent
   ) {}
 
   ngOnInit(): void {
-    this.crawlerName = this.route.snapshot.queryParams["crawlerName"];
-    let startDateString = this.route.snapshot.queryParams["startDate"];
-    let endDateString = this.route.snapshot.queryParams["endDate"];
+    this.crawlerName = this.route.snapshot.queryParams['crawlerName'];
+    let startDateString = this.route.snapshot.queryParams['startDate'];
+    let endDateString = this.route.snapshot.queryParams['endDate'];
     this.startDate = moment(startDateString);
     this.endDate = moment(endDateString);
     this.selectedDatesSubject$ = new BehaviorSubject({
-      startDate: this.startDate.format("YYYY-MM-DD"),
-      endDate: this.endDate.clone().add(1, "d").format("YYYY-MM-DD"),
+      startDate: this.startDate.format('YYYY-MM-DD'),
+      endDate: this.endDate.clone().add(1, 'd').format('YYYY-MM-DD')
     });
     this.masterSub.add(
       this.selectedDatesSubject$
@@ -107,7 +77,7 @@ export class AgentStatisticsCrawlerDetailsComponent
               .getDetailedStatistics({
                 crawlerName: this.crawlerName,
                 startDate: selectedDate.startDate,
-                endDate: selectedDate.endDate,
+                endDate: selectedDate.endDate
               })
               .pipe(
                 catchError((_) => {
@@ -124,12 +94,12 @@ export class AgentStatisticsCrawlerDetailsComponent
             res.crawlerDurationSum.length > 0
               ? [
                   {
-                    name: "Items crawled",
+                    name: 'Items crawled',
                     series: res.itemsCrawled.map((datapoint) => ({
                       name: datapoint.date.slice(0, 10),
-                      value: datapoint.itemsCrawled,
-                    })),
-                  },
+                      value: datapoint.itemsCrawled
+                    }))
+                  }
                 ]
               : [];
 
@@ -137,12 +107,12 @@ export class AgentStatisticsCrawlerDetailsComponent
             res.crawlerDurationSum.length > 0
               ? [
                   {
-                    name: "Crawler duration sum",
+                    name: 'Crawler duration sum',
                     series: res.crawlerDurationSum.map((datapoint) => ({
                       name: datapoint.date.slice(0, 10),
-                      value: datapoint.duration,
-                    })),
-                  },
+                      value: datapoint.duration
+                    }))
+                  }
                 ]
               : [];
 
@@ -150,12 +120,12 @@ export class AgentStatisticsCrawlerDetailsComponent
             res.crawlerDurationAverage.length > 0
               ? [
                   {
-                    name: "Crawler duration average",
+                    name: 'Crawler duration average',
                     series: res.crawlerDurationSum.map((datapoint) => ({
                       name: datapoint.date.slice(0, 10),
-                      value: datapoint.duration,
-                    })),
-                  },
+                      value: datapoint.duration
+                    }))
+                  }
                 ]
               : [];
 
@@ -163,22 +133,22 @@ export class AgentStatisticsCrawlerDetailsComponent
             res.itemsToUpdate.length > 0
               ? [
                   {
-                    name: "Items to update",
+                    name: 'Items to update',
                     series: res.itemsToUpdate.map((datapoint) => ({
                       name: datapoint.date.slice(0, 10),
-                      value: datapoint.itemsToUpdate,
-                    })),
-                  },
+                      value: datapoint.itemsToUpdate
+                    }))
+                  }
                 ]
               : [];
 
           if (res.itemsUpdated.length > 0) {
             this.dataItemsUpdate.push({
-              name: "Items updated",
+              name: 'Items updated',
               series: res.itemsUpdated.map((datapoint) => ({
                 name: datapoint.date.slice(0, 10),
-                value: datapoint.itemsUpdated,
-              })),
+                value: datapoint.itemsUpdated
+              }))
             });
           }
 
@@ -194,5 +164,35 @@ export class AgentStatisticsCrawlerDetailsComponent
 
   ngOnDestroy(): void {
     this.masterSub.unsubscribe();
+  }
+
+  filterDateSelected(
+    event: MatDatepickerInputEvent<moment.Moment>,
+    isStartDate: boolean
+  ) {
+    if (isStartDate) {
+      this.startDate = event.value;
+    } else {
+      this.endDate = event.value;
+    }
+    const url = this.router
+      .createUrlTree([], {
+        queryParams: {
+          crawlerName: this.crawlerName,
+          startDate: this.startDate.format('YYYY-MM-DD'),
+          endDate: this.endDate.format('YYYY-MM-DD')
+        },
+        relativeTo: this.route
+      })
+      .toString();
+    this.location.go(url);
+    this.selectedDatesSubject$.next({
+      startDate: this.startDate.format('YYYY-MM-DD'),
+      endDate: this.endDate.clone().add(1, 'd').format('YYYY-MM-DD')
+    });
+  }
+
+  checkForValidDate(date: moment.Moment) {
+    return date.valueOf() > this.startDate?.valueOf();
   }
 }

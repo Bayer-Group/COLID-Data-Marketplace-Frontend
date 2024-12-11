@@ -23,7 +23,7 @@
       instance type.
     </div>
   </div>
-  <div class="mt-2">
+  <div class="my-2">
     <mat-form-field class="me-4" style="width: 400px">
       <mat-label>New Keyword</mat-label>
       <input matInput type="text" [(ngModel)]="newKeyword" />
@@ -38,7 +38,7 @@
       Add new keyword
     </button>
   </div>
-  <mat-form-field appearance="standard" class="w-100">
+  <mat-form-field appearance="outline" class="w-100">
     <mat-label>Filter Labels</mat-label>
     <mat-icon matPrefix>search</mat-icon>
     <input matInput #input (keyup)="applyFilter($event)" />
@@ -106,14 +106,16 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       <tr class="mat-row" *matNoDataRow>
         <td
-          class="mat-cell"
+          class="mat-cell p-2"
           colspan="3"
           *ngIf="selectedKeywordGraphPidUri == null; else noFilterResults"
         >
           Please select an instance graph to show the keywords
         </td>
         <ng-template #noFilterResults>
-          <td class="mat-cell" colspan="3">No data matching the filter</td>
+          <td class="mat-cell" colspan="3" style="padding: 8px">
+            No data matching the filter
+          </td>
         </ng-template>
       </tr>
     </table>

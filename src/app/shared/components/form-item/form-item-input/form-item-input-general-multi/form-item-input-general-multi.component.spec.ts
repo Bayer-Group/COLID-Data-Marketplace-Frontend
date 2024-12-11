@@ -1,14 +1,14 @@
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { FormItemInputGeneralMultiComponent } from "./form-item-input-general-multi.component";
+import { FormItemInputGeneralMultiComponent } from './form-item-input-general-multi.component';
 
-describe("FormItemInputGeneralMultiComponent", () => {
+describe('FormItemInputGeneralMultiComponent', () => {
   let component: FormItemInputGeneralMultiComponent;
   let fixture: ComponentFixture<FormItemInputGeneralMultiComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [FormItemInputGeneralMultiComponent],
+      declarations: [FormItemInputGeneralMultiComponent]
     }).compileComponents();
   }));
 
@@ -18,7 +18,7 @@ describe("FormItemInputGeneralMultiComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

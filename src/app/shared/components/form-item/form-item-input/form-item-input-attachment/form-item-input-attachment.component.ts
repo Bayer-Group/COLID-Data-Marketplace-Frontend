@@ -3,36 +3,38 @@ import {
   forwardRef,
   Input,
   Output,
-  EventEmitter,
-} from "@angular/core";
-import { FormItemInputBaseComponent } from "../form-item-input-base/form-item-input-base.component";
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { Metadata } from "src/app/shared/models/metadata/meta-data";
-import { Entity } from "src/app/shared/models/entities/entity";
-import { FormChangedDTO } from "src/app/shared/models/form/form-changed-dto";
-import { FormService } from "src/app/shared/services/form.service";
-import { Constants } from "src/app/shared/constants";
-import { Observable, of } from "rxjs";
-import { PidUriTemplateResultDTO } from "src/app/shared/models/pidUriTemplates/pid-uri-template-result-dto";
-import { MatDialog } from "@angular/material/dialog";
-import { DeleteItemDialogComponent } from "src/app/shared/components/delete-item-dialog/delete-item-dialog.component";
-import { MetaDataProperty } from "src/app/shared/models/metadata/meta-data-property";
-import { AttachmentApiService } from "src/app/core/http/attachment.api.service";
-import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
-import { AttachmentUploadedDto } from "src/app/shared/models/attachment/attachment-uploaded-dto";
-import { FormItemChangedDTO } from "src/app/shared/models/form/form-item-changed-dto";
+  EventEmitter
+} from '@angular/core';
+import { FormItemInputBaseComponent } from '../form-item-input-base/form-item-input-base.component';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Metadata } from 'src/app/shared/models/metadata/meta-data';
+import { Entity } from 'src/app/shared/models/entities/entity';
+import { FormChangedDTO } from 'src/app/shared/models/form/form-changed-dto';
+import { FormService } from 'src/app/shared/services/form.service';
+import { Constants } from 'src/app/shared/constants';
+import { Observable, of } from 'rxjs';
+import { PidUriTemplateResultDTO } from 'src/app/shared/models/pidUriTemplates/pid-uri-template-result-dto';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteItemDialogComponent } from 'src/app/shared/components/delete-item-dialog/delete-item-dialog.component';
+import { MetaDataProperty } from 'src/app/shared/models/metadata/meta-data-property';
+import { AttachmentApiService } from 'src/app/core/http/attachment.api.service';
+import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
+import { AttachmentUploadedDto } from 'src/app/shared/models/attachment/attachment-uploaded-dto';
+import { FormItemChangedDTO } from 'src/app/shared/models/form/form-item-changed-dto';
+
+// TODO: Unify - duplicate code with colid-ui-editor-frontend
 
 @Component({
-  selector: "app-form-item-input-attachment",
-  templateUrl: "./form-item-input-attachment.component.html",
-  styleUrls: ["./form-item-input-attachment.component.scss"],
+  selector: 'app-form-item-input-attachment',
+  templateUrl: './form-item-input-attachment.component.html',
+  styleUrls: ['./form-item-input-attachment.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => FormItemInputAttachmentComponent),
-      multi: true,
-    },
-  ],
+      multi: true
+    }
+  ]
 })
 export class FormItemInputAttachmentComponent extends FormItemInputBaseComponent {
   @Input() newAttachmentEntities: string[];
@@ -46,7 +48,7 @@ export class FormItemInputAttachmentComponent extends FormItemInputBaseComponent
   @Output() attachmentUploaded: EventEmitter<AttachmentUploadedDto> =
     new EventEmitter<AttachmentUploadedDto>();
 
-  attachmentFileName: string = "Choose file";
+  attachmentFileName: string = 'Choose file';
   attachmentFileToUpload: File = null;
   isUploadInProgress: boolean = false;
 
@@ -91,9 +93,9 @@ export class FormItemInputAttachmentComponent extends FormItemInputBaseComponent
     const dialogRef = this.dialog.open(DeleteItemDialogComponent, {
       data: {
         header: `Deleting ${this.label.toLowerCase()}`,
-        body: `Are you sure you want to delete this ${this.label.toLowerCase()}?`,
+        body: `Are you sure you want to delete this ${this.label.toLowerCase()}?`
       },
-      disableClose: true,
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -182,16 +184,16 @@ export class FormItemInputAttachmentComponent extends FormItemInputBaseComponent
 
             this.internalValue.id = result.id;
             this.internalValue.properties[Constants.Metadata.EntityType] = [
-              Constants.Attachment.Type,
+              Constants.Attachment.Type
             ];
             this.internalValue.properties[Constants.Metadata.RdfsLabel] = [
-              result.s3File.fileName,
+              result.s3File.fileName
             ];
             this.internalValue.properties[Constants.Attachment.FileSize] = [
-              result.s3File.fileSize,
+              result.s3File.fileSize
             ];
             this.internalValue.properties[Constants.Attachment.FileType] = [
-              result.s3File.fileType,
+              result.s3File.fileType
             ];
 
             const entity = this.createEntity(
@@ -238,7 +240,7 @@ export class FormItemInputAttachmentComponent extends FormItemInputBaseComponent
       this.attachmentFileToUpload == null ||
       comment == null ||
       comment.length == 0 ||
-      comment[0].trim() == ""
+      comment[0].trim() == ''
     ) {
       return false;
     }

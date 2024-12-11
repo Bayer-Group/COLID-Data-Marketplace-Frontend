@@ -1,23 +1,24 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { Select, Store } from "@ngxs/store";
-import { Observable } from "rxjs";
-import { NotificationDialogComponent } from "src/app/modules/notification/components/notification-dialog/notification-dialog.component";
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { NotificationDialogComponent } from 'src/app/modules/notification/components/notification-dialog/notification-dialog.component';
 import {
   DeleteNotification,
   FetchNotifications,
   NotificationState,
   ReadNotification,
-  ReadNotifications,
-} from "src/app/modules/notification/notification.state";
-import { MessageDto } from "src/app/shared/models/user/message-dto";
-import { UserDto } from "src/app/shared/models/user/user-dto";
+  ReadNotifications
+} from 'src/app/modules/notification/notification.state';
+import { MessageDto } from 'src/app/shared/models/user/message-dto';
+import { UserDto } from 'src/app/shared/models/user/user-dto';
+import { UserInfoState } from 'src/app/states/user-info.state';
 
 @Component({
-  selector: "app-notifications-tile",
-  templateUrl: "./notifications-tile.component.html",
-  styleUrls: ["./notifications-tile.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-notifications-tile',
+  templateUrl: './notifications-tile.component.html',
+  styleUrls: ['./notifications-tile.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotificationsTileComponent {
   @Input() user: UserDto;
@@ -25,15 +26,20 @@ export class NotificationsTileComponent {
     MessageDto[]
   >;
 
-  constructor(private store: Store, private dialog: MatDialog) {}
+  constructor(
+    private store: Store,
+    private dialog: MatDialog
+  ) {}
 
   reloadNofications() {
-    this.store.dispatch(new FetchNotifications(this.user.id));
+    this.store.dispatch(
+      new FetchNotifications(this.store.selectSnapshot(UserInfoState.getUserId))
+    );
   }
 
   openNotification(notification: MessageDto) {
     const dialogRef = this.dialog.open(NotificationDialogComponent, {
-      data: notification,
+      data: notification
     });
 
     dialogRef.afterClosed().subscribe((_) => {

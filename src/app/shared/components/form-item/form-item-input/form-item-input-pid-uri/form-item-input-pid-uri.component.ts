@@ -1,22 +1,24 @@
-import { Component, OnInit, forwardRef, Input } from "@angular/core";
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { FormItemInputBaseComponent } from "../form-item-input-base/form-item-input-base.component";
-import { Constants } from "src/app/shared/constants";
-import { Observable } from "rxjs";
-import { PidUriTemplateResultDTO } from "src/app/shared/models/pidUriTemplates/pid-uri-template-result-dto";
-import { Entity } from "src/app/shared/models/entities/entity";
+import { Component, OnInit, forwardRef, Input } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormItemInputBaseComponent } from '../form-item-input-base/form-item-input-base.component';
+import { Constants } from 'src/app/shared/constants';
+import { Observable } from 'rxjs';
+import { PidUriTemplateResultDTO } from 'src/app/shared/models/pidUriTemplates/pid-uri-template-result-dto';
+import { Entity } from 'src/app/shared/models/entities/entity';
+
+// TODO: Unify - duplicate code with colid-ui-editor-frontend
 
 @Component({
-  selector: "app-form-item-input-pid-uri",
-  templateUrl: "./form-item-input-pid-uri.component.html",
-  styleUrls: ["./form-item-input-pid-uri.component.scss"],
+  selector: 'app-form-item-input-pid-uri',
+  templateUrl: './form-item-input-pid-uri.component.html',
+  styleUrls: ['./form-item-input-pid-uri.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => FormItemInputPidUriComponent),
-      multi: true,
-    },
-  ],
+      multi: true
+    }
+  ]
 })
 export class FormItemInputPidUriComponent
   extends FormItemInputBaseComponent
@@ -68,7 +70,7 @@ export class FormItemInputPidUriComponent
       this.entity = <Entity>(Array.isArray(value) ? value[0] : value);
       if (this.entity != null) {
         if (this.entity.id != null) {
-          this.internalValue = this.entity.id.replace(this.prefix, "");
+          this.internalValue = this.entity.id.replace(this.prefix, '');
           this.setExternalSelected();
         }
         this.setSelectedPreset();
@@ -104,19 +106,19 @@ export class FormItemInputPidUriComponent
     }
 
     this.entity.properties[Constants.Metadata.EntityType] = [
-      Constants.Identifier.Type,
+      Constants.Identifier.Type
     ];
 
     this.entity.id = this.publicValue;
 
     if (this.selectedPreset != null) {
       this.entity.properties[Constants.Metadata.HasUriTemplate] = [
-        this.selectedPreset,
+        this.selectedPreset
       ];
     }
 
     this.entity.properties[Constants.Metadata.EntityType] = [
-      Constants.Identifier.Type,
+      Constants.Identifier.Type
     ];
 
     this.handleValueChanged(

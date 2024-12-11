@@ -21,7 +21,7 @@
         >
           <ng-template matStepLabel>
             <span
-              >{{ getHeader(entity) | date : "yyyy-MM-dd HH:mm" }}
+              >{{ getHeader(entity) | date: 'yyyy-MM-dd HH:mm' }}
               <span
                 class="badge badge-pill badge-primary ms-1"
                 *ngIf="getState(entity) === 'published'"

@@ -1,26 +1,26 @@
-import { ActivatedRoute } from "@angular/router";
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { Select, Store } from "@ngxs/store";
-import { Observable } from "rxjs";
-import { SearchResult } from "src/app/shared/models/search-result";
-import { FetchMetadata, MetadataState } from "src/app/states/metadata.state";
-import { SearchByPidUri, SearchState } from "src/app/states/search.state";
-import { SearchResultComponent } from "../search-result/search-result.component";
+import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { SearchResult } from 'src/app/shared/models/search-result';
+import { FetchMetadata, MetadataState } from 'src/app/states/metadata.state';
+import { SearchByPidUri, SearchState } from 'src/app/states/search.state';
+import { SearchResultComponent } from '../search-result/search-result.component';
 
 @Component({
-  selector: "app-search-result-standalone-container",
-  templateUrl: "./search-result-standalone-container.component.html",
-  styleUrls: ["./search-result-standalone-container.component.scss"],
+  selector: 'app-search-result-standalone-container',
+  templateUrl: './search-result-standalone-container.component.html',
+  styleUrls: ['./search-result-standalone-container.component.scss']
 })
 export class SearchResultStandaloneContainerComponent implements OnInit {
   @Select(MetadataState.getMetadata) metadata$: Observable<any>;
   @Select(SearchState.getDocumentResult)
   searchResult$: Observable<SearchResult>;
 
-  @ViewChild("res")
+  @ViewChild('res')
   searchResultComponent: SearchResultComponent;
 
-  pidUri: string = "";
+  pidUri: string = '';
   metadata: any;
   searchResult: any;
   loading: boolean = true;
@@ -28,12 +28,15 @@ export class SearchResultStandaloneContainerComponent implements OnInit {
   pidUriFromQueryString: string = null;
 
   _store: Store;
-  constructor(private store: Store, private route: ActivatedRoute) {
+  constructor(
+    private store: Store,
+    private route: ActivatedRoute
+  ) {
     this._store = store;
     this.pidUriFromQueryString = decodeURI(
-      this.route.snapshot.queryParamMap.get("pidUri")
+      this.route.snapshot.queryParamMap.get('pidUri')
     );
-    if (this.pidUriFromQueryString && this.pidUriFromQueryString != "null") {
+    if (this.pidUriFromQueryString && this.pidUriFromQueryString != 'null') {
       this.pidUri = this.pidUriFromQueryString;
     }
   }

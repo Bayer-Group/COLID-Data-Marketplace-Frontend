@@ -24,6 +24,7 @@
             style="height: 40px"
             *ngFor="let cluster of clusteredResults.clusters"
             [value]="cluster.labels[0]"
+            color="primary"
             [selected]="cluster.labels[0] === currentlySelectedCluster"
             ><div class="clamping-container">
               <li>
@@ -72,7 +73,7 @@
                 color="primary"
                 mat-list-icon
                 (change)="checkboxChanged($event, hit.id)"
-                [checked]="hit.id | checkboxSelected : selectedPidUris"
+                [checked]="hit.id | checkboxSelected: selectedPidUris"
               >
               </mat-checkbox>
               <app-search-result

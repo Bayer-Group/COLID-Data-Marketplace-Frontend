@@ -26,7 +26,7 @@ export function jsonToStringMap(json: string): Map<string, string[]> {
     mapObject = JSON.parse(json);
     properties = Object.entries(mapObject);
   } catch (e) {
-    console.error("Could not parse JSON", e);
+    console.error('Could not parse JSON', e);
     return map;
   }
 

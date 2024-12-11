@@ -1,12 +1,11 @@
-<div class="row px-3" *ngIf="pidUriTemplateForm">
+<div
+  class="row px-3"
+  *ngIf="pidUriTemplateForm && metaData && pidUriTemplates; else loading"
+>
   <form [formGroup]="pidUriTemplateForm" class="form-group w-100">
-    <table
-      class="table"
-      *ngIf="metaData && (pidUriTemplates$ | async); else loading"
-    >
+    <table class="table">
       <thead>
         <tr>
-          <th></th>
           <th scope="col" *ngFor="let m of metaData">
             <div class="d-flex">
               {{ m.properties[constants.Metadata.Name] }}
@@ -23,8 +22,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let p of pidUriTemplates$ | async; let i = index">
-          <th scope="row">{{ i + 1 }}</th>
+        <tr
+          *ngFor="
+            let p of pidUriTemplates.slice(
+              pageIndex * pageSize,
+              (pageIndex + 1) * pageSize
+            )
+          "
+        >
           <td *ngFor="let m of metaData">
             <div *ngIf="p !== selectedForEdit">
               <app-entity-display-item
@@ -104,7 +109,6 @@
           </td>
         </tr>
         <tr *ngIf="!selectedForEdit">
-          <th scope="row">New</th>
           <td *ngFor="let m of metaData">
             <app-form-item
               name="{{ m.properties[pidUriConstant] }}"
@@ -131,6 +135,11 @@
         </tr>
       </tbody>
     </table>
+    <mat-paginator
+      [length]="pidUriTemplates.length"
+      [pageSize]="pageSize"
+      (page)="pageIndex = $event.pageIndex"
+    ></mat-paginator>
   </form>
 </div>
 <ng-template #loading>

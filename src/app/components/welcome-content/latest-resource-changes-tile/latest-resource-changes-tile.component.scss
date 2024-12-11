@@ -1,10 +1,14 @@
 .last-changed-results {
-    height: 300px;
-    overflow-y: scroll;
+  height: 300px;
+  overflow-y: scroll;
 }
 
 @media (min-height: 1024px) {
-    .last-changed-results {
-        height: 500px;
-    }
+  .last-changed-results {
+    height: 500px;
+  }
+}
+
+.mat-expansion-panel-header {
+  font-weight: bold;
 }

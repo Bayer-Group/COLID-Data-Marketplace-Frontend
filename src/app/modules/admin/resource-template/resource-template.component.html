@@ -1,0 +1,44 @@
+<div class="row justify-content-between p-2">
+  <div class="col-auto">
+    <h1 class="admin-tab-title">Resource Templates</h1>
+  </div>
+  <div class="col-auto">
+    <action-button
+      color="primary"
+      (click)="reload()"
+      [disabled]="(resourceTemplates$ | async) === null"
+      [loading]="(resourceTemplates$ | async) === null"
+      icon="refresh"
+    >
+      Reload
+    </action-button>
+  </div>
+</div>
+<div
+  class="row"
+  *ngIf="resourceTemplateTableInput$ | async as resourceTemplateTableInput"
+>
+  <div
+    class="col"
+    *ngIf="
+      resourceTemplateTableInput.resourceTemplates &&
+        resourceTemplateTableInput.metadata &&
+        resourceTemplateTableInput.resourceTypes;
+      else loading
+    "
+  >
+    <app-resource-template-table
+      [resourceTemplates]="resourceTemplateTableInput.resourceTemplates"
+      [metaData]="resourceTemplateTableInput.metadata"
+      [resourceTypes]="resourceTemplateTableInput.resourceTypes"
+    ></app-resource-template-table>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="row justify-content-center mt-4">
+    <div class="col-auto">
+      <app-colid-spinner></app-colid-spinner>
+    </div>
+  </div>
+</ng-template>

@@ -1,45 +1,45 @@
-import { Selector, State, Action, StateContext } from "@ngxs/store";
-import { ConsumerGroupApiService } from "../core/http/consumer-group.api.service";
-import { ConsumerGroupResultDTO } from "../shared/models/consumerGroups/consumer-group-result-dto";
-import { MetaDataProperty } from "../shared/models/metadata/meta-data-property";
-import { mergeMap, tap } from "rxjs/operators";
-import { Constants } from "../shared/constants";
-import { FetchConsumerGroupsByUser } from "./user-info.state";
-import { Injectable } from "@angular/core";
-import { MetadataService } from "../core/http/metadata.service";
+import { Selector, State, Action, StateContext } from '@ngxs/store';
+import { ConsumerGroupApiService } from '../core/http/consumer-group.api.service';
+import { ConsumerGroupResultDTO } from '../shared/models/consumerGroups/consumer-group-result-dto';
+import { MetaDataProperty } from '../shared/models/metadata/meta-data-property';
+import { mergeMap, tap } from 'rxjs/operators';
+import { Constants } from '../shared/constants';
+import { FetchConsumerGroupsByUser } from './user-info.state';
+import { Injectable } from '@angular/core';
+import { MetadataService } from '../core/http/metadata.service';
 
 export class FetchConsumerGroups {
-  static readonly type = "[ConsumerGroup] Fetch consumerGroups";
+  static readonly type = '[ConsumerGroup] Fetch consumerGroups';
   constructor() {}
 }
 
 export class FetchConsumerGroupDetails {
-  static readonly type = "[ConsumerGroup] Fetch consumerGroup";
+  static readonly type = '[ConsumerGroup] Fetch consumerGroup';
   constructor(public payload: string) {}
 }
 
 export class FetchConsumerGroupMetadata {
-  static readonly type = "[ConsumerGroup] Fetch consumerGroupMetadata";
+  static readonly type = '[ConsumerGroup] Fetch consumerGroupMetadata';
   constructor() {}
 }
 
 export class DeleteConsumerGroup {
-  static readonly type = "[ConsumerGroup] Delete consumerGroup";
+  static readonly type = '[ConsumerGroup] Delete consumerGroup';
   constructor(public payload: string) {}
 }
 
 export class ReactivateConsumerGroup {
-  static readonly type = "[ConsumerGroup] Reactivate consumerGroup";
+  static readonly type = '[ConsumerGroup] Reactivate consumerGroup';
   constructor(public payload: string) {}
 }
 
 export class SetConsumerGroup {
-  static readonly type = "[ConsumerGroup] Set consumerGroup";
+  static readonly type = '[ConsumerGroup] Set consumerGroup';
   constructor(public payload: ConsumerGroupResultDTO) {}
 }
 
 export class ClearConsumerGroup {
-  static readonly type = "[ConsumerGroup] Clear consumerGroup";
+  static readonly type = '[ConsumerGroup] Clear consumerGroup';
 }
 
 export class ConsumerGroupStateModel {
@@ -49,12 +49,12 @@ export class ConsumerGroupStateModel {
 }
 
 @State<ConsumerGroupStateModel>({
-  name: "consumerGroups",
+  name: 'consumerGroups',
   defaults: {
     consumerGroups: null,
     consumerGroup: null,
-    metadata: null,
-  },
+    metadata: null
+  }
 })
 @Injectable()
 export class ConsumerGroupState {
@@ -86,7 +86,7 @@ export class ConsumerGroupState {
     return this.consumerGroupApiService.getAllEntities().pipe(
       tap((res) => {
         patchState({
-          consumerGroups: res,
+          consumerGroups: res
         });
       })
     );
@@ -106,7 +106,7 @@ export class ConsumerGroupState {
       .pipe(
         tap((res) => {
           patchState({
-            metadata: res,
+            metadata: res
           });
         })
       );
@@ -148,7 +148,7 @@ export class ConsumerGroupState {
     return this.consumerGroupApiService.getEntityById(payload).pipe(
       tap((res) => {
         patchState({
-          consumerGroup: res,
+          consumerGroup: res
         });
       })
     );
@@ -160,7 +160,7 @@ export class ConsumerGroupState {
     action: SetConsumerGroup
   ) {
     patchState({
-      consumerGroup: action.payload,
+      consumerGroup: action.payload
     });
   }
 
@@ -170,7 +170,7 @@ export class ConsumerGroupState {
     {}: ClearConsumerGroup
   ) {
     patchState({
-      consumerGroup: null,
+      consumerGroup: null
     });
   }
 }

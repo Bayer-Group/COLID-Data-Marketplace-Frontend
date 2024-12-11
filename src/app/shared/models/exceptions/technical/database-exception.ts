@@ -1,3 +1,3 @@
-import { TechnicalException } from "../technical-exception";
+import { TechnicalException } from '../technical-exception';
 
 export class DatabaseException extends TechnicalException {}

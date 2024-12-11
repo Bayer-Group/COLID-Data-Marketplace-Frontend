@@ -1,6 +1,6 @@
-import { Entity } from "../entities/entity";
-import { LinkingMapping } from "./linking-mapping";
-import { VersionProperty } from "./version-property";
+import { Entity } from '../entities/entity';
+import { LinkingMapping } from './linking-mapping';
+import { VersionProperty } from './version-property';
 
 export class Resource extends Entity {
   pidUri: string;

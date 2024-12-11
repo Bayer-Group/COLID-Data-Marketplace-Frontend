@@ -1,5 +1,5 @@
-import { Aggregation } from "./aggregation";
-import { RangeFilter } from "./range-filter";
+import { Aggregation } from './aggregation';
+import { RangeFilter } from './range-filter';
 
 export class AggregationsResultDto {
   aggregations: Aggregation[];

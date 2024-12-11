@@ -1,34 +1,34 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { Observable } from "rxjs";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Observable } from 'rxjs';
 import {
   ResourceState,
   RejectResourceMarkedAsDeleted,
   FetchResourceMarkedAsDeleted,
-  DeleteResources,
-} from "src/app/states/resource.state";
-import { Select, Store } from "@ngxs/store";
-import { ResourceOverviewCTO } from "src/app/shared/models/resources/resource-overview-cto";
+  DeleteResources
+} from 'src/app/states/resource.state';
+import { Select, Store } from '@ngxs/store';
+import { ResourceOverviewCTO } from 'src/app/shared/models/resources/resource-overview-cto';
 import {
   MatSelectionListChange,
-  MatSelectionList,
-} from "@angular/material/list";
-import { MatCheckboxChange } from "@angular/material/checkbox";
-import { ResourceOverviewDTO } from "src/app/shared/models/resources/resource-overview-dto";
-import { ColidMatSnackBarService } from "src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service";
-import { DeletionRequestDialogComponent } from "./deletion-request-dialog/deletion-request-dialog.component";
-import { MatDialog } from "@angular/material/dialog";
-import { EntityFormStatus } from "src/app/shared/models/entity-form.status";
-import { AuthService } from "src/app/modules/authentication/services/auth.service";
+  MatSelectionList
+} from '@angular/material/list';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { ResourceOverviewDTO } from 'src/app/shared/models/resources/resource-overview-dto';
+import { ColidMatSnackBarService } from 'src/app/modules/colid-mat-snack-bar/colid-mat-snack-bar.service';
+import { DeletionRequestDialogComponent } from './deletion-request-dialog/deletion-request-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { EntityFormStatus } from 'src/app/shared/models/entity-form.status';
+import { AuthService } from 'src/app/modules/authentication/services/auth.service';
 
 export enum DeletionRequestAction {
-  REJECT = "reject",
-  DELETION = "deletion",
+  REJECT = 'reject',
+  DELETION = 'deletion'
 }
 
 @Component({
-  selector: "app-deletion-request",
-  templateUrl: "./deletion-request.component.html",
-  styleUrls: ["./deletion-request.component.scss"],
+  selector: 'app-deletion-request',
+  templateUrl: './deletion-request.component.html',
+  styleUrls: ['./deletion-request.component.scss']
 })
 export class DeletionRequestComponent implements OnInit {
   @Select(ResourceState.getIsResourcesMarkedDeletedLoading)
@@ -36,7 +36,7 @@ export class DeletionRequestComponent implements OnInit {
   @Select(ResourceState.getResourcesMarkedDeleted)
   resources$: Observable<ResourceOverviewCTO>;
 
-  @ViewChild("deletionRequests", { static: false })
+  @ViewChild('deletionRequests', { static: false })
   deletionRequests: MatSelectionList;
 
   action: DeletionRequestAction;
@@ -58,7 +58,7 @@ export class DeletionRequestComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.store.dispatch(new FetchResourceMarkedAsDeleted()).subscribe();
+    this.store.dispatch(new FetchResourceMarkedAsDeleted());
     this.authService.currentEmail$.subscribe(
       (userEmail) => (this.userEmail = userEmail)
     );
@@ -71,11 +71,11 @@ export class DeletionRequestComponent implements OnInit {
   reject() {
     const dialogRef = this.dialog.open(DeletionRequestDialogComponent, {
       data: {
-        header: "Reject colid entry",
-        requests: this.selectedDeletionRequests,
+        header: 'Reject colid entry',
+        requests: this.selectedDeletionRequests
       },
-      width: "auto",
-      disableClose: true,
+      width: 'auto',
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -93,8 +93,8 @@ export class DeletionRequestComponent implements OnInit {
             (_) => {
               this.status = EntityFormStatus.SUCCESS;
               this.snackbar.success(
-                "Reject successful",
-                "The entries have been rejected."
+                'Reject successful',
+                'The entries have been rejected.'
               );
             },
             (_) => {
@@ -108,11 +108,11 @@ export class DeletionRequestComponent implements OnInit {
   delete() {
     const dialogRef = this.dialog.open(DeletionRequestDialogComponent, {
       data: {
-        header: "Delete colid entry",
-        requests: this.selectedDeletionRequests,
+        header: 'Delete colid entry',
+        requests: this.selectedDeletionRequests
       },
-      width: "auto",
-      disableClose: true,
+      width: 'auto',
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -143,8 +143,8 @@ export class DeletionRequestComponent implements OnInit {
             );
 
           this.snackbar.success(
-            "Deletion successful",
-            "The entries have been deleted."
+            'Deletion successful',
+            'The entries have been deleted.'
           );
         }
       }

@@ -1,19 +1,19 @@
-import { Observable } from "rxjs";
-import { distinctUntilChanged, map } from "rxjs/operators";
-import { Router } from "@angular/router";
-import { IdentityProvider } from "./identity-provider.service";
-import { ColidAccount } from "../models/colid-account.model";
-import { Injectable, Inject } from "@angular/core";
-import { IDENT_PROV } from "src/app/shared/constants";
-import { Select } from "@ngxs/store";
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { IdentityProvider } from './identity-provider.service';
+import { ColidAccount } from '../models/colid-account.model';
+import { Injectable, Inject } from '@angular/core';
+import { IDENT_PROV } from 'src/app/shared/constants';
+import { Select } from '@ngxs/store';
 import {
   UserInfoState,
-  UserInfoStateModel,
-} from "src/app/states/user-info.state";
-import { RolePermissions } from "../role-permissions";
+  UserInfoStateModel
+} from 'src/app/states/user-info.state';
+import { RolePermissions } from '../role-permissions';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class AuthService {
   @Select(UserInfoState) userInfoState$: Observable<UserInfoStateModel>;
@@ -54,7 +54,7 @@ export class AuthService {
   }
 
   get hasEditorFunctionalitiesPrivilege$(): Observable<boolean> {
-    const permissionRegex = new RegExp("^(PID|COLID)(.*)(ReadWrite)$");
+    const permissionRegex = new RegExp('^(PID|COLID)(.*)(ReadWrite)$');
     return this.currentUserRoles$.pipe(
       map((roles) => {
         if (roles == null) {
@@ -64,7 +64,7 @@ export class AuthService {
           // filter out the 'Open For Everyone' consumer group
           return roles.some(
             (role) =>
-              permissionRegex.test(role) && !role.includes("Group10Data")
+              permissionRegex.test(role) && !role.includes('Group10Data')
           );
         }
         return false;
@@ -99,7 +99,7 @@ export class AuthService {
   }
 
   get accessToken(): string {
-    return localStorage.getItem("msal.idtoken");
+    return sessionStorage.getItem('msal.idtoken');
   }
 
   get hasCreatePrivilege$(): Observable<boolean> {
@@ -114,23 +114,23 @@ export class AuthService {
   subscribeCheckAccount() {
     return this.isLoggedIn$.pipe(distinctUntilChanged()).subscribe((val) => {
       // val is on startup of the application null, in this case we do nothing
-      console.log("current value", val);
+      console.log('current value', val);
       if (val === false) {
-        console.log("Logging in");
+        console.log('Logging in');
         this.login();
       } else if (val === true) {
-        console.log("Redirecting");
+        console.log('Redirecting');
         this.redirect();
       }
     });
   }
 
   redirect() {
-    const redirectPathString = window.sessionStorage.getItem("url");
-    const queryParamString = window.sessionStorage.getItem("queryParams");
+    const redirectPathString = window.sessionStorage.getItem('url');
+    const queryParamString = window.sessionStorage.getItem('queryParams');
 
     if (redirectPathString == null || queryParamString == null) {
-      this.router.navigate([""]);
+      this.router.navigate(['']);
       return;
     }
 

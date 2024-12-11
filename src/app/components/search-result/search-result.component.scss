@@ -1,19 +1,12 @@
-.border-button {
-  border: 1px solid currentColor !important;
-  border-color: rgba(0, 0, 0, 0.12) !important;
+.search-result {
+  &__indicators-and-buttons {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
 }
 
-.border-button[disabled] {
-  background-color: lightgray;
-  cursor: not-allowed
-}
-
-.beta-feature-tag {
-  font-size: 0.8rem;
-  vertical-align: top;
-}
-
-.mat-expansion-panel-header[aria-disabled="true"] {
+.mat-expansion-panel-header[aria-disabled='true'] {
   color: rgba(0, 0, 0, 0.87) !important;
 }
 
@@ -22,43 +15,34 @@
   border-radius: 0.3rem;
 }
 
-.buttons {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-
-  .spacer {
-    width: 2rem;
-  }
-
-  .broken-icon {
-    height: 30px;
-  }
-}
-
 .result-header-wrapper {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
 }
 
 .result-header {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-}
-
-.result-header {
-  flex-direction: row;
-  align-items: center;
+  gap: 1rem;
+  padding-right: 1rem;
 }
 
 .result-description {
-  font-size: 0.94rem;
+  font-size: 0.9375rem;
   margin-bottom: unset !important;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   text-align: justify;
   width: auto;
+  padding-right: 0.5rem;
+}
+
+.mat-mdc-icon-button.mat-mdc-button-base.resource-details-dialog-button {
+  --mdc-icon-button-state-layer-size: 24px;
+  padding: 0;
+  margin-right: 8px;
 }
 
 .mat-expansion-panel-header {
@@ -166,9 +150,31 @@ span {
   align-self: end;
 }
 
-.resource-details-dialog-button {
-  width: 24px;
-  height: 24px;
-  line-height: 24px;
-  margin-right: 1rem;
+.mat-icon-check {
+  color: var(--bayer-green);
+}
+
+.mat-icon-cross {
+  color: var(--bayer-raspberry);
+}
+
+.search-result {
+  &__nested-links-filter-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  &__nested-links-filter-input {
+    width: 15rem;
+  }
+
+  &__nested-links-filter-radio-button {
+    padding-left: 0.5rem;
+  }
+
+  &__no-matching-filtered-result-placeholder {
+    padding: 0.5rem;
+  }
 }

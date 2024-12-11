@@ -1,4 +1,4 @@
-<h1 class="mat-headline pt-2 ps-3">Administration</h1>
+<h4 class="mat-headline pt-2 ps-3">Administration</h4>
 <mat-nav-list>
   <ng-container *ngIf="hasSuperAdminPrivilege$ | async">
     <h1 matSubheader>General</h1>
@@ -7,38 +7,48 @@
       (click)="linkClicked()"
       routerLinkActive="active"
     >
-      <mat-icon class="me-1" fontSet="material-icons-outlined">ballot</mat-icon>
-      <a>Message Templates</a>
+      <div class="d-flex align-items-center">
+        <mat-icon class="me-1" fontSet="material-icons-outlined"
+          >ballot</mat-icon
+        >
+        <a>Message Templates</a>
+      </div>
     </mat-list-item>
     <mat-list-item
       routerLink="welcomeMessage"
       (click)="linkClicked()"
       routerLinkActive="active"
     >
-      <mat-icon class="me-1" fontSet="material-icons"
-        >picture_in_picture_alt</mat-icon
-      >
-      <a>Welcome Messages</a>
+      <div class="d-flex align-items-center">
+        <mat-icon class="me-1" fontSet="material-icons"
+          >picture_in_picture_alt</mat-icon
+        >
+        <a>Welcome Messages</a>
+      </div>
     </mat-list-item>
     <mat-list-item
       routerLink="broadcastMessage"
       (click)="linkClicked()"
       routerLinkActive="active"
     >
-      <mat-icon class="me-1" fontSet="material-icons-outlined"
-        >message</mat-icon
-      >
-      <a>Broadcast Message</a>
+      <div class="d-flex align-items-center">
+        <mat-icon class="me-1" fontSet="material-icons-outlined"
+          >message</mat-icon
+        >
+        <a>Broadcast Message</a>
+      </div>
     </mat-list-item>
     <mat-list-item
       routerLink="excelimport"
       (click)="linkClicked()"
       routerLinkActive="active"
     >
-      <mat-icon class="me-1" fontSet="material-icons-outlined"
-        >unarchive</mat-icon
-      >
-      <a>Excel Import</a>
+      <div class="d-flex align-items-center">
+        <mat-icon class="me-1" fontSet="material-icons-outlined"
+          >unarchive</mat-icon
+        >
+        <a>Excel Import</a>
+      </div>
     </mat-list-item>
 
     <h1 matSubheader>Graph Management</h1>
@@ -47,24 +57,30 @@
       (click)="linkClicked()"
       routerLinkActive="active"
     >
-      <mat-icon class="me-1" fontSet="material-icons-outlined">save</mat-icon>
-      <a>Metadata Graph Configuration</a>
+      <div class="d-flex align-items-center">
+        <mat-icon class="me-1" fontSet="material-icons-outlined">save</mat-icon>
+        <a>Metadata Graph Configuration</a>
+      </div>
     </mat-list-item>
     <mat-list-item
       routerLink="graph"
       (click)="linkClicked()"
       routerLinkActive="active"
     >
-      <mat-icon class="me-1" fontSet="material-icons-outlined"
-        >graphic_eq</mat-icon
-      >
-      <a>Triplestore Graph Management</a>
+      <div class="d-flex align-items-center">
+        <mat-icon class="me-1" fontSet="material-icons-outlined"
+          >graphic_eq</mat-icon
+        >
+        <a>Triplestore Graph Management</a>
+      </div>
     </mat-list-item>
     <mat-list-item routerLink="keyword-management" routerLinkActive="active">
-      <mat-icon class="me-1" fontSet="material-icons-outlined"
-        >format_indent_increase</mat-icon
-      >
-      <a>Keyword Management</a>
+      <div class="d-flex align-items-center">
+        <mat-icon class="me-1" fontSet="material-icons-outlined"
+          >format_indent_increase</mat-icon
+        >
+        <a>Keyword Management</a>
+      </div>
     </mat-list-item>
   </ng-container>
 
@@ -74,42 +90,64 @@
     (click)="linkClicked()"
     routerLinkActive="active"
   >
-    <mat-icon class="me-1" fontSet="material-icons-outlined">people</mat-icon>
-    <a>Consumer Groups</a>
+    <div class="d-flex align-items-center">
+      <mat-icon class="me-1" fontSet="material-icons-outlined">people</mat-icon>
+      <a>Consumer Groups</a>
+    </div>
   </mat-list-item>
   <mat-list-item
     routerLink="pidUriTemplates"
     (click)="linkClicked()"
     routerLinkActive="active"
   >
-    <mat-icon class="me-1" fontSet="material-icons-outlined"
-      >fiber_smart_record</mat-icon
-    >
-    <a>PID URI Templates</a>
+    <div class="d-flex align-items-center">
+      <mat-icon class="me-1" fontSet="material-icons-outlined"
+        >fiber_smart_record</mat-icon
+      >
+      <a>PID URI Templates</a>
+    </div>
   </mat-list-item>
   <mat-list-item
     routerLink="extendedUriTemplates"
     (click)="linkClicked()"
     routerLinkActive="active"
   >
-    <mat-icon class="me-1" fontSet="material-icons-outlined"
-      >file_copy</mat-icon
-    >
-    <a>Extended URI Templates</a>
+    <div class="d-flex align-items-center">
+      <mat-icon class="me-1" fontSet="material-icons-outlined"
+        >file_copy</mat-icon
+      >
+      <a>Extended URI Templates</a>
+    </div>
+  </mat-list-item>
+  <mat-list-item
+    routerLink="resourceTemplates"
+    (click)="linkClicked()"
+    routerLinkActive="active"
+  >
+    <div class="d-flex align-items-center">
+      <mat-icon class="me-1" fontSet="material-icons-outlined"
+        >assignment</mat-icon
+      >
+      <a>Resource Templates</a>
+    </div>
   </mat-list-item>
 
   <h1 matSubheader>Link Management</h1>
   <mat-list-item routerLink="linkhistory" routerLinkActive="active">
-    <mat-icon class="me-1" fontSet="material-icons-outlined">link</mat-icon>
-    <a>Link History</a>
+    <div class="d-flex align-items-center">
+      <mat-icon class="me-1" fontSet="material-icons-outlined">link</mat-icon>
+      <a>Link History</a>
+    </div>
   </mat-list-item>
 
   <h1 matSubheader>User Requests</h1>
   <mat-list-item routerLink="deletionrequests" routerLinkActive="active">
-    <mat-icon class="me-1" fontSet="material-icons-outlined"
-      >delete_sweep</mat-icon
-    >
-    <a>Deletion Requests</a>
+    <div class="d-flex align-items-center">
+      <mat-icon class="me-1" fontSet="material-icons-outlined"
+        >delete_sweep</mat-icon
+      >
+      <a>Deletion Requests</a>
+    </div>
   </mat-list-item>
   <mat-list-item
     *ngIf="hasSuperAdminPrivilege$ | async"
@@ -117,27 +155,44 @@
     (click)="linkClicked()"
     routerLinkActive="active"
   >
-    <mat-icon class="me-1" fontSet="material-icons-outlined"
-      >scatter_plot</mat-icon
-    >
-    <a>Orphaned Identifiers</a>
+    <div class="d-flex align-items-center">
+      <mat-icon class="me-1" fontSet="material-icons-outlined"
+        >scatter_plot</mat-icon
+      >
+      <a>Orphaned Identifiers</a>
+    </div>
   </mat-list-item>
+  <ng-container *ngIf="hasSuperAdminPrivilege$ | async">
+    <h1 matSubheader>System Analytics</h1>
+    <mat-list-item routerLink="system-analytics" routerLinkActive="active">
+      <div class="d-flex align-items-center">
+        <mat-icon class="me-1" fontSet="material-icons-outlined"
+          >insert_chart_outlined</mat-icon
+        >
+        <a>System Analytics</a>
+      </div>
+    </mat-list-item>
+  </ng-container>
   <ng-container *ngIf="hasSuperAdminPrivilege$ | async">
     <h1 matSubheader>Agent Statistics</h1>
     <mat-list-item routerLink="agent-statistics" routerLinkActive="active">
-      <mat-icon class="me-1" fontSet="material-icons-outlined"
-        >monitor_heart</mat-icon
-      >
-      <a>Agent Statistics</a>
+      <div class="d-flex align-items-center">
+        <mat-icon class="me-1" fontSet="material-icons-outlined"
+          >monitor_heart</mat-icon
+        >
+        <a>Agent Statistics</a>
+      </div>
     </mat-list-item>
   </ng-container>
   <ng-container *ngIf="hasSuperAdminPrivilege$ | async">
     <h1 matSubheader>User Statistics</h1>
     <mat-list-item routerLink="user-statistics" routerLinkActive="active">
-      <mat-icon class="me-1" fontSet="material-icons-outlined"
-        >recent_actors</mat-icon
-      >
-      <a>User Statistics</a>
+      <div class="d-flex align-items-center">
+        <mat-icon class="me-1" fontSet="material-icons-outlined"
+          >recent_actors</mat-icon
+        >
+        <a>User Statistics</a>
+      </div>
     </mat-list-item>
   </ng-container>
 </mat-nav-list>

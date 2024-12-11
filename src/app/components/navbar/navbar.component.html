@@ -16,28 +16,24 @@
       </span>
     </div>
 
+    <span class="filler"></span>
+
     <button
-      *ngIf="hasCreatePrivilege$ | async"
-      mat-flat-button
-      class="ms-4 d-none d-md-block"
-      title="Want to register resources? Go to COLID Editor"
-      id="button-sidebar-pid-link"
+      mat-icon-button
+      *ngIf="hasEditorFunctionalitiesPrivilege$ | async"
+      matTooltip="Go to Editor"
       (click)="goToEditor()"
     >
-      Want to register resources? Go to COLID Editor
+      <mat-icon>format_indent_increase</mat-icon>
     </button>
 
     <button
-      mat-flat-button
-      class="ms-4 d-none d-md-block"
-      title="Want to link resources? Go to Resource Relationship Manager"
-      inline="true"
-      id="button-sidebar-rrm-link"
+      mat-icon-button
+      matTooltip="Go to Resource Relationship Manager"
       (click)="goToRRM()"
     >
-      Want to link resources? Go to Resource Relationship Manager
+      <mat-icon>lan</mat-icon>
     </button>
-    <span class="filler"></span>
 
     <button
       mat-icon-button

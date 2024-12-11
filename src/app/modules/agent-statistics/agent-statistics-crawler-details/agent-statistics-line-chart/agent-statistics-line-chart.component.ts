@@ -1,9 +1,9 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: "app-agent-statistics-line-chart",
-  templateUrl: "./agent-statistics-line-chart.component.html",
-  styleUrls: ["./agent-statistics-line-chart.component.css"],
+  selector: 'app-agent-statistics-line-chart',
+  templateUrl: './agent-statistics-line-chart.component.html',
+  styleUrls: ['./agent-statistics-line-chart.component.css']
 })
 export class AgentStatisticsLineChartComponent {
   @Input() chartWidth: number;
@@ -12,6 +12,4 @@ export class AgentStatisticsLineChartComponent {
   @Input() xAxisLabel: string;
   @Input() yAxisLabel: string;
   @Input() xAxisTicks;
-
-  constructor() {}
 }

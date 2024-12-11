@@ -1,11 +1,11 @@
-import { Selector, State, Store } from "@ngxs/store";
-import { IronMountainService } from "../core/http/iron-mountain.api.service";
-import { ResourceRetentionClasses } from "../shared/models/resourcePolicies/resource-retentionClass";
-import { SearchResult } from "../shared/models/search-result";
-import { Injectable } from "@angular/core";
+import { Selector, State, Store } from '@ngxs/store';
+import { IronMountainService } from '../core/http/iron-mountain.api.service';
+import { ResourceRetentionClasses } from '../shared/models/resourcePolicies/resource-retentionClass';
+import { SearchResult } from '../shared/models/search-result';
+import { Injectable } from '@angular/core';
 
 export class FetchResourcePolicies {
-  static readonly type = "[ResourcePolicies] Fetch FetchResourcePolicies";
+  static readonly type = '[ResourcePolicies] Fetch FetchResourcePolicies';
   constructor(public searchResult: SearchResult) {}
 }
 
@@ -15,11 +15,11 @@ export class ResourcePoliciesStateModel {
 }
 
 @State<ResourcePoliciesStateModel>({
-  name: "ResourcePolicies",
+  name: 'ResourcePolicies',
   defaults: {
     loading: false,
-    resourcePolicies: [],
-  },
+    resourcePolicies: []
+  }
 })
 @Injectable()
 export class ResourcePoliciesState {

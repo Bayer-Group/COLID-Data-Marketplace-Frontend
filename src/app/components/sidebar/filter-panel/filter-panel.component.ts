@@ -1,42 +1,42 @@
-import { Component, OnInit, Input, OnDestroy } from "@angular/core";
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import {
   FetchFilter,
   FilterState,
-  SetFilterGroupPanelState,
-} from "src/app/states/filter.state";
-import { Observable, Subscription, combineLatest } from "rxjs";
-import { Select, Store } from "@ngxs/store";
-import { Aggregation } from "src/app/shared/models/aggregation";
+  SetFilterGroupPanelState
+} from 'src/app/states/filter.state';
+import { Observable, Subscription, combineLatest } from 'rxjs';
+import { Select, Store } from '@ngxs/store';
+import { Aggregation } from 'src/app/shared/models/aggregation';
 import {
   ResetActiveAggregationBuckets,
   SearchState,
   SearchStateModel,
   OverwriteActiveAggregationBuckets,
-  OverwriteActiveRangeFilters,
-} from "../../../states/search.state";
-import { RangeFilter } from "src/app/shared/models/range-filter";
-import { ActiveRangeFilters } from "src/app/shared/models/active-range-filters";
-import { Constants } from "src/app/shared/constants";
-import { UserInfoState } from "src/app/states/user-info.state";
-import { SearchFilterDataMarketplaceDto } from "src/app/shared/models/user/search-filter-data-marketplace-dto";
-import { objectToMap } from "src/app/shared/converters/map-object.converter";
-import { mapToObject } from "src/app/shared/converters/map-object.converter";
-import { MatDialog } from "@angular/material/dialog";
-import { LogService } from "src/app/core/logging/log.service";
-import { SearchFilterDialogComponent } from "src/app/components/sidebar/search-filter-dialog/search-filter-dialog.component";
+  OverwriteActiveRangeFilters
+} from '../../../states/search.state';
+import { RangeFilter } from 'src/app/shared/models/range-filter';
+import { ActiveRangeFilters } from 'src/app/shared/models/active-range-filters';
+import { Constants } from 'src/app/shared/constants';
+import { UserInfoState } from 'src/app/states/user-info.state';
+import { SearchFilterDataMarketplaceDto } from 'src/app/shared/models/user/search-filter-data-marketplace-dto';
+import { objectToMap } from 'src/app/shared/converters/map-object.converter';
+import { mapToObject } from 'src/app/shared/converters/map-object.converter';
+import { MatDialog } from '@angular/material/dialog';
+import { LogService } from 'src/app/core/logging/log.service';
+import { SearchFilterDialogComponent } from 'src/app/components/sidebar/search-filter-dialog/search-filter-dialog.component';
 import {
   ClearResourceTypeItem,
-  FetchResourceTypeHierarchy,
-  MetadataState,
-} from "src/app/states/metadata.state";
-import { ActivatedRoute } from "@angular/router";
-import { FilterGroupingOrder } from "src/app/shared/models/metadata/filter-grouping-order";
-import { FilterGroupingOrderRaw } from "src/app/shared/models/metadata/filter-grouping-order-raw";
+  FetchCheckboxResourceTypeHierarchy,
+  MetadataState
+} from 'src/app/states/metadata.state';
+import { ActivatedRoute } from '@angular/router';
+import { FilterGroupingOrder } from 'src/app/shared/models/metadata/filter-grouping-order';
+import { FilterGroupingOrderRaw } from 'src/app/shared/models/metadata/filter-grouping-order-raw';
 
 @Component({
-  selector: "app-filter-panel",
-  templateUrl: "./filter-panel.component.html",
-  styleUrls: ["./filter-panel.component.scss"],
+  selector: 'app-filter-panel',
+  templateUrl: './filter-panel.component.html',
+  styleUrls: ['./filter-panel.component.scss']
 })
 export class FilterPanelComponent implements OnInit, OnDestroy {
   @Select(FilterState.getAggregationFilters) aggregationFilters$: Observable<
@@ -79,7 +79,7 @@ export class FilterPanelComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.store.dispatch(new FetchResourceTypeHierarchy());
+    this.store.dispatch(new FetchCheckboxResourceTypeHierarchy());
 
     this.masterSub.add(
       this.aggregationFilters$.subscribe((aggregationFilters) => {
@@ -109,7 +109,7 @@ export class FilterPanelComponent implements OnInit, OnDestroy {
     this.masterSub.add(
       combineLatest([
         this.aggregationFilters$,
-        this.defaultSearchFilterDataMarketplace$,
+        this.defaultSearchFilterDataMarketplace$
       ]).subscribe(
         ([aggregationFilters, defaultSearchFilterDataMarketplace]: [
           Aggregation[],
@@ -174,12 +174,12 @@ export class FilterPanelComponent implements OnInit, OnDestroy {
         const filters = group.filters.map((filter) => {
           return {
             ...filter,
-            aggregation: null,
+            aggregation: null
           };
         });
         return {
           ...group,
-          filters,
+          filters
         };
       });
       aggregationFilters.forEach((aggregationFilter) => {
@@ -240,17 +240,17 @@ export class FilterPanelComponent implements OnInit, OnDestroy {
     const activeAggregationFilters = mapToObject(this.activeAggregations);
     const activeRangeFilters = this.activeRangeFilters;
     const searchText = this.searchText;
-    this.logger.info("DMP_SAVE_SEARCH_FILTER_LINK_CLICKED", {
+    this.logger.info('DMP_SAVE_SEARCH_FILTER_LINK_CLICKED', {
       searchText: searchText,
       activeRangeFilters: activeRangeFilters,
-      activeAggregationFilters: activeAggregationFilters,
+      activeAggregationFilters: activeAggregationFilters
     });
     this.dialog.open(SearchFilterDialogComponent, {
       data: {
         searchText: searchText,
         activeRangeFilters: activeRangeFilters,
-        activeAggregationFilters: activeAggregationFilters,
-      },
+        activeAggregationFilters: activeAggregationFilters
+      }
     });
   }
 }

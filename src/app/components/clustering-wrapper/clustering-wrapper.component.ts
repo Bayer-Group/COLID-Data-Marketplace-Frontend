@@ -1,18 +1,18 @@
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
-import { MatCheckboxChange } from "@angular/material/checkbox";
-import { MatListOption } from "@angular/material/list";
-import { Select, Store } from "@ngxs/store";
-import { Observable, Subscription } from "rxjs";
-import { DocumentService } from "src/app/core/http/document.service";
-import { SearchClusterResults } from "src/app/shared/models/search-cluster-result";
-import { MetadataState } from "src/app/states/metadata.state";
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatListOption } from '@angular/material/list';
+import { Select, Store } from '@ngxs/store';
+import { Observable, Subscription } from 'rxjs';
+import { DocumentService } from 'src/app/core/http/document.service';
+import { SearchClusterResults } from 'src/app/shared/models/search-cluster-result';
+import { MetadataState } from 'src/app/states/metadata.state';
 import {
   AddSelectedPIDURI,
   AddSelectedPIDURIs,
   ClearSelectedPIDURIs,
   RemoveSelectedPIDURI,
-  SearchState,
-} from "src/app/states/search.state";
+  SearchState
+} from 'src/app/states/search.state';
 
 interface ClusterSearchResultMapping {
   [key: string]: {
@@ -22,9 +22,9 @@ interface ClusterSearchResultMapping {
 }
 
 @Component({
-  selector: "app-clustering-wrapper",
-  templateUrl: "./clustering-wrapper.component.html",
-  styleUrls: ["./clustering-wrapper.component.scss"],
+  selector: 'app-clustering-wrapper',
+  templateUrl: './clustering-wrapper.component.html',
+  styleUrls: ['./clustering-wrapper.component.scss']
 })
 export class ClusteringWrapperComponent implements OnInit {
   masterSub: Subscription = new Subscription();
@@ -41,13 +41,16 @@ export class ClusteringWrapperComponent implements OnInit {
   @Output() selectedClusterPidUris = new EventEmitter<string[]>();
 
   clusteredResultsMapping: ClusterSearchResultMapping = {};
-  currentlySelectedCluster: string = "";
+  currentlySelectedCluster: string = '';
   currentlyDisplayedSearchResultPidUris: string[] = [];
   selectedPidUris: string[] = [];
   searchResults = [];
   loadingSearchResults = false;
 
-  constructor(private documentService: DocumentService, private store: Store) {}
+  constructor(
+    private documentService: DocumentService,
+    private store: Store
+  ) {}
 
   ngOnInit(): void {
     this.masterSub.add(
@@ -66,7 +69,7 @@ export class ClusteringWrapperComponent implements OnInit {
           clusteredResults.clusters.forEach((cluster) => {
             this.clusteredResultsMapping[cluster.labels[0]] = {
               pidUris: cluster.docDetails.map((d) => d.pidUri),
-              totalResultCount: cluster.docDetails.length,
+              totalResultCount: cluster.docDetails.length
             };
           });
           this.currentlySelectedCluster =
@@ -101,7 +104,6 @@ export class ClusteringWrapperComponent implements OnInit {
     if (event.checked) {
       const pidUris =
         this.clusteredResultsMapping[this.currentlySelectedCluster].pidUris;
-      console.log(pidUris);
       this.store.dispatch(new AddSelectedPIDURIs(pidUris));
     } else {
       this.store.dispatch(new ClearSelectedPIDURIs());

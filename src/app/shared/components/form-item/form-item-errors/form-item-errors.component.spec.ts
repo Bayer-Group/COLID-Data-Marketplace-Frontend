@@ -1,14 +1,14 @@
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { FormItemErrorsComponent } from "./form-item-errors.component";
+import { FormItemErrorsComponent } from './form-item-errors.component';
 
-describe("FormItemErrorsComponent", () => {
+describe('FormItemErrorsComponent', () => {
   let component: FormItemErrorsComponent;
   let fixture: ComponentFixture<FormItemErrorsComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [FormItemErrorsComponent],
+      declarations: [FormItemErrorsComponent]
     }).compileComponents();
   }));
 
@@ -18,7 +18,7 @@ describe("FormItemErrorsComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

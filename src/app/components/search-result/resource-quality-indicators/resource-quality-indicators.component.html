@@ -1,0 +1,38 @@
+<div class="resource-quality-indicators">
+  @if (showBrokenDistributionEndpoints) {
+    <img
+      class="resource-quality-indicators__broken-endpoints"
+      src="assets/broken-link.svg"
+      matTooltip="{{
+        'Resource has following invalid endpoint(s): ' +
+          (brokenDistributionEndpoints | join | removeHtml)
+      }}"
+    />
+  }
+
+  @if (showBrokenContacts) {
+    <img
+      class="resource-quality-indicators__broken-contacts"
+      src="assets/invalid-user.svg"
+      matTooltip="{{
+        'Resource has following invalid contact(s): ' + (brokenContacts | join)
+      }}"
+    />
+  }
+
+  @if (showNextReviewIsDue) {
+    <img
+      class="resource-quality-indicators__review-cycle-expired"
+      src="assets/review_cycle_due.svg"
+      matTooltip="Deadline for the resource review has expired"
+    />
+  }
+
+  @if (showValidReviewCycle) {
+    <img
+      class="resource-quality-indicators__review-cycle-valid"
+      src="assets/review_cycle_success.svg"
+      matTooltip="Resource is in a valid review cycle"
+    />
+  }
+</div>
