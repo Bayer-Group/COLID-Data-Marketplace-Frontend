@@ -1,0 +1,34 @@
+.help {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  &__email-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+
+  &__build-metadata {
+    padding-top: 3rem;
+
+    // TODO: This is a temporary fix in one place, should verify using same style in all components
+    a {
+      color: #007bff;
+      text-decoration: none;
+      background-color: transparent;
+    }
+
+    a:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+  }
+}

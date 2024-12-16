@@ -60,27 +60,6 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleSidenav(type: string) {
-    if (type === 'favorite' && this.currentRoute.startsWith('/favorite')) {
-      return;
-    }
-    //when sidenav type is changed
-    if (this.activeSidebar != type) {
-      this.activeSidebar = type;
-      if (!this.openedSidenav) {
-        this.openedSidenav = !this.openedSidenav;
-      }
-    } else {
-      this.openedSidenav = !this.openedSidenav;
-    }
-
-    if (this.openedSidenav) {
-      this.sidenav.open();
-    } else {
-      this.sidenav.close();
-    }
-  }
-
   ngOnInit() {
     this.masterSub.add(
       this.authService.isLoggedIn$.subscribe((isAuth) => {
@@ -157,6 +136,27 @@ export class AppComponent implements OnInit, OnDestroy {
       this.store
         .dispatch([new SetSidebarMode('side'), new SetSidebarOpened(true)])
         .subscribe();
+    }
+  }
+
+  toggleSidenav(type: string) {
+    if (type === 'favorite' && this.currentRoute.startsWith('/favorite')) {
+      return;
+    }
+    //when sidenav type is changed
+    if (this.activeSidebar != type) {
+      this.activeSidebar = type;
+      if (!this.openedSidenav) {
+        this.openedSidenav = !this.openedSidenav;
+      }
+    } else {
+      this.openedSidenav = !this.openedSidenav;
+    }
+
+    if (this.openedSidenav) {
+      this.sidenav.open();
+    } else {
+      this.sidenav.close();
     }
   }
 

@@ -121,7 +121,6 @@ import { FilterBoxItemSwitchComponent } from './components/sidebar/filter-panel/
 import { FilterBoxItemDaterangeComponent } from './components/sidebar/filter-panel/filter-box/filter-box-item-daterange/filter-box-item-daterange.component';
 import { WelcomeContentComponent } from './components/welcome-content/welcome-content.component';
 import { SearchResultComponent } from './components/search-result/search-result.component';
-import { HelpComponent } from './components/help/help.component';
 import { StatusApiService } from './core/http/status.api.service';
 import { WelcomeMessageApiService } from './core/http/welcome-message.api.service';
 
@@ -133,7 +132,6 @@ import { SearchService } from './core/http/search.service';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchResultLinkTypeComponent } from './components/search-result/search-result-link-type/search-result-link-type.component';
-import { SupportFeedbackBarComponent } from './shared/components/support-feedback-bar/support-feedback-bar.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { DocumentService } from './core/http/document.service';
 import { LinkedResourceDisplayDialogComponent } from './components/linked-resource-dialog/linked-resource-display-dialog.component';
@@ -215,6 +213,7 @@ import { ViewDescriptionDialogComponent } from './components/search-result/view-
 import { ResourceOperationsButtonsComponent } from './components/search-result/resource-operations-buttons/resource-operations-buttons.component';
 import { ResourceStatusIndicatorsComponent } from './components/search-result/resource-status-indicators/resource-status-indicators.component';
 import { ResourceQualityIndicatorsComponent } from './components/search-result/resource-quality-indicators/resource-quality-indicators.component';
+import { HelpComponent } from './components/help/help.component';
 
 const states = [
   FilterState,
@@ -254,6 +253,7 @@ const protectedResourceMap = new Map(
     FilterBoxItemComponent,
     SidebarComponent,
     NavbarComponent,
+    HelpComponent,
     WelcomeComponent,
     SearchComponent,
     SearchBarComponent,
@@ -265,14 +265,12 @@ const protectedResourceMap = new Map(
     FilterBoxItemDaterangeComponent,
     WelcomeContentComponent,
     SearchResultComponent,
-    HelpComponent,
     SearchResultStandaloneContainerComponent,
     DistributionEndpointComponent,
     SearchResultAttachmentComponent,
     RangeBoxComponent,
     UnauthorizedComponent,
     SearchResultLinkTypeComponent,
-    SupportFeedbackBarComponent,
     LinkedResourceDisplayDialogComponent,
     ReleasenotesDialogComponent,
     ExportDialogComponent,

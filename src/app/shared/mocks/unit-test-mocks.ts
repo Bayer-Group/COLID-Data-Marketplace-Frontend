@@ -278,12 +278,6 @@ export class MockSidebarComponent {
 export class MockSubscriptionsTileComponent {}
 
 @Component({
-  selector: 'app-support-feedback-bar',
-  template: ''
-})
-export class MockSupportFeedbackBarComponent {}
-
-@Component({
   selector: 'app-user-preferences-sidebar',
   template: ''
 })

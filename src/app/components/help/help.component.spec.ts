@@ -1,26 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HelpComponent } from './help.component';
-import { NgxsModule } from '@ngxs/store';
-import { MatDialogModule } from '@angular/material/dialog';
-import {
-  MockLogService,
-  MockSupportFeedbackBarComponent
-} from 'src/app/shared/mocks/unit-test-mocks';
-import { LogService } from 'src/app/core/logging/log.service';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { environment } from 'src/environments/environment';
 
 describe('HelpComponent', () => {
   let component: HelpComponent;
   let fixture: ComponentFixture<HelpComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [HelpComponent, MockSupportFeedbackBarComponent],
-      imports: [NgxsModule.forRoot(), MatDialogModule],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [HelpComponent],
+      imports: [MatDialogModule, MatIconModule],
       providers: [
         {
-          provide: LogService,
-          useClass: MockLogService
+          provide: MAT_DIALOG_DATA,
+          useValue: {}
         }
       ]
     }).compileComponents();
@@ -32,5 +28,25 @@ describe('HelpComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should open feedback mail link when sendFeedbackMail is called', () => {
+    spyOn(window, 'open');
+
+    component.sendFeedbackMail();
+
+    expect(window.open).toHaveBeenCalledWith(
+      environment.appSupportFeedBack.mailToLink
+    );
+  });
+
+  it('should open support ticket link when createSupportTicket is called', () => {
+    spyOn(window, 'open');
+
+    component.createSupportTicket();
+
+    expect(window.open).toHaveBeenCalledWith(
+      environment.appSupportFeedBack.supportTicketLink
+    );
   });
 });

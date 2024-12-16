@@ -1,35 +1,48 @@
-<div class="col-10 offset-1 h-90">
-  <div class="row justify-content-between">
-    <div class="col-8">
-      <h1 class="pt-5">Help</h1>
+<mat-dialog-content class="help">
+  <div class="help__header">
+    <div>
+      <h1>Help</h1>
       <h3 class="mat-subheading-3">
         For further support, please always refer to the version identifiers
         listed below.
       </h3>
     </div>
-    <div class="col-4">
-      <div class="pt-5">
-        <img [src]="logo" alt="Bayer AG" width="120em" height="120em" />
-      </div>
+    <div>
+      <img [src]="logo" alt="Bayer AG" width="120em" height="120em" />
     </div>
   </div>
-  <div class="row">
-    <div class="col-12">
-      <app-support-feedback-bar></app-support-feedback-bar>
-    </div>
+
+  <div class="help__email-buttons">
+    <button mat-raised-button color="accent" (click)="sendFeedbackMail()">
+      <mat-icon fontSet="material-icons-outlined"> feedback </mat-icon>
+      We value your feedback
+    </button>
+    <button mat-raised-button color="accent" (click)="createSupportTicket()">
+      <mat-icon fontSet="material-icons-outlined"> contact_support </mat-icon>
+      Contact Support
+    </button>
   </div>
-  <div class="row mt-4">
-    <div class="col-12">
-      <p>To view the release notes, please click here:</p>
-    </div>
-  </div>
-  <div class="row mt-4" *ngIf="buildInformation$ | async as buildInformation">
-    <div class="col-12">
+
+  <div
+    class="help__build-metadata"
+    *ngIf="data.buildInformation$ | async as buildInformation"
+  >
+    <div>
       <p>
         Published at:
         {{ buildInformation.latestReleaseDate | date: 'dd/MM/yyyy HH:mm' }}
       </p>
       <p>Image Tags: {{ buildInformation.imageTags | join }}</p>
+      <p>
+        <a href="/3rdpartylicenses.txt">Show third-party software licenses</a>
+      </p>
     </div>
   </div>
-</div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button mat-dialog-close>
+    <mat-icon class="mr-1">close</mat-icon>
+    <span>Close</span>
+  </button>
+</mat-dialog-actions>

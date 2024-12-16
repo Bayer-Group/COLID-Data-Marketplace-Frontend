@@ -26,6 +26,7 @@ import { Favorites } from 'src/app/shared/models/favorites';
 import { FavoritesState } from '../favorites/favorites.state';
 import { ReleasenotesDialogComponent } from '../releasenotes-dialog/releasenotes-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { HelpComponent } from '../help/help.component';
 
 @Component({
   selector: 'app-navbar',
@@ -171,5 +172,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
           'The selected filter settings have been set as default filters.'
         );
       });
+  }
+
+  openHelpDialog(): void {
+    this.dialog.open(HelpComponent, {
+      data: {
+        buildInformation$: this.buildInformation$
+      }
+    });
   }
 }

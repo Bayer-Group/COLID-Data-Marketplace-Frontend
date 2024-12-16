@@ -123,7 +123,7 @@
     </mat-menu>
 
     <mat-menu #helpMenu="matMenu">
-      <button mat-menu-item matTooltip="Help" [routerLink]="'/help'">
+      <button mat-menu-item matTooltip="Help" (click)="openHelpDialog()">
         <mat-icon>help_outline</mat-icon>
         <span>About / Help</span>
       </button>
